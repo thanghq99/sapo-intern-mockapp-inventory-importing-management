@@ -5,7 +5,6 @@ import "./products.scss"
 export default function Products() {
     return (
         <div className='products'>
-            <Topbar />
             this is product page
         </div>
     )
