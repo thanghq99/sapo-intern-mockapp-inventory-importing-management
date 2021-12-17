@@ -5,8 +5,6 @@ import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -18,6 +16,8 @@ import MailIcon from '@mui/icons-material/Mail';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import "./sidebar.scss";
 import Topbar from '../topbar/Topbar';
+import Products from '../../pages/Products/Products';
+import Supply from '../../pages/Supply/Supply';
 
 const drawerWidth = 240;
 
@@ -100,10 +100,10 @@ export default function MiniDrawer() {
 
     return (
         <Box sx={{
-            display: 'flex', width: "100%", background: "white"
+            display: 'flex', width: "100%", background: "#27274b"
         }}>
             <CssBaseline />
-            <Drawer variant="permanent" open={open}>
+            <Drawer className="drawer" variant="permanent" open={open}>
                 <DrawerHeader className="leftbar_header" >
                     {open && <img className='logo_image' src="https://www.sapo.vn/Themes/Portal/Default/StylesV2/images/logo/Sapo-logo.svg" alt="" />}
                     {open ? <IconButton className="button_close" onClick={handleDrawerClose}>
@@ -112,7 +112,6 @@ export default function MiniDrawer() {
                         {theme.direction === 'rtl' ? <ChevronRightIcon /> : <MenuIcon />}
                     </IconButton>}
                 </DrawerHeader>
-                <Divider />
                 <List className="nav_leftbar">
                     {['Danh sách sản phẩm', 'Quản lý kho', 'Nhập hàng', 'Kiểm hàng', "Nhà cung cấp", "Cài đặt"].map((text, index) => (
                         <ListItem className="nav_leftbar_item" button key={text}>
@@ -126,6 +125,7 @@ export default function MiniDrawer() {
             </Drawer>
             <Box className="box_content" component="main">
                 <Topbar />
+                <Supply />
             </Box>
         </Box >
     );
