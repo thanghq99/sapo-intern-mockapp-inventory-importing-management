@@ -14,6 +14,10 @@
             i {
                 margin: 0 1em;
             }
+            a {
+                font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                text-decoration: none;
+            }
         }
         .activity {
             padding: 0.5em 1em;
@@ -63,26 +67,24 @@
                 .search_input {
                     outline: none;
                     border: none;
+                    width: 100%;
                     &:focus {
                         outline-style: none;
                     }
                 }
             }
-            .filter_section{
+            .filter_section {
                 margin-top: -1em;
                 display: flex;
                 align-items: center;
-                i{
+                i {
                     margin-right: 0.5em;
                     font-size: 2em;
                 }
-                .filter_input{
+                .filter_input {
                     min-width: 10em;
                 }
             }
-        }
-        .table{
-            padding-top: 1em;
         }
     }
 }

@@ -1,17 +1,18 @@
 import { Autocomplete, Button, TextField } from '@mui/material'
 import React from 'react'
 import TableSupply from '../../components/table/TableSupply'
-import Table from '../../components/table/TableSupply'
 import "./supply.scss"
 
 const top100Films = [
-    { title: 'The Shawshank Redemption', year: 1994 },
-    { title: 'The Godfather', year: 1972 },
-    { title: 'The Godfather: Part II', year: 1974 },
-    { title: 'The Dark Knight', year: 2008 },
-    { title: '12 Angry Men', year: 1957 },
-    { title: "Schindler's List", year: 1993 },
-    { title: 'Pulp Fiction', year: 1994 },
+    { title: 'lua chon so 1 '},
+    { title: 'lua chon so 2 '},
+    { title: 'lua chon so 3 '},
+    { title: 'lua chon so 4 '},
+    { title: 'lua chon so 5 '},
+    { title: 'lua chon so 6 '},
+    { title: 'lua chon so 7 '},
+    { title: 'lua chon so 8 '},
+    { title: 'lua chon so 9 '}
 ]
 export default function Supply() {
     return (
@@ -19,32 +20,32 @@ export default function Supply() {
             <div className="supply_content">
                 <div className="navig">
                     <i className="fas fa-arrow-left"></i>
-                    <a>Quay lai trang truoc</a>
+                    <a href="#">Quay lại trang trước</a>
                 </div>
                 <div className="activity">
                     <div className="left_activity">
                         <div className="left_activity_item">
                             <i className="fas fa-upload"></i>
-                            <a href="">Xuat file</a>
+                            <a href="">Xuất file</a>
                         </div>
                         <div className="left_activity_item">
-                            <i className="fas fa-upload"></i>
-                            <a href="">Nhap file</a>
+                            <i className="fas fa-download"></i>
+                            <a href="">Nhập file</a>
                         </div>
                         <div className="left_activity_item">
-                            <i className="fas fa-upload"></i>
-                            <a href="">Nhom nha cung cap</a>
+                            <i className="fas fa-users"></i>
+                            <a href="">Nhóm nhà cung cấp</a>
                         </div>
                     </div>
                     <div className="right_activity">
-                        <Button variant="contained"><i className="fas fa-plus-circle"></i> <span>Them nha cung cap</span> </Button>
+                        <Button variant="contained"><i className="fas fa-plus-circle"></i> <span>Thêm nhà cung cấp</span> </Button>
                     </div>
                 </div>
                 <hr />
                 <div className="find_section">
                     <div className="search_section">
                         <i className="fas fa-search"></i>
-                        <input className='search_input' type="text" placeholder='search here ...' />
+                        <input className='search_input' type="text" placeholder='nhập giá trị ...' />
                     </div>
                     <div className="filter_section">
                         <i className="fas fa-filter"></i>
@@ -58,14 +59,14 @@ export default function Supply() {
                                 <TextField
                                     {...params}
                                     variant="standard"
-                                    label="Loc nhieu gia tri"
-                                    placeholder="Favorites"
+                                    label="Lọc nhiều giá trị"
+                                    placeholder="Yêu thích"
                                 />
                             )}
                         />
                     </div>
                 </div>
-                <TableSupply className="table" />
+                <TableSupply />
             </div>
         </div>
     )

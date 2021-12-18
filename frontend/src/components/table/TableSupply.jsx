@@ -1,4 +1,5 @@
 import * as React from 'react';
+import "./tableSupply.scss";
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -33,19 +34,28 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const rows = [
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Donut', 452, 25.0, 51, 4.9),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Honeycomb', 408, 3.2, 87, 6.5),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Jelly Bean', 375, 0.0, 94, 0.0),
-    createData('KitKat', 518, 26.0, 65, 7.0),
-    createData('Lollipop', 392, 0.2, 98, 0.0),
-    createData('Marshmallow', 318, 0, 81, 2.0),
-    createData('Nougat', 360, 19.0, 9, 37.0),
-    createData('Oreo', 437, 18.0, 63, 4.0),
+    createData('Đại lý Số 1', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 2', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 3', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 4', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 5', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 6', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 7', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 8', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 9', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 10', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 11', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 12', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 13', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 14', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 15', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 16', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 17', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 18', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 19', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 20', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 21', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
+    createData('Đại lý Số 22', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -83,31 +93,31 @@ const headCells = [
         id: 'name',
         numeric: false,
         disablePadding: true,
-        label: 'Dessert (100g serving)',
+        label: 'Tên nhà cung cấp',
     },
     {
-        id: 'calories',
+        id: 'manhacungcap',
         numeric: true,
         disablePadding: false,
-        label: 'Calories',
+        label: 'Mã nhà cung cấp',
     },
     {
-        id: 'fat',
+        id: 'nhomnhacungcap',
         numeric: true,
         disablePadding: false,
-        label: 'Fat (g)',
+        label: 'Nhom nha cung cap',
     },
     {
-        id: 'carbs',
+        id: 'sodienthoai',
         numeric: true,
         disablePadding: false,
-        label: 'Carbs (g)',
+        label: 'Số điện thoại',
     },
     {
-        id: 'protein',
+        id: 'trangthai',
         numeric: true,
         disablePadding: false,
-        label: 'Protein (g)',
+        label: 'Trạng thái',
     },
 ];
 
@@ -188,7 +198,7 @@ const EnhancedTableToolbar = (props) => {
                     variant="subtitle1"
                     component="div"
                 >
-                    {numSelected} selected
+                    {numSelected} đã chọn
                 </Typography>
             ) : (
                 <Typography
@@ -197,7 +207,7 @@ const EnhancedTableToolbar = (props) => {
                     id="tableTitle"
                     component="div"
                 >
-                    Nutrition
+                    Danh sách nhà cung cấp
                 </Typography>
             )}
 
@@ -285,7 +295,7 @@ export default function TableSupply() {
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box className='table_box' sx={{ width: '100%', marginTop: "1em" }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
@@ -358,6 +368,7 @@ export default function TableSupply() {
                     </Table>
                 </TableContainer>
                 <TablePagination
+                    node="So hàng một trang"
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
                     count={rows.length}
@@ -369,7 +380,7 @@ export default function TableSupply() {
             </Paper>
             <FormControlLabel
                 control={<Switch checked={dense} onChange={handleChangeDense} />}
-                label="Dense padding"
+                label="Xóa padding"
             />
         </Box>
     );
