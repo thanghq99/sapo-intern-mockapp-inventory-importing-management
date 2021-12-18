@@ -1,8 +1,8 @@
--- MariaDB dump 10.19  Distrib 10.5.10-MariaDB, for debian-linux-gnu (x86_64)
+-- MariaDB dump 10.19  Distrib 10.5.9-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: sapo_mock
 -- ------------------------------------------------------
--- Server version	10.5.10-MariaDB-1:10.5.10+maria~focal
+-- Server version	10.5.9-MariaDB-1:10.5.9+maria~focal
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -24,20 +24,11 @@ DROP TABLE IF EXISTS `brands`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `brands` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(32) NOT NULL,
   `description` varchar(255) DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `brands`
---
-
-LOCK TABLES `brands` WRITE;
-/*!40000 ALTER TABLE `brands` DISABLE KEYS */;
-/*!40000 ALTER TABLE `brands` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `categories`
@@ -55,40 +46,93 @@ CREATE TABLE `categories` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `categories`
+-- Table structure for table `check_sheets`
 --
 
-LOCK TABLES `categories` WRITE;
-/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `check_sheet`
---
-
-DROP TABLE IF EXISTS `check_sheet`;
+DROP TABLE IF EXISTS `check_sheets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `check_sheet` (
+CREATE TABLE `check_sheets` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `created_by` int(10) unsigned NOT NULL,
   `note` varchar(255) DEFAULT '',
   PRIMARY KEY (`id`),
-  KEY `check_sheet_created_by_foreign` (`created_by`),
-  CONSTRAINT `check_sheet_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`)
+  KEY `check_sheets_created_by_foreign` (`created_by`),
+  CONSTRAINT `check_sheets_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `check_sheet`
+-- Table structure for table `import_receipts`
 --
 
-LOCK TABLES `check_sheet` WRITE;
-/*!40000 ALTER TABLE `check_sheet` DISABLE KEYS */;
-/*!40000 ALTER TABLE `check_sheet` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `import_receipts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `import_receipts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(8) NOT NULL,
+  `order_id` int(10) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `created_by` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `import_receipts_fk_orders` (`order_id`),
+  KEY `import_receipts_fk_users` (`created_by`),
+  CONSTRAINT `import_receipts_fk_orders` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  CONSTRAINT `import_receipts_fk_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `orders` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(8) NOT NULL,
+  `supplier_id` int(10) unsigned NOT NULL,
+  `total_amount` decimal(12,2) NOT NULL,
+  `paid_amount` decimal(12,2) DEFAULT 0.00,
+  `expected_time` date NOT NULL,
+  `status` varchar(32) DEFAULT 'Đang giao dịch' CHECK (`status` in ('Đang giao dịch','Đã huỷ')),
+  `transaction_status` varchar(32) DEFAULT 'Chưa thanh toán' CHECK (`transaction_status` in ('Chưa thanh toán','Thanh toán một phần','Đã thanh toán')),
+  `imported_status` varchar(32) DEFAULT 'Chờ nhập kho' CHECK (`imported_status` in ('Chờ nhập kho','Đã nhập kho','Hoàn trả một phần','Hoàn trả toàn bộ')),
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp(),
+  `created_by` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `orders_code_unique` (`code`),
+  KEY `orders_supplier_id_foreign` (`supplier_id`),
+  KEY `orders_created_by_foreign` (`created_by`),
+  CONSTRAINT `orders_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
+  CONSTRAINT `orders_supplier_id_foreign` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `payment_invoice`
+--
+
+DROP TABLE IF EXISTS `payment_invoice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `payment_invoice` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `amount` decimal(12,2) NOT NULL CHECK (`amount` >= 0),
+  `order_id` int(10) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `created_by` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `payment_invoice_fk_orders` (`order_id`),
+  KEY `payment_invoice_fk_users` (`created_by`),
+  CONSTRAINT `payment_invoice_fk_orders` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  CONSTRAINT `payment_invoice_fk_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `products`
@@ -115,15 +159,6 @@ CREATE TABLE `products` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `products`
---
-
-LOCK TABLES `products` WRITE;
-/*!40000 ALTER TABLE `products` DISABLE KEYS */;
-/*!40000 ALTER TABLE `products` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `roles`
 --
 
@@ -136,15 +171,6 @@ CREATE TABLE `roles` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `roles`
---
-
-LOCK TABLES `roles` WRITE;
-/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `suppliers`
@@ -164,61 +190,11 @@ CREATE TABLE `suppliers` (
   `description` varchar(255) DEFAULT '',
   `fax` varchar(32) DEFAULT '',
   `debt` decimal(12,2) DEFAULT 0.00,
-  `activity_status` varchar(16) DEFAULT 'COOPERATIVE' CHECK (`activity_status` in ('COOPERATIVE','UNCOOPERATIVE')),
-  `record_status` varchar(16) DEFAULT 'ACTIVE' CHECK (`record_status` in ('ACTIVE','DELETED')),
+  `activity_status` varchar(32) DEFAULT 'Đang hợp tác' CHECK (`activity_status` in ('Đang hợp tác','Ngừng hợp tác')),
+  `record_status` varchar(32) DEFAULT 'Đang hoạt động' CHECK (`record_status` in ('Đang hoạt động','Đã xoá')),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `suppliers`
---
-
-LOCK TABLES `suppliers` WRITE;
-/*!40000 ALTER TABLE `suppliers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `suppliers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `supply_orders`
---
-
-DROP TABLE IF EXISTS `supply_orders`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `supply_orders` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) NOT NULL,
-  `supplier_id` int(10) unsigned NOT NULL,
-  `total_amount` decimal(12,2) NOT NULL,
-  `paid_amount` decimal(12,2) DEFAULT 0.00,
-  `status` varchar(16) DEFAULT 'PROCESSING' CHECK (`status` in ('PROCESSING','CANCELLED')),
-  `transaction_status` varchar(16) DEFAULT 'UNPAID' CHECK (`transaction_status` in ('UNPAID','PARTIAL_PAID','PAID')),
-  `imported_status` varchar(16) DEFAULT 'UNIMPORTED' CHECK (`imported_status` in ('UNIMPORTED','IMPORTED')),
-  `expected_time` date NOT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp(),
-  `created_by` int(10) unsigned NOT NULL,
-  `imported_by` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `supply_orders_code_unique` (`code`),
-  KEY `supply_orders_supplier_id_foreign` (`supplier_id`),
-  KEY `supply_orders_created_by_foreign` (`created_by`),
-  KEY `supply_orders_imported_by_foreign` (`imported_by`),
-  CONSTRAINT `supply_orders_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
-  CONSTRAINT `supply_orders_imported_by_foreign` FOREIGN KEY (`imported_by`) REFERENCES `users` (`id`),
-  CONSTRAINT `supply_orders_supplier_id_foreign` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `supply_orders`
---
-
-LOCK TABLES `supply_orders` WRITE;
-/*!40000 ALTER TABLE `supply_orders` DISABLE KEYS */;
-/*!40000 ALTER TABLE `supply_orders` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `user_role`
@@ -238,15 +214,6 @@ CREATE TABLE `user_role` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user_role`
---
-
-LOCK TABLES `user_role` WRITE;
-/*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `users`
 --
 
@@ -261,73 +228,28 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users`
+-- Table structure for table `variants_check_sheets`
 --
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `variant_checksheet`
---
-
-DROP TABLE IF EXISTS `variant_checksheet`;
+DROP TABLE IF EXISTS `variants_check_sheets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `variant_checksheet` (
-  `product_id` int(10) unsigned NOT NULL,
+CREATE TABLE `variants_check_sheets` (
+  `variant_id` int(10) unsigned NOT NULL,
   `checksheet_id` int(10) unsigned NOT NULL,
   `inventory_quantity` int(11) NOT NULL,
   `real_quantity` int(11) NOT NULL,
   `note` varchar(255) DEFAULT '',
-  PRIMARY KEY (`product_id`,`checksheet_id`),
+  PRIMARY KEY (`variant_id`,`checksheet_id`),
   KEY `checksheet_id` (`checksheet_id`),
-  CONSTRAINT `variant_checksheet_ibfk_1` FOREIGN KEY (`checksheet_id`) REFERENCES `check_sheet` (`id`),
-  CONSTRAINT `variant_checksheet_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+  CONSTRAINT `variants_check_sheets_ibfk_1` FOREIGN KEY (`checksheet_id`) REFERENCES `check_sheets` (`id`),
+  CONSTRAINT `variants_check_sheets_ibfk_2` FOREIGN KEY (`variant_id`) REFERENCES `variants` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `variant_checksheet`
---
-
-LOCK TABLES `variant_checksheet` WRITE;
-/*!40000 ALTER TABLE `variant_checksheet` DISABLE KEYS */;
-/*!40000 ALTER TABLE `variant_checksheet` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `variant_supplyorder`
---
-
-DROP TABLE IF EXISTS `variant_supplyorder`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `variant_supplyorder` (
-  `supply_order_id` int(10) unsigned NOT NULL,
-  `product_id` int(10) unsigned NOT NULL,
-  `supplied_quantity` int(11) NOT NULL,
-  PRIMARY KEY (`supply_order_id`,`product_id`),
-  KEY `product_id` (`product_id`),
-  CONSTRAINT `variant_supplyorder_ibfk_1` FOREIGN KEY (`supply_order_id`) REFERENCES `supply_orders` (`id`),
-  CONSTRAINT `variant_supplyorder_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `variant_supplyorder`
---
-
-LOCK TABLES `variant_supplyorder` WRITE;
-/*!40000 ALTER TABLE `variant_supplyorder` DISABLE KEYS */;
-/*!40000 ALTER TABLE `variant_supplyorder` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `variants`
@@ -338,33 +260,61 @@ DROP TABLE IF EXISTS `variants`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `variants` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `products_id` int(10) unsigned NOT NULL,
+  `product_id` int(10) unsigned NOT NULL,
   `code` varchar(16) NOT NULL,
-  `inventory_quantity` int(11) NOT NULL,
-  `sellable_quantity` int(11) NOT NULL,
+  `inventory_quantity` bigint(20) NOT NULL,
+  `sellable_quantity` bigint(20) NOT NULL,
   `size` varchar(8) DEFAULT '',
   `color` varchar(16) DEFAULT '',
   `material` varchar(32) DEFAULT '',
-  `unit` varchar(16) NOT NULL DEFAULT '',
+  `unit` varchar(16) NULL DEFAULT '',
   `original_price` decimal(12,2) NOT NULL,
   `whole_sale_price` decimal(12,2) NOT NULL,
   `retail_price` decimal(12,2) NOT NULL,
-  `record_status` varchar(16) DEFAULT 'ACTIVE' CHECK (`record_status` in ('ACTIVE','DELETED')),
+  `record_status` varchar(32) DEFAULT 'Đang hoạt động' CHECK (`record_status` in ('Đang hoạt động','Đã xoá')),
   PRIMARY KEY (`id`),
   UNIQUE KEY `variants_code_unique` (`code`),
-  KEY `variants_products_id_foreign` (`products_id`),
-  CONSTRAINT `variants_products_id_foreign` FOREIGN KEY (`products_id`) REFERENCES `products` (`id`)
+  KEY `variants_product_id_foreign` (`product_id`),
+  CONSTRAINT `variants_products_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `variants`
+-- Table structure for table `variants_import_receipts`
 --
 
-LOCK TABLES `variants` WRITE;
-/*!40000 ALTER TABLE `variants` DISABLE KEYS */;
-/*!40000 ALTER TABLE `variants` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `variants_import_receipts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `variants_import_receipts` (
+  `variant_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `import_receipt_id` int(11) NOT NULL,
+  `quantity` bigint(20) NOT NULL CHECK (`quantity` >= 0),
+  PRIMARY KEY (`variant_id`,`import_receipt_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `variants_orders`
+--
+
+DROP TABLE IF EXISTS `variants_orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `variants_orders` (
+  `order_id` int(10) unsigned NOT NULL,
+  `variant_id` int(10) unsigned NOT NULL,
+  `supplied_quantity` int(11) NOT NULL,
+  PRIMARY KEY (`order_id`,`variant_id`),
+  KEY `variant_id` (`variant_id`),
+  CONSTRAINT `variants_orders_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  CONSTRAINT `variants_orders_ibfk_2` FOREIGN KEY (`variant_id`) REFERENCES `variants` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping routines for database 'sapo_mock'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -375,4 +325,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-13 15:38:20
+-- Dump completed on 2021-12-18 10:03:10
