@@ -18,7 +18,7 @@ public class Variant {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Column(name = "code", nullable = false, length = 16)
+    @Column(name = "code", nullable = false, unique = true, length = 16)
     private String code;
 
     @Column(name = "inventory_quantity", nullable = false)

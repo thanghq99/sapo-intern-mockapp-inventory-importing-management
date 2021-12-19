@@ -10,7 +10,7 @@ public class Supplier {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "code", nullable = false, length = 16)
+    @Column(name = "code", nullable = false, unique = true, length = 16)
     private String code;
 
     @Column(name = "name", nullable = false, length = 64)

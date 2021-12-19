@@ -11,7 +11,7 @@ public class ImportReceipt {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "code", nullable = false, length = 8)
+    @Column(name = "code", nullable = false, unique = true, length = 8)
     private String code;
 
     @ManyToOne(optional = false)
