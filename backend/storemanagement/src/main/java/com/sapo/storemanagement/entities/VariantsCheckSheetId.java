@@ -9,11 +9,11 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class VariantChecksheetId implements Serializable {
-    private static final long serialVersionUID = -1162133790639918804L;
+public class VariantsCheckSheetId implements Serializable {
+    private static final long serialVersionUID = 4456938104971511060L;
 
-    @Column(name = "product_id", nullable = false)
-    private Integer productId;
+    @Column(name = "variant_id", nullable = false)
+    private Integer variantId;
 
     @Column(name = "checksheet_id", nullable = false)
     private Integer checksheetId;
@@ -26,25 +26,25 @@ public class VariantChecksheetId implements Serializable {
         this.checksheetId = checksheetId;
     }
 
-    public Integer getProductId() {
-        return productId;
+    public Integer getVariantId() {
+        return variantId;
     }
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
+    public void setVariantId(Integer variantId) {
+        this.variantId = variantId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, checksheetId);
+        return Objects.hash(variantId, checksheetId);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        VariantChecksheetId entity = (VariantChecksheetId) o;
-        return Objects.equals(this.productId, entity.productId) &&
+        VariantsCheckSheetId entity = (VariantsCheckSheetId) o;
+        return Objects.equals(this.variantId, entity.variantId) &&
             Objects.equals(this.checksheetId, entity.checksheetId);
     }
 }
