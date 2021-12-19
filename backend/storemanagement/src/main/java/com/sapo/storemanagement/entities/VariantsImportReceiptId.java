@@ -11,10 +11,20 @@ import java.util.Objects;
 @Embeddable
 public class VariantsImportReceiptId implements Serializable {
     private static final long serialVersionUID = -335613539868123076L;
+
     @Column(name = "variant_id", nullable = false)
     private Integer variantId;
+
     @Column(name = "import_receipt_id", nullable = false)
     private Integer importReceiptId;
+
+    public VariantsImportReceiptId() {
+    }
+
+    public VariantsImportReceiptId(Integer variantId, Integer importReceiptId) {
+        this.variantId = variantId;
+        this.importReceiptId = importReceiptId;
+    }
 
     public Integer getImportReceiptId() {
         return importReceiptId;

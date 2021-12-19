@@ -18,6 +18,14 @@ public class VariantsCheckSheetId implements Serializable {
     @Column(name = "checksheet_id", nullable = false)
     private Integer checksheetId;
 
+    public VariantsCheckSheetId() {
+    }
+
+    public VariantsCheckSheetId(Integer variantId, Integer checksheetId) {
+        this.variantId = variantId;
+        this.checksheetId = checksheetId;
+    }
+
     public Integer getChecksheetId() {
         return checksheetId;
     }

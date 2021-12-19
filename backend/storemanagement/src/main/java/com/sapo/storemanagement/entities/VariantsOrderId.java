@@ -11,10 +11,20 @@ import java.util.Objects;
 @Embeddable
 public class VariantsOrderId implements Serializable {
     private static final long serialVersionUID = -5671855994402133031L;
+
     @Column(name = "order_id", nullable = false)
     private Integer orderId;
+
     @Column(name = "variant_id", nullable = false)
     private Integer variantId;
+
+    public VariantsOrderId() {
+    }
+
+    public VariantsOrderId(Integer orderId, Integer variantId) {
+        this.orderId = orderId;
+        this.variantId = variantId;
+    }
 
     public Integer getVariantId() {
         return variantId;
