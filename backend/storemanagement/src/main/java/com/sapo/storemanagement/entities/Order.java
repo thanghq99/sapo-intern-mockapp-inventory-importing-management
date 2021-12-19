@@ -31,13 +31,13 @@ public class Order {
     private LocalDate expectedTime;
 
     @Column(name = "status", length = 32)
-    private String status;
+    private OrderStatus status = OrderStatus.PROCESSING;
 
     @Column(name = "transaction_status", length = 32)
-    private String transactionStatus;
+    private TransactionStatus transactionStatus = TransactionStatus.UNPAID;
 
     @Column(name = "imported_status", length = 32)
-    private String importedStatus;
+    private ImportedStatus importedStatus = ImportedStatus.AWAITING;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -126,26 +126,26 @@ public class Order {
     }
 
     public String getStatus() {
-        return status;
+        return status.getStatus();
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
     public String getTransactionStatus() {
-        return transactionStatus;
+        return transactionStatus.getStatus();
     }
 
-    public void setTransactionStatus(String transactionStatus) {
+    public void setTransactionStatus(TransactionStatus transactionStatus) {
         this.transactionStatus = transactionStatus;
     }
 
     public String getImportedStatus() {
-        return importedStatus;
+        return importedStatus.getStatus();
     }
 
-    public void setImportedStatus(String importedStatus) {
+    public void setImportedStatus(ImportedStatus importedStatus) {
         this.importedStatus = importedStatus;
     }
 
