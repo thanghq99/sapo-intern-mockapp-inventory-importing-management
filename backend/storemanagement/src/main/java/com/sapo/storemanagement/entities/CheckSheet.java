@@ -9,7 +9,7 @@ public class CheckSheet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "code", nullable = false, length = 8)
     private String code;
@@ -38,7 +38,7 @@ public class CheckSheet {
         this.note = note;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

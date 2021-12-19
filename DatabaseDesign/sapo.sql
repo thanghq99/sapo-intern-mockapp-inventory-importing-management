@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `categories` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
   `description` varchar(255) DEFAULT '',
   PRIMARY KEY (`id`)
@@ -38,10 +38,10 @@ DROP TABLE IF EXISTS `check_sheets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `check_sheets` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(8) NOT NULL UNIQUE KEY,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `created_by` int(10) unsigned NOT NULL,
+  `created_by` bigint unsigned NOT NULL,
   `note` varchar(255) DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `check_sheets_created_by_foreign` (`created_by`),
@@ -57,11 +57,11 @@ DROP TABLE IF EXISTS `import_receipts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `import_receipts` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(8) NOT NULL,
-  `order_id` int(10) unsigned NOT NULL,
+  `order_id` bigint unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `created_by` int(10) unsigned NOT NULL,
+  `created_by` bigint unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `import_receipts_fk_orders` (`order_id`),
   KEY `import_receipts_fk_users` (`created_by`),
@@ -78,9 +78,9 @@ DROP TABLE IF EXISTS `orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `orders` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(8) NOT NULL,
-  `supplier_id` int(10) unsigned NOT NULL,
+  `supplier_id` bigint unsigned NOT NULL,
   `total_amount` decimal(12,2) NOT NULL,
   `paid_amount` decimal(12,2) DEFAULT 0.00,
   `expected_time` date NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE `orders` (
   `imported_status` varchar(32) DEFAULT 'Chờ nhập kho' CHECK (`imported_status` in ('Chờ nhập kho','Đã nhập kho','Hoàn trả một phần','Hoàn trả toàn bộ')),
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp(),
-  `created_by` int(10) unsigned NOT NULL,
+  `created_by` bigint unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `orders_code_unique` (`code`),
   KEY `orders_supplier_id_foreign` (`supplier_id`),
@@ -107,11 +107,11 @@ DROP TABLE IF EXISTS `payment_invoice`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `payment_invoice` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `amount` decimal(12,2) NOT NULL CHECK (`amount` >= 0),
-  `order_id` int(10) unsigned NOT NULL,
+  `order_id` bigint unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `created_by` int(10) unsigned NOT NULL,
+  `created_by` bigint unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `payment_invoice_fk_orders` (`order_id`),
   KEY `payment_invoice_fk_users` (`created_by`),
@@ -128,9 +128,9 @@ DROP TABLE IF EXISTS `products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `products` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
-  `category_id` int(10) unsigned NOT NULL,
+  `category_id` bigint unsigned NOT NULL,
   `brand` varchar(32) NULL DEFAULT '',
   `description` varchar(255) DEFAULT '',
   `image_url` varchar(255) NOT NULL,
@@ -150,8 +150,8 @@ DROP TABLE IF EXISTS `roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `roles` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` int(11) NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -164,7 +164,7 @@ DROP TABLE IF EXISTS `suppliers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `suppliers` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(16) NOT NULL,
   `name` varchar(64) NOT NULL,
   `address` varchar(128) NOT NULL,
@@ -188,8 +188,8 @@ DROP TABLE IF EXISTS `user_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_role` (
-  `user_id` int(10) unsigned NOT NULL,
-  `role_id` int(10) unsigned NOT NULL,
+  `user_id` bigint unsigned NOT NULL,
+  `role_id` bigint unsigned NOT NULL,
   PRIMARY KEY (`user_id`,`role_id`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `user_role_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
@@ -205,7 +205,7 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(32) NOT NULL,
   `password` varchar(255) NOT NULL,
   `email` varchar(128) NOT NULL,
@@ -223,10 +223,10 @@ DROP TABLE IF EXISTS `variants_check_sheets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `variants_check_sheets` (
-  `variant_id` int(10) unsigned NOT NULL,
-  `checksheet_id` int(10) unsigned NOT NULL,
-  `inventory_quantity` int(11) NOT NULL,
-  `real_quantity` int(11) NOT NULL,
+  `variant_id` bigint unsigned NOT NULL,
+  `checksheet_id` bigint unsigned NOT NULL,
+  `inventory_quantity` bigint NOT NULL,
+  `real_quantity` bigint NOT NULL,
   `note` varchar(255) DEFAULT '',
   PRIMARY KEY (`variant_id`,`checksheet_id`),
   KEY `checksheet_id` (`checksheet_id`),
@@ -243,11 +243,11 @@ DROP TABLE IF EXISTS `variants`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `variants` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `product_id` int(10) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `product_id` bigint unsigned NOT NULL,
   `code` varchar(16) NOT NULL,
-  `inventory_quantity` bigint(20) NOT NULL,
-  `sellable_quantity` bigint(20) NOT NULL,
+  `inventory_quantity` bigint NOT NULL,
+  `sellable_quantity` bigint NOT NULL,
   `size` varchar(8) DEFAULT '',
   `color` varchar(16) DEFAULT '',
   `material` varchar(32) DEFAULT '',
@@ -271,10 +271,12 @@ DROP TABLE IF EXISTS `variants_import_receipts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `variants_import_receipts` (
-  `variant_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `import_receipt_id` int(11) NOT NULL,
-  `quantity` bigint(20) NOT NULL CHECK (`quantity` >= 0),
-  PRIMARY KEY (`variant_id`,`import_receipt_id`)
+  `variant_id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `import_receipt_id` bigint unsigned NOT NULL,
+  `quantity` bigint NOT NULL CHECK (`quantity` >= 0),
+  PRIMARY KEY (`variant_id`,`import_receipt_id`),
+  CONSTRAINT `fk_variants` FOREIGN KEY (`variant_id`) REFERENCES `variants` (`id`),
+  CONSTRAINT `fk_import_receipts` FOREIGN KEY (`import_receipt_id`) REFERENCES `import_receipts` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -286,9 +288,9 @@ DROP TABLE IF EXISTS `variants_orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `variants_orders` (
-  `order_id` int(10) unsigned NOT NULL,
-  `variant_id` int(10) unsigned NOT NULL,
-  `supplied_quantity` int(11) NOT NULL,
+  `order_id` bigint unsigned NOT NULL,
+  `variant_id` bigint unsigned NOT NULL,
+  `supplied_quantity` bigint NOT NULL,
   PRIMARY KEY (`order_id`,`variant_id`),
   KEY `variant_id` (`variant_id`),
   CONSTRAINT `variants_orders_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),

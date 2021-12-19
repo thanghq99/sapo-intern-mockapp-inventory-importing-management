@@ -13,32 +13,32 @@ public class VariantsCheckSheetId implements Serializable {
     private static final long serialVersionUID = 4456938104971511060L;
 
     @Column(name = "variant_id", nullable = false)
-    private Integer variantId;
+    private Long variantId;
 
     @Column(name = "checksheet_id", nullable = false)
-    private Integer checksheetId;
+    private Long checksheetId;
 
     public VariantsCheckSheetId() {
     }
 
-    public VariantsCheckSheetId(Integer variantId, Integer checksheetId) {
+    public VariantsCheckSheetId(Long variantId, Long checksheetId) {
         this.variantId = variantId;
         this.checksheetId = checksheetId;
     }
 
-    public Integer getChecksheetId() {
+    public Long getChecksheetId() {
         return checksheetId;
     }
 
-    public void setChecksheetId(Integer checksheetId) {
+    public void setChecksheetId(Long checksheetId) {
         this.checksheetId = checksheetId;
     }
 
-    public Integer getVariantId() {
+    public Long getVariantId() {
         return variantId;
     }
 
-    public void setVariantId(Integer variantId) {
+    public void setVariantId(Long variantId) {
         this.variantId = variantId;
     }
 

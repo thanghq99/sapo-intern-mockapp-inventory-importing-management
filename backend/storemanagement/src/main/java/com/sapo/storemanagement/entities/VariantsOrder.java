@@ -21,12 +21,12 @@ public class VariantsOrder {
     private Variant variant;
 
     @Column(name = "supplied_quantity", nullable = false)
-    private Integer suppliedQuantity;
+    private Long suppliedQuantity;
 
     public VariantsOrder() {
     }
 
-    public VariantsOrder(int orderId, int variantId, int suppliedQuantity) {
+    public VariantsOrder(long orderId, long variantId, long suppliedQuantity) {
         this.id = new VariantsOrderId(orderId, variantId);
         this.suppliedQuantity = suppliedQuantity;
     }
@@ -43,11 +43,11 @@ public class VariantsOrder {
         return variant;
     }
 
-    public Integer getSuppliedQuantity() {
+    public Long getSuppliedQuantity() {
         return suppliedQuantity;
     }
 
-    public void setSuppliedQuantity(Integer suppliedQuantity) {
+    public void setSuppliedQuantity(Long suppliedQuantity) {
         this.suppliedQuantity = suppliedQuantity;
     }
 }

@@ -17,14 +17,14 @@ public class VariantsCheckSheet {
 
     @ManyToOne
     @MapsId("checksheetId")
-    @JoinColumn(name = "check_sheet_id")
+    @JoinColumn(name = "checksheet_id")
     private CheckSheet checkSheet;
 
     @Column(name = "inventory_quantity", nullable = false)
-    private Integer inventoryQuantity;
+    private Long inventoryQuantity;
 
     @Column(name = "real_quantity", nullable = false)
-    private Integer realQuantity;
+    private Long realQuantity;
 
     @Column(name = "note")
     private String note = "";
@@ -32,14 +32,14 @@ public class VariantsCheckSheet {
     public VariantsCheckSheet() {
     }
 
-    public VariantsCheckSheet(int variantId, int checksheetId, int inventoryQuantity, int realQuantity) {
+    public VariantsCheckSheet(long variantId, long checksheetId, long inventoryQuantity, long realQuantity) {
         this.id = new VariantsCheckSheetId(variantId, checksheetId);
         this.inventoryQuantity = inventoryQuantity;
         this.realQuantity = realQuantity;
     }
 
-    public VariantsCheckSheet(int variantId, int checksheetId,
-                              int inventoryQuantity, int realQuantity,
+    public VariantsCheckSheet(long variantId, long checksheetId,
+                              long inventoryQuantity, long realQuantity,
                               String note) {
         this.id = new VariantsCheckSheetId(variantId, checksheetId);
         this.inventoryQuantity = inventoryQuantity;
@@ -59,15 +59,15 @@ public class VariantsCheckSheet {
         return checkSheet;
     }
 
-    public Integer getInventoryQuantity() {
+    public Long getInventoryQuantity() {
         return inventoryQuantity;
     }
 
-    public Integer getRealQuantity() {
+    public Long getRealQuantity() {
         return realQuantity;
     }
 
-    public void setRealQuantity(Integer realQuantity) {
+    public void setRealQuantity(Long realQuantity) {
         this.realQuantity = realQuantity;
     }
 

@@ -12,7 +12,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "code", nullable = false, length = 8)
     private String code;
@@ -61,7 +61,7 @@ public class Order {
         this.createdBy = createdBy;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

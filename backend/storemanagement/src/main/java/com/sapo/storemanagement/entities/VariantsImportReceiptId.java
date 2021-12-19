@@ -13,32 +13,32 @@ public class VariantsImportReceiptId implements Serializable {
     private static final long serialVersionUID = -335613539868123076L;
 
     @Column(name = "variant_id", nullable = false)
-    private Integer variantId;
+    private Long variantId;
 
     @Column(name = "import_receipt_id", nullable = false)
-    private Integer importReceiptId;
+    private Long importReceiptId;
 
     public VariantsImportReceiptId() {
     }
 
-    public VariantsImportReceiptId(Integer variantId, Integer importReceiptId) {
+    public VariantsImportReceiptId(Long variantId, Long importReceiptId) {
         this.variantId = variantId;
         this.importReceiptId = importReceiptId;
     }
 
-    public Integer getImportReceiptId() {
+    public Long getImportReceiptId() {
         return importReceiptId;
     }
 
-    public void setImportReceiptId(Integer importReceiptId) {
+    public void setImportReceiptId(Long importReceiptId) {
         this.importReceiptId = importReceiptId;
     }
 
-    public Integer getVariantId() {
+    public Long getVariantId() {
         return variantId;
     }
 
-    public void setVariantId(Integer variantId) {
+    public void setVariantId(Long variantId) {
         this.variantId = variantId;
     }
 

@@ -13,32 +13,32 @@ public class VariantsOrderId implements Serializable {
     private static final long serialVersionUID = -5671855994402133031L;
 
     @Column(name = "order_id", nullable = false)
-    private Integer orderId;
+    private Long orderId;
 
     @Column(name = "variant_id", nullable = false)
-    private Integer variantId;
+    private Long variantId;
 
     public VariantsOrderId() {
     }
 
-    public VariantsOrderId(Integer orderId, Integer variantId) {
+    public VariantsOrderId(Long orderId, Long variantId) {
         this.orderId = orderId;
         this.variantId = variantId;
     }
 
-    public Integer getVariantId() {
+    public Long getVariantId() {
         return variantId;
     }
 
-    public void setVariantId(Integer variantId) {
+    public void setVariantId(Long variantId) {
         this.variantId = variantId;
     }
 
-    public Integer getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Integer orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 

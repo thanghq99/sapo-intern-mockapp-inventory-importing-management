@@ -8,7 +8,7 @@ public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "code", nullable = false, length = 16)
     private String code;
@@ -66,7 +66,7 @@ public class Supplier {
         this.debt = debt;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

@@ -12,7 +12,7 @@ public class Variant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_id", nullable = false)
@@ -83,7 +83,7 @@ public class Variant {
         this.retailPrice = retailPrice;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

@@ -24,7 +24,7 @@ public class VariantsImportReceipt {
     public VariantsImportReceipt() {
     }
 
-    public VariantsImportReceipt(int variantId, int importReceiptId, long quantity) {
+    public VariantsImportReceipt(long variantId, long importReceiptId, long quantity) {
         this.id = new VariantsImportReceiptId(variantId, importReceiptId);
         this.quantity = quantity;
     }
