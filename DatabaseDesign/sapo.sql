@@ -16,21 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `brands`
---
-
-DROP TABLE IF EXISTS `brands`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `brands` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) NOT NULL,
-  `description` varchar(255) DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `categories`
 --
 
@@ -54,6 +39,7 @@ DROP TABLE IF EXISTS `check_sheets`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `check_sheets` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(8) NOT NULL UNIQUE KEY,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `created_by` int(10) unsigned NOT NULL,
   `note` varchar(255) DEFAULT '',
@@ -145,15 +131,13 @@ CREATE TABLE `products` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `category_id` int(10) unsigned NOT NULL,
-  `brand_id` int(10) unsigned NOT NULL,
+  `brand` varchar(32) NULL DEFAULT '',
   `description` varchar(255) DEFAULT '',
   `image_url` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `products_category_id_foreign` (`category_id`),
-  KEY `products_brand_id_foreign` (`brand_id`),
-  CONSTRAINT `products_brand_id_foreign` FOREIGN KEY (`brand_id`) REFERENCES `brands` (`id`),
   CONSTRAINT `products_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
