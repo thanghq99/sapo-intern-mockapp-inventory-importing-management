@@ -1,7 +1,6 @@
 package com.sapo.storemanagement.entities;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "suppliers")
@@ -9,9 +8,9 @@ public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
-    @Column(name = "code", nullable = false, length = 16)
+    @Column(name = "code", nullable = false, unique = true, length = 16)
     private String code;
 
     @Column(name = "name", nullable = false, length = 64)
@@ -21,42 +20,41 @@ public class Supplier {
     private String address;
 
     @Column(name = "phone", length = 11)
-    private String phone;
+    private String phone = "";
 
     @Column(name = "email", length = 128)
-    private String email;
+    private String email = "";
 
     @Column(name = "website", length = 128)
-    private String website;
+    private String website = "";
 
     @Column(name = "description")
-    private String description;
+    private String description = "";
 
     @Column(name = "fax", length = 32)
-    private String fax;
+    private String fax = "";
 
-    @Column(name = "debt", precision = 12, scale = 2)
-    private BigDecimal debt;
+    @Column(name = "debt")
+    private Double debt = 0.0;
 
-    private SupplierStatus activityStatus;
+    @Column(name = "activity_status", length = 32)
+    private SupplierStatus activityStatus = SupplierStatus.COOPERATIVE;
 
-    private RecordStatus recordStatus;
+    @Column(name = "record_status", length = 32)
+    private RecordStatus recordStatus = RecordStatus.ACTIVE;
 
     public Supplier() {
     }
 
-    public Supplier(Integer id, String code, String name, String address) {
-        this.id = id;
+    public Supplier(String code, String name, String address) {
         this.code = code;
         this.name = name;
         this.address = address;
     }
 
-    public Supplier(Integer id, String code, String name,
-                    String address, String phone, String email,
-                    String website, String description, String fax,
-                    BigDecimal debt, SupplierStatus activityStatus, RecordStatus recordStatus) {
-        this.id = id;
+    public Supplier(String code, String name, String address,
+                    String phone, String email, String website,
+                    String description, String fax, Double debt) {
         this.code = code;
         this.name = name;
         this.address = address;
@@ -66,11 +64,9 @@ public class Supplier {
         this.description = description;
         this.fax = fax;
         this.debt = debt;
-        this.activityStatus = activityStatus;
-        this.recordStatus = recordStatus;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -80,6 +76,14 @@ public class Supplier {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAddress() {
@@ -130,24 +134,32 @@ public class Supplier {
         this.fax = fax;
     }
 
-    public BigDecimal getDebt() {
+    public Double getDebt() {
         return debt;
     }
 
-    public void setDebt(BigDecimal debt) {
+    private void setDebt(Double debt) {
         this.debt = debt;
     }
 
-    public SupplierStatus getActivityStatus() {
-        return activityStatus;
+    public void increaseDebt(double offset) {
+        this.setDebt(this.debt + offset);
+    }
+
+    public void decreaseDebt(double offset) {
+        this.setDebt(this.debt - offset);
+    }
+
+    public String getActivityStatus() {
+        return activityStatus.getStatus();
     }
 
     public void setActivityStatus(SupplierStatus activityStatus) {
         this.activityStatus = activityStatus;
     }
 
-    public RecordStatus getRecordStatus() {
-        return recordStatus;
+    public String getRecordStatus() {
+        return recordStatus.getStatus();
     }
 
     public void setRecordStatus(RecordStatus recordStatus) {

@@ -10,7 +10,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "name", nullable = false, length = 64)
     private String name;
@@ -19,9 +19,8 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "brand_id", nullable = false)
-    private Brand brand;
+    @Column(name = "brand", length = 32)
+    private String brand;
 
     @Column(name = "description")
     private String description;
@@ -38,17 +37,15 @@ public class Product {
     public Product() {
     }
 
-    public Product(Integer id, String name, Category category, Brand brand, String imageUrl) {
-        this.id = id;
+    public Product(String name, Category category, String imageUrl) {
         this.name = name;
         this.category = category;
         this.brand = brand;
         this.imageUrl = imageUrl;
     }
 
-    public Product(Integer id, String name, Category category,
-                   Brand brand, String description, String imageUrl) {
-        this.id = id;
+    public Product(String name, Category category, String brand,
+                   String description, String imageUrl) {
         this.name = name;
         this.category = category;
         this.brand = brand;
@@ -56,7 +53,7 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -66,7 +63,6 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
-        this.setUpdatedAt(LocalDateTime.now());
     }
 
     public Category getCategory() {
@@ -75,10 +71,9 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
-        this.setUpdatedAt(LocalDateTime.now());
     }
 
-    public Brand getBrand() {
+    public String getBrand() {
         return brand;
     }
 
@@ -88,7 +83,6 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
-        this.setUpdatedAt(LocalDateTime.now());
     }
 
     public String getImageUrl() {
@@ -97,7 +91,6 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-        this.setUpdatedAt(LocalDateTime.now());
     }
 
     public LocalDateTime getCreatedAt() {

@@ -8,29 +8,29 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "name", nullable = false, length = 32)
     private String name;
 
     @Column(name = "description")
-    private String description;
+    private String description = "";
 
     public Category() {
     }
 
-    public Category(Integer id, String name) {
+    public Category(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Category(Integer id, String name, String description) {
+    public Category(Long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

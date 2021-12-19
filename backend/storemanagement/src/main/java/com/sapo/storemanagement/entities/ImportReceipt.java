@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "check_sheets")
-public class CheckSheet {
+@Table(name = "import_receipts")
+public class ImportReceipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -14,6 +14,10 @@ public class CheckSheet {
     @Column(name = "code", nullable = false, unique = true, length = 8)
     private String code;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -21,49 +25,28 @@ public class CheckSheet {
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
 
-    @Column(name = "note")
-    private String note = "";
-
-    public CheckSheet() {
+    public ImportReceipt() {
     }
 
-    public CheckSheet(String code, User createdBy) {
+    public ImportReceipt(String code, Order order, User createdBy) {
         this.code = code;
+        this.order = order;
         this.createdBy = createdBy;
-    }
-
-    public CheckSheet(String code, User createdBy, String note) {
-        this.code = code;
-        this.createdBy = createdBy;
-        this.note = note;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getCode() {
         return code;
     }
 
+    public Order getOrder() {
+        return order;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    private void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public User getCreatedBy() {
         return createdBy;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-        this.setCreatedAt(LocalDateTime.now());
     }
 }
