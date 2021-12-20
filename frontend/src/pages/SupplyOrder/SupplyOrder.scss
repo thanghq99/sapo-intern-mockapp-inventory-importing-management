@@ -81,9 +81,9 @@
         .btn-more-select {
             color: #000000;
             width: 15%;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 100;
-            padding-right: 15px;
+            text-transform: none;
             .MuiButton-root {
                 border-radius: 0;
                 border-color: #e0e0e0;
@@ -165,6 +165,9 @@
                 margin-top: 10px;
                 width: 90%;
             }
+            .MuiOutlinedInput-root {
+                height: 40px;
+            }
         }
         .time-supply-order{
             .title{
@@ -178,6 +181,10 @@
                 .MuiFormControl-root {
                     margin-left: 20px;
                     width: 85%;
+                    height: 40px;
+                    .MuiOutlinedInput-root {
+                        height: 40px;
+                    }
                 }
             }
         }

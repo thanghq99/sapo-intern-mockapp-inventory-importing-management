@@ -114,6 +114,7 @@ export default function SupplyOrder() {
                                     // sx={{ width: 500 }}
                                     renderInput={(params) => <TextField {...params} style={{ padding: 0 }} placeholder="Chọn nhà cung cấp" />}
                                 />
+                                
                             </Box>
 
 
