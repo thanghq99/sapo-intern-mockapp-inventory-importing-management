@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../Sapo_Example/Ex_08/demo.iml" filepath="$PROJECT_DIR$/../../Sapo_Example/Ex_08/demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../MyProject/web-main_ProjectI/backend/miniblog.iml" filepath="$PROJECT_DIR$/../../MyProject/web-main_ProjectI/backend/miniblog.iml" />
       <module fileurl="file://$PROJECT_DIR$/backend/storemanagement/storemanagement.iml" filepath="$PROJECT_DIR$/backend/storemanagement/storemanagement.iml" />
     </modules>
   </component>
