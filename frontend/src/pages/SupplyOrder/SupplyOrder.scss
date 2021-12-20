@@ -1,0 +1,218 @@
+.body {
+    flex-direction: column ;
+    background-color: #F4F6F8;
+    padding: 10px 20px;
+    // justify-content: space-between;
+}
+.back {
+    display: flex;
+    margin-top: 22px;
+}
+.Supply {
+    
+    border: 1px solid #e4e4e4 ;
+    border-radius: 5px;
+    padding: 10px 10px;
+    background-color: #FFFFFF;
+    margin-top: 40px;
+    .title {
+        font-weight: 600;
+        padding-bottom: 10px;
+        margin-left: 10px;
+        font-size: 14px;
+    }
+    .selectSupply-info {
+        display: flex;
+        flex-direction: row;
+        margin-left: 10px;
+        margin-right: 10px;
+        border: 1px rgb(209, 209, 209) solid;
+        border-radius: 5px;
+        align-items: center;
+        .icon-search{   
+            margin-left: 10px;
+        }
+        .selectSupply {
+            width: 95%;
+            height: 40px;
+            border-radius: 5px;
+            z-index: 1;   
+          }
+    }
+}
+
+.Products {
+    margin-top: 30px;
+    background-color: #FFFFFF;
+    border: 1px solid #e4e4e4 ;
+    border-radius: 5px;
+    .title {
+        font-weight: 600;
+        font-size: 14px;
+        padding-bottom: 10px;
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+    .selectproduct {
+        display: flex;
+        margin-bottom: 15px;
+        .selectProduct-info{
+            display: flex;
+            flex-direction: row;
+            margin-left: 20px;
+            border: 1px rgb(209, 209, 209) solid;
+            border-bottom-left-radius: 5px;
+            border-top-left-radius: 5px;
+            // border-radius: 5px;
+            align-items: center;
+            width: 80%;
+            // height: 30px;
+            .icon-search{   
+                margin-left: 10px;
+            }
+            .selectProductItem {
+                width: 95%;
+                height: 40px;
+                border-radius: 5px;
+                z-index: 1; 
+            }
+
+        }
+        .btn-more-select {
+            color: #000000;
+            width: 15%;
+            font-size: 13px;
+            font-weight: 100;
+            text-transform: none;
+            .MuiButton-root {
+                border-radius: 0;
+                border-color: #e0e0e0;
+            }
+           
+        }
+    }
+    .header-Product {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 20px;
+        border: 1px solid #e4e4e4;
+        background-color: #F4F6F8;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    .bodyProducts {
+        padding: 0;
+        .product-item {
+            width: 100%;
+            min-height: 50px;
+            border: 1px solid rgb(192, 192, 192);
+           
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            // align-items: ;
+        }
+        .pay-info {
+            width: 300px;
+            // border: 1px solid black;
+            float: right;
+            padding-top: 15px;
+            .pay-info-item {
+                display: flex;
+                justify-content: space-between;
+                height: 30px;
+                padding-right: 10px;
+            }
+        }
+    }
+}
+
+.more-info {
+    // position: absolute;
+    // float: right;
+    // background-color: #FFFFFF;
+    // padding-left: 30px;
+   
+    .time-line {
+        margin-top: 15px;
+        margin-bottom: 20px;
+    }
+    .more-info-detail{
+        background-color: #FFFFFF;
+        border: 1px solid rgb(224, 224, 224);
+        border-radius: 5px;
+        width: 95%;
+        padding-bottom: 20px;
+        .title {
+            font-size: 15px;
+            font-weight: 700;
+            padding-top: 15px;
+            padding-left: 20px;
+        }
+        .code-supply-order{
+            // background-color: #9e9e9e;
+            // width: 80%;
+            padding-top: 5px;
+            padding-left: 20px;
+            height: 120px;
+            .title{
+                font-size: 12px;
+                font-weight: 400;
+                padding-left: 0px;
+                // margin: 15px 15px;
+            }
+            .info {
+                margin-top: 10px;
+                width: 90%;
+            }
+            .MuiOutlinedInput-root {
+                height: 40px;
+            }
+        }
+        .time-supply-order{
+            .title{
+                font-size: 12px;
+                font-weight: 400;
+                padding-left: 20px;
+                margin-bottom: 10px;
+                
+            }
+            .time {
+                .MuiFormControl-root {
+                    margin-left: 20px;
+                    width: 85%;
+                    height: 40px;
+                    .MuiOutlinedInput-root {
+                        height: 40px;
+                    }
+                }
+            }
+        }
+        .note {
+            margin-top: 10px;
+            .title {
+                font-size: 12px;
+                font-weight: 450;
+                padding-top: 15px;
+                padding-left: 20px;
+                margin-bottom: 10px;
+            }
+            .content-note {
+                margin-left: 20px;
+                width: 85%;
+                height: 80px;
+                border-color: #cfcfcf;
+                border-radius: 5px;
+            }
+        }
+        .btn-order {
+            margin-left: 20px;
+            width: 85%;
+            margin-top: 20px;
+            height: 40px;
+            background-color: #007BFF ;
+            color: #FFFFFF;
+            font-size: 16px;
+        }
+    }
+}
