@@ -26,12 +26,12 @@ public class SupplierController {
         return supplierService.getSupplierById(id);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public Iterable<Supplier> findAllSuppliers(){
         return supplierService.listAllSuppliers();
     }
 
-    @PostMapping("/")
+    @PostMapping
     public Supplier createSupplier(@RequestBody Supplier supplier){
         return supplierService.saveSupplier(supplier);
     }
