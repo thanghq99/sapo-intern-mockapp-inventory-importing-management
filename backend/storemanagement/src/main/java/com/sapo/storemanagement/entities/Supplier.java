@@ -150,16 +150,16 @@ public class Supplier {
         this.setDebt(this.debt - offset);
     }
 
-    public String getActivityStatus() {
-        return activityStatus.getStatus();
+    public SupplierStatus getActivityStatus() {
+        return activityStatus;
     }
 
     public void setActivityStatus(SupplierStatus activityStatus) {
         this.activityStatus = activityStatus;
     }
 
-    public String getRecordStatus() {
-        return recordStatus.getStatus();
+    public RecordStatus getRecordStatus() {
+        return recordStatus;
     }
 
     public void setRecordStatus(RecordStatus recordStatus) {

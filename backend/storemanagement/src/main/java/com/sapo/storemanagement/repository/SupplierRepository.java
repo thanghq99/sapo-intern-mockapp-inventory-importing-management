@@ -8,5 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
-    Optional<Supplier> findByCode(String code);
+    boolean existsByCode(String code);
+//   Optional<Supplier> findByCode(String code);
+//    void delete(Long id);
 }

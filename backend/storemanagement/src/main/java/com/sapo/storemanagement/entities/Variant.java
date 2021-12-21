@@ -95,6 +95,10 @@ public class Variant {
         return code;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public Long getInventoryQuantity() {
         return inventoryQuantity;
     }
