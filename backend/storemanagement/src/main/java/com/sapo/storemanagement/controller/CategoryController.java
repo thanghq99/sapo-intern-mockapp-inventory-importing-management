@@ -18,17 +18,17 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public Category findSupplierById(@PathVariable long id){
+    public Category findCategoryById(@PathVariable long id){
         return categoryService.getCategoryById(id);
     }
 
     @GetMapping
-    public List<Category> findAllSuppliers(){
+    public List<Category> findAllCategories(){
         return categoryService.listAllCategories();
     }
 
     @PostMapping
-    public Category createSupplier(@RequestBody Category category){
+    public Category createCategory(@RequestBody Category category){
         return categoryService.saveCategory(category);
     }
 }
