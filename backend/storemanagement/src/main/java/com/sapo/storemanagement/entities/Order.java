@@ -57,8 +57,8 @@ public class Order {
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
 
-//    public Order() {
-//    }
+    public Order() {
+    }
 
     public Order(String code, Supplier supplier, Double totalAmount,
                  LocalDate expectedTime, User createdBy) {
