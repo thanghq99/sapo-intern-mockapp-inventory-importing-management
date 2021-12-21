@@ -1,11 +1,13 @@
 package com.sapo.storemanagement.service.impl;
 
 import com.sapo.storemanagement.entities.Category;
+import com.sapo.storemanagement.exception.BadNumberException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
 import com.sapo.storemanagement.repository.CategoryRepository;
 import com.sapo.storemanagement.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,12 +27,17 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category getCategoryById(Long id) {
+        if(id <= 0) {
+            throw new BadNumberException("id must be greater than 0");
+        }
+
         return categoryRepository
             .findById(id)
             .orElseThrow(() -> new RecordNotFoundException("Category not found"));
     }
 
     @Override
+    @Transactional
     public Category saveCategory(Category category) {
         return categoryRepository.save(category);
     }

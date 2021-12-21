@@ -33,6 +33,10 @@ public class VariantServiceImpl implements VariantService {
 
     @Override
     public Variant getVariantById(Long id) {
+        if(id <= 0) {
+            throw new BadNumberException("id must be greater than 0");
+        }
+
         return variantRepository
             .findById(id)
             .orElseThrow(() -> new RecordNotFoundException("Variant not found"));
@@ -93,7 +97,7 @@ public class VariantServiceImpl implements VariantService {
     public String deleteVariant(Long id) {
         Variant variant = this.getVariantById(id);
         variant.setRecordStatus(RecordStatus.DELETED);
-        this.saveVariant(variant);
+        variantRepository.save(variant);
 
         return "Delete Variant " + id;
     }
