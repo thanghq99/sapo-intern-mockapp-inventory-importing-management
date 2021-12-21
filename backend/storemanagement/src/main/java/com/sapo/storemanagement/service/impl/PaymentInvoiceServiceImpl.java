@@ -47,7 +47,7 @@ public class PaymentInvoiceServiceImpl implements PaymentInvoiceService {
     public PaymentInvoice savePaymentInvoice(PaymentInvoice paymentInvoice) {
         // check foreign key constraint
         if(!orderRepository.existsById(paymentInvoice.getOrder().getId())) {
-            throw new ForeignKeyConstraintException("Referenced product does not exist");
+            throw new ForeignKeyConstraintException("Referenced order does not exist");
         }
         if(!userRepository.existsById(paymentInvoice.getCreatedBy().getId())) {
             throw new ForeignKeyConstraintException("Invoice creator does not exist");
