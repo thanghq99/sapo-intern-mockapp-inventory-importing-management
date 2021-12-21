@@ -5,9 +5,6 @@ import com.sapo.storemanagement.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/suppliers")
 @CrossOrigin
@@ -22,23 +19,23 @@ public class SupplierController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Supplier> findSupplierById(@PathVariable long id){
+    public Supplier findSupplierById(@PathVariable long id){
         return supplierService.getSupplierById(id);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public Iterable<Supplier> findAllSuppliers(){
         return supplierService.listAllSuppliers();
     }
 
-    @PostMapping("/")
+    @PostMapping
     public Supplier createSupplier(@RequestBody Supplier supplier){
         return supplierService.saveSupplier(supplier);
     }
 
     @PutMapping("/{id}")
-    public Supplier updateSupplier(@RequestBody Supplier supplier){
-        return supplierService.updateSupplier(supplier);
+    public Supplier updateSupplier(@PathVariable long id, @RequestBody Supplier supplier){
+        return supplierService.updateSupplier(id, supplier);
     }
 
     @DeleteMapping("/{id}")
