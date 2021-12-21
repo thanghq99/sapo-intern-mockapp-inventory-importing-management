@@ -34,8 +34,8 @@ public class SupplierController {
     }
 
     @PutMapping("/{id}")
-    public Supplier updateSupplier(@RequestBody Supplier supplier){
-        return supplierService.updateSupplier(supplier);
+    public Supplier updateSupplier(@PathVariable long id, @RequestBody Supplier supplier){
+        return supplierService.updateSupplier(id, supplier);
     }
 
     @DeleteMapping("/{id}")

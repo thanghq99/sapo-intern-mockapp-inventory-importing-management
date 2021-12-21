@@ -10,7 +10,7 @@ public interface SupplierService {
 
     Supplier saveSupplier(Supplier supplier);
 
-    Supplier updateSupplier(Supplier supplier);
+    Supplier updateSupplier(long id, Supplier supplier);
 
     String deleteSupplier(Long id);
 
