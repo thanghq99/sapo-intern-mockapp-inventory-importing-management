@@ -1,6 +1,7 @@
 package com.sapo.storemanagement.service.impl;
 
 import com.sapo.storemanagement.entities.Supplier;
+import com.sapo.storemanagement.exception.RecordNotFoundException;
 import com.sapo.storemanagement.repository.SupplierRepository;
 import com.sapo.storemanagement.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,10 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public Optional<Supplier> getSupplierById(Long id) {
-        return supplierRepository.findById(id);
+    public Supplier getSupplierById(Long id) {
+        return supplierRepository
+            .findById(id)
+            .orElseThrow(() -> new RecordNotFoundException("Supplier not found"));
     }
 
 //    public Optional<Supplier> getSupplierByCode(String code) {

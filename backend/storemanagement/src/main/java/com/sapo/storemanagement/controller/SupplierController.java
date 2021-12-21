@@ -5,9 +5,6 @@ import com.sapo.storemanagement.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/suppliers")
 @CrossOrigin
@@ -22,7 +19,7 @@ public class SupplierController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Supplier> findSupplierById(@PathVariable long id){
+    public Supplier findSupplierById(@PathVariable long id){
         return supplierService.getSupplierById(id);
     }
 
