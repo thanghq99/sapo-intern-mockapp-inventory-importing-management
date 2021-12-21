@@ -68,6 +68,13 @@ public class Order {
         this.expectedTime = expectedTime;
         this.createdBy = createdBy;
     }
+    public Order( Double totalAmount, Double paidAmount, LocalDate expectedTime) {
+
+        this.totalAmount = totalAmount;
+        this.paidAmount = paidAmount;
+        this.expectedTime = expectedTime;
+
+    }
 
     public Long getId() {
         return id;

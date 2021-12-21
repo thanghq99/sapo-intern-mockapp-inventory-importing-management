@@ -3,10 +3,7 @@ package com.sapo.storemanagement.controller;
 import com.sapo.storemanagement.entities.Order;
 import com.sapo.storemanagement.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +25,13 @@ public class OrderController {
     @GetMapping
     public List<Order> findAllOrder(){
         return orderService.getAllOrder();
+    }
+    @PostMapping
+    public Order createOrder(@RequestBody Order order){
+        return orderService.createdOrder(order);
+    }
+    @PutMapping("/{id}")
+    public Order updateOrder(@PathVariable long id, @RequestBody Order order){
+        return orderService.updateOrder(id, order);
     }
 }

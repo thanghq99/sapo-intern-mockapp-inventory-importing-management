@@ -44,12 +44,10 @@ public class OrderServiceImpl implements OrderService {
         if(orderUpdate.getStatus() == "Đang giao dịch")
             orderUpdate.setTotalAmount(newOrder.getTotalAmount());
             orderUpdate.setPaidAmount(newOrder.getPaidAmount());
+            orderUpdate.setExpectedTime(newOrder.getExpectedTime());
 //            orderUpdate.setImportedStatus(newOrder.getImportedStatus());
-
-        return null;
+        orderRepository.save(orderUpdate);
+        return orderUpdate;
     }
-
-
-
 
 }
