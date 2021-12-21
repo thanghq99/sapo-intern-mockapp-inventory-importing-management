@@ -1,16 +1,24 @@
 package com.sapo.storemanagement.entities;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@Data
+@Getter
+@Setter
 @Table(name = "orders", indexes = {
     @Index(name = "orders_code_unique", columnList = "code", unique = true)
 })
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -49,8 +57,8 @@ public class Order {
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
 
-    public Order() {
-    }
+//    public Order() {
+//    }
 
     public Order(String code, Supplier supplier, Double totalAmount,
                  LocalDate expectedTime, User createdBy) {
@@ -77,9 +85,9 @@ public class Order {
         return totalAmount;
     }
 
-    private void setTotalAmount(Double totalAmount) {
-        this.totalAmount = totalAmount;
-    }
+//    private void setTotalAmount(Double totalAmount) {
+//        this.totalAmount = totalAmount;
+//    }
 
     public void increaseTotalAmount(double offset) {
         // check if offset was >= 0
@@ -99,9 +107,9 @@ public class Order {
         return paidAmount;
     }
 
-    private void setPaidAmount(Double paidAmount) {
-        this.paidAmount = paidAmount;
-    }
+//    private void setPaidAmount(Double paidAmount) {
+//        this.paidAmount = paidAmount;
+//    }
 
     public void increasePaidAmount(double offset) {
         // check if offset was >= 0
