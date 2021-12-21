@@ -5,20 +5,26 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(
+    name = "users",
+    indexes = {
+        @Index(name = "username", columnList = "username", unique = true),
+        @Index(name = "email", columnList = "email", unique = true)
+    }
+)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
-    @Column(name = "username", nullable = false, length = 32)
+    @Column(name = "username", nullable = false, unique = true, length = 32)
     private String username;
 
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email", nullable = false, length = 128)
+    @Column(name = "email", nullable = false, unique = true, length = 128)
     private String email;
 
     @ManyToMany
@@ -32,12 +38,15 @@ public class User {
     public User() {
     }
 
-    public User(Integer id, String username, String password, String email) {
-        this.id = id;
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.roles = new HashSet<>();
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getEmail() {
@@ -62,14 +71,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Set<Role> getRoles() {
