@@ -8,30 +8,30 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/san-pham")
 @CrossOrigin
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/san-pham")
+    @GetMapping("")
     public Iterable<Product> listAllProducts() { return productService.listAllProducts(); }
 
-    @GetMapping("/san-pham/{id}")
+    @GetMapping("/{id}")
     Product getProductById(@PathVariable(name = "id") long id) { return productService.getProductById(id); }
 
-    @PostMapping("/san-pham")
-    Product saveProduct(Product productEntity) {
+    @PostMapping
+    Product saveProduct(@RequestBody Product productEntity) {
         return productService.saveProduct(productEntity);
     }
 
-    @PutMapping("/san-pham/{id}")
+    @PutMapping("/{id}")
     Product updateProduct(@PathVariable(name = "id") long id, @RequestBody Product productEntity) {
         return productService.updateProduct(id, productEntity);
     }
 
-    @DeleteMapping("/san-pham/{id}")
+    @DeleteMapping("/{id}")
     ResponseEntity<String> deleteProduct(@PathVariable(name = "id") long id) {
         return new ResponseEntity<String>(productService.deleteProduct(id),HttpStatus.OK);
     }
