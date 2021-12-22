@@ -2,6 +2,7 @@ package com.sapo.storemanagement.controller;
 
 import com.sapo.storemanagement.entities.Category;
 import com.sapo.storemanagement.service.CategoryService;
+import com.sapo.storemanagement.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/categories")
+@CrossOrigin
 public class CategoryController {
     private final CategoryService categoryService;
 
