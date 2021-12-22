@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
         Order orderUpdate = orderRepository.findById(id).get();
         if(orderUpdate.getStatus() == "Đang giao dịch")
             orderUpdate.setTotalAmount(newOrder.getTotalAmount());
-            orderUpdate.setPaidAmount(newOrder.getPaidAmount());
+//            orderUpdate.setPaidAmount(newOrder.getPaidAmount());
             orderUpdate.setExpectedTime(newOrder.getExpectedTime());
 //            orderUpdate.setImportedStatus(newOrder.getImportedStatus());
         orderRepository.save(orderUpdate);

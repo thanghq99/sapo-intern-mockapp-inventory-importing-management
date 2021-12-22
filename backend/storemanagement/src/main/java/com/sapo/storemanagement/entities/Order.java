@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+
 @Getter
 @Setter
 @Table(name = "orders", indexes = {
@@ -92,31 +92,18 @@ public class Order {
         return totalAmount;
     }
 
-//    private void setTotalAmount(Double totalAmount) {
-//        this.totalAmount = totalAmount;
-//    }
-
-    public void increaseTotalAmount(double offset) {
-        // check if offset was >= 0
-
-        this.setTotalAmount(this.totalAmount + offset);
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
-    public void decreaseTotalAmount(double offset) {
-        // check if offset was >= 0
-
-        if(this.totalAmount >= offset) {
-            this.setTotalAmount(this.totalAmount - offset);
-        }
-    }
 
     public Double getPaidAmount() {
         return paidAmount;
     }
 
-//    private void setPaidAmount(Double paidAmount) {
-//        this.paidAmount = paidAmount;
-//    }
+    private void setPaidAmount(Double paidAmount) {
+        this.paidAmount = paidAmount;
+    }
 
     public void increasePaidAmount(double offset) {
         // check if offset was >= 0
