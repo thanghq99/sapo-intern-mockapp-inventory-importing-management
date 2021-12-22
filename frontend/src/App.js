@@ -5,6 +5,7 @@ import Sidebar from "./components/sidebar/Sidebar";
 import Products from "./pages/Products/Products";
 import SupplyOrder from "./pages/SupplyOrder/SupplyOrder";
 import Supply from "./pages/Supply/Supply";
+import Topbar from "./components/topbar/Topbar";
 
 function App() {
   return (
@@ -20,12 +21,7 @@ function App() {
           <CssBaseline />
           <Sidebar />
           <Box className="box_content" component="main">
-            {/* <Topbar />
-                <Supply />
-                {
-                    (path == "/nhap-hang") ? <SupplyOrder /> : <Supply />
-                }
-                <SupplyOrder /> */}
+            <Topbar></Topbar>
             <Switch>
               <Route path="/san-pham">
                 <Products />
@@ -34,8 +30,6 @@ function App() {
               <Route path="/kiem-hang"></Route>
               <Route exact path="/nha-cung-cap" component={Supply} />
               <Route exact path="/nhap-hang" component={SupplyOrder} />
-              <SupplyOrder />
-
               <Route path="/cai-dat"></Route>
             </Switch>
           </Box>

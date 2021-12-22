@@ -38,10 +38,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product updateProduct(long id, Product product) {
-        //CHECK SKU CODE HERE
-//        if(productRepository.existsByCode(product.getCode())) {
-//            throw new UniqueKeyConstraintException("Supplier code already existed");
-//        }
         Product productToUpdate = productRepository
                 .findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("product not found"));
@@ -49,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
         productToUpdate.setDescription(product.getDescription());
         productToUpdate.setImageUrl(product.getImageUrl());
         productToUpdate.setCategory(product.getCategory());
-        //update brand?
+        productToUpdate.setBrand(product.getBrand());
         return productRepository.save(productToUpdate);
     }
 

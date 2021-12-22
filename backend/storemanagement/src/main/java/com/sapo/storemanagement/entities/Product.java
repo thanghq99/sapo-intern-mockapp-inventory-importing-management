@@ -15,11 +15,6 @@ public class Product {
     @Column(name = "name", nullable = false, length = 64)
     private String name;
 
-    //sku code? vi du: AO14, QUAN22
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "sku", nullable = false)
-    private Long sku;
-
     @ManyToOne(optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
@@ -77,6 +72,8 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
+
+    public void setBrand(String brand) { this.brand = brand; }
 
     public String getBrand() {
         return brand;
