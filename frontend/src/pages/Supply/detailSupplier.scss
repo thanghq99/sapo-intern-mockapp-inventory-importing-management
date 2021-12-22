@@ -43,7 +43,7 @@
             margin-top: 2em;
             .first_info {
                 border-radius: 0.5em;
-                border: 1px rgb(179, 179, 179) solid;
+                border: 1px #cfcfcf solid;
                 padding: 2em 2em 1em 2em;
                 background: white;
                 .first_info_upper {
@@ -68,9 +68,9 @@
                     margin: 1em;
                 }
                 .first_info_under {
-                    text-align: center;
+                    text-align: left;
                     ul {
-                        list-style: none;
+                        margin-left: 4em;
                         li{
                             padding: 1em 0;
                         }
