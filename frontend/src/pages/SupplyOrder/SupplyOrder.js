@@ -59,9 +59,7 @@ export default function SupplyOrder() {
             backgroundColor: "#ffff",
             marginTop: 0,
             height: 40,
-            // width: 400,
-            // display: "flex",
-            // float: "left",
+        
             "& .MuiOutlinedInput-notchedOutline": {
                 borderWidth: "1px",
                 borderColor: "white",
