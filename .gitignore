@@ -20,3 +20,5 @@ Backup of *.doc*
 
 # LibreOffice locks
 .~lock.*#
+
+.idea/
