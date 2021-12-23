@@ -1,27 +1,18 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Link, NavLink, useLocation } from "react-router-dom";
 import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import ListItemButton from '@mui/material/ListItemButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import "./sidebar.scss";
-import Topbar from '../topbar/Topbar';
-import Supply from '../../pages/Supply/Supply';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ListItemButton from '@mui/material/ListItemButton';
+import "./sidebar.scss";
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -31,10 +22,10 @@ import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
+import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
-import SupplyOrder from '../../pages/SupplyOrder/SupplyOrder';
-import CreateSupplier from '../../pages/Supply/CreateSupplier';
-import DetailSupplier from '../../pages/Supply/DetailSupplier';
+import { Box } from '@mui/material';
+
 
 const drawerWidth = 240;
 
@@ -84,7 +75,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-const navList = [{ title: 'Danh sách sản phẩm', url: '/san-pham/' }, { title: 'Quản lý kho', url: 'kho-hang' }, { title: 'Nhập hàng', url: 'nhap-hang' }, { title: 'Kiểm hàng', url: 'kiem-hang' }, { title: 'Nhà cung cấp', url: 'nha-cung-cap' }, { title: 'Cài đặt', url: 'cai-dat' }];
+const navList = [{ title: 'Danh sách sản phẩm', url: '/san-pham/' }, { title: 'Quản lý kho', url: '/kho-hang' }, { title: 'Nhập hàng', url: '/nhap-hang' }, { title: 'Kiểm hàng', url: '/kiem-hang' }, { title: 'Nhà cung cấp', url: '/nha-cung-cap' }, { title: 'Cài đặt', url: '/cai-dat' }];
 const subMenuList = [{ title: 'Hotline: 1900 0000', url: '/hotline' }, { title: 'Trợ giúp', url: '/tro-giup' }, { title: 'Thông tin tài khoản', url: '/tai-khoan' }, { title: 'Đăng xuất', url: '/dang-xuat' }]
 const navListIcons = [
     <LocalMallIcon />, <WarehouseIcon />, <AddShoppingCartIcon />, <AssignmentTurnedInIcon />, <AddBusinessIcon />, <SettingsIcon />
@@ -92,16 +83,13 @@ const navListIcons = [
 const userNavListIcons = [<PhoneIcon />, <LiveHelpIcon />, <ContactMailIcon />, <LogoutIcon />]
 
 export default function MiniDrawer() {
-    const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [openSubMenu, setopenSubMenu] = React.useState(false);
-
 
 
     const handleSubMenu = () => {
         setopenSubMenu(!openSubMenu);
     };
-
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -110,27 +98,19 @@ export default function MiniDrawer() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-    const usePathname = () => {
-        const location = useLocation();
-        return location.pathname;
-    }
-    let path = usePathname();
-    console.log(path)
 
 
     return (
-        <Box sx={{
-            display: 'flex', width: "100%", background: "#27274b"
-        }}>
-            <CssBaseline />
+        <Box>
             <Drawer className="drawer" variant="permanent" open={open}>
                 <DrawerHeader className="leftbar_header" >
                     {open && <img className='logo_image' src="https://www.sapo.vn/Themes/Portal/Default/StylesV2/images/logo/Sapo-logo.svg" alt="" />}
-                    {open ? <IconButton className="button_close" onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <MoreVertIcon size="large" />}
-                    </IconButton> : <IconButton className="button_open" onClick={handleDrawerOpen}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <MenuIcon />}
-                    </IconButton>}
+                    {open ?
+                        <MoreVertIcon className="button_close" onClick={handleDrawerClose}>
+                        </MoreVertIcon>
+                        :
+                        <MenuIcon className="button_open" onClick={handleDrawerOpen}>
+                        </MenuIcon>}
                 </DrawerHeader>
                 <List className="nav_leftbar">
                     {navList.map((navItem, index) => (
@@ -165,19 +145,8 @@ export default function MiniDrawer() {
                             ))}
                         </List>
                     </Collapse>
-
                 </List>
             </Drawer>
-            <Box className="box_content" component="main">
-                <Topbar />
-                <Supply />
-                <DetailSupplier />
-                <CreateSupplier />
-                {/* {
-                    (path == "/nhap-hang") ? <SupplyOrder /> : <Supply />
-                } */}
-                <SupplyOrder />
-            </Box>
         </Box >
     );
 }
