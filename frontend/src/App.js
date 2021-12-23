@@ -4,7 +4,7 @@ import { Box, CssBaseline } from '@mui/material';
 import Sidebar from "./components/sidebar/Sidebar";
 import Products from "./pages/Products/Products";
 import SupplyOrder from "./pages/SupplyOrder/SupplyOrder";
-import Supplier from "./pages/Suppliers/Supplier";
+import Supplier from "./pages/Suppliers/Suppliers";
 import Topbar from "./components/topbar/Topbar";
 import CreateSupplier from "./pages/Suppliers/CreateSupplier";
 import DetailSupplier from "./pages/Suppliers/DetailSupplier";

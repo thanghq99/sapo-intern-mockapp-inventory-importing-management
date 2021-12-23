@@ -2,9 +2,9 @@ import { Autocomplete, Button, TextField } from '@mui/material'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import TableSupply from '../../components/table/TableListSuppliers'
-import "./supplier.scss"
+import "./suppliers.scss"
 
-const top100Films = [
+const topFilter = [
     { title: 'lua chon so 1 ' },
     { title: 'lua chon so 2 ' },
     { title: 'lua chon so 3 ' },
@@ -56,7 +56,7 @@ export default function Supplier() {
                             className="filter_input"
                             multiple
                             id="tags-standard"
-                            options={top100Films}
+                            options={topFilter}
                             getOptionLabel={(option) => option.title}
                             renderInput={(params) => (
                                 <TextField
