@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface ImportReceiptRepository extends JpaRepository<ImportReceipt, Long> {
     Optional<ImportReceipt> findByCode(String code);
+
+    boolean existsByCode(String code);
 }
