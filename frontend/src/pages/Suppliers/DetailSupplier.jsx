@@ -7,6 +7,7 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { ContactTable, DebtTable, HistoryOrderTable } from '../../components/table/TableDetailSupplier';
+import axios from 'axios';
 
 
 function TabPanel(props) {
@@ -44,6 +45,17 @@ function a11yProps(index) {
 
 export default function DetailSupplier() {
 
+    console.log(window.location.search);
+    const [supplier, setSupplier] = React.useState({});
+    React.useEffect(() => {
+        const searchParam = window.location.search.replace("?id=", "")
+        const fetchSupplier = async () => {
+            const res = await axios.get("http://localhost:9191/suppliers/" + searchParam);
+            setSupplier(res.data)
+        }
+        fetchSupplier();
+    }, [])
+
     const [value, setValue] = useState(0);
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -70,7 +82,7 @@ export default function DetailSupplier() {
                                     Thông tin nhà cung cấp
                                 </Grid>
                                 <Grid className="upper_item" item xs={4}>
-                                    <p style={{ color: "#1ec709" }}>Đang giao dịch</p>
+                                    <p style={{ color: "#1ec709" }}>{supplier.activityStatus}</p>
                                 </Grid>
                                 <Grid className="upper_item" item xs={4}>
                                     <a href="#"><i className="fas fa-edit"></i></a>
@@ -84,21 +96,21 @@ export default function DetailSupplier() {
                             <Grid container spacing={2}>
                                 <Grid item xs={6}>
                                     <ul>
-                                        <li><strong>Tên nhà cung cấp: </strong>Nhà cung cấp số 1
+                                        <li><strong>Tên nhà cung cấp: </strong>{supplier.name}
                                         </li>
-                                        <li><strong>Mã nhà cung cấp: </strong>NCC1
+                                        <li><strong>Mã nhà cung cấp: </strong>{supplier.code}
                                         </li>
-                                        <li> <strong>Số điện thoại: </strong>0987654321
+                                        <li> <strong>Số điện thoại: </strong>{supplier.phone}
                                         </li>
                                     </ul>
                                 </Grid>
                                 <Grid item xs={6}>
                                     <ul>
-                                        <li><strong>Email: </strong>acs
+                                        <li><strong>Email: </strong>{supplier.email}
                                         </li>
-                                        <li><strong>Số Fax: </strong>11.22.33.45.5.44
+                                        <li><strong>Số Fax: </strong>{supplier.fax}
                                         </li>
-                                        <li><strong>Địa chỉ: </strong>số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội
+                                        <li><strong>Địa chỉ: </strong>{supplier.address}
                                         </li>
                                     </ul>
                                 </Grid>
