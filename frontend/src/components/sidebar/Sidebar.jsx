@@ -170,12 +170,13 @@ export default function MiniDrawer() {
             </Drawer>
             <Box className="box_content" component="main">
                 <Topbar />
-                {/* <Supply /> */}
+                <Supply />
                 <DetailSupplier />
+                <CreateSupplier />
                 {/* {
                     (path == "/nhap-hang") ? <SupplyOrder /> : <Supply />
                 } */}
-                {/* <SupplyOrder /> */}
+                <SupplyOrder />
             </Box>
         </Box >
     );

@@ -57,8 +57,7 @@ export default function DetailSupplier() {
                     <a href="#">Quay lại trang trước</a>
                 </div>
                 <div className="activity">
-                    <Button className="button_activity" variant="contained"><i className="fas fa-plus-circle"></i> <span>Thêm nhà cung cấp</span> </Button>
-                </div>
+                    <Button className="button_activity" variant="outlined"><i className="far fa-question-circle"></i> <span>Trợ giúp</span> </Button>                </div>
                 <hr />
                 <div className="tagname_supplier">
                     <h2>Tên nhà cung cấp</h2>
