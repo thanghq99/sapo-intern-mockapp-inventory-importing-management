@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Link, NavLink, useLocation  } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, NavLink, useLocation } from "react-router-dom";
 import { styled, useTheme } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -24,6 +24,8 @@ import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SupplyOrder from '../../pages/SupplyOrder/SupplyOrder';
+import CreateSupplier from '../../pages/Supply/CreateSupplier';
+import DetailSupplier from '../../pages/Supply/DetailSupplier';
 
 const drawerWidth = 240;
 
@@ -100,7 +102,7 @@ export default function MiniDrawer() {
     const usePathname = () => {
         const location = useLocation();
         return location.pathname;
-      }
+    }
     let path = usePathname();
     console.log(path)
 
@@ -153,6 +155,16 @@ export default function MiniDrawer() {
                 </List>
 
             </Drawer>
-            
+            <Box className="box_content" component="main">
+                <Topbar />
+                <Supply />
+                <DetailSupplier />
+                <CreateSupplier />
+                {/* {
+                    (path == "/nhap-hang") ? <SupplyOrder /> : <Supply />
+                } */}
+                <SupplyOrder />
+            </Box>
+        </Box >
     );
 }
