@@ -1,5 +1,4 @@
 import * as React from 'react';
-import "./tableSupply.scss";
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -22,41 +21,9 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-function createData(name, calories, fat, carbs, protein) {
-    return {
-        name,
-        calories,
-        fat,
-        carbs,
-        protein,
-    };
-}
-
-const rows = [
-    createData('Đại lý Số 1', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 2', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 3', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 4', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 5', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 6', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 7', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 8', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 9', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 10', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 11', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 12', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 13', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 14', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 15', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 16', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 17', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 18', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 19', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 20', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 21', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-    createData('Đại lý Số 22', "NCC1", "NS1", "0987654321", "Đang hoạt động"),
-];
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -74,8 +41,6 @@ function getComparator(order, orderBy) {
         : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
 function stableSort(array, comparator) {
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
@@ -102,10 +67,10 @@ const headCells = [
         label: 'Mã nhà cung cấp',
     },
     {
-        id: 'nhomnhacungcap',
+        id: 'sofax',
         numeric: true,
         disablePadding: false,
-        label: 'Nhom nha cung cap',
+        label: 'Số Fax',
     },
     {
         id: 'sodienthoai',
@@ -145,7 +110,7 @@ function EnhancedTableHead(props) {
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
+                        align={headCell.numeric ? 'center' : 'left'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
@@ -233,6 +198,17 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function TableSupply() {
+
+    const [listSuppliers, setListSuppliers] = React.useState([]);
+    React.useEffect(() => {
+        const fetchSuppliers = async () => {
+            const res = await axios.get("http://localhost:9191/suppliers");
+            setListSuppliers(res.data);
+        }
+        fetchSuppliers();
+    }, [])
+
+
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
@@ -248,7 +224,7 @@ export default function TableSupply() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.name);
+            const newSelecteds = listSuppliers.map((n) => n.name);
             setSelected(newSelecteds);
             return;
         }
@@ -258,7 +234,6 @@ export default function TableSupply() {
     const handleClick = (event, name) => {
         const selectedIndex = selected.indexOf(name);
         let newSelected = [];
-
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selected, name);
         } else if (selectedIndex === 0) {
@@ -271,7 +246,6 @@ export default function TableSupply() {
                 selected.slice(selectedIndex + 1),
             );
         }
-
         setSelected(newSelected);
     };
 
@@ -292,10 +266,10 @@ export default function TableSupply() {
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - listSuppliers.length) : 0;
 
     return (
-        <Box className='table_box' sx={{ width: '100%', marginTop: "1em" }}>
+        <Box style={{ boxShadow: "0px 0px 7px rgba(0, 0, 0, 0.35)" }} className='table_box' sx={{ width: '100%', marginTop: "1em" }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
@@ -310,12 +284,12 @@ export default function TableSupply() {
                             orderBy={orderBy}
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
+                            rowCount={listSuppliers.length}
                         />
                         <TableBody>
                             {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-                            {stableSort(rows, getComparator(order, orderBy))
+                            {stableSort(listSuppliers, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.name);
@@ -346,12 +320,12 @@ export default function TableSupply() {
                                                 scope="row"
                                                 padding="none"
                                             >
-                                                {row.name}
+                                                <Link to={`/thong-tin-nha-cung-cap?id=${row.id}`} >{row.name}</Link>
                                             </TableCell>
-                                            <TableCell align="right">{row.calories}</TableCell>
-                                            <TableCell align="right">{row.fat}</TableCell>
-                                            <TableCell align="right">{row.carbs}</TableCell>
-                                            <TableCell align="right">{row.protein}</TableCell>
+                                            <TableCell align="center">{row.code}</TableCell>
+                                            <TableCell align="center">{row.fax}</TableCell>
+                                            <TableCell align="center">{row.phone}</TableCell>
+                                            <TableCell align="center">{row.activityStatus}</TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -368,10 +342,10 @@ export default function TableSupply() {
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    node="So hàng một trang"
+                    labelRowsPerPage="Số hàng một trang"
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
-                    count={rows.length}
+                    count={listSuppliers.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}

@@ -1,12 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
@@ -14,10 +9,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { makeStyles } from "@material-ui/core/styles";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
 import CancelIcon from '@mui/icons-material/Cancel';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -35,16 +26,16 @@ import SupplySelect from './supplySelect/SupplySelect';
 import ProductSelect from './productSelect/ProductSelect';
 
 export default function SupplyOrder() {
-    const [supply, setSupply] = React.useState('');
-    const [product, setProduct] = React.useState('');
+    // const [supply, setSupply] = React.useState('');
+    // const [product, setProduct] = React.useState('');
     const [date, setDate] = React.useState(null);
 
-    const handleChangeSupply = (event) => {
-        setSupply(event.target.value);
-    };
-    const handleChangeProduct = (event) => {
-        setProduct(event.target.value);
-    };
+    // const handleChangeSupply = (event) => {
+    //     setSupply(event.target.value);
+    // };
+    // const handleChangeProduct = (event) => {
+    //     setProduct(event.target.value);
+    // };
     const top100Films = [
         { label: 'The Shawshank Redemption', year: 1994 },
         { label: 'The Godfather', year: 1972 },
@@ -70,12 +61,10 @@ export default function SupplyOrder() {
             },
             "&:hover .MuiOutlinedInput-notchedOutline": {
                 borderWidth: "0px",
-                // borderColor: "white"
 
             },
             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                 borderWidth: "0px",
-                // borderColor: "white"
             },
             "& #combo-box-demo": {
                 padding: 0,

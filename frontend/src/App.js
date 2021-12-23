@@ -1,11 +1,13 @@
 import "./app.scss";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import {Box, CssBaseline} from '@mui/material';
+import { Box, CssBaseline } from '@mui/material';
 import Sidebar from "./components/sidebar/Sidebar";
 import Products from "./pages/Products/Products";
 import SupplyOrder from "./pages/SupplyOrder/SupplyOrder";
-import Supply from "./pages/Supply/Supply";
+import Supplier from "./pages/Suppliers/Suppliers";
 import Topbar from "./components/topbar/Topbar";
+import CreateSupplier from "./pages/Suppliers/CreateSupplier";
+import DetailSupplier from "./pages/Suppliers/DetailSupplier";
 
 function App() {
   return (
@@ -28,7 +30,11 @@ function App() {
               </Route>
               <Route path="/kho-hang"></Route>
               <Route path="/kiem-hang"></Route>
-              <Route exact path="/nha-cung-cap" component={Supply} />
+              <Route exact path="/nha-cung-cap" >
+                <Supplier />
+              </Route>
+              <Route path="/nha-cung-cap/tao-moi-nha-cung-cap" component={CreateSupplier}></Route>
+              <Route path="/thong-tin-nha-cung-cap" component={DetailSupplier}></Route>
               <Route exact path="/nhap-hang" component={SupplyOrder} />
               <Route path="/cai-dat"></Route>
             </Switch>

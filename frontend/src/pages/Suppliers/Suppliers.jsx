@@ -1,20 +1,21 @@
 import { Autocomplete, Button, TextField } from '@mui/material'
 import React from 'react'
-import TableSupply from '../../components/table/TableSupply'
-import "./supply.scss"
+import { Link } from 'react-router-dom'
+import TableSupply from '../../components/table/TableListSuppliers'
+import "./suppliers.scss"
 
-const top100Films = [
-    { title: 'lua chon so 1 '},
-    { title: 'lua chon so 2 '},
-    { title: 'lua chon so 3 '},
-    { title: 'lua chon so 4 '},
-    { title: 'lua chon so 5 '},
-    { title: 'lua chon so 6 '},
-    { title: 'lua chon so 7 '},
-    { title: 'lua chon so 8 '},
-    { title: 'lua chon so 9 '}
+const topFilter = [
+    { title: 'lua chon so 1 ' },
+    { title: 'lua chon so 2 ' },
+    { title: 'lua chon so 3 ' },
+    { title: 'lua chon so 4 ' },
+    { title: 'lua chon so 5 ' },
+    { title: 'lua chon so 6 ' },
+    { title: 'lua chon so 7 ' },
+    { title: 'lua chon so 8 ' },
+    { title: 'lua chon so 9 ' }
 ]
-export default function Supply() {
+export default function Supplier() {
     return (
         <div className='supply_page'>
             <div className="supply_content">
@@ -38,7 +39,9 @@ export default function Supply() {
                         </div>
                     </div>
                     <div className="right_activity">
-                        <Button variant="contained"><i className="fas fa-plus-circle"></i> <span>Thêm nhà cung cấp</span> </Button>
+                        <Link style={{ textDecoration: "none" }} to="/nha-cung-cap/tao-moi-nha-cung-cap">
+                            <Button variant="contained"><i className="fas fa-plus-circle"></i> <span>Thêm nhà cung cấp</span> </Button>
+                        </Link>
                     </div>
                 </div>
                 <hr />
@@ -53,7 +56,7 @@ export default function Supply() {
                             className="filter_input"
                             multiple
                             id="tags-standard"
-                            options={top100Films}
+                            options={topFilter}
                             getOptionLabel={(option) => option.title}
                             renderInput={(params) => (
                                 <TextField
