@@ -1,17 +1,12 @@
 package com.sapo.storemanagement.entities;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import com.sapo.storemanagement.exception.BadNumberException;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-
-@Getter
-@Setter
 @Table(name = "orders", indexes = {
     @Index(name = "orders_code_unique", columnList = "code", unique = true)
 })
@@ -30,7 +25,7 @@ public class Order {
     private Supplier supplier;
 
     @Column(name = "total_amount", nullable = false)
-    private Double totalAmount;
+    private Double totalAmount = 0.0;
 
     @Column(name = "paid_amount")
     private Double paidAmount = 0.0;
@@ -60,20 +55,12 @@ public class Order {
     public Order() {
     }
 
-    public Order(String code, Supplier supplier, Double totalAmount,
+    public Order(String code, Supplier supplier,
                  LocalDate expectedTime, User createdBy) {
         this.code = code;
         this.supplier = supplier;
-        this.totalAmount = totalAmount;
         this.expectedTime = expectedTime;
         this.createdBy = createdBy;
-    }
-    public Order( Double totalAmount, Double paidAmount, LocalDate expectedTime) {
-
-        this.totalAmount = totalAmount;
-        this.paidAmount = paidAmount;
-        this.expectedTime = expectedTime;
-
     }
 
     public Long getId() {
@@ -92,30 +79,21 @@ public class Order {
         return totalAmount;
     }
 
-    public void setTotalAmount(Double totalAmount) {
+    public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
     }
-
 
     public Double getPaidAmount() {
         return paidAmount;
     }
 
-    private void setPaidAmount(Double paidAmount) {
+    public void setPaidAmount(double paidAmount) {
         this.paidAmount = paidAmount;
-    }
-
-    public void increasePaidAmount(double offset) {
-        // check if offset was >= 0
-
-        this.setTotalAmount(this.paidAmount + offset);
-    }
-
-    public void decreasePaidAmount(double offset) {
-        // check if offset was >= 0
-
-        if(this.totalAmount >= offset) {
-            this.setTotalAmount(this.paidAmount - offset);
+        if(this.paidAmount < this.totalAmount) {
+            this.setTransactionStatus(TransactionStatus.PARTIAL_PAID);
+        }
+        else {
+            this.setTransactionStatus(TransactionStatus.PAID);
         }
     }
 

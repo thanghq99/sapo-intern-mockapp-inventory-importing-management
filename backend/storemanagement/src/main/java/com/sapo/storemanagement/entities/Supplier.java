@@ -138,16 +138,8 @@ public class Supplier {
         return debt;
     }
 
-    private void setDebt(Double debt) {
+    public void setDebt(Double debt) {
         this.debt = debt;
-    }
-
-    public void increaseDebt(double offset) {
-        this.setDebt(this.debt + offset);
-    }
-
-    public void decreaseDebt(double offset) {
-        this.setDebt(this.debt - offset);
     }
 
     public SupplierStatus getActivityStatus() {
