@@ -270,8 +270,8 @@ export default function TableSupply() {
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - listSuppliers.length) : 0;
 
     return (
-        <Box style={{ boxShadow: "0px 0px 7px rgba(0, 0, 0, 0.35)" }} className='table_box' sx={{ width: '100%', marginTop: "1em" }}>
-            <Paper sx={{ width: '100%', mb: 2 }}>
+        <Box className='table_box' sx={{ width: '100%', marginTop: "1em" }}>
+            <Paper sx={{ width: '100%', mb: 2}}>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
                     <Table
