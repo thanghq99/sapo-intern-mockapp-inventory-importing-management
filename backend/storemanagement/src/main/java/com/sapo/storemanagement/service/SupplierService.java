@@ -14,4 +14,8 @@ public interface SupplierService {
 
     String deleteSupplier(Long id);
 
+    Supplier decreaseDebt(long supplierId, double offset);
+
+    Supplier increaseDebt(long supplierId, double offset);
+
 }
