@@ -1,4 +1,5 @@
-import { Autocomplete, Button, TextField } from '@mui/material'
+import { Box, Autocomplete, Button, TextField, Divider, InputAdornment } from '@mui/material'
+import { ArrowBack, Download, Upload, Group, AddCircle, Search, FilterAlt } from '@mui/icons-material';
 import React from 'react'
 import { Link } from 'react-router-dom'
 import TableSupply from '../../components/table/TableListSuppliers'
@@ -17,60 +18,80 @@ const topFilter = [
 ]
 export default function Supplier() {
     return (
-        <div className='supply_page'>
-            <div className="supply_content">
-                <div className="navig">
-                    <i className="fas fa-arrow-left"></i>
-                    <a href="#">Quay lại trang trước</a>
-                </div>
-                <div className="activity">
-                    <div className="left_activity">
-                        <div className="left_activity_item">
-                            <i className="fas fa-upload"></i>
-                            <a href="">Xuất file</a>
-                        </div>
-                        <div className="left_activity_item">
-                            <i className="fas fa-download"></i>
-                            <a href="">Nhập file</a>
-                        </div>
-                        <div className="left_activity_item">
-                            <i className="fas fa-users"></i>
-                            <a href="">Nhóm nhà cung cấp</a>
-                        </div>
-                    </div>
-                    <div className="right_activity">
+        <Box px={4} pt={2} backgroundColor="#F4F6F8" minHeight='90vh'>
+            <Box display='flex' flexDirection='column'>
+                <Box display='flex' pb={1}>
+                    <ArrowBack />
+                    <Link underline="none">
+                        Quay lại trang trước
+                    </Link>
+                </Box>
+
+                <Box display='flex' justifyContent='space-between' py={2} px={2} backgroundColor='white'>
+                    <Box display='flex' alignItems='center'>
+                        <Box display='flex' pr={2}>
+                            <Download />
+                            <Link underline="none">
+                                Xuất file
+                            </Link>
+                        </Box>
+                        <Box display='flex' pr={2}>
+                            <Upload />
+                            <Link underline="none">
+                                Nhập file
+                            </Link>
+                        </Box>
+                        <Box display='flex' pr={2}>
+                            <Group />
+                            <Link underline="none">
+                                Nhóm nhà cung cấp
+                            </Link>
+                        </Box>
+                    </Box>
+                    <Box>
                         <Link style={{ textDecoration: "none" }} to="/nha-cung-cap/tao-moi-nha-cung-cap">
-                            <Button variant="contained"><i className="fas fa-plus-circle"></i> <span>Thêm nhà cung cấp</span> </Button>
+                            <Button variant="contained" sx={{ width: 200 }} startIcon={<AddCircle />}>Thêm nhà cung cấp</Button>
                         </Link>
-                    </div>
-                </div>
-                <hr />
-                <div className="find_section">
-                    <div className="search_section">
-                        <i className="fas fa-search"></i>
-                        <input className='search_input' type="text" placeholder='nhập giá trị ...' />
-                    </div>
-                    <div className="filter_section">
-                        <i className="fas fa-filter"></i>
+                    </Box>
+                </Box>
+                <Divider />
+                <Box py={3} px={2} display='flex' justifyContent='space-between' backgroundColor='white'>
+                    <TextField
+                        placeholder="Tìm kiếm"
+                        sx={{
+                            width: '70%'
+                        }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Search />
+                                </InputAdornment>
+                            ),
+                        }}
+                        variant="outlined"
+                        size='small'
+                    />
+                    <Box display='flex' alignItems='center'>
+                        <FilterAlt fontSize="large"/>
                         <Autocomplete
-                            className="filter_input"
                             multiple
-                            id="tags-standard"
                             options={topFilter}
+                            sx={{ width: 200 }}
                             getOptionLabel={(option) => option.title}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
                                     variant="standard"
-                                    label="Lọc nhiều giá trị"
-                                    placeholder="Yêu thích"
+                                    size='small'
+                                    variant="outlined"
+                                    placeholder="Lọc nhiều giá trị"
                                 />
                             )}
                         />
-                    </div>
-                </div>
+                    </Box>
+                </Box>
                 <TableSupply />
-            </div>
-        </div>
+            </Box>
+        </Box>
     )
 }
