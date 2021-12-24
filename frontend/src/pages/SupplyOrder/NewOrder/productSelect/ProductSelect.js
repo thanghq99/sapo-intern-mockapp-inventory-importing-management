@@ -84,6 +84,7 @@ export default function ProductSelect() {
                         <Autocomplete className="selectProductItem"
                             classes={classes}
                             disablePortal
+                          
                             id="combo-box-demo"
                             options={top100Films}
                             // sx={{ width: 500 }}

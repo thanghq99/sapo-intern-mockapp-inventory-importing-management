@@ -80,6 +80,11 @@ export default function SupplyOrder() {
         'Nhập Kho',
         'Thanh toán',
     ];
+
+    React.useEffect(() => {
+        
+    }, [])
+
     return (
 
         <div>

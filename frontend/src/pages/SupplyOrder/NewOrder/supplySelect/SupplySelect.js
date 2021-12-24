@@ -30,11 +30,15 @@ import StepLabel from '@mui/material/StepLabel';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import { useHistory } from 'react-router-dom';
 
 export default function SupplySelect() {
 
     const [detailSupply, setDetailSupply] = React.useState(false);
     const [Search, setSearch] = React.useState(true);
+
+    const history = useHistory();
+
     const top100Films = [
         { label: 'The Shawshank Redemption', year: 1994 },
         { label: 'The Godfather', year: 1972 },
@@ -85,6 +89,21 @@ export default function SupplySelect() {
         setDetailSupply(!detailSupply);
         
     }
+    // async function Loaddata() {
+    //     let result = await CategoryAPI.CategoryList();
+        
+  
+    //     return true;
+    // }
+
+    useEffect(() => {
+        async function getData() {
+            // const result = await Loaddata(); 
+            
+        }
+        getData();
+ 
+    }, [history]);
 
     return (
         <div>
@@ -97,6 +116,7 @@ export default function SupplySelect() {
                     <Autocomplete className="selectSupply"
                         classes={classes}
                         disablePortal
+                        open={showDetail}
                         id="combo-box-demo"
                         options={top100Films}
                         onChange={showDetail}
