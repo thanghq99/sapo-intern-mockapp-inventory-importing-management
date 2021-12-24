@@ -30,9 +30,7 @@ function App() {
               </Route>
               <Route path="/kho-hang"></Route>
               <Route path="/kiem-hang"></Route>
-              <Route exact path="/nha-cung-cap" >
-                <Supplier />
-              </Route>
+              <Route exact path="/nha-cung-cap" component={Supplier} />
               <Route path="/nha-cung-cap/tao-moi-nha-cung-cap" component={CreateSupplier}></Route>
               <Route path="/thong-tin-nha-cung-cap" component={DetailSupplier}></Route>
               <Route exact path="/nhap-hang" component={SupplyOrder} />
