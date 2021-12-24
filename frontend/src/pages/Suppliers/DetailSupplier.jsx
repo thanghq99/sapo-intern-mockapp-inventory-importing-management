@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { ContactTable, DebtTable, HistoryOrderTable } from '../../components/table/TableDetailSupplier';
 import axios from 'axios';
+import SupplierAPI from '../../api/SupplierAPI';
 
 
 function TabPanel(props) {
@@ -50,7 +51,7 @@ export default function DetailSupplier() {
     React.useEffect(() => {
         const searchParam = window.location.search.replace("?id=", "")
         const fetchSupplier = async () => {
-            const res = await axios.get("http://localhost:9191/suppliers/" + searchParam);
+            const res = await SupplierAPI.supplierItem(searchParam);
             setSupplier(res.data)
         }
         fetchSupplier();
@@ -152,7 +153,7 @@ export default function DetailSupplier() {
                                     aria-label="minimum height"
                                     minRows={10}
                                     value={supplier.description}
-                                    style={{width: "60vw", paddingTop:"1em",paddingLeft:"1em" }}
+                                    style={{ width: "60vw", paddingTop: "1em", paddingLeft: "1em" }}
                                 />
                             </TabPanel>
                         </Box>

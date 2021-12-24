@@ -7,6 +7,7 @@ import React, { useRef, useState } from 'react';
 import "./createSupplier.scss"
 import axios from 'axios';
 import { Redirect, useHistory } from 'react-router-dom';
+import SupplierAPI from '../../api/SupplierAPI';
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -47,7 +48,7 @@ export default function CreateSupplier() {
         }
         try {
             setOpenAlertSuccess(true);
-            await axios.post("http://localhost:9191/suppliers", supplier);
+            await SupplierAPI.createSupplier(supplier);
             history.push("/nha-cung-cap");
         } catch (error) {
             console.log(error);
