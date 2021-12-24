@@ -1,4 +1,4 @@
-import { Button, Grid, TextareaAutosize } from '@mui/material'
+import { Button, Grid, Modal, TextareaAutosize } from '@mui/material'
 import React, { useState } from 'react'
 import "./detailSupplier.scss"
 import PropTypes from 'prop-types';
@@ -6,10 +6,30 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Fade from '@mui/material/Fade';
 import { ContactTable, DebtTable, HistoryOrderTable } from '../../components/table/TableDetailSupplier';
-import axios from 'axios';
+import DeleteIcon from '@mui/icons-material/Delete';
+import BrowserUpdatedIcon from '@mui/icons-material/BrowserUpdated';
+import Snackbar from '@mui/material/Snackbar';
+import Slide from '@mui/material/Slide';
+import SupplierAPI from '../../api/SupplierAPI';
 
 
+const style = {
+    textAlign: "center",
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
+
+
+//tab panel
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -29,7 +49,6 @@ function TabPanel(props) {
         </div>
     );
 }
-
 TabPanel.propTypes = {
     children: PropTypes.node,
     index: PropTypes.number.isRequired,
@@ -40,26 +59,72 @@ function a11yProps(index) {
         id: `vertical-tab-${index}`,
         'aria-controls': `vertical-tabpanel-${index}`,
     };
+}// end tab panel
+
+// transition of alert 
+function SlideTransition(props) {
+    return <Slide {...props} direction="up" />;
 }
+
 
 
 export default function DetailSupplier() {
 
-    console.log(window.location.search);
+    // handle Alert
+    const [alert, setAlert] = React.useState({
+        openAlert: false,
+        Transition: Fade,
+    });
+    const handleOpenAlert = (Transition) => () => {
+        setAlert({
+            openAlert: true,
+            Transition,
+        });
+    };
+    const handleCloseAlert = () => {
+        setAlert({
+            ...alert,
+            openAlert: false,
+        });
+    }; //end handle alert
+
+
+
+    //open and close Modal
+    const [openModal, setOpenModal] = React.useState(false);
+    const handleOpenModal = () => setOpenModal(true);
+    const handleCloseModal = () => setOpenModal(false);
+
+
+    //get info supplier
+    const searchParam = window.location.search.replace("?id=", "");
     const [supplier, setSupplier] = React.useState({});
     React.useEffect(() => {
-        const searchParam = window.location.search.replace("?id=", "")
         const fetchSupplier = async () => {
-            const res = await axios.get("http://localhost:9191/suppliers/" + searchParam);
+            const res = await SupplierAPI.supplierItem(searchParam);
             setSupplier(res.data)
         }
         fetchSupplier();
-    }, [])
+    }, [])// end get supplier
 
+
+    //delete supplier
+    const handleDeleteSupplier = async () => {
+        try {
+            await SupplierAPI.deleteSupplier(searchParam);
+            handleCloseModal();
+            handleOpenAlert();
+        } catch (error) {
+           console.log(error); 
+        }
+    }
+
+    // set value tab panel 
     const [value, setValue] = useState(0);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
 
     return (
         <div className="detail_supplier_page">
@@ -85,8 +150,12 @@ export default function DetailSupplier() {
                                     <p style={{ color: "#1ec709" }}>{supplier.activityStatus}</p>
                                 </Grid>
                                 <Grid className="upper_item" item xs={4}>
-                                    <a href="#"><i className="fas fa-edit"></i></a>
-                                    <a href="#"><i style={{ color: "red" }} className="fas fa-trash-alt"></i></a>
+                                    <Button onClick={handleOpenModal} variant="outlined" startIcon={<BrowserUpdatedIcon />}>
+                                        Chinh sua
+                                    </Button>&emsp;
+                                    <Button color="error" onClick={handleOpenModal} variant="outlined" startIcon={<DeleteIcon />}>
+                                        Xoa
+                                    </Button>
                                 </Grid>
                             </Grid>
 
@@ -151,14 +220,36 @@ export default function DetailSupplier() {
                                     disabled
                                     aria-label="minimum height"
                                     minRows={10}
-                                    placeholder="Chua co thong tin"
-                                    style={{ width: "60vw" }}
+                                    value={supplier.description}
+                                    style={{ width: "60vw", paddingTop: "1em", paddingLeft: "1em" }}
                                 />
                             </TabPanel>
                         </Box>
                     </div>
                 </div>
             </div>
+            <Modal
+                open={openModal}
+                onClose={handleCloseModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Ban muon xoa nha cung cap nay khong
+                    </Typography><br />
+                    <Button onClick={handleCloseModal} variant="contained">Quay lai</Button>&emsp;&emsp;
+                    <Button color="error" variant="contained">Xoa</Button>
+                </Box>
+            </Modal>
+
+            <Snackbar
+                open={alert.openAlert}
+                onClose={handleCloseAlert}
+                TransitionComponent={alert.Transition}
+                message="I love snacks"
+                key={alert.Transition.name}
+            />
         </div>
     )
 }
