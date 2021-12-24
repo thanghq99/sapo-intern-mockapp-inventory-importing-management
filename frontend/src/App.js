@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Box, CssBaseline } from '@mui/material';
 import Sidebar from "./components/sidebar/Sidebar";
 import Products from "./pages/Products/Products";
-import SupplyOrder from "./pages/SupplyOrder/SupplyOrder";
+import SupplyOrder from "./pages/SupplyOrder/NewOrder/SupplyOrder";
 import Supplier from "./pages/Suppliers/Suppliers";
 import Topbar from "./components/topbar/Topbar";
 import CreateSupplier from "./pages/Suppliers/CreateSupplier";
