@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Link, NavLink, useLocation  } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, NavLink, useLocation } from "react-router-dom";
 import { styled, useTheme } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -22,8 +22,10 @@ import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
+import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
-import SupplyOrder from '../../pages/SupplyOrder/SupplyOrder';
+import { Box } from '@mui/material';
+
 
 const drawerWidth = 240;
 
@@ -81,7 +83,6 @@ const navListIcons = [
 const userNavListIcons = [<PhoneIcon />, <LiveHelpIcon />, <ContactMailIcon />, <LogoutIcon />]
 
 export default function MiniDrawer() {
-    const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [openSubMenu, setopenSubMenu] = React.useState(false);
 
@@ -97,16 +98,10 @@ export default function MiniDrawer() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-    const usePathname = () => {
-        const location = useLocation();
-        return location.pathname;
-      }
-    let path = usePathname();
-    console.log(path)
 
 
     return (
-        
+        <Box>
             <Drawer className="drawer" variant="permanent" open={open}>
                 <DrawerHeader className="leftbar_header" >
                     {open && <img className='logo_image' src="https://www.sapo.vn/Themes/Portal/Default/StylesV2/images/logo/Sapo-logo.svg" alt="" />}
@@ -114,8 +109,8 @@ export default function MiniDrawer() {
                         <MoreVertIcon className="button_close" onClick={handleDrawerClose}>
                         </MoreVertIcon>
                         :
-                        <MoreVertIcon className="button_open" onClick={handleDrawerOpen}>
-                        </MoreVertIcon>}
+                        <MenuIcon className="button_open" onClick={handleDrawerOpen}>
+                        </MenuIcon>}
                 </DrawerHeader>
                 <List className="nav_leftbar">
                     {navList.map((navItem, index) => (
@@ -151,8 +146,7 @@ export default function MiniDrawer() {
                         </List>
                     </Collapse>
                 </List>
-
             </Drawer>
-            
+        </Box >
     );
 }

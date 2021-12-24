@@ -1,9 +1,11 @@
 package com.sapo.storemanagement.controller;
 
+import com.sapo.storemanagement.entities.PaymentInvoice;
 import com.sapo.storemanagement.service.PaymentInvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/payment-invoices")
@@ -13,5 +15,20 @@ public class PaymentInvoiceController {
     @Autowired
     public PaymentInvoiceController(PaymentInvoiceService paymentInvoiceService) {
         this.paymentInvoiceService = paymentInvoiceService;
+    }
+
+    @GetMapping("/{id}")
+    public PaymentInvoice findPaymentInvoiceById(@PathVariable long id){
+        return paymentInvoiceService.getPaymentInvoiceById(id);
+    }
+
+    @GetMapping
+    public List<PaymentInvoice> findAllPaymentInvoices(){
+        return paymentInvoiceService.listAllPaymentInvoices();
+    }
+
+    @PostMapping
+    public PaymentInvoice createPaymentInvoice(@RequestBody PaymentInvoice paymentInvoice){
+        return paymentInvoiceService.savePaymentInvoice(paymentInvoice);
     }
 }
