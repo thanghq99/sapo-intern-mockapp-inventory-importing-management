@@ -151,8 +151,8 @@ export default function DetailSupplier() {
                                     disabled
                                     aria-label="minimum height"
                                     minRows={10}
-                                    placeholder="Chua co thong tin"
-                                    style={{ width: "60vw" }}
+                                    value={supplier.description}
+                                    style={{width: "60vw", paddingTop:"1em",paddingLeft:"1em" }}
                                 />
                             </TabPanel>
                         </Box>
