@@ -46,14 +46,9 @@ export default function SupplySelect() {
 
 
     const history = useHistory();
-    // const te = [
+    // const test = [
     //     {id: 2, code: '123', name: 'ctya', address: '266 doi can', phone: '0987654321'},
     //     {id: 3, code: '12345', name: 'Cty Anhvu', address: '123 đội cấn', phone: '098767890'}
-
-
-    // ]
-
-    // const test = [...new Set(supplierList.map(e => (e.name, e.code)))];
    
     const useStyles = makeStyles((theme) => ({
         inputRoot: {
@@ -91,21 +86,20 @@ export default function SupplySelect() {
         }
     }));
     const classes = useStyles();
-    // let result = "";
-    async function getSupplier(id){
-        console.log(id);
-        let result = await SupplierAPI.supplierItem(id);
-        setSupplier(result);
-    }
+
+    // async function getSupplier(id){
+    //     console.log(id);
+    //     let result = await SupplierAPI.supplierItem(id);
+    //     setSupplier(result);
+    // }
     const showDetail = async  (event, newValue) => {
         // await getSupplier(newValue.id);
         setSearch(!Search);
         setDetailSupply(!detailSupply);
         setValue(newValue);
-       
-  
+    
     }
-    // if(Search){}
+
      
     const closeDetail = () => {
         setSearch(!Search);
