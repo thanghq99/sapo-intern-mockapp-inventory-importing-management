@@ -1,18 +1,18 @@
-import './SupplySelect.scss';
+import "./SupplySelect.scss";
 
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
-import SearchIcon from '@mui/icons-material/Search';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import Button from "@mui/material/Button";
+import SearchIcon from "@mui/icons-material/Search";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 import { makeStyles } from "@material-ui/core/styles";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -36,14 +36,12 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
 
 export default function SupplySelect() {
-
     const [detailSupply, setDetailSupply] = React.useState(false);
     const [Search, setSearch] = React.useState(true);
     const [supplierList, setSupplierList] = React.useState([]);
     const [value, setValue] = React.useState();
     const [supplier, setSupplier] = React.useState();
-
-
+ 
 
     const history = useHistory();
     // const test = [
@@ -129,7 +127,6 @@ export default function SupplySelect() {
         <div>
             <Box className="Supply">
                 <div className="title">Thông tin nhà cung cấp</div>
-                {/* <div>{supplierList[1].name}</div> */}
                 {
                     Search ?
                     <Box className="selectSupply-info" >
@@ -194,8 +191,7 @@ export default function SupplySelect() {
                         </Box>
                         : null
                 }
-
             </Box>
         </div>
-    )
+    );
 }

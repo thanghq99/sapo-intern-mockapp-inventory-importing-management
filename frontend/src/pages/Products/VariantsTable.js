@@ -1,7 +1,10 @@
-import * as React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
+import { FormControl, Select, MenuItem, ButtonGroup } from "@mui/material";
+import { ArrowDropDown, ArrowDropUp, SquareRounded, CheckBoxRounded, CheckBoxOutlineBlank } from "@mui/icons-material";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -22,131 +25,22 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 
-import { Link } from "react-router-dom";
-
-function createData(
-  img,
-  name,
-  code,
-  category,
-  importPrice,
-  salePrice,
-  stock,
-  saleStatus
-) {
+function createData(name, calories, fat, carbs, protein) {
   return {
-    img,
     name,
-    code,
-    category,
-    importPrice,
-    salePrice,
-    stock,
-    saleStatus,
+    calories,
+    fat,
+    carbs,
+    protein,
   };
 }
 
 const rows = [
-  createData(
-    "img here",
-    "Iphone 14",
-    "IP420",
-    "Apple",
-    "15.000.000",
-    "16.000.000",
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 15",
-    "IP420",
-    "Apple",
-    "15.000.000",
-    "16.000.000",
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 14",
-    "IP420",
-    "Apple",
-    "15.000.000",
-    "16.000.000",
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 14",
-    "IP420",
-    "Apple",
-    "15.000.000",
-    "16.000.000",
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 14",
-    "IP420",
-    "Apple",
-    "15.000.000",
-    "16.000.000",
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 14",
-    "IP420",
-    "Apple",
-    "15.000.000",
-    "16.000.000",
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 14",
-    "IP420",
-    "Apple",
-    "15.000.000",
-    "16.000.000",
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 14",
-    "IP420",
-    "Apple",
-    "15.000.000",
-    "16.000.000",
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 14",
-    "IP420",
-    "Apple",
-    "15.000.000",
-    "16.000.000",
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 14",
-    "IP420",
-    "Apple",
-    "15.000.000",
-    "16.000.000",
-    420,
-    "Đang bán"
-  ),
+  createData("Cupcake", 305, 3.7, 67, 4.3),
+  createData("Donut", 452, 25.0, 51, 4.9),
+  createData("Eclair", 262, 16.0, 24, 6.0),
+  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
+  createData("Gingerbread", 356, 16.0, 49, 3.9),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -181,52 +75,34 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "img",
-    numeric: false,
-    disablePadding: true,
-    label: "",
-  },
-  {
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: "Tên sản phẩm",
+    label: "Dessert (100g serving)",
   },
   {
-    id: "code",
+    id: "calories",
     numeric: true,
     disablePadding: false,
-    label: "Mã sản phẩm",
+    label: "Calories",
   },
   {
-    id: "category",
+    id: "fat",
     numeric: true,
     disablePadding: false,
-    label: "Loại hàng",
+    label: "Fat (g)",
   },
   {
-    id: "importPrice",
+    id: "carbs",
     numeric: true,
     disablePadding: false,
-    label: "Giá nhập",
+    label: "Carbs (g)",
   },
   {
-    id: "salePrice",
+    id: "protein",
     numeric: true,
     disablePadding: false,
-    label: "Giá bán",
-  },
-  {
-    id: "stock",
-    numeric: true,
-    disablePadding: false,
-    label: "Lượng tồn kho",
-  },
-  {
-    id: "saleStatus",
-    numeric: true,
-    disablePadding: false,
-    label: "Trạng thái bán",
+    label: "Protein (g)",
   },
 ];
 
@@ -253,32 +129,64 @@ function EnhancedTableHead(props) {
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
             inputProps={{
-              "aria-label": "select all desserts",
+              //fix cho nay
+              //   `${'Đã chọn' + ${numSelected} 'phiên bản'}: 'Đã chọn tất cả phiên bản',
+              "aria-label": "Đã chọn tất cả phiên bản",
             }}
           />
         </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
+        <TableCell padding="none">
+          <Box
+            py={2}
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            height="30px"
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
+            {numSelected === 0 && (
+              <Typography
+                // sx={{ flex: "1 1 100%" }}
+                variant="subtitle2"
+                id="tableTitle"
+                sx={{ fontSize: "1rem", fontWeight: "normal" }}
+                // component="div"
+              >
+                Phiên bản ({rows.length})
+              </Typography>
+            )}
+
+            {numSelected !== rows.length && numSelected > 0 && (
+              <Typography
+                // sx={{ flex: "1 1 100%" }}
+                variant="subtitle2"
+                id="tableTitle"
+                sx={{ fontSize: "1rem", fontWeight: "normal" }}
+                component="div"
+              >
+                Đã chọn {numSelected} phiên bản
+              </Typography>
+            )}
+            {numSelected === rows.length && numSelected > 0 && (
+              <Typography
+                // sx={{ flex: "1 1 100%" }}
+                variant="subtitle2"
+                id="tableTitle"
+                sx={{ fontSize: "1rem", fontWeight: "normal" }}
+                component="div"
+              >
+                Đã chọn tất cả phiên bản
+              </Typography>
+            )}
+
+            {numSelected > 0 && (
+              <Button variant="outlined" color="error">
+                Xóa
+              </Button>
+            )}
+          </Box>
+        </TableCell>
       </TableRow>
+      <TableRow></TableRow>
     </TableHead>
   );
 }
@@ -294,53 +202,52 @@ EnhancedTableHead.propTypes = {
 
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
+  const { openVariantSelectActions, setOpenVariantSelectActions } =
+    useState(false);
 
   return (
     <Toolbar
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
-            ),
-        }),
       }}
     >
-      {numSelected > 0 ? (
+      {numSelected === 0 && (
         <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
+          //sx={{ flex: "1 1 100%" }}
+          variant="subtitle2"
           id="tableTitle"
-          component="div"
+          //component="div"
         >
-          Danh sách sản phẩm
+          Phiên bản ({rows.length})
         </Typography>
       )}
 
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+      {numSelected !== rows.length && numSelected > 0 && (
+        <Typography
+          //sx={{ flex: "1 1 100%" }}
+          variant="subtitle2"
+          id="tableTitle"
+          //component="div"
+        >
+          Đã chọn {numSelected} phiên bản
+        </Typography>
+      )}
+      {numSelected === rows.length && numSelected > 0 && (
+        <Typography
+          //sx={{ flex: "1 1 100%" }}
+          variant="subtitle2"
+          id="tableTitle"
+          //component="div"
+        >
+          Đã chọn tất cả phiên bản
+        </Typography>
+      )}
+
+      {numSelected > 0 && (
+        <Button variant="outlined" color="error">
+          Xóa
+        </Button>
       )}
     </Toolbar>
   );
@@ -350,13 +257,14 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable() {
+export default function EnhancedTable( {setVariantInfo} ) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [chosenVariant, setChosenVariant] = React.useState();
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -393,6 +301,10 @@ export default function EnhancedTable() {
     setSelected(newSelected);
   };
 
+  const handleChoseVariant = (even, name) => {
+    setVariantInfo(name);
+  }
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -414,14 +326,10 @@ export default function EnhancedTable() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+      <Paper elevation={0} square sx={{ width: "100%", mb: 2, padding: 1}}>
+        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
         <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
-          >
+          <Table aria-labelledby="tableTitle">
             <EnhancedTableHead
               numSelected={selected.length}
               order={order}
@@ -441,13 +349,17 @@ export default function EnhancedTable() {
 
                   return (
                     <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.name)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.name}
                       selected={isItemSelected}
+                      sx={{
+                        backgroundColor: (row.name === chosenVariant) ? 'rgb(0, 136, 255)' : 'none',
+                        '&:hover': {
+                          cursor: 'pointer',
+                        }
+                      }}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
@@ -456,27 +368,39 @@ export default function EnhancedTable() {
                           inputProps={{
                             "aria-labelledby": labelId,
                           }}
+                          onClick={(event) => handleClick(event, row.name)}
+                          icon={<SquareRounded stroke={"gray"} stroke-width={1} sx={{ color: 'white'}} />}
+                          checkedIcon={<CheckBoxRounded />}
                         />
-                      </TableCell>
-                      <TableCell component="th" scope="row" padding="none">
-                        {row.img}
                       </TableCell>
                       <TableCell
                         component="th"
                         id={labelId}
                         scope="row"
                         padding="none"
+                        onClick={(event) => {handleChoseVariant(event, row.name); setChosenVariant(row.name)}}
                       >
-                        <Link to="/san-pham/san-pham-x" style={{ textDecoration: 'none', color: '#000'}}>
-                          <Typography>{row.name}</Typography>
-                        </Link>
+                        <Box py={1} display="flex" alignItems="center">
+                          <Box
+                            width="40px"
+                            height="40px"
+                            backgroundColor="green"
+                            mr={2}
+                          ></Box>
+                          <Box py={1} display="flex" flexDirection="column">
+                            <Typography
+                              variant="subtitle2"
+                              sx={{ fontSize: "1rem", fontWeight: "normal" }}
+                            >
+                              {row.name}
+                            </Typography>
+                            <Box display="flex">
+                              <Typography sx={{ pr: 4 }}>Tồn kho: 3</Typography>
+                              <Typography>Có thể bán: 3</Typography>
+                            </Box>
+                          </Box>
+                        </Box>
                       </TableCell>
-                      <TableCell align="right">{row.code}</TableCell>
-                      <TableCell align="right">{row.category}</TableCell>
-                      <TableCell align="right">{row.importPrice}</TableCell>
-                      <TableCell align="right">{row.salePrice}</TableCell>
-                      <TableCell align="right">{row.stock}</TableCell>
-                      <TableCell align="right">{row.saleStatus}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -492,20 +416,7 @@ export default function EnhancedTable() {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </Box>
   );
 }
