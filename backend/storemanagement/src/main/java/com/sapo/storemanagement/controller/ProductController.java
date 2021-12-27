@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/san-pham")
 @CrossOrigin
@@ -22,12 +24,12 @@ public class ProductController {
     Product getProductById(@PathVariable(name = "id") long id) { return productService.getProductById(id); }
 
     @PostMapping
-    Product saveProduct(@RequestBody Product productEntity) {
+    Product saveProduct(@RequestBody @Valid Product productEntity) {
         return productService.saveProduct(productEntity);
     }
 
     @PutMapping("/{id}")
-    Product updateProduct(@PathVariable(name = "id") long id, @RequestBody Product productEntity) {
+    Product updateProduct(@PathVariable(name = "id") long id, @RequestBody @Valid Product productEntity) {
         return productService.updateProduct(id, productEntity);
     }
 

@@ -3,6 +3,10 @@ package com.sapo.storemanagement.entities;
 import com.sapo.storemanagement.exception.BadNumberException;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -13,11 +17,12 @@ import java.time.LocalDateTime;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "code", nullable = false, unique = true, length = 8)
+    @NotBlank(message = "Order code cannot be blank")
+    @Size(max = 8, message = "Order code length cannot exceed {max}")
     private String code;
 
     @ManyToOne(optional = false)
@@ -25,9 +30,13 @@ public class Order {
     private Supplier supplier;
 
     @Column(name = "total_amount", nullable = false)
+    @NotNull(message = "Total amount cannot be null")
+    @Min(value = 0, message = "Total amount cannot be less than {value}")
     private Double totalAmount = 0.0;
 
     @Column(name = "paid_amount")
+    @NotNull(message = "Paid amount cannot be null")
+    @Min(value = 0, message = "Total amount cannot be less than {value}")
     private Double paidAmount = 0.0;
 
     @Column(name = "expected_time", nullable = false)
