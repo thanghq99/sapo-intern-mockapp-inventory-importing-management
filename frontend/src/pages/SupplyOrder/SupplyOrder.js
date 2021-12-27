@@ -1,15 +1,8 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import { makeStyles } from "@material-ui/core/styles";
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import CancelIcon from '@mui/icons-material/Cancel';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
@@ -19,32 +12,15 @@ import StepLabel from '@mui/material/StepLabel';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 
-import { sizing } from '@mui/system';
 
 import './SupplyOrder.scss';
 import SupplySelect from './supplySelect/SupplySelect';
 import ProductSelect from './productSelect/ProductSelect';
 
 export default function SupplyOrder() {
-    // const [supply, setSupply] = React.useState('');
-    // const [product, setProduct] = React.useState('');
+
     const [date, setDate] = React.useState(null);
 
-    // const handleChangeSupply = (event) => {
-    //     setSupply(event.target.value);
-    // };
-    // const handleChangeProduct = (event) => {
-    //     setProduct(event.target.value);
-    // };
-    const top100Films = [
-        { label: 'The Shawshank Redemption', year: 1994 },
-        { label: 'The Godfather', year: 1972 },
-        { label: 'The Godfather: Part II', year: 1974 },
-        { label: 'The Dark Knight', year: 2008 },
-        { label: '12 Angry Men', year: 1957 },
-        { label: "Schindler's List", year: 1993 },
-        { label: 'Pulp Fiction', year: 1994 }
-    ]
     const useStyles = makeStyles((theme) => ({
         inputRoot: {
             color: "black",
@@ -74,7 +50,6 @@ export default function SupplyOrder() {
             color: "black"
         }
     }));
-    const classes = useStyles();
     const steps = [
         'Đặt hàng',
         'Nhập Kho',
