@@ -5,6 +5,7 @@ import com.sapo.storemanagement.service.PaymentInvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,7 +29,7 @@ public class PaymentInvoiceController {
     }
 
     @PostMapping
-    public PaymentInvoice createPaymentInvoice(@RequestBody PaymentInvoice paymentInvoice){
+    public PaymentInvoice createPaymentInvoice(@RequestBody @Valid PaymentInvoice paymentInvoice){
         return paymentInvoiceService.savePaymentInvoice(paymentInvoice);
     }
 }

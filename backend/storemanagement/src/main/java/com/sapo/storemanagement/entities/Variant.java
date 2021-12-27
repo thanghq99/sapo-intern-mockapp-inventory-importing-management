@@ -1,7 +1,10 @@
 package com.sapo.storemanagement.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "variants", indexes = {
@@ -19,33 +22,51 @@ public class Variant {
     private Product product;
 
     @Column(name = "code", nullable = false, unique = true, length = 16)
+    @NotBlank(message = "Variant code cannot be blank")
+    @Size(max = 16, message = "Variant code length cannot exceed {max}")
     private String code;
 
     @Column(name = "inventory_quantity", nullable = false)
+    @Min(value = 0, message = "Invalid inventory quantity, must be positive")
     private Long inventoryQuantity;
 
     @Column(name = "sellable_quantity", nullable = false)
+    @Min(value = 0, message = "Invalid sellable quantity, must be positive")
     private Long sellableQuantity;
 
     @Column(name = "size", length = 8)
+    @NotNull(message = "Variant code cannot be null")
+    @Size(max = 8, message = "Variant code length cannot exceed {max}")
     private String size = "";
 
     @Column(name = "color", length = 16)
+    @NotNull(message = "Variant color cannot be null")
+    @Size(max = 16, message = "Variant color length cannot exceed {max}")
     private String color = "";
 
     @Column(name = "material", length = 32)
+    @NotNull(message = "Variant material cannot be null")
+    @Size(max = 32, message = "Variant material length cannot exceed {max}")
     private String material = "";
 
     @Column(name = "unit", length = 16)
+    @NotNull(message = "Variant unit cannot be null")
+    @Size(max = 16, message = "Variant unit length cannot exceed {max}")
     private String unit = "";
 
     @Column(name = "original_price", nullable = false)
+    @NotNull(message = "Please input original price")
+    @Min(value = 0, message = "Invalid original price, must be positive")
     private Double originalPrice;
 
     @Column(name = "whole_sale_price", nullable = false)
+    @NotNull(message = "Please input wholesale price")
+    @Min(value = 0, message = "Invalid wholesale price, must be positive")
     private Double wholeSalePrice;
 
     @Column(name = "retail_price", nullable = false)
+    @NotNull(message = "Please input retail price")
+    @Min(value = 0, message = "Invalid retail price, must be positive")
     private Double retailPrice;
 
     @Column(name = "record_status", length = 32)

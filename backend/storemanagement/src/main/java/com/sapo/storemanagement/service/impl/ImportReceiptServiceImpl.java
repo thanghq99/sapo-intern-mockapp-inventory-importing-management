@@ -1,6 +1,9 @@
 package com.sapo.storemanagement.service.impl;
 
 import com.sapo.storemanagement.entities.ImportReceipt;
+import com.sapo.storemanagement.entities.ImportedStatus;
+import com.sapo.storemanagement.entities.Order;
+import com.sapo.storemanagement.entities.OrderStatus;
 import com.sapo.storemanagement.exception.BadNumberException;
 import com.sapo.storemanagement.exception.ForeignKeyConstraintException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
@@ -52,12 +55,19 @@ public class ImportReceiptServiceImpl implements ImportReceiptService {
         }
 
         // check foreign key constraint
-        if(!orderRepository.existsById(importReceipt.getOrder().getId())) {
-            throw new ForeignKeyConstraintException("Referenced order does not exist");
-        }
         if(!userRepository.existsById(importReceipt.getCreatedBy().getId())) {
             throw new ForeignKeyConstraintException("Import receipt's creator does not exist");
         }
+
+        Order order = orderRepository
+            .findById(importReceipt.getOrder().getId())
+            .orElseThrow(() -> new ForeignKeyConstraintException("Referenced order does not exist"));
+
+        if(!order.getImportedStatus().equals(ImportedStatus.AWAITING.getStatus()) ||
+            !order.getStatus().equals(OrderStatus.PROCESSING.getStatus())) {
+            throw new IllegalStateException("Order is not in awaiting status");
+        }
+        order.setImportedStatus(ImportedStatus.IMPORTED);
 
         return importReceiptRepository.save(importReceipt);
     }
