@@ -1,10 +1,12 @@
 import React from 'react'
+import {useHistory} from 'react-router-dom'
 import { Box, TextField, InputAdornment, Button, Divider, Card, CardContent, Typography } from '@mui/material'
 import { Search, FilterAltOutlined, AddCircle } from '@mui/icons-material';
 import ProductsTable from './ProductsTable'
 import "./products.scss"
 
 export default function Products() {
+    const history = useHistory();
     return (
         <Box backgroundColor="#F4F6F8" pt={2} pb={4} px={4}>
             <Box py={2} px={2} display="flex" justifyContent="space-between" backgroundColor='white'>
@@ -38,7 +40,9 @@ export default function Products() {
                         variant='outlined'
                         sx={{ mr: 2 }}
                         endIcon={<AddCircle />}
-                    >Thêm sản phẩm</Button>
+                        onClick={() => { history.push('/san-pham/tao-san-pham') }}
+                    >Thêm sản phẩm
+                    </Button>
                     <Button
                         variant='outlined'
                         endIcon={<AddCircle />}

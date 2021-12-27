@@ -52,8 +52,8 @@ const rows = [
     "Iphone 14",
     "IP420",
     "Apple",
-    "15.000.000",
-    "16.000.000",
+    15000000,
+    16000000,
     420,
     "Đang bán"
   ),
@@ -62,88 +62,88 @@ const rows = [
     "Iphone 15",
     "IP420",
     "Apple",
-    "15.000.000",
-    "16.000.000",
+    15000000,
+    16000000,
     420,
     "Đang bán"
   ),
   createData(
     "img here",
-    "Iphone 14",
+    "Iphone 16",
     "IP420",
     "Apple",
-    "15.000.000",
-    "16.000.000",
+    15000000,
+    16000000,
     420,
     "Đang bán"
   ),
   createData(
     "img here",
-    "Iphone 14",
+    "Iphone 17",
     "IP420",
     "Apple",
-    "15.000.000",
-    "16.000.000",
+    15000000,
+    16000000,
     420,
     "Đang bán"
   ),
   createData(
     "img here",
-    "Iphone 14",
+    "Iphone 18",
     "IP420",
     "Apple",
-    "15.000.000",
-    "16.000.000",
+    15000000,
+    16000000,
     420,
     "Đang bán"
   ),
   createData(
     "img here",
-    "Iphone 14",
+    "Iphone 19",
     "IP420",
     "Apple",
-    "15.000.000",
-    "16.000.000",
+    15000000,
+    16000000,
     420,
     "Đang bán"
   ),
   createData(
     "img here",
-    "Iphone 14",
+    "Iphone 20",
     "IP420",
     "Apple",
-    "15.000.000",
-    "16.000.000",
+    15000000,
+    16000000,
     420,
     "Đang bán"
   ),
   createData(
     "img here",
-    "Iphone 14",
+    "Iphone 21",
     "IP420",
     "Apple",
-    "15.000.000",
-    "16.000.000",
+    15000000,
+    16000000,
     420,
     "Đang bán"
   ),
   createData(
     "img here",
-    "Iphone 14",
+    "Iphone 22",
     "IP420",
     "Apple",
-    "15.000.000",
-    "16.000.000",
+    15000000,
+    16000000,
     420,
     "Đang bán"
   ),
   createData(
     "img here",
-    "Iphone 14",
+    "Iphone 23",
     "IP420",
     "Apple",
-    "15.000.000",
-    "16.000.000",
+    15000000,
+    16000000,
     420,
     "Đang bán"
   ),
@@ -184,7 +184,7 @@ const headCells = [
     id: "img",
     numeric: false,
     disablePadding: true,
-    label: "",
+    label: "Ảnh",
   },
   {
     id: "name",
@@ -194,14 +194,14 @@ const headCells = [
   },
   {
     id: "code",
-    numeric: true,
-    disablePadding: false,
+    numeric: false,
+    disablePadding: true,
     label: "Mã sản phẩm",
   },
   {
     id: "category",
-    numeric: true,
-    disablePadding: false,
+    numeric: false,
+    disablePadding: true,
     label: "Loại hàng",
   },
   {
@@ -224,8 +224,8 @@ const headCells = [
   },
   {
     id: "saleStatus",
-    numeric: true,
-    disablePadding: false,
+    numeric: false,
+    disablePadding: true,
     label: "Trạng thái bán",
   },
 ];
@@ -260,7 +260,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
+            align={headCell.numeric ? "center" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -459,7 +459,13 @@ export default function EnhancedTable() {
                         />
                       </TableCell>
                       <TableCell component="th" scope="row" padding="none">
-                        {row.img}
+                        {/* {row.img} */}
+                        <Box
+                            width="40px"
+                            height="40px"
+                            backgroundColor="green"
+                            mr={2}
+                          ></Box>
                       </TableCell>
                       <TableCell
                         component="th"
@@ -471,12 +477,12 @@ export default function EnhancedTable() {
                           <Typography>{row.name}</Typography>
                         </Link>
                       </TableCell>
-                      <TableCell align="right">{row.code}</TableCell>
-                      <TableCell align="right">{row.category}</TableCell>
-                      <TableCell align="right">{row.importPrice}</TableCell>
-                      <TableCell align="right">{row.salePrice}</TableCell>
-                      <TableCell align="right">{row.stock}</TableCell>
-                      <TableCell align="right">{row.saleStatus}</TableCell>
+                      <TableCell align="left">{row.code}</TableCell>
+                      <TableCell align="left">{row.category}</TableCell>
+                      <TableCell align="center">{row.importPrice}</TableCell>
+                      <TableCell align="center">{row.salePrice}</TableCell>
+                      <TableCell align="center">{row.stock}</TableCell>
+                      <TableCell align="left">{row.saleStatus}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -502,10 +508,6 @@ export default function EnhancedTable() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </Box>
   );
 }
