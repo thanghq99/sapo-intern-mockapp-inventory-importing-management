@@ -39,6 +39,7 @@ function App() {
               <Route path="/thong-tin-nha-cung-cap" component={DetailSupplier}></Route>
               <Route exact path="/nhap-hang" component={ListOrder} />
               <Route path="/nhap-hang/tao-don-nhap-hang" component={SupplyOrder}></Route>
+              
               <Route path="/cai-dat"></Route>
             </Switch>
           </Box>

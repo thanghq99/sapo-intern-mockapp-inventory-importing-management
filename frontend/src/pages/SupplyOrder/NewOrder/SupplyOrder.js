@@ -17,6 +17,13 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+    useHistory
+  } from "react-router-dom";
 
 
 import { sizing } from '@mui/system';
@@ -29,6 +36,7 @@ export default function SupplyOrder() {
     // const [supply, setSupply] = React.useState('');
     // const [product, setProduct] = React.useState('');
     const [date, setDate] = React.useState(null);
+    const history = useHistory();
 
     // const handleChangeSupply = (event) => {
     //     setSupply(event.target.value);
@@ -36,15 +44,7 @@ export default function SupplyOrder() {
     // const handleChangeProduct = (event) => {
     //     setProduct(event.target.value);
     // };
-    const top100Films = [
-        { label: 'The Shawshank Redemption', year: 1994 },
-        { label: 'The Godfather', year: 1972 },
-        { label: 'The Godfather: Part II', year: 1974 },
-        { label: 'The Dark Knight', year: 2008 },
-        { label: '12 Angry Men', year: 1957 },
-        { label: "Schindler's List", year: 1993 },
-        { label: 'Pulp Fiction', year: 1994 }
-    ]
+
     const useStyles = makeStyles((theme) => ({
         inputRoot: {
             color: "black",
@@ -90,7 +90,7 @@ export default function SupplyOrder() {
         <div>
             <Box py={2} px={5} sx={{ flexGrow: 1 }} className="body">
                 <Box className="test"  >
-                    <Box className="back">
+                    <Box className="back" onClick={history.goBack}>
                         <ArrowBackIosIcon />
                         <Box>Đơn nhập hàng</Box>
                     </Box>

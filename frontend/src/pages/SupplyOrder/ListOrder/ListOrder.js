@@ -5,7 +5,7 @@ import { Box, Autocomplete, Button, TextField, Divider, InputAdornment } from '@
 import muiLink from '@mui/material/Link'
 import { ArrowBack, Download, Upload, Group, AddCircle, Search, FilterAlt } from '@mui/icons-material';
 import { Link } from 'react-router-dom'
-import TableSupply from '../../../components/table/TableListSuppliers';
+import TableOrder from '../../../components/table/TableListOrder';
 
 export default function ListOrder() {
     const topFilter = [
@@ -22,12 +22,12 @@ export default function ListOrder() {
     return(
         <Box px={4} pt={2} backgroundColor="#F4F6F8" minHeight='90vh'>
         <Box display='flex' flexDirection='column'>
-            <Box display='flex' pb={1}>
+            {/* <Box display='flex' pb={1}>
                 <ArrowBack />
                 <Link underline="none" sx={{}}>
                     Quay lại trang trước
                 </Link>
-            </Box>
+            </Box> */}
 
             <Box display='flex' justifyContent='space-between' py={2} px={2} backgroundColor='white'>
                 <Box display='flex' alignItems='center'>
@@ -43,12 +43,12 @@ export default function ListOrder() {
                             Nhập file
                         </Link>
                     </Box>
-                    <Box display='flex' pr={2}>
+                    {/* <Box display='flex' pr={2}>
                         <Group />
                         <muiLink underline="none">
                             Nhóm nhà cung cấp
                         </muiLink>
-                    </Box>
+                    </Box> */}
                 </Box>
                 <Box>
                     <Link style={{ textDecoration: "none" }} to="/nhap-hang/tao-don-nhap-hang">
@@ -92,7 +92,7 @@ export default function ListOrder() {
                     />
                 </Box>
             </Box>
-            <TableSupply />
+            <TableOrder />
         </Box>
     </Box>
     );
