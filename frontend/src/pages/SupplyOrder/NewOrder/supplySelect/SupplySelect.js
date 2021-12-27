@@ -31,23 +31,30 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import { useHistory } from 'react-router-dom';
+import SupplierAPI from '../../../../api/SupplierAPI';
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+
 
 export default function SupplySelect() {
 
     const [detailSupply, setDetailSupply] = React.useState(false);
     const [Search, setSearch] = React.useState(true);
+    const [supplierList, setSupplierList] = React.useState([]);
+    const [value, setValue] = React.useState();
+    const [supplier, setSupplier] = React.useState();
+
+
 
     const history = useHistory();
+    // const te = [
+    //     {id: 2, code: '123', name: 'ctya', address: '266 doi can', phone: '0987654321'},
+    //     {id: 3, code: '12345', name: 'Cty Anhvu', address: '123 đội cấn', phone: '098767890'}
 
-    const top100Films = [
-        { label: 'The Shawshank Redemption', year: 1994 },
-        { label: 'The Godfather', year: 1972 },
-        { label: 'The Godfather: Part II', year: 1974 },
-        { label: 'The Dark Knight', year: 2008 },
-        { label: '12 Angry Men', year: 1957 },
-        { label: "Schindler's List", year: 1993 },
-        { label: 'Pulp Fiction', year: 1994 }
-    ]
+
+    // ]
+
+    // const test = [...new Set(supplierList.map(e => (e.name, e.code)))];
+   
     const useStyles = makeStyles((theme) => ({
         inputRoot: {
             color: "black",
@@ -84,43 +91,76 @@ export default function SupplySelect() {
         }
     }));
     const classes = useStyles();
-    const showDetail = () => {
+    // let result = "";
+    async function getSupplier(id){
+        console.log(id);
+        let result = await SupplierAPI.supplierItem(id);
+        setSupplier(result);
+    }
+    const showDetail = async  (event, newValue) => {
+        // await getSupplier(newValue.id);
+        setSearch(!Search);
+        setDetailSupply(!detailSupply);
+        setValue(newValue);
+       
+  
+    }
+    // if(Search){}
+     
+    const closeDetail = () => {
         setSearch(!Search);
         setDetailSupply(!detailSupply);
         
     }
-    // async function Loaddata() {
-    //     let result = await CategoryAPI.CategoryList();
-        
+    async function getData() {
+        const result = await SupplierAPI.suppliersList();
+        setSupplierList(result.data);
   
-    //     return true;
-    // }
+        return true;
+    }
 
-    useEffect(() => {
-        async function getData() {
-            // const result = await Loaddata(); 
+    React.useEffect(() => {
+        // async function getData() {
+        //     const result = await SupplierAPI.suppliersList();
+        //     setSupplierList(result.data);
+        //     console.log(result.data);
             
-        }
+        // }
         getData();
  
-    }, [history]);
-
+    }, []);
+    console.log(supplierList);
+    console.log(value);
     return (
         <div>
             <Box className="Supply">
                 <div className="title">Thông tin nhà cung cấp</div>
+                {/* <div>{supplierList[1].name}</div> */}
                 {
                     Search ?
                     <Box className="selectSupply-info" >
                     <SearchIcon className="icon-search" /> 
-                    <Autocomplete className="selectSupply"
+                    <Autocomplete className="selectSupply"i
                         classes={classes}
                         disablePortal
-                        open={showDetail}
+                        
+                        getOptionLabel={(option) => option.name}
+                        renderOption={(props ,option) => (
+                            <Box {...props}>
+                            <AccountCircleRoundedIcon />
+                            <Box>
+                                {option.name}
+                                </Box> 
+                               </Box>
+                        )
+                           
+                         
+                        }
+                        // open={showDetail}
                         id="combo-box-demo"
-                        options={top100Films}
-                        onChange={showDetail}
-                        onClose={showDetail}
+                        options={supplierList}
+                        onChange={(event, newValue) => showDetail(event, newValue)}
+                        // onClose={closeDetail}
                         // sx={{ width: 500 }}
                         renderInput={(params) => <TextField {...params} style={{ padding: 0 }}
                             placeholder="Chọn nhà cung cấp" />}
@@ -133,10 +173,10 @@ export default function SupplySelect() {
                             <Box className="headerSupply">
                                 <Box className="nameSupply">
                                     <PersonRoundedIcon sx={{marginRight: "10px"}} />
-                                    <Typography sx={{marginRight: "5px"}}>Cty abc</Typography>
-                                    <CancelOutlinedIcon sx={{cursor: "pointer"}} onClick={showDetail} />
+                                    <Typography sx={{marginRight: "5px"}}>{value.name}</Typography>
+                                    <CancelOutlinedIcon sx={{cursor: "pointer"}} onClick={closeDetail} />
                                 </Box>
-                                <Typography className="debt">Công nợ: 125.000vnd</Typography>
+                                <Typography className="debt">Công nợ: {value.debt}vnd</Typography>
                             </Box>
                             <Divider />
                             <Box className="detail-supplier">
@@ -144,17 +184,17 @@ export default function SupplySelect() {
                                     <Typography className="title-add">Địa chỉ xuất hàng</Typography>
                                     <Typography>Giao hàng</Typography>
                                     <Typography>----</Typography>
-                                    <Typography>266 đội cấn</Typography>
+                                    <Typography>{value.address}</Typography>
                                     <Typography>Quận Ba Đình - Hà Nội</Typography>
-                                    <Typography>Email: </Typography>
+                                    <Typography>Email: {value.email}</Typography>
                                 </Box>
                                 <Box className="billing-ex-add">
                                     <Typography className="title-add" >Địa chỉ xuất hàng</Typography>
                                     <Typography>Giao hàng</Typography>
                                     <Typography>----</Typography>
-                                    <Typography>266 đội cấn</Typography>
+                                    <Typography>{value.address}</Typography>
                                     <Typography>Quận Ba Đình - Hà Nội</Typography>
-                                    <Typography>Email: </Typography>
+                                    <Typography>Email: {value.email}</Typography>
                                 </Box>
                             </Box>
                         </Box>
