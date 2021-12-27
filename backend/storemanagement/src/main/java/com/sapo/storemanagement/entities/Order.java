@@ -1,11 +1,17 @@
 package com.sapo.storemanagement.entities;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+
+@Getter
+@Setter
 @Table(name = "orders", indexes = {
     @Index(name = "orders_code_unique", columnList = "code", unique = true)
 })

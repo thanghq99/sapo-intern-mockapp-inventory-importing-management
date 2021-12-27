@@ -83,4 +83,29 @@ public class SupplierServiceImpl implements SupplierService {
 
         return "delete supplier successful !!!";
     }
+
+    @Override
+    @Transactional
+    public Supplier decreaseDebt(long supplierId, double offset) {
+        if(offset < 0) {
+            throw new BadNumberException("Offset cant be negative");
+        }
+
+        Supplier supplier = this.getSupplierById(supplierId);
+        supplier.setDebt(supplier.getDebt() - offset);
+
+        return supplier;
+    }
+
+    @Override
+    public Supplier increaseDebt(long supplierId, double offset) {
+        if(offset < 0) {
+            throw new BadNumberException("Offset cant be negative");
+        }
+
+        Supplier supplier = this.getSupplierById(supplierId);
+        supplier.setDebt(supplier.getDebt() + offset);
+
+        return supplier;
+    }
 }

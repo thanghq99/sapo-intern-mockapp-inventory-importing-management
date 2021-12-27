@@ -6,6 +6,7 @@ import com.sapo.storemanagement.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -30,7 +31,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public Category createCategory(@RequestBody Category category){
+    public Category createCategory(@RequestBody @Valid Category category){
         return categoryService.saveCategory(category);
     }
 }

@@ -1,6 +1,8 @@
 package com.sapo.storemanagement.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,6 +14,8 @@ public class ImportReceipt {
     private Long id;
 
     @Column(name = "code", nullable = false, unique = true, length = 8)
+    @NotBlank(message = "Import receipt code cannot be blank")
+    @Size(max = 8, message = "Import receipt code length cannot exceed {max}")
     private String code;
 
     @ManyToOne(optional = false)
