@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Box, CssBaseline } from '@mui/material';
 import Sidebar from "./components/sidebar/Sidebar";
 import Products from "./pages/Products/Products";
+import CreateProduct from "./pages/Products/CreateProduct";
+import ProductDetails from "./pages/Products/ProductDetails";
 import SupplyOrder from "./pages/SupplyOrder/SupplyOrder";
 import Supplier from "./pages/Suppliers/Suppliers";
 import Topbar from "./components/topbar/Topbar";
@@ -25,9 +27,9 @@ function App() {
           <Box className="box_content" component="main">
             <Topbar></Topbar>
             <Switch>
-              <Route path="/san-pham">
-                <Products />
-              </Route>
+              <Route exact path="/san-pham" component={Products}></Route>
+              <Route path="/san-pham/tao-san-pham" component={CreateProduct}></Route>
+              <Route path="/san-pham/san-pham-x" component={ProductDetails}></Route>
               <Route path="/kho-hang"></Route>
               <Route path="/kiem-hang"></Route>
               <Route exact path="/nha-cung-cap" >
