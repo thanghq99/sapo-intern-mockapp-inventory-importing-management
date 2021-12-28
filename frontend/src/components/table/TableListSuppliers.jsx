@@ -23,6 +23,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import SupplierAPI from '../../api/SupplierAPI';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -202,8 +203,9 @@ export default function TableSupply() {
     const [listSuppliers, setListSuppliers] = React.useState([]);
     React.useEffect(() => {
         const fetchSuppliers = async () => {
-            const res = await axios.get("http://localhost:9191/suppliers");
+            const res = await SupplierAPI.suppliersList();
             setListSuppliers(res.data);
+            console.log(res.data.name);
         }
         fetchSuppliers();
     }, [])
