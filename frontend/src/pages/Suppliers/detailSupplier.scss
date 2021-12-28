@@ -71,50 +71,16 @@
                     text-align: left;
                     ul {
                         margin-left: 4em;
-                        li {
+                        li{
                             padding: 1em 0;
                         }
                     }
                 }
             }
 
-            .second_info {
+            .second_info{
                 margin-top: 3em;
             }
         }
-    }
-}
-.createSupplier_form {
-    font-size: 14px;
-    margin-top: 1em;
-    padding: 2em 1em;
-    background: #f4f6f8;
-
-    .left_info {
-        margin-right: 2em;
-        .left_info_first {
-            border-radius: 1em;
-            border: 1px rgb(177, 177, 177) solid;
-            padding: 1em;
-            background: white;
-            .left_info_first_input {
-                width: 50%;
-                padding: 0 1em 0 0em;
-                margin: 1em 0px;
-                font-size: 0.7em;
-            }
-            .left {
-                float: right;
-            }
-            .address {
-                width: 100%;
-            }
-        }
-        .second {
-            margin-top: 2em;
-        }
-    }
-    .activity{
-        margin: 1em 0;
     }
 }
