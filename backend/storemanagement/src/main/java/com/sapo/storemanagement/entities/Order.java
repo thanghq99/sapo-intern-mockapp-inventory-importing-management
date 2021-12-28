@@ -1,28 +1,23 @@
 package com.sapo.storemanagement.entities;
 
-import com.sapo.storemanagement.exception.BadNumberException;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+
 @Table(name = "orders", indexes = {
     @Index(name = "orders_code_unique", columnList = "code", unique = true)
 })
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "code", nullable = false, unique = true, length = 8)
-    @NotBlank(message = "Order code cannot be blank")
-    @Size(max = 8, message = "Order code length cannot exceed {max}")
     private String code;
 
     @ManyToOne(optional = false)
@@ -30,13 +25,9 @@ public class Order {
     private Supplier supplier;
 
     @Column(name = "total_amount", nullable = false)
-    @NotNull(message = "Total amount cannot be null")
-    @Min(value = 0, message = "Total amount cannot be less than {value}")
-    private Double totalAmount = 0.0;
+    private Double totalAmount;
 
     @Column(name = "paid_amount")
-    @NotNull(message = "Paid amount cannot be null")
-    @Min(value = 0, message = "Total amount cannot be less than {value}")
     private Double paidAmount = 0.0;
 
     @Column(name = "expected_time", nullable = false)
@@ -64,12 +55,20 @@ public class Order {
     public Order() {
     }
 
-    public Order(String code, Supplier supplier,
+    public Order(String code, Supplier supplier, Double totalAmount,
                  LocalDate expectedTime, User createdBy) {
         this.code = code;
         this.supplier = supplier;
+        this.totalAmount = totalAmount;
         this.expectedTime = expectedTime;
         this.createdBy = createdBy;
+    }
+    public Order( Double totalAmount, Double paidAmount, LocalDate expectedTime) {
+
+        this.totalAmount = totalAmount;
+        this.paidAmount = paidAmount;
+        this.expectedTime = expectedTime;
+
     }
 
     public Long getId() {
@@ -88,21 +87,30 @@ public class Order {
         return totalAmount;
     }
 
-    public void setTotalAmount(double totalAmount) {
+    public void setTotalAmount(Double totalAmount) {
         this.totalAmount = totalAmount;
     }
+
 
     public Double getPaidAmount() {
         return paidAmount;
     }
 
-    public void setPaidAmount(double paidAmount) {
+    public void setPaidAmount(Double paidAmount) {
         this.paidAmount = paidAmount;
-        if(this.paidAmount < this.totalAmount) {
-            this.setTransactionStatus(TransactionStatus.PARTIAL_PAID);
-        }
-        else {
-            this.setTransactionStatus(TransactionStatus.PAID);
+    }
+
+    public void increasePaidAmount(double offset) {
+        // check if offset was >= 0
+
+        this.setTotalAmount(this.paidAmount + offset);
+    }
+
+    public void decreasePaidAmount(double offset) {
+        // check if offset was >= 0
+
+        if(this.totalAmount >= offset) {
+            this.setTotalAmount(this.paidAmount - offset);
         }
     }
 
