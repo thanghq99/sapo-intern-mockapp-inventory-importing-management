@@ -33,12 +33,41 @@ import ProductAPI from '../../../../api/ProductAPI';
 export default function ProductSelect() {
 
     const [detailSupply, setDetailSupply] = React.useState(false);
-    const [Search, setSearch] = React.useState(true);
     const [productList, setProductList] = React.useState([]);
     const [value, setValue] = React.useState();
-    const [supplier, setSupplier] = React.useState();
+    let productSelect = [];
+    // const [supplier, setSupplier] = React.useState();
 
-    
+    const [originalPrice, setOriginalPrice] = React.useState(
+        productList.reduce(
+            (obj, product) => ({ ...obj,[product.id]: [product.originalPrice] }),
+            {}
+          )
+    )
+    const [num, setNum] = React.useState(
+        productList.reduce(
+            (obj, product) => ({ ...obj,[product.id]: 1 }),
+            {}
+          )
+    )
+    function handleChangeNum(evt) {
+        const value1 = evt.target.value;
+        setNum({
+          ...num,
+          [productList.id]: value1
+        });
+      }
+    function handleChangeOriginalPrice(evt) {
+        const value1 = evt.target.value;
+        setOriginalPrice({
+          ...originalPrice,
+          [productList.id]: value1
+        });
+      }
+    function handleSelectProd(event, newValue){
+        productSelect.push(newValue);
+    }
+
     const useStyles = makeStyles((theme) => ({
         inputRoot: {
             color: "black",
@@ -73,7 +102,7 @@ export default function ProductSelect() {
 
     async function getData() {
         const result = await ProductAPI.ProductList();
-        console.log(result.data)
+        
         setProductList(result.data);
   
         return true;
@@ -84,7 +113,9 @@ export default function ProductSelect() {
  
     }, []);
 
-
+    console.log(productList)
+    console.log(num)
+    
     return (
         <div>
             <Box className="Products">
@@ -97,7 +128,7 @@ export default function ProductSelect() {
                         <Autocomplete className="selectProductItem"
                             classes={classes}
                             disablePortal
-                          
+                            onChange={(event, newValue) => handleSelectProd(event, newValue)}
                             id="combo-box-demo"
                             options={productList}
                             // open="true"
@@ -134,29 +165,32 @@ export default function ProductSelect() {
                 </Box>
                 <Box className="bodyProducts">
                    
-                    {/* <List>
+                    <List>
                         {
                             
                             productList.map(item => {
-                                const [num, setNum] = React.useState("1");
-                                const [originalPrice, setOriginalPrice] = React.useState(item.originalPrice);
-                                
+                                return (
                                 <ListItem className="product-item"
                                 >
                                     <Typography sx={{ width: '10%' }}>{item.code}</Typography>
                                     <Typography sx={{ width: '48%', paddingLeft: "5px" }} >{item.product.name}</Typography>
                                     <Typography sx={{ width: '10%', textAlign: "center" }}>{item.unit}</Typography>
-                                    <Box sx={{ width: '10%', textAlign: "center" }}><input style={{ width: '80%', height: 35 }} value={num} onChange={e => setNum(e.target.value) } /></Box>
-                                    <Box sx={{ width: '10%', textAlign: "center" }}><input style={{ width: '80%', height: 35 }} value={originalPrice} onChange={e => setOriginalPrice(e.target.value) } /></Box>
+                                    <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="num" value="1" 
+                                    onChange={e =>
+                                        setNum({ ...num, [item.id]: e.target.value })} 
+                                    /></Box>
+                                    <Box sx={{ width: '10%', textAlign: "center" }}><input style={{ width: '80%', height: 35 }} name="originalPrice" value={item.originalPrice} 
+                                    onChange={e =>  setOriginalPrice({ ...originalPrice, [item.id]: e.target.value })} 
+                                    /></Box>
         
-                                    <Typography sx={{ width: '10%', textAlign: "center" }}>{num.originalPrice}</Typography>
+                                    <Typography sx={{ width: '10%', textAlign: "center" }}>{num[item.id]*originalPrice[item.id]}</Typography>
                                     <CancelIcon sx={{ width: '2%', textAlign: "center" }} />
                                 
-                                </ListItem>
+                                </ListItem>)
                             })
                         }
                        
-                    </List> */}
+                    </List>
                     <Box className="pay-info">
                         <Box className="pay-info-item">
                             <Typography>Tổng sản phẩm</Typography>
