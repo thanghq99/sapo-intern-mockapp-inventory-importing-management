@@ -5,6 +5,7 @@ import com.sapo.storemanagement.service.VariantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,12 +29,12 @@ public class VariantController {
     }
 
     @PostMapping
-    public Variant createVariant(@RequestBody Variant variant){
+    public Variant createVariant(@RequestBody @Valid Variant variant){
         return variantService.saveVariant(variant);
     }
 
     @PutMapping("/{id}")
-    public Variant updateVariant(@PathVariable long id, @RequestBody Variant variant){
+    public Variant updateVariant(@PathVariable long id, @RequestBody @Valid Variant variant){
         return variantService.updateVariant(id, variant);
     }
 

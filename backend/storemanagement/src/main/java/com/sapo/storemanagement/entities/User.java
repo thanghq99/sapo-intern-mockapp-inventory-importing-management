@@ -1,6 +1,10 @@
 package com.sapo.storemanagement.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,12 +23,18 @@ public class User {
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true, length = 32)
+    @NotNull(message = "Username cannot be null")
+    @Size(max = 32, message = "Username length cannot exceed {max}")
     private String username;
 
     @Column(name = "password", nullable = false)
+    @NotNull(message = "Password cannot be null")
+    @Size(min = 8, max = 255, message = "Ensure that password length is between {min} and {max}")
     private String password;
 
     @Column(name = "email", nullable = false, unique = true, length = 128)
+    @NotBlank(message = "Email cannot be blank")
+    @Email
     private String email;
 
     @ManyToMany
