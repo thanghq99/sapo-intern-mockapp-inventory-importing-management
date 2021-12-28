@@ -411,7 +411,7 @@ export default function EnhancedTable({ setVariantInfo }) {
                             flexDirection="column"
                             sx={{
                               color:
-                                row.name === chosenVariant
+                                (row.name === chosenVariant && isSelected(row.name) === false)
                                   ? "white"
                                   : "black",
                               "&:hover": {
@@ -421,7 +421,7 @@ export default function EnhancedTable({ setVariantInfo }) {
                           >
                             <Typography
                               variant="subtitle2"
-                              sx={{ fontSize: "1rem", fontWeight: "normal" }}
+                              sx={{ fontSize: "1rem", fontWeight: "normal"}}
                             >
                               {row.name}
                             </Typography>
