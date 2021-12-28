@@ -49,7 +49,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     @Transactional
-    public Supplier updateSupplier(Long id, Supplier supplier) {
+    public Supplier updateSupplier(long id, Supplier supplier) {
         if(id <= 0) {
             throw new BadNumberException("id must be greater than 0");
         }
