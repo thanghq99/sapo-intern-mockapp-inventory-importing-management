@@ -1,4 +1,4 @@
-import './SupplySelect.scss';
+import "./SupplySelect.scss";
 
 import * as React from 'react';
 import Box from '@mui/material/Box';
@@ -12,10 +12,10 @@ import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
 export default function SupplySelect() {
-
     const [detailSupply, setDetailSupply] = React.useState(false);
     const [Search, setSearch] = React.useState(true);
-    const test = ["ada","asssdasd"];
+
+    const test = ["asdas","afasfas"];
     const useStyles = makeStyles((theme) => ({
         inputRoot: {
             color: "black",
@@ -55,7 +55,7 @@ export default function SupplySelect() {
     const showDetail = () => {
         setSearch(!Search);
         setDetailSupply(!detailSupply);
-        
+
     }
 
     return (
@@ -64,29 +64,29 @@ export default function SupplySelect() {
                 <div className="title">Thông tin nhà cung cấp</div>
                 {
                     Search ?
-                    <Box className="selectSupply-info" >
-                    <SearchIcon className="icon-search" /> 
-                    <Autocomplete className="selectSupply"
-                        classes={classes}
-                        disablePortal
-                        id="combo-box-demo"
-                        options={test}
-                        onChange={showDetail}
-                        onClose={showDetail}
-                        // sx={{ width: 500 }}
-                        renderInput={(params) => <TextField {...params} style={{ padding: 0 }}
-                            placeholder="Chọn nhà cung cấp" />}
-                    />
-                     </Box>: null
+                        <Box className="selectSupply-info" >
+                            <SearchIcon className="icon-search" />
+                            <Autocomplete className="selectSupply"
+                                classes={classes}
+                                disablePortal
+                                id="combo-box-demo"
+                                options={test}
+                                onChange={showDetail}
+                                onClose={showDetail}
+                                // sx={{ width: 500 }}
+                                renderInput={(params) => <TextField {...params} style={{ padding: 0 }}
+                                    placeholder="Chọn nhà cung cấp" />}
+                            />
+                        </Box> : null
                 }
                 {
                     detailSupply ?
                         <Box>
                             <Box className="headerSupply">
                                 <Box className="nameSupply">
-                                    <PersonRoundedIcon sx={{marginRight: "10px"}} />
-                                    <Typography sx={{marginRight: "5px"}}>Cty abc</Typography>
-                                    <CancelOutlinedIcon sx={{cursor: "pointer"}} onClick={showDetail} />
+                                    <PersonRoundedIcon sx={{ marginRight: "10px" }} />
+                                    <Typography sx={{ marginRight: "5px" }}>Cty abc</Typography>
+                                    <CancelOutlinedIcon sx={{ cursor: "pointer" }} onClick={showDetail} />
                                 </Box>
                                 <Typography className="debt">Công nợ: 125.000vnd</Typography>
                             </Box>
@@ -112,8 +112,77 @@ export default function SupplySelect() {
                         </Box>
                         : null
                 }
-
             </Box>
         </div>
-    )
+        )
 }
+
+{/* return (
+                <div>
+                    <Box className="Supply">
+                        <div className="title">Thông tin nhà cung cấp</div>
+                        {Search ? (
+                            <Box className="selectSupply-info">
+                                <SearchIcon className="icon-search" />
+                                <Autocomplete
+                                    className="selectSupply"
+                                    classes={classes}
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={options}
+                                    getOptionLabel={(option) => option.name}
+                                    renderOption={(option) => (
+                                        <>
+                                            {option.name}
+                                        </>
+                                    )}
+                                    //   onChange={showDetail}
+                                    //   onClose={showDetail}
+                                    // sx={{ width: 500 }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            //   style={{ padding: 0 }}
+                                            placeholder="Chọn nhà cung cấp"
+                                        />
+                                    )}
+                                />
+                            </Box>
+                        ) : null}
+                        {detailSupply ? (
+                            <Box>
+                                <Box className="headerSupply">
+                                    <Box className="nameSupply">
+                                        <PersonRoundedIcon sx={{ marginRight: "10px" }} />
+                                        <Typography sx={{ marginRight: "5px" }}>Cty abc</Typography>
+                                        <CancelOutlinedIcon
+                                            sx={{ cursor: "pointer" }}
+                                            onClick={showDetail}
+                                        />
+                                    </Box>
+                                    <Typography className="debt">Công nợ: 125.000vnd</Typography>
+                                </Box>
+                                <Divider />
+                                <Box className="detail-supplier">
+                                    <Box className="export-address">
+                                        <Typography className="title-add">Địa chỉ xuất hàng</Typography>
+                                        <Typography>Giao hàng</Typography>
+                                        <Typography>----</Typography>
+                                        <Typography>266 đội cấn</Typography>
+                                        <Typography>Quận Ba Đình - Hà Nội</Typography>
+                                        <Typography>Email: </Typography>
+                                    </Box>
+                                    <Box className="billing-ex-add">
+                                        <Typography className="title-add">Địa chỉ xuất hàng</Typography>
+                                        <Typography>Giao hàng</Typography>
+                                        <Typography>----</Typography>
+                                        <Typography>266 đội cấn</Typography>
+                                        <Typography>Quận Ba Đình - Hà Nội</Typography>
+                                        <Typography>Email: </Typography>
+                                    </Box>
+                                </Box>
+                            </Box>
+                        ) : null}
+                    </Box>
+                </div>
+                ); */}
