@@ -120,6 +120,7 @@ function EnhancedTableHead(props) {
     numSelected,
     rowCount,
     onRequestSort,
+    variants
   } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -157,11 +158,11 @@ function EnhancedTableHead(props) {
                 sx={{ fontSize: "1rem", fontWeight: "normal" }}
                 // component="div"
               >
-                Phiên bản ({rows.length})
+                Phiên bản ({variants.length})
               </Typography>
             )}
 
-            {numSelected !== rows.length && numSelected > 0 && (
+            {numSelected !== variants.length && numSelected > 0 && (
               <Typography
                 // sx={{ flex: "1 1 100%" }}
                 variant="subtitle2"
@@ -172,7 +173,7 @@ function EnhancedTableHead(props) {
                 Đã chọn {numSelected} phiên bản
               </Typography>
             )}
-            {numSelected === rows.length && numSelected > 0 && (
+            {numSelected === variants.length && numSelected > 0 && (
               <Typography
                 // sx={{ flex: "1 1 100%" }}
                 variant="subtitle2"
@@ -204,6 +205,7 @@ EnhancedTableHead.propTypes = {
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
+  variants: PropTypes.array.isRequired
 };
 
 const EnhancedTableToolbar = (props) => {
@@ -263,7 +265,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ setVariantInfo }) {
+export default function EnhancedTable({ setVariantInfo, variants }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
@@ -280,19 +282,19 @@ export default function EnhancedTable({ setVariantInfo }) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = variants.map((n) => n.code);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, code) => {
+    const selectedIndex = selected.indexOf(code);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, code);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -307,8 +309,8 @@ export default function EnhancedTable({ setVariantInfo }) {
     setSelected(newSelected);
   };
 
-  const handleChoseVariant = (even, name) => {
-    setVariantInfo(name);
+  const handleChoseVariant = (even, code) => {
+    setVariantInfo(variants.find(variant => variant.code === code));
   };
 
   const handleChangePage = (event, newPage) => {
@@ -324,11 +326,11 @@ export default function EnhancedTable({ setVariantInfo }) {
     setDense(event.target.checked);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (code) => selected.indexOf(code) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - variants.length) : 0;
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -342,15 +344,16 @@ export default function EnhancedTable({ setVariantInfo }) {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={variants.length}
+              variants={variants}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(variants, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.code);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
@@ -358,11 +361,11 @@ export default function EnhancedTable({ setVariantInfo }) {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.code}
                       selected={isItemSelected}
                       sx={{
                         backgroundColor:
-                          row.name === chosenVariant
+                          row.code === chosenVariant
                             ? "rgb(0, 136, 255)"
                             : "none",
                         "&:hover": {
@@ -377,11 +380,11 @@ export default function EnhancedTable({ setVariantInfo }) {
                           inputProps={{
                             "aria-labelledby": labelId,
                           }}
-                          onClick={(event) => handleClick(event, row.name)}
+                          onClick={(event) => handleClick(event, row.code)}
                           icon={
                             <SquareRounded
                               stroke={"gray"}
-                              stroke-width={1}
+                              strokeWidth={1}
                               sx={{ color: "white" }}
                             />
                           }
@@ -394,8 +397,8 @@ export default function EnhancedTable({ setVariantInfo }) {
                         scope="row"
                         padding="none"
                         onClick={(event) => {
-                          handleChoseVariant(event, row.name);
-                          setChosenVariant(row.name);
+                          handleChoseVariant(event, row.code);
+                          setChosenVariant(row.code);
                         }}
                       >
                         <Box py={1} display="flex" alignItems="center">
@@ -411,7 +414,7 @@ export default function EnhancedTable({ setVariantInfo }) {
                             flexDirection="column"
                             sx={{
                               color:
-                                (row.name === chosenVariant && isSelected(row.name) === false)
+                                (row.code === chosenVariant && isSelected(row.code) === false)
                                   ? "white"
                                   : "black",
                               "&:hover": {
@@ -423,7 +426,7 @@ export default function EnhancedTable({ setVariantInfo }) {
                               variant="subtitle2"
                               sx={{ fontSize: "1rem", fontWeight: "normal"}}
                             >
-                              {row.name}
+                              {row.code}
                             </Typography>
                             <Box display="flex">
                               <Typography sx={{ pr: 4 }}>Tồn kho: 3</Typography>

@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -43,6 +44,9 @@ public class Product {
     @NotBlank(message = "Image URL cannot be blank")
     @Size(max = 255, message = "Image URL length cannot exceed {max}")
     private String imageUrl;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "product")
+    private List<Variant> variants;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -117,6 +121,10 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public List<Variant> getVariants() {
+        return variants;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -33,7 +33,7 @@ function App() {
               <Route exact path="/" component={Products} />
               <Route exact path="/san-pham" component={Products}></Route>
               <Route path="/san-pham/tao-san-pham" component={CreateProduct}></Route>
-              <Route path="/san-pham/san-pham-x" component={ProductDetails}></Route>
+              <Route path="/san-pham/:id" component={ProductDetails}></Route>
               <Route path="/kho-hang"></Route>
               <Route path="/kiem-hang"></Route>
               <Route exact path="/nha-cung-cap" component={Supplier} />

@@ -1,5 +1,6 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
+import ProductAPI from '../../api/ProductAPI'
 import { Box, TextField, InputAdornment, Button, Divider, Card, CardContent, Typography } from '@mui/material'
 import { Search, FilterAltOutlined, AddCircle } from '@mui/icons-material';
 import ProductsTable from './ProductsTable'
@@ -7,6 +8,16 @@ import "./products.scss"
 
 export default function Products() {
     const history = useHistory();
+    const [products, setProducts] = useState([]);
+    async function getData() {
+        const result = await ProductAPI.productList();
+        setProducts(result.data);
+  
+        return true;
+    }
+    useEffect(() => {
+        getData();
+    },[])
     return (
         <Box backgroundColor="#F4F6F8" pt={2} pb={4} px={4}>
             <Box py={2} px={2} display="flex" justifyContent="space-between" backgroundColor='white'>
@@ -58,7 +69,7 @@ export default function Products() {
                 }}>
                     <CardContent sx={{ textAlign: 'center', py: 1 }}>
                         <Typography variant='h6'>Tình trạng kho</Typography>
-                        <Typography>1000/3000</Typography>
+                        <Typography>?/?</Typography>
                     </CardContent>
                 </Card>
                 <Card sx={{
@@ -68,7 +79,7 @@ export default function Products() {
                 }}>
                     <CardContent sx={{ textAlign: 'center', py: 1 }}>
                         <Typography variant='h6'>Tổng số sản phẩm</Typography>
-                        <Typography>24</Typography>
+                        <Typography>{products.length}</Typography>
                     </CardContent>
                 </Card>
                 <Card sx={{
@@ -78,7 +89,7 @@ export default function Products() {
                 }}>
                     <CardContent sx={{ textAlign: 'center', py: 1 }}>
                         <Typography variant='h6'>Sản phẩm đang bán</Typography>
-                        <Typography>21</Typography>
+                        <Typography>variant?</Typography>
                     </CardContent>
                 </Card>
                 <Card sx={{
@@ -88,12 +99,12 @@ export default function Products() {
                 }}>
                     <CardContent sx={{ textAlign: 'center', py: 1}}>
                         <Typography variant='h6'>Sản phẩm hết hàng</Typography>
-                        <Typography>1</Typography>
+                        <Typography>variant?</Typography>
                     </CardContent>
                 </Card>
             </Box>
             <Box py={2}>
-                <ProductsTable />
+                <ProductsTable products={products}/>
             </Box>
         </Box>
     )

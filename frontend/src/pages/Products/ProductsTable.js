@@ -350,7 +350,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable() {
+export default function EnhancedTable({products}) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
@@ -402,10 +402,6 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
-
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -420,7 +416,6 @@ export default function EnhancedTable() {
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -428,12 +423,12 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={products.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(products, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
@@ -473,12 +468,12 @@ export default function EnhancedTable() {
                         scope="row"
                         padding="none"
                       >
-                        <Link to="/san-pham/san-pham-x" style={{ textDecoration: 'none', color: '#000'}}>
+                        <Link to={`/san-pham/${row.id}`} style={{ textDecoration: 'none', color: '#000'}}>
                           <Typography>{row.name}</Typography>
                         </Link>
                       </TableCell>
                       <TableCell align="left">{row.code}</TableCell>
-                      <TableCell align="left">{row.category}</TableCell>
+                      <TableCell align="left">{row.category.name}</TableCell>
                       <TableCell align="center">{row.importPrice}</TableCell>
                       <TableCell align="center">{row.salePrice}</TableCell>
                       <TableCell align="center">{row.stock}</TableCell>
