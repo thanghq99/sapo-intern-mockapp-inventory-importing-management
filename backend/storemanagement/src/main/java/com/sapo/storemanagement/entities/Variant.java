@@ -35,8 +35,8 @@ public class Variant {
     private Long sellableQuantity;
 
     @Column(name = "size", length = 8)
-    @NotNull(message = "Variant code cannot be null")
-    @Size(max = 8, message = "Variant code length cannot exceed {max}")
+    @NotNull(message = "Variant size cannot be null")
+    @Size(max = 8, message = "Variant size length cannot exceed {max}")
     private String size = "";
 
     @Column(name = "color", length = 16)
@@ -71,6 +71,9 @@ public class Variant {
 
     @Column(name = "record_status", length = 32)
     private RecordStatus recordStatus = RecordStatus.ACTIVE;
+
+    @Column(name = "sell_status", columnDefinition = "varchar(32) DEFAULT 'Có thể bán'")
+    private SellableStatus sellableStatus = SellableStatus.SELLABLE;
 
     public Variant() {
     }
@@ -198,5 +201,13 @@ public class Variant {
 
     public void setRecordStatus(RecordStatus recordStatus) {
         this.recordStatus = recordStatus;
+    }
+
+    public String getSellableStatus() {
+        return sellableStatus.getStatus();
+    }
+
+    public void setSellableStatus(SellableStatus sellableStatus) {
+        this.sellableStatus = sellableStatus;
     }
 }

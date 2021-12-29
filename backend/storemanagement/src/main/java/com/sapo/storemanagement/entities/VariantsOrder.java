@@ -35,9 +35,10 @@ public class VariantsOrder {
     public VariantsOrder() {
     }
 
-    public VariantsOrder(long orderId, long variantId, long suppliedQuantity) {
+    public VariantsOrder(long orderId, long variantId, long suppliedQuantity, double price) {
         this.id = new VariantsOrderId(orderId, variantId);
         this.suppliedQuantity = suppliedQuantity;
+        this.price = price;
     }
 
     public VariantsOrderId getId() {
@@ -58,5 +59,13 @@ public class VariantsOrder {
 
     public void setSuppliedQuantity(Long suppliedQuantity) {
         this.suppliedQuantity = suppliedQuantity;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }

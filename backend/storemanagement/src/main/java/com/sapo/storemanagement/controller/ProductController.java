@@ -1,5 +1,6 @@
 package com.sapo.storemanagement.controller;
 
+import com.sapo.storemanagement.dto.ProductVariantDto;
 import com.sapo.storemanagement.entities.Product;
 import com.sapo.storemanagement.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/san-pham")
+@RequestMapping("/products")
 @CrossOrigin
 public class ProductController {
 
@@ -24,8 +25,8 @@ public class ProductController {
     Product getProductById(@PathVariable(name = "id") long id) { return productService.getProductById(id); }
 
     @PostMapping
-    Product saveProduct(@RequestBody @Valid Product productEntity) {
-        return productService.saveProduct(productEntity);
+    Product saveProduct(@RequestBody @Valid ProductVariantDto newProduct) {
+        return productService.saveProduct(newProduct);
     }
 
     @PutMapping("/{id}")
