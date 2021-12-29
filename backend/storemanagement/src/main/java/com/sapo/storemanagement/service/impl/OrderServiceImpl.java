@@ -1,16 +1,23 @@
 package com.sapo.storemanagement.service.impl;
 
-import com.sapo.storemanagement.entities.Order;
-import com.sapo.storemanagement.entities.OrderStatus;
-import com.sapo.storemanagement.entities.TransactionStatus;
+import com.sapo.storemanagement.dto.LineItemDto;
+import com.sapo.storemanagement.dto.OrderDto;
+import com.sapo.storemanagement.entities.*;
 import com.sapo.storemanagement.exception.BadNumberException;
+import com.sapo.storemanagement.exception.RecordNotFoundException;
 import com.sapo.storemanagement.repository.OrderRepository;
+import com.sapo.storemanagement.repository.UserRepository;
+import com.sapo.storemanagement.repository.VariantRepository;
+import com.sapo.storemanagement.repository.VariantsOrderRepository;
 import com.sapo.storemanagement.service.OrderService;
 import com.sapo.storemanagement.service.SupplierService;
+import com.sapo.storemanagement.service.VariantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,6 +26,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private SupplierService supplierService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private VariantService variantService;
+    @Autowired
+    private VariantsOrderRepository variantsOrderRepository;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository) {
@@ -41,22 +56,57 @@ public class OrderServiceImpl implements OrderService {
     // luu thong tin 1 don nhap hang
     @Override
     @Transactional
-    public Order createdOrder(Order order) {
-        orderRepository.save(order);
-        supplierService.increaseDebt(order.getSupplier().getId(), order.getTotalAmount());
-        return order;
+    public Order createdOrder(OrderDto orderDto) {
+        Supplier supplier = supplierService.getSupplierById(orderDto.getSupplierId());
+        User user = userRepository.getById(orderDto.getCreatedBy());
+        Order newOrder = orderRepository.save(new Order(
+
+                orderDto.getOrderCode(),
+                supplier,
+                orderDto.getDescription(),
+                orderDto.getDeliveryTime(),
+                user
+        ));
+        orderDto.getLineItems().forEach(item -> {
+            VariantsOrder variantsOrder = new VariantsOrder(
+                    newOrder.getId(),
+                    item.getVariantId(),
+                    item.getQuantity(),
+                    item.getPrice()
+            );
+            variantsOrderRepository.save(variantsOrder);
+            newOrder.setTotalAmount(newOrder.getTotalAmount() + item.getPrice()*item.getQuantity());
+            supplierService.increaseDebt(newOrder.getSupplier().getId(), newOrder.getTotalAmount());
+        } );
+
+        return newOrder;
     }
 
     // cap nhat thong tin 1 don nhap hang
     @Override
     @Transactional
-    public Order updateOrder(long id, Order newOrder) {
-        Order orderUpdate = orderRepository.findById(id).get();
+    public Order updateOrder(long id, OrderDto newOrderDto) {
+        Order orderUpdate = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("order not found"));
+
         if(orderUpdate.getStatus() == "Đang giao dịch") {
-            orderUpdate.setTotalAmount(newOrder.getTotalAmount());
-//            orderUpdate.setPaidAmount(newOrder.getPaidAmount());
-            orderUpdate.setExpectedTime(newOrder.getExpectedTime());
-//            orderUpdate.setImportedStatus(newOrder.getImportedStatus());
+            List<LineItemDto> newVariantOrders = newOrderDto.getLineItems();
+            List<VariantsOrder> variantsOrderUpdates = variantsOrderRepository.findByOrderId(orderUpdate.getId());
+            variantsOrderUpdates.forEach(oldVariant -> {
+                newVariantOrders.forEach(newVariant -> {
+                    if(newVariant.getVariantId() == oldVariant.getVariant().getId()){
+                        oldVariant.setPrice(newVariant.getPrice());
+                        oldVariant.setSuppliedQuantity(newVariant.getQuantity());
+
+                    } else {
+                        orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() - oldVariant.getPrice()*oldVariant.getSuppliedQuantity());
+//                    variantsOrderRepository.delete(oldVariant.getId());
+                    }
+                });
+            });
+
+            orderUpdate.setExpectedTime(newOrderDto.getDeliveryTime());
+            orderUpdate.setDescription(newOrderDto.getDescription());
+            orderUpdate.setUpdatedAt(LocalDateTime.now());
         }
         orderRepository.save(orderUpdate);
         return orderUpdate;

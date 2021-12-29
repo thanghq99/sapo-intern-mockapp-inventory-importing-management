@@ -28,10 +28,10 @@ public class OrderController {
     public List<Order> findAllOrder(){
         return orderService.getAllOrder();
     }
-    @PostMapping
-    public Order createOrder(@RequestBody @Valid Order order){
-        return orderService.createdOrder(order);
-    }
+//    @PostMapping
+//    public Order createOrder(@RequestBody @Valid Order order){
+//        return orderService.createdOrder(order);
+//    }
     @PutMapping("/{id}")
     public Order updateOrder(@PathVariable long id, @RequestBody @Valid Order order){
         return orderService.updateOrder(id, order);
