@@ -34,7 +34,7 @@ export default function ProductSelect() {
 
     const [detailSupply, setDetailSupply] = React.useState(false);
     const [productList, setProductList] = React.useState([]);
-    const [value, setValue] = React.useState();
+    // const [value, setValue] = React.useState();
     let productSelect = [];
     // const [supplier, setSupplier] = React.useState();
 
@@ -97,23 +97,33 @@ export default function ProductSelect() {
     const classes = useStyles();
     const handleOriPrice = async (list) => {
 
-        list.map( (product) => {
-            console.log(product.id);
-            setOriginalPrice({ ...originalPrice, [product.id]: product.originalPrice});
-            setNum({ ...num, [product.id]: 1 });
-        })
+       
+          
+            setOriginalPrice (
+                list.reduce(
+                    (obj, product) => ({ ...obj,[product.id]: product.originalPrice }),
+                    {}
+                  )
+            )
+            setNum(
+                list.reduce(
+                    (obj, product) => ({ ...obj,[product.id]: 1 }),
+                    {}
+                  )
+            )
+        
        
     }
-    React.useEffect(() => {
-        handleOriPrice(productList);
+    // React.useEffect(() => {
+    //     handleOriPrice(productList);
  
-    }, [productList]);
+    // }, [productList]);
 
     async function getData() {
         const result = await ProductAPI.ProductList();
         
         setProductList(result.data);
-        // handleOriPrice(result.data);
+        handleOriPrice(result.data);
         // setOriginalPrice({ ...originalPrice, [item.id]: .value })
   
         return true;
