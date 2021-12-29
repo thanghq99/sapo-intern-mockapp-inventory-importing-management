@@ -38,17 +38,12 @@ export default function ProductSelect() {
     let productSelect = [];
     // const [supplier, setSupplier] = React.useState();
 
-    const [originalPrice, setOriginalPrice] = React.useState(
-        productList.reduce(
-            (obj, product) => ({ ...obj,[product.id]: [product.originalPrice] }),
-            {}
-          )
-    )
-    const [num, setNum] = React.useState(
-        productList.reduce(
-            (obj, product) => ({ ...obj,[product.id]: 1 }),
-            {}
-          )
+    const [originalPrice, setOriginalPrice] = React.useState([])
+    const [num, setNum] = React.useState([]
+        // productList.reduce(
+        //     (obj, product) => ({ ...obj,[product.id]: 1 }),
+        //     {}
+        //   )
     )
     function handleChangeNum(evt) {
         const value1 = evt.target.value;
@@ -99,11 +94,26 @@ export default function ProductSelect() {
         }
     }));
     const classes = useStyles();
+    const handleOriPrice = async (list) => {
+
+        list.map( (product) => {
+            console.log(product.id);
+            setOriginalPrice({ ...originalPrice, [product.id]: product.originalPrice});
+            setNum({ ...num, [product.id]: 1 });
+        })
+       
+    }
+    React.useEffect(() => {
+        handleOriPrice(productList);
+ 
+    }, [productList]);
 
     async function getData() {
         const result = await ProductAPI.ProductList();
         
         setProductList(result.data);
+        // handleOriPrice(result.data);
+        // setOriginalPrice({ ...originalPrice, [item.id]: .value })
   
         return true;
     }
@@ -113,8 +123,8 @@ export default function ProductSelect() {
  
     }, []);
 
-    console.log(productList)
-    console.log(num)
+    
+    console.log(originalPrice);
     
     return (
         <div>
@@ -175,11 +185,11 @@ export default function ProductSelect() {
                                     <Typography sx={{ width: '10%' }}>{item.code}</Typography>
                                     <Typography sx={{ width: '48%', paddingLeft: "5px" }} >{item.product.name}</Typography>
                                     <Typography sx={{ width: '10%', textAlign: "center" }}>{item.unit}</Typography>
-                                    <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="num" value="1" 
+                                    <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="num" value={num[item.id]} 
                                     onChange={e =>
                                         setNum({ ...num, [item.id]: e.target.value })} 
                                     /></Box>
-                                    <Box sx={{ width: '10%', textAlign: "center" }}><input style={{ width: '80%', height: 35 }} name="originalPrice" value={item.originalPrice} 
+                                    <Box sx={{ width: '10%', textAlign: "center" }}><input  type="text" style={{ width: '80%', height: 35 }} name="originalPrice" value={originalPrice[item.id]} 
                                     onChange={e =>  setOriginalPrice({ ...originalPrice, [item.id]: e.target.value })} 
                                     /></Box>
         
