@@ -82,7 +82,7 @@ const navListIcons = [
 ]
 const userNavListIcons = [<PhoneIcon />, <LiveHelpIcon />, <ContactMailIcon />, <LogoutIcon />]
 
-export default function MiniDrawer() {
+export default function MiniDrawer({setHeaderTitle}) {
     const [open, setOpen] = React.useState(false);
     const [openSubMenu, setopenSubMenu] = React.useState(false);
 
@@ -115,7 +115,7 @@ export default function MiniDrawer() {
                 <List className="nav_leftbar">
                     {navList.map((navItem, index) => (
                         <Link to={navItem.url} className="nav_link">
-                            <ListItem className="nav_leftbar_item" button key={navItem.title}>
+                            <ListItem className="nav_leftbar_item" button key={navItem.title} onClick={() => setHeaderTitle(navItem.title)}>
                                 <ListItemIcon className="nav_item_icon">
                                     {navListIcons[index]}
                                 </ListItemIcon>

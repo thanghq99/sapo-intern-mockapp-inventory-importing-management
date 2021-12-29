@@ -8,14 +8,14 @@ import HelpIcon from '@mui/icons-material/Help';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 
-export default function Topbar() {
+export default function Topbar({headerTitle}) {
 
     return (
         <Box sx={{ flexGrow: 1, background: "white"}}>
             <AppBar sx={{ background: "white" }} position="static">
                 <Toolbar>
                     <Typography className="title_topbar" >
-                        Danh sach san pham
+                        {headerTitle}
                     </Typography>
                     <Box className='right_topbar' >
                         <Button className="right_topbar_button" variant="text">Tro giup
