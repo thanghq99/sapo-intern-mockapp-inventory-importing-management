@@ -1,10 +1,10 @@
 package com.sapo.storemanagement.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,15 +24,20 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @Column(name = "weight", columnDefinition = "DECIMAL(10,2) DEFAULT 0")
+    @NotNull(message = "Product weight cannot be null")
+    @Min(value = 0, message = "Product weight cannot exceed {value}")
+    private Double weight = 0.0;
+
     @Column(name = "brand", length = 32)
     @NotNull(message = "Brand name cannot be null")
     @Size(max = 32, message = "Brand name length cannot exceed {max}")
-    private String brand;
+    private String brand = "";
 
     @Column(name = "description")
     @NotNull(message = "Product description cannot be null")
     @Size(max = 255, message = "Product description length cannot exceed {max}")
-    private String description;
+    private String description = "";
 
     @Column(name = "image_url", nullable = false)
     @NotBlank(message = "Image URL cannot be blank")
@@ -51,16 +56,16 @@ public class Product {
     public Product(String name, Category category, String imageUrl) {
         this.name = name;
         this.category = category;
-        this.brand = brand;
         this.imageUrl = imageUrl;
     }
 
-    public Product(String name, Category category, String brand,
-                   String description, String imageUrl) {
+    public Product(String name, Category category, String brand, String description,
+                   Double weight, String imageUrl, SellableStatus sellableStatus) {
         this.name = name;
         this.category = category;
         this.brand = brand;
         this.description = description;
+        this.weight = weight;
         this.imageUrl = imageUrl;
     }
 
@@ -82,6 +87,14 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
     }
 
     public void setBrand(String brand) { this.brand = brand; }

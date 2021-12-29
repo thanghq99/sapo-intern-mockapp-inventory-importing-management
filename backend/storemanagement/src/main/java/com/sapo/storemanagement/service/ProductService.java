@@ -1,5 +1,6 @@
 package com.sapo.storemanagement.service;
 
+import com.sapo.storemanagement.dto.ProductVariantDto;
 import com.sapo.storemanagement.entities.Product;
 
 public interface ProductService {
@@ -7,7 +8,7 @@ public interface ProductService {
 
     Product getProductById(Long id);
 
-    Product saveProduct(Product product);
+    Product saveProduct(ProductVariantDto productVariantDto);
 
     Product updateProduct(long id, Product product);
 
