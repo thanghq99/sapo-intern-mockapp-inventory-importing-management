@@ -12,6 +12,10 @@
 .back {
     display: flex;
     margin-top: 22px;
+    cursor: pointer;
+    :hover {
+        color: #007BFF;
+    }
     
 }
 

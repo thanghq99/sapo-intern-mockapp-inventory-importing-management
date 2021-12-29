@@ -28,18 +28,41 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ProductAPI from '../../../../api/ProductAPI';
 
 export default function ProductSelect() {
 
-    const top100Films = [
-        { label: 'The Shawshank Redemption', year: 1994 },
-        { label: 'The Godfather', year: 1972 },
-        { label: 'The Godfather: Part II', year: 1974 },
-        { label: 'The Dark Knight', year: 2008 },
-        { label: '12 Angry Men', year: 1957 },
-        { label: "Schindler's List", year: 1993 },
-        { label: 'Pulp Fiction', year: 1994 }
-    ]
+    const [detailSupply, setDetailSupply] = React.useState(false);
+    const [productList, setProductList] = React.useState([]);
+    const [value, setValue] = React.useState();
+    let productSelect = [];
+    // const [supplier, setSupplier] = React.useState();
+
+    const [originalPrice, setOriginalPrice] = React.useState([])
+    const [num, setNum] = React.useState([]
+        // productList.reduce(
+        //     (obj, product) => ({ ...obj,[product.id]: 1 }),
+        //     {}
+        //   )
+    )
+    function handleChangeNum(evt) {
+        const value1 = evt.target.value;
+        setNum({
+          ...num,
+          [productList.id]: value1
+        });
+      }
+    function handleChangeOriginalPrice(evt) {
+        const value1 = evt.target.value;
+        setOriginalPrice({
+          ...originalPrice,
+          [productList.id]: value1
+        });
+      }
+    function handleSelectProd(event, newValue){
+        productSelect.push(newValue);
+    }
+
     const useStyles = makeStyles((theme) => ({
         inputRoot: {
             color: "black",
@@ -72,6 +95,38 @@ export default function ProductSelect() {
         }
     }));
     const classes = useStyles();
+    const handleOriPrice = async (list) => {
+
+        list.map( (product) => {
+            console.log(product.id);
+            setOriginalPrice({ ...originalPrice, [product.id]: product.originalPrice});
+            setNum({ ...num, [product.id]: 1 });
+        })
+       
+    }
+    React.useEffect(() => {
+        handleOriPrice(productList);
+ 
+    }, [productList]);
+
+    async function getData() {
+        const result = await ProductAPI.ProductList();
+        
+        setProductList(result.data);
+        // handleOriPrice(result.data);
+        // setOriginalPrice({ ...originalPrice, [item.id]: .value })
+  
+        return true;
+    }
+
+    React.useEffect(() => {
+        getData();
+ 
+    }, []);
+
+    
+    console.log(originalPrice);
+    
     return (
         <div>
             <Box className="Products">
@@ -84,8 +139,26 @@ export default function ProductSelect() {
                         <Autocomplete className="selectProductItem"
                             classes={classes}
                             disablePortal
+                            onChange={(event, newValue) => handleSelectProd(event, newValue)}
                             id="combo-box-demo"
-                            options={top100Films}
+                            options={productList}
+                            // open="true"
+                            getOptionLabel={(option) => option.product.name}
+                            renderOption={(props ,option) => (
+                                <Box {...props}>
+                                    <Box>Img</Box>
+                                    <Box className="info">
+                                        <Box  sx={{display: "flex" }} className="info-prod" >
+                                            <Box>{option.product.name}</Box>
+                                            <Box>{option.originalPrice}</Box>
+                                        </Box>
+                                        <Box sx={{display: "flex"}} className="info-prod">
+                                            <Box>{option.code}</Box>
+                                            <Box>Số lượng: {option.inventoryQuantity}</Box>
+                                        </Box>
+                                    </Box> 
+                                </Box>
+                            )}
                             // sx={{ width: 500 }}
                             renderInput={(params) => <TextField {...params} style={{ padding: 0 }} placeholder="Chọn sản phẩm cần nhập" />}
                         />
@@ -102,61 +175,32 @@ export default function ProductSelect() {
                     <div style={{ width: "1.5%", textAlign: "center" }}></div>
                 </Box>
                 <Box className="bodyProducts">
+                   
                     <List>
-
-                        {/* //generate
-                                    ( */}
-                        <ListItem className="product-item"
-                        // secondaryAction={
-                        //     <IconButton edge="end" aria-label="delete">
-                        //         {/* <DeleteIcon /> */}
-                        //     </IconButton>
-                        // }
-                        >
-                            <Typography sx={{ width: '10%' }}>1234</Typography>
-                            <Typography sx={{ width: '48%', paddingLeft: "5px" }} >Day la mot san pham cuc aaaa aaaaaa aa aaaaaaaaaa ki huu ich</Typography>
-                            <Typography sx={{ width: '10%', textAlign: "center" }}>hop</Typography>
-                            <Box sx={{ width: '10%', textAlign: "center" }}><input style={{ width: '80%', height: 35 }} value="12" /></Box>
-                            <Box sx={{ width: '10%', textAlign: "center" }}><input style={{ width: '80%', height: 35 }} value="12" /></Box>
-
-                            <Typography sx={{ width: '10%', textAlign: "center" }}>123456</Typography>
-                            <CancelIcon sx={{ width: '2%', textAlign: "center" }} />
-                            {/* <ListItemAvatar>
-                                                <Avatar>
-                                    
-                                                </Avatar>
-                                            </ListItemAvatar> */}
-                            {/* <ListItemText
-                                                primary="Single-line item"
-                                                secondary={secondary ? 'Secondary text' : null}
-                                            /> */}
-                        </ListItem>
-                        <ListItem className="product-item"
-                        // secondaryAction={
-                        //     <IconButton edge="end" aria-label="delete">
-                        //         {/* <DeleteIcon /> */}
-                        //     </IconButton>
-                        // }
-                        >
-                            <Typography sx={{ width: '10%' }}>1234</Typography>
-                            <Typography sx={{ width: '48%', paddingLeft: "5px" }} >Day la mot san pham cuc aaaa aaaaaa aa aaaaaaaaaa ki huu ich</Typography>
-                            <Typography sx={{ width: '10%', textAlign: "center" }}>hop</Typography>
-                            <Box sx={{ width: '10%', textAlign: "center" }}><input style={{ width: '80%', height: 35 }} value="12" /></Box>
-                            <Box sx={{ width: '10%', textAlign: "center" }}><input style={{ width: '80%', height: 35 }} value="12" /></Box>
-
-                            <Typography sx={{ width: '10%', textAlign: "center" }}>123456</Typography>
-                            <CancelIcon sx={{ width: '2%', textAlign: "center" }} />
-                            {/* <ListItemAvatar>
-                                                <Avatar>
-                                    
-                                                </Avatar>
-                                            </ListItemAvatar> */}
-                            {/* <ListItemText
-                                                primary="Single-line item"
-                                                secondary={secondary ? 'Secondary text' : null}
-                                            /> */}
-                        </ListItem>
-                        {/* ) */}
+                        {
+                            
+                            productList.map(item => {
+                                return (
+                                <ListItem className="product-item"
+                                >
+                                    <Typography sx={{ width: '10%' }}>{item.code}</Typography>
+                                    <Typography sx={{ width: '48%', paddingLeft: "5px" }} >{item.product.name}</Typography>
+                                    <Typography sx={{ width: '10%', textAlign: "center" }}>{item.unit}</Typography>
+                                    <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="num" value={num[item.id]} 
+                                    onChange={e =>
+                                        setNum({ ...num, [item.id]: e.target.value })} 
+                                    /></Box>
+                                    <Box sx={{ width: '10%', textAlign: "center" }}><input  type="text" style={{ width: '80%', height: 35 }} name="originalPrice" value={originalPrice[item.id]} 
+                                    onChange={e =>  setOriginalPrice({ ...originalPrice, [item.id]: e.target.value })} 
+                                    /></Box>
+        
+                                    <Typography sx={{ width: '10%', textAlign: "center" }}>{num[item.id]*originalPrice[item.id]}</Typography>
+                                    <CancelIcon sx={{ width: '2%', textAlign: "center" }} />
+                                
+                                </ListItem>)
+                            })
+                        }
+                       
                     </List>
                     <Box className="pay-info">
                         <Box className="pay-info-item">

@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/variants")
+@CrossOrigin
 public class VariantController {
     private final VariantService variantService;
 
