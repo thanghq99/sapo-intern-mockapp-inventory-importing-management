@@ -35,8 +35,8 @@ public class Variant {
     private Long sellableQuantity;
 
     @Column(name = "size", length = 8)
-    @NotNull(message = "Variant code cannot be null")
-    @Size(max = 8, message = "Variant code length cannot exceed {max}")
+    @NotNull(message = "Variant size cannot be null")
+    @Size(max = 8, message = "Variant size length cannot exceed {max}")
     private String size = "";
 
     @Column(name = "color", length = 16)
