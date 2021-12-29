@@ -72,6 +72,9 @@ public class Variant {
     @Column(name = "record_status", length = 32)
     private RecordStatus recordStatus = RecordStatus.ACTIVE;
 
+    @Column(name = "sell_status", columnDefinition = "varchar(32) DEFAULT 'Có thể bán'")
+    private SellableStatus sellableStatus = SellableStatus.SELLABLE;
+
     public Variant() {
     }
 
@@ -198,5 +201,13 @@ public class Variant {
 
     public void setRecordStatus(RecordStatus recordStatus) {
         this.recordStatus = recordStatus;
+    }
+
+    public String getSellableStatus() {
+        return sellableStatus.getStatus();
+    }
+
+    public void setSellableStatus(SellableStatus sellableStatus) {
+        this.sellableStatus = sellableStatus;
     }
 }
