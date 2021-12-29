@@ -5,8 +5,7 @@ import MuiAlert from '@mui/material/Alert';
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField, Snackbar, Stack } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import "./createSupplier.scss"
-import axios from 'axios';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import SupplierAPI from '../../api/SupplierAPI';
 
 
@@ -91,17 +90,17 @@ export default function CreateSupplier() {
                             <TextField inputRef={name} className="left_info_first_input" required id="outlined-required" label="Tên nhà cung cấp" />
                             <TextField inputRef={code} className="left_info_first_input left" required id="outlined-required" label="Mã nhà cung cấp" />
                             <TextField inputRef={phone} className="left_info_first_input" required id="outlined-required" label="Số điện thoại" />
-                            <TextField inputRef={email} className="left_info_first_input left" required id="outlined-required" label="Email" />
-                            <TextField inputRef={address} className="left_info_first_input address" required id="outlined-required" label="Địa chỉ" />
+                            <TextField inputRef={email} className="left_info_first_input left" id="outlined-required" label="Email" />
+                            <TextField inputRef={address} className="left_info_first_input address" id="outlined-required" label="Địa chỉ" />
                         </div>
                         <div className="left_info_first second">
                             <div>
                                 <strong style={{ width: "100%" }}>Thông tin bổ sung</strong>
                             </div>
-                            <TextField inputRef={fax} className="left_info_first_input" required id="outlined-required" label="Số Fax" />
-                            <TextField inputRef={website} className="left_info_first_input left" required id="outlined-required" label="Website" />
-                            <TextField className="left_info_first_input" required id="outlined-required" label="Mã số thuế" />
-                            <TextField inputRef={description} className="left_info_first_input address" required id="outlined-required" label="Mô tả nhà cung cấp" />
+                            <TextField inputRef={fax} className="left_info_first_input" id="outlined-required" label="Số Fax" />
+                            <TextField inputRef={website} className="left_info_first_input left" id="outlined-required" label="Website" />
+                            <TextField className="left_info_first_input" id="outlined-required" label="Mã số thuế" />
+                            <TextField inputRef={description} className="left_info_first_input address" id="outlined-required" label="Mô tả nhà cung cấp" />
                         </div>
 
                     </div>

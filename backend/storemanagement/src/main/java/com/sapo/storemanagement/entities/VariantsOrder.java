@@ -1,6 +1,8 @@
 package com.sapo.storemanagement.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "variants_orders", indexes = {
@@ -21,7 +23,14 @@ public class VariantsOrder {
     private Variant variant;
 
     @Column(name = "supplied_quantity", nullable = false)
+    @NotNull(message = "Please input retail price")
+    @Min(value = 0, message = "Invalid supplied quantity, must be positive")
     private Long suppliedQuantity;
+
+    @Column(name = "price", columnDefinition = "DECIMAL(12,2) DEFAULT 0.0")
+    @NotNull(message = "Please input retail price")
+    @Min(value = 0, message = "Invalid price, must be positive")
+    private Double price = 0.0;
 
     public VariantsOrder() {
     }

@@ -1,6 +1,8 @@
 package com.sapo.storemanagement.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,6 +14,8 @@ public class PaymentInvoice {
     private Long id;
 
     @Column(name = "amount", nullable = false)
+    @NotNull(message = "Amount cannot be null")
+    @Min(value = 0, message = "Amount cannot be less than {value}")
     private Double amount;
 
     @ManyToOne(optional = false)

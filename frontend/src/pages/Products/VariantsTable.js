@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import { FormControl, Select, MenuItem, ButtonGroup } from "@mui/material";
-import { ArrowDropDown, ArrowDropUp, SquareRounded, CheckBoxRounded, CheckBoxOutlineBlank } from "@mui/icons-material";
+import {
+  ArrowDropDown,
+  ArrowDropUp,
+  SquareRounded,
+  CheckBoxRounded,
+  CheckBoxOutlineBlank,
+} from "@mui/icons-material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Table from "@mui/material/Table";
@@ -257,7 +263,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable( {setVariantInfo} ) {
+export default function EnhancedTable({ setVariantInfo }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
@@ -303,7 +309,7 @@ export default function EnhancedTable( {setVariantInfo} ) {
 
   const handleChoseVariant = (even, name) => {
     setVariantInfo(name);
-  }
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -326,7 +332,7 @@ export default function EnhancedTable( {setVariantInfo} ) {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper elevation={0} square sx={{ width: "100%", mb: 2, padding: 1}}>
+      <Paper elevation={0} square sx={{ width: "100%", mb: 2, padding: 1 }}>
         {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
         <TableContainer>
           <Table aria-labelledby="tableTitle">
@@ -355,10 +361,13 @@ export default function EnhancedTable( {setVariantInfo} ) {
                       key={row.name}
                       selected={isItemSelected}
                       sx={{
-                        backgroundColor: (row.name === chosenVariant) ? 'rgb(0, 136, 255)' : 'none',
-                        '&:hover': {
-                          cursor: 'pointer',
-                        }
+                        backgroundColor:
+                          row.name === chosenVariant
+                            ? "rgb(0, 136, 255)"
+                            : "none",
+                        "&:hover": {
+                          cursor: "pointer",
+                        },
                       }}
                     >
                       <TableCell padding="checkbox">
@@ -369,7 +378,13 @@ export default function EnhancedTable( {setVariantInfo} ) {
                             "aria-labelledby": labelId,
                           }}
                           onClick={(event) => handleClick(event, row.name)}
-                          icon={<SquareRounded stroke={"gray"} stroke-width={1} sx={{ color: 'white'}} />}
+                          icon={
+                            <SquareRounded
+                              stroke={"gray"}
+                              stroke-width={1}
+                              sx={{ color: "white" }}
+                            />
+                          }
                           checkedIcon={<CheckBoxRounded />}
                         />
                       </TableCell>
@@ -378,7 +393,10 @@ export default function EnhancedTable( {setVariantInfo} ) {
                         id={labelId}
                         scope="row"
                         padding="none"
-                        onClick={(event) => {handleChoseVariant(event, row.name); setChosenVariant(row.name)}}
+                        onClick={(event) => {
+                          handleChoseVariant(event, row.name);
+                          setChosenVariant(row.name);
+                        }}
                       >
                         <Box py={1} display="flex" alignItems="center">
                           <Box
@@ -387,10 +405,23 @@ export default function EnhancedTable( {setVariantInfo} ) {
                             backgroundColor="green"
                             mr={2}
                           ></Box>
-                          <Box py={1} display="flex" flexDirection="column">
+                          <Box
+                            py={1}
+                            display="flex"
+                            flexDirection="column"
+                            sx={{
+                              color:
+                                (row.name === chosenVariant && isSelected(row.name) === false)
+                                  ? "white"
+                                  : "black",
+                              "&:hover": {
+                                cursor: "pointer",
+                              },
+                            }}
+                          >
                             <Typography
                               variant="subtitle2"
-                              sx={{ fontSize: "1rem", fontWeight: "normal" }}
+                              sx={{ fontSize: "1rem", fontWeight: "normal"}}
                             >
                               {row.name}
                             </Typography>

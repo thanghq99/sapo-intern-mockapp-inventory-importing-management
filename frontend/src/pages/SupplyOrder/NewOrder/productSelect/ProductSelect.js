@@ -79,6 +79,7 @@ export default function ProductSelect() {
             },
             "&:hover .MuiOutlinedInput-notchedOutline": {
                 borderWidth: "0px",
+                // borderColor: "white"
 
             },
             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {

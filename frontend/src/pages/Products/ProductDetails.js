@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { Box, Typography, Button, Divider, Checkbox, Grid } from "@mui/material";
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import VariantsTable from "./VariantsTable";
 
 const variants = [
@@ -32,6 +32,8 @@ const variants = [
 ];
 
 function ProductDetails() {
+  const history = useHistory()
+
   const [variantInfo, setVariantInfo] = useState();
   return (
     <Box
@@ -42,13 +44,19 @@ function ProductDetails() {
       flexDirection="column"
     >
       <Box py={1}>
-        <Link
+        <Typography
           underline="none"
-          style={{ textDecoration: "none", display: "flex" }}
+          onClick={() => history.push("/san-pham")}
+          sx={{
+            display: 'flex',
+            '&:hover': {
+              cursor: 'pointer',
+            }
+          }}
         >
           <ArrowBackIosNew sx={{ mr: 2 }} />
           Quay lại Danh sách sản phẩm
-        </Link>
+        </Typography>
       </Box>
       <Box
         display="flex"
@@ -70,13 +78,13 @@ function ProductDetails() {
         </Box>
       </Box>
 
-      <Box
-        py={2}
-        px={1}
-        display="flex"
-        flexDirection="column"
-        backgroundColor="white"
-      >
+        <Box
+          py={2}
+          px={1}
+          display="flex"
+          flexDirection="column"
+          backgroundColor="white"
+        >
         <Typography variant="subtitle1" id="tableTitle" px={1}>
           Chi tiết sản phẩm
         </Typography>
@@ -169,14 +177,12 @@ function ProductDetails() {
             backgroundColor="white"
           >
             <Typography
-              // sx={{ flex: "1 1 100%" }}
               variant="subtitle1"
               id="tableTitle"
               px={1}
             >
-              Thông tin chi tiết phiên bản
+              Thông tin chi tiết phiên bản                             {variantInfo}
             </Typography>
-            {variantInfo}
             <Divider sx={{ my: 1 }} />
             <Box display="flex" px={1}  py={2}>
               <Box

@@ -1,6 +1,9 @@
 package com.sapo.storemanagement.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "suppliers")
@@ -11,27 +14,43 @@ public class Supplier {
     private Long id;
 
     @Column(name = "code", nullable = false, unique = true, length = 16)
+    @NotBlank(message = "Supplier code cannot be blank")
+    @Size(max = 16, message = "Supplier code length cannot exceed {max}")
     private String code;
 
     @Column(name = "name", nullable = false, length = 64)
+    @NotBlank(message = "Supplier name cannot be blank")
+    @Size(max = 64, message = "Supplier code length cannot exceed {max}")
     private String name;
 
     @Column(name = "address", nullable = false, length = 128)
+    @NotBlank(message = "Supplier address cannot be blank")
+    @Size(max = 128, message = "Supplier code length cannot exceed {max}")
     private String address;
 
     @Column(name = "phone", length = 11)
+    @NotNull(message = "Supplier phone cannot be null")
+    @Size(max = 11, message = "Supplier phone length cannot exceed {max}")
     private String phone = "";
 
     @Column(name = "email", length = 128)
+    @NotNull(message = "Supplier phone cannot be null")
+    @Size(max = 128, message = "Supplier email length cannot exceed {max}")
     private String email = "";
 
     @Column(name = "website", length = 128)
+    @NotNull(message = "Supplier website cannot be null")
+    @Size(max = 128, message = "Supplier website length cannot exceed {max}")
     private String website = "";
 
     @Column(name = "description")
+    @NotNull(message = "Supplier description cannot be null")
+    @Size(max = 255, message = "Supplier description length cannot exceed {max}")
     private String description = "";
 
     @Column(name = "fax", length = 32)
+    @NotNull(message = "Supplier fax cannot be null")
+    @Size(max = 32, message = "Supplier fax length cannot exceed {max}")
     private String fax = "";
 
     @Column(name = "debt")
@@ -138,16 +157,8 @@ public class Supplier {
         return debt;
     }
 
-    private void setDebt(Double debt) {
+    public void setDebt(Double debt) {
         this.debt = debt;
-    }
-
-    public void increaseDebt(double offset) {
-        this.setDebt(this.debt + offset);
-    }
-
-    public void decreaseDebt(double offset) {
-        this.setDebt(this.debt - offset);
     }
 
     public SupplierStatus getActivityStatus() {

@@ -1,6 +1,8 @@
 package com.sapo.storemanagement.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "variants_import_receipts")
@@ -9,6 +11,8 @@ public class VariantsImportReceipt {
     private VariantsImportReceiptId id;
 
     @Column(name = "quantity", nullable = false)
+    @NotNull(message = "Quantity cannot be null")
+    @Size(min = 0, message = "Quantity cannot be less than {max}")
     private Long quantity;
 
     @ManyToOne

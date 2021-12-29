@@ -5,6 +5,8 @@ import com.sapo.storemanagement.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/suppliers")
 @CrossOrigin
@@ -29,12 +31,12 @@ public class SupplierController {
     }
 
     @PostMapping
-    public Supplier createSupplier(@RequestBody Supplier supplier){
+    public Supplier createSupplier(@RequestBody @Valid Supplier supplier){
         return supplierService.saveSupplier(supplier);
     }
 
     @PutMapping("/{id}")
-    public Supplier updateSupplier(@PathVariable long id, @RequestBody Supplier supplier){
+    public Supplier updateSupplier(@PathVariable long id, @RequestBody @Valid Supplier supplier){
         return supplierService.updateSupplier(id, supplier);
     }
 
