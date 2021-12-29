@@ -39,6 +39,11 @@ public class Order {
     @Min(value = 0, message = "Total amount cannot be less than {value}")
     private Double paidAmount = 0.0;
 
+    @Column(name = "description", columnDefinition = "varchar(255) DEFAULT ''")
+    @NotNull(message = "Description cannot be null")
+    @Size(max = 255, message = "Order description length cannot exceed {max}")
+    private String description;
+
     @Column(name = "expected_time", nullable = false)
     private LocalDate expectedTime;
 
@@ -64,10 +69,11 @@ public class Order {
     public Order() {
     }
 
-    public Order(String code, Supplier supplier,
+    public Order(String code, Supplier supplier, String description,
                  LocalDate expectedTime, User createdBy) {
         this.code = code;
         this.supplier = supplier;
+        this.description = description;
         this.expectedTime = expectedTime;
         this.createdBy = createdBy;
     }
@@ -90,6 +96,14 @@ public class Order {
 
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Double getPaidAmount() {
