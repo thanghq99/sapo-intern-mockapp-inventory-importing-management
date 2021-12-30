@@ -205,7 +205,6 @@ export default function TableSupply() {
         const fetchSuppliers = async () => {
             const res = await SupplierAPI.suppliersList();
             setListSuppliers(res.data);
-            console.log(res.data.name);
         }
         fetchSuppliers();
     }, [])

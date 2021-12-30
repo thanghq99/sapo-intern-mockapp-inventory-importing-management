@@ -1,5 +1,5 @@
 import "./app.scss";
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Box, CssBaseline } from '@mui/material';
 import Sidebar from "./components/sidebar/Sidebar";
@@ -12,24 +12,28 @@ import Topbar from "./components/topbar/Topbar";
 import CreateSupplier from "./pages/Suppliers/CreateSupplier";
 import DetailSupplier from "./pages/Suppliers/DetailSupplier";
 import ListOrder from "./pages/SupplyOrder/ListOrder/ListOrder";
+import Login from "./pages/Login_Register/Login";
+import Register from "./pages/Login_Register/Register";
 
 function App() {
   const [headerTitle, setHeaderTitle] = useState('');
   return (
     <div className="App" style={{ display: "flex", flexDirection: "column" }}>
       <Router className="App1">
-        <Box
-          sx={{
-            display: "flex",
-            width: "100%",
-            background: "#27274b",
-          }}
-        >
-          <CssBaseline />
-          <Sidebar setHeaderTitle={setHeaderTitle} />
-          <Box className="box_content" component="main">
-            <Topbar headerTitle={headerTitle} ></Topbar>
-            <Switch>
+        <Switch>
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
+          <Box
+            sx={{
+              display: "flex",
+              width: "100%",
+              background: "#27274b",
+            }}
+          >
+            <CssBaseline />
+            <Sidebar setHeaderTitle={setHeaderTitle} />
+            <Box className="box_content" component="main">
+              <Topbar headerTitle={headerTitle} ></Topbar>
               <Route exact path="/" component={Products} />
               <Route exact path="/san-pham" component={Products}></Route>
               <Route path="/san-pham/tao-san-pham" component={CreateProduct}></Route>
@@ -41,11 +45,11 @@ function App() {
               <Route path="/thong-tin-nha-cung-cap" component={DetailSupplier}></Route>
               <Route exact path="/nhap-hang" component={ListOrder} />
               <Route path="/nhap-hang/tao-don-nhap-hang" component={SupplyOrder}></Route>
-              
+
               <Route path="/cai-dat"></Route>
-            </Switch>
+            </Box>
           </Box>
-        </Box>
+        </Switch>
       </Router>
     </div>
   );

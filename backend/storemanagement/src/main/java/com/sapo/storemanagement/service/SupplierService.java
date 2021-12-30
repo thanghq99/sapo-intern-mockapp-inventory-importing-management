@@ -8,7 +8,7 @@ public interface SupplierService {
 
     Iterable<Supplier> listAllSuppliers();
 
-    Optional<Supplier> listAllSuppliersByCode(String status);
+    Iterable<Supplier> listAllSuppliersByRecordStatus();
 
     Supplier getSupplierById(Long id);
 

@@ -2,16 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9c1397fb-95d9-425c-9170-404bd6d6c0c8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectPlan.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/controller/SupplierController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/controller/SupplierController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/repository/SupplierRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/repository/SupplierRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/service/SupplierService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/service/SupplierService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/service/impl/SupplierServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/service/impl/SupplierServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Suppliers/Suppliers.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Suppliers/Suppliers.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +124,7 @@
               <path>
                 <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
                 <item name="Spring Boot" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="Failed" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+                <item name="Finished" type="7427dc5b:ServiceModel$ServiceGroupNode" />
               </path>
             </expand>
             <select />
@@ -152,7 +147,7 @@
       <workItem from="1639983363693" duration="11493000" />
       <workItem from="1640019246408" duration="10819000" />
       <workItem from="1640243843630" duration="10867000" />
-      <workItem from="1640586653314" duration="12937000" />
+      <workItem from="1640586653314" duration="20573000" />
     </task>
     <servers />
   </component>
@@ -172,10 +167,10 @@
       <screen x="0" y="0" width="1366" height="738" />
     </state>
     <state x="137" y="24" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.738@0.0.1366.738" timestamp="1639983588314" />
-    <state x="488" y="78" key="#com.intellij.ide.util.MemberChooser" timestamp="1640830073198">
+    <state x="488" y="78" key="#com.intellij.ide.util.MemberChooser" timestamp="1640839336972">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state x="488" y="78" key="#com.intellij.ide.util.MemberChooser/0.0.1366.738@0.0.1366.738" timestamp="1640830073198" />
+    <state x="488" y="78" key="#com.intellij.ide.util.MemberChooser/0.0.1366.738@0.0.1366.738" timestamp="1640839336972" />
     <state x="210" y="0" key="CommitChangelistDialog2" timestamp="1640020075952">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
@@ -184,38 +179,38 @@
       <screen x="0" y="0" width="1366" height="738" />
     </state>
     <state x="463" y="62" key="FileChooserDialogImpl/0.0.1366.738@0.0.1366.738" timestamp="1640791603552" />
-    <state width="1129" height="266" key="GridCell.Tab.0.bottom" timestamp="1640831025779">
+    <state width="1129" height="233" key="GridCell.Tab.0.bottom" timestamp="1640852126760">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="266" key="GridCell.Tab.0.bottom/0.0.1366.738@0.0.1366.738" timestamp="1640831025779" />
-    <state width="1129" height="266" key="GridCell.Tab.0.center" timestamp="1640831025779">
+    <state width="1129" height="233" key="GridCell.Tab.0.bottom/0.0.1366.738@0.0.1366.738" timestamp="1640852126760" />
+    <state width="1129" height="233" key="GridCell.Tab.0.center" timestamp="1640852126759">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="266" key="GridCell.Tab.0.center/0.0.1366.738@0.0.1366.738" timestamp="1640831025779" />
-    <state width="1129" height="266" key="GridCell.Tab.0.left" timestamp="1640831025779">
+    <state width="1129" height="233" key="GridCell.Tab.0.center/0.0.1366.738@0.0.1366.738" timestamp="1640852126759" />
+    <state width="1129" height="233" key="GridCell.Tab.0.left" timestamp="1640852126758">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="266" key="GridCell.Tab.0.left/0.0.1366.738@0.0.1366.738" timestamp="1640831025779" />
-    <state width="1129" height="266" key="GridCell.Tab.0.right" timestamp="1640831025779">
+    <state width="1129" height="233" key="GridCell.Tab.0.left/0.0.1366.738@0.0.1366.738" timestamp="1640852126758" />
+    <state width="1129" height="233" key="GridCell.Tab.0.right" timestamp="1640852126759">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="266" key="GridCell.Tab.0.right/0.0.1366.738@0.0.1366.738" timestamp="1640831025779" />
-    <state width="1129" height="266" key="GridCell.Tab.1.bottom" timestamp="1640831025780">
+    <state width="1129" height="233" key="GridCell.Tab.0.right/0.0.1366.738@0.0.1366.738" timestamp="1640852126759" />
+    <state width="1129" height="233" key="GridCell.Tab.1.bottom" timestamp="1640852126761">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="266" key="GridCell.Tab.1.bottom/0.0.1366.738@0.0.1366.738" timestamp="1640831025780" />
-    <state width="1129" height="266" key="GridCell.Tab.1.center" timestamp="1640831025780">
+    <state width="1129" height="233" key="GridCell.Tab.1.bottom/0.0.1366.738@0.0.1366.738" timestamp="1640852126761" />
+    <state width="1129" height="233" key="GridCell.Tab.1.center" timestamp="1640852126760">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="266" key="GridCell.Tab.1.center/0.0.1366.738@0.0.1366.738" timestamp="1640831025780" />
-    <state width="1129" height="266" key="GridCell.Tab.1.left" timestamp="1640831025779">
+    <state width="1129" height="233" key="GridCell.Tab.1.center/0.0.1366.738@0.0.1366.738" timestamp="1640852126760" />
+    <state width="1129" height="233" key="GridCell.Tab.1.left" timestamp="1640852126760">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="266" key="GridCell.Tab.1.left/0.0.1366.738@0.0.1366.738" timestamp="1640831025779" />
-    <state width="1129" height="266" key="GridCell.Tab.1.right" timestamp="1640831025780">
+    <state width="1129" height="233" key="GridCell.Tab.1.left/0.0.1366.738@0.0.1366.738" timestamp="1640852126760" />
+    <state width="1129" height="233" key="GridCell.Tab.1.right" timestamp="1640852126760">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="266" key="GridCell.Tab.1.right/0.0.1366.738@0.0.1366.738" timestamp="1640831025780" />
+    <state width="1129" height="233" key="GridCell.Tab.1.right/0.0.1366.738@0.0.1366.738" timestamp="1640852126760" />
     <state width="1323" height="227" key="GridCell.Tab.2.bottom" timestamp="1640019163845">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
