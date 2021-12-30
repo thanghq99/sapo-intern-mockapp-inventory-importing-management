@@ -24,6 +24,11 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    public Optional<Supplier> listAllSuppliersByCode(String status) {
+        return supplierRepository.findByStatus(status);
+    }
+
+    @Override
     public Supplier getSupplierById(Long id) {
         if(id <= 0) {
             throw new BadNumberException("id must be greater than 0");
@@ -34,9 +39,9 @@ public class SupplierServiceImpl implements SupplierService {
             .orElseThrow(() -> new RecordNotFoundException("Supplier not found"));
     }
 
-    public Optional<Supplier> getSupplierByCode(String code) {
-        return supplierRepository.findByCode(code);
-    }
+//    public Optional<Supplier> getSupplierByCode(String code) {
+//        return supplierRepository.findByCode(code);
+//    }
 
     @Override
     @Transactional

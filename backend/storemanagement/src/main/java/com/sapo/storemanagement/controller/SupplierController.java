@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/suppliers")
@@ -26,8 +27,8 @@ public class SupplierController {
     }
 
     @GetMapping
-    public Iterable<Supplier> findAllSuppliers(){
-        return supplierService.listAllSuppliers();
+    public Optional<Supplier> findAllSuppliers(@RequestBody String status){
+        return supplierService.listAllSuppliersByCode(status);
     }
 
     @PostMapping
