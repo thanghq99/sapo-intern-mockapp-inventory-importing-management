@@ -1,17 +1,29 @@
 package com.sapo.storemanagement.service.impl;
 
 import com.sapo.storemanagement.entities.AppUserDetails;
+import com.sapo.storemanagement.entities.Role;
 import com.sapo.storemanagement.entities.User;
+import com.sapo.storemanagement.exception.RecordNotFoundException;
+import com.sapo.storemanagement.exception.UniqueKeyConstraintException;
+import com.sapo.storemanagement.repository.RoleRepository;
 import com.sapo.storemanagement.repository.UserRepository;
+import com.sapo.storemanagement.security.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -35,5 +47,25 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("Username" + username + " not found"));
         return new AppUserDetails(user);
+    }
+
+    public void createAdminAccount(RegisterRequest loginRequest) {
+        String username = loginRequest.getUsername();
+        String email = loginRequest.getEmail();
+
+        if(userRepository.existsByUsername(username)) {
+            throw new UniqueKeyConstraintException("Username already exists");
+        }
+
+        if(userRepository.existsByEmail(email)) {
+            throw new UniqueKeyConstraintException("Email already exists");
+        }
+
+        String encodedPassword = passwordEncoder.encode(loginRequest.getPassword());
+        User user = new User(username, encodedPassword, email);
+        Role role = roleRepository.findByName("ADMIN").orElseThrow(() -> new RecordNotFoundException("Role not found"));
+        user.addRole(role);
+
+        userRepository.save(user);
     }
 }
