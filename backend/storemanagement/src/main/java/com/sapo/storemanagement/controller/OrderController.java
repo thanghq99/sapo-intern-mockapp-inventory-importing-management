@@ -1,5 +1,6 @@
 package com.sapo.storemanagement.controller;
 
+import com.sapo.storemanagement.dto.OrderDto;
 import com.sapo.storemanagement.entities.Order;
 import com.sapo.storemanagement.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,13 @@ public class OrderController {
     public List<Order> findAllOrder(){
         return orderService.getAllOrder();
     }
-//    @PostMapping
-//    public Order createOrder(@RequestBody @Valid Order order){
-//        return orderService.createdOrder(order);
-//    }
+    @PostMapping
+    public Order createOrder(@RequestBody @Valid OrderDto orderDto){
+        return orderService.createdOrder(orderDto);
+    }
     @PutMapping("/{id}")
-    public Order updateOrder(@PathVariable long id, @RequestBody @Valid Order order){
-        return orderService.updateOrder(id, order);
+    public Order updateOrder(@PathVariable long id, @RequestBody OrderDto orderDto){
+        return orderService.updateOrder(id, orderDto);
     }
 }
+// @Valid put

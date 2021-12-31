@@ -35,8 +35,10 @@ public class VariantsOrder {
     public VariantsOrder() {
     }
 
-    public VariantsOrder(long orderId, long variantId, long suppliedQuantity, double price) {
-        this.id = new VariantsOrderId(orderId, variantId);
+    public VariantsOrder(Order order, Variant variant, long suppliedQuantity, double price) {
+        this.id = new VariantsOrderId(order.getId(), variant.getId());
+        this.order = order;
+        this.variant = variant;
         this.suppliedQuantity = suppliedQuantity;
         this.price = price;
     }

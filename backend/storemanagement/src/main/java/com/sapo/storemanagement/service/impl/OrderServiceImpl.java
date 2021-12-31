@@ -7,7 +7,6 @@ import com.sapo.storemanagement.exception.BadNumberException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
 import com.sapo.storemanagement.repository.OrderRepository;
 import com.sapo.storemanagement.repository.UserRepository;
-import com.sapo.storemanagement.repository.VariantRepository;
 import com.sapo.storemanagement.repository.VariantsOrderRepository;
 import com.sapo.storemanagement.service.OrderService;
 import com.sapo.storemanagement.service.SupplierService;
@@ -16,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -32,6 +31,7 @@ public class OrderServiceImpl implements OrderService {
     private UserRepository userRepository;
     @Autowired
     private VariantService variantService;
+
     @Autowired
     private VariantsOrderRepository variantsOrderRepository;
 
@@ -58,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Order createdOrder(OrderDto orderDto) {
         Supplier supplier = supplierService.getSupplierById(orderDto.getSupplierId());
-        User user = userRepository.getById(orderDto.getCreatedBy());
+        User user = userRepository.findById(orderDto.getCreatedBy()).orElseThrow( () -> new RecordNotFoundException("User not found") );
         Order newOrder = orderRepository.save(new Order(
 
                 orderDto.getOrderCode(),
@@ -68,12 +68,14 @@ public class OrderServiceImpl implements OrderService {
                 user
         ));
         orderDto.getLineItems().forEach(item -> {
+            Variant variant = variantService.getVariantById(item.getVariantId());
             VariantsOrder variantsOrder = new VariantsOrder(
-                    newOrder.getId(),
-                    item.getVariantId(),
+                    newOrder,
+                    variant,
                     item.getQuantity(),
                     item.getPrice()
             );
+
             variantsOrderRepository.save(variantsOrder);
             newOrder.setTotalAmount(newOrder.getTotalAmount() + item.getPrice()*item.getQuantity());
             supplierService.increaseDebt(newOrder.getSupplier().getId(), newOrder.getTotalAmount());
@@ -87,22 +89,70 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Order updateOrder(long id, OrderDto newOrderDto) {
         Order orderUpdate = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("order not found"));
-
-        if(orderUpdate.getStatus() == "Đang giao dịch") {
+        double oldTotalAmount = orderUpdate.getTotalAmount();
+//        System.out.println("bandau: " + oldTotalAmount);
+//        orderUpdate.setTotalAmount(100);
+//        System.out.println("lan1 " + orderUpdate.getTotalAmount());
+//        orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() + 200);
+//        System.out.println("lan 2 " + orderUpdate.getTotalAmount());
+//        AtomicReference<Double> newTotalAmount = new AtomicReference<>((double) 0);
+        if(orderUpdate.getStatus().equals("Đang giao dịch")) {
             List<LineItemDto> newVariantOrders = newOrderDto.getLineItems();
-            List<VariantsOrder> variantsOrderUpdates = variantsOrderRepository.findByOrderId(orderUpdate.getId());
+            List<VariantsOrder> variantsOrderUpdates = variantsOrderRepository.findVariantByOrderId(orderUpdate.getId());
+
+        // Xoá đi sản phẩm cũ ko nằm trong danh sách mới và cập nhật các sản phầm
             variantsOrderUpdates.forEach(oldVariant -> {
+                AtomicBoolean check = new AtomicBoolean(false);
                 newVariantOrders.forEach(newVariant -> {
-                    if(newVariant.getVariantId() == oldVariant.getVariant().getId()){
+                    if(newVariant.getVariantId().equals(oldVariant.getVariant().getId())){
+                        orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() - (oldVariant.getPrice() * oldVariant.getSuppliedQuantity()) + (newVariant.getPrice() * newVariant.getQuantity()));
                         oldVariant.setPrice(newVariant.getPrice());
                         oldVariant.setSuppliedQuantity(newVariant.getQuantity());
 
-                    } else {
-                        orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() - oldVariant.getPrice()*oldVariant.getSuppliedQuantity());
-//                    variantsOrderRepository.delete(oldVariant.getId());
+                        variantsOrderRepository.save(oldVariant);
+                        check.set(true);
                     }
                 });
+                if(!check.get()){
+                    orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() - (oldVariant.getPrice() * oldVariant.getSuppliedQuantity()));
+                    variantsOrderRepository.deleteVariantOderInOrder(oldVariant.getOrder().getId(), oldVariant.getVariant().getId());
+                }
             });
+
+         // thêm sản phẩm mới chưa có trong danh sách cũ
+            List<VariantsOrder> variantOrderUpdating = variantsOrderRepository.findVariantByOrderId(orderUpdate.getId());
+            newVariantOrders.forEach(newVariant -> {
+                // kiểm tra đã tồn tại hay chưa
+                AtomicBoolean check = new AtomicBoolean(false);
+                variantOrderUpdating.forEach(oldVariant -> {
+                    if(newVariant.getVariantId().equals(oldVariant.getVariant().getId())){
+                        check.set(true);
+                    }
+                });
+
+                if(!check.get()){
+                    orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() + (newVariant.getPrice() * newVariant.getQuantity()));
+                    Variant variant = variantService.getVariantById(newVariant.getVariantId());
+                    VariantsOrder variantsOrderAdd = new VariantsOrder(
+                            orderUpdate,
+                            variant,
+                            newVariant.getQuantity(),
+                            newVariant.getPrice()
+                    );
+                    variantsOrderRepository.save(variantsOrderAdd);
+                }
+            });
+
+
+            double newTotalAmount = orderUpdate.getTotalAmount();
+            if(newTotalAmount < 0) {
+                throw new BadNumberException("TotalAmount is invalid");
+            }
+            if(oldTotalAmount < newTotalAmount){
+                supplierService.increaseDebt(orderUpdate.getSupplier().getId(), (newTotalAmount - oldTotalAmount));
+            } else if(oldTotalAmount > newTotalAmount) {
+                supplierService.decreaseDebt(orderUpdate.getSupplier().getId(), (oldTotalAmount - newTotalAmount));
+            }
 
             orderUpdate.setExpectedTime(newOrderDto.getDeliveryTime());
             orderUpdate.setDescription(newOrderDto.getDescription());
