@@ -1,5 +1,6 @@
 import React from 'react'
 import "./register.scss";
+import { Link } from "react-router-dom";
 
 export default function Register() {
     return (
@@ -13,7 +14,7 @@ export default function Register() {
                 </div>
                 <div className="login-content">
                     <form action="">
-                        <h2 className="title">Đăng ki</h2>
+                        <h2 className="title">Đăng ký</h2>
                         <div className="input-div one">
                             <div className="i">
                                 <i className="fas fa-user" />
@@ -24,7 +25,7 @@ export default function Register() {
                         </div>
                         <div className="input-div pass">
                             <div className="i">
-                                <i className="fas fa-lock" />
+                                <i className="fas fa-envelope"></i>
                             </div>
                             <div className="div">
                                 <input type="email" placeholder='Email' className="input" />
@@ -38,13 +39,15 @@ export default function Register() {
                                 <input type="password" placeholder='Mật khẩu' className="input" />
                             </div>
                         </div>
-                       <div className="submit">
-                        <button>Xác nhận</button>
-                        <a className='back_to_login' href="">Bạn đã có tài khoản</a>
-                       </div>
+                        <div className="submit">
+                            <button>Xác nhận</button>
+                            <Link to={"/login"} className='back_to_login'>
+                                Bạn đã có tài khoản
+                            </Link>
+                        </div>
                     </form>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }

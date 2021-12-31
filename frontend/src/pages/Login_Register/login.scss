@@ -58,6 +58,14 @@ body {
                 border: 1px #aaaaaa solid;
                 color: #ffffff;
                 font-weight: 600;
+                cursor: pointer;
+
+                &:hover{
+                    background-color: #505db6;
+                }
+            }
+            .toRegister{
+                text-align: center;
             }
         }
     }
