@@ -3,7 +3,7 @@ const Reducer = (state, action) => {
         case "LOGIN_SUCCESS": {
             return {
                 token: action.payload,
-                error: false
+                error: null
             }
         }
         case "LOGIN_FAILURE": {
@@ -16,3 +16,4 @@ const Reducer = (state, action) => {
             return state;
     }
 }
+export default Reducer;

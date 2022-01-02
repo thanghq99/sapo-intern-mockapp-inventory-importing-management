@@ -271,7 +271,7 @@ export default function TableSupply() {
 
     return (
         <Box className='table_box' sx={{ width: '100%', marginTop: "1em" }}>
-            <Paper sx={{ width: '100%', mb: 2}}>
+            <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
                     <Table

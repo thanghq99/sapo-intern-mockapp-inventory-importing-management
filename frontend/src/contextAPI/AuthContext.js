@@ -2,8 +2,8 @@ import { createContext, useEffect, useReducer } from "react";
 import Reducer from "./AuthReducer.js"
 
 const INITIAL_STATE = {
-    token: JSON.parse(sessionStorage.getItem("jwt")) || null,
-    error: false
+    token: JSON.parse(sessionStorage.getItem("token")) || null,
+    error: null
 };
 
 export const AuthContext = createContext(INITIAL_STATE);

@@ -3,15 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9c1397fb-95d9-425c-9170-404bd6d6c0c8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/controller/AppController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/controller/AppController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/controller/CheckSheetController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/controller/CheckSheetController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/controller/ImportReceiptController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/controller/ImportReceiptController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/controller/PaymentInvoiceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/storemanagement/src/main/java/com/sapo/storemanagement/controller/PaymentInvoiceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Login_Register/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Login_Register/Login.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Login_Register/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Login_Register/Register.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Login_Register/login.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Login_Register/login.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Login_Register/register.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Login_Register/register.scss" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +120,7 @@
               <path>
                 <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
                 <item name="Spring Boot" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="Finished" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+                <item name="Running" type="7427dc5b:ServiceModel$ServiceGroupNode" />
               </path>
             </expand>
             <select />
@@ -153,7 +144,7 @@
       <workItem from="1640019246408" duration="10819000" />
       <workItem from="1640243843630" duration="10867000" />
       <workItem from="1640586653314" duration="23602000" />
-      <workItem from="1640922703483" duration="1661000" />
+      <workItem from="1640922703483" duration="2866000" />
     </task>
     <servers />
   </component>
@@ -185,38 +176,38 @@
       <screen x="0" y="0" width="1366" height="738" />
     </state>
     <state x="463" y="62" key="FileChooserDialogImpl/0.0.1366.738@0.0.1366.738" timestamp="1640791603552" />
-    <state width="1129" height="317" key="GridCell.Tab.0.bottom" timestamp="1640926033561">
+    <state width="1129" height="317" key="GridCell.Tab.0.bottom" timestamp="1641111976164">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="317" key="GridCell.Tab.0.bottom/0.0.1366.738@0.0.1366.738" timestamp="1640926033561" />
-    <state width="1129" height="317" key="GridCell.Tab.0.center" timestamp="1640926033561">
+    <state width="1129" height="317" key="GridCell.Tab.0.bottom/0.0.1366.738@0.0.1366.738" timestamp="1641111976164" />
+    <state width="1129" height="317" key="GridCell.Tab.0.center" timestamp="1641111976163">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="317" key="GridCell.Tab.0.center/0.0.1366.738@0.0.1366.738" timestamp="1640926033561" />
-    <state width="1129" height="317" key="GridCell.Tab.0.left" timestamp="1640926033560">
+    <state width="1129" height="317" key="GridCell.Tab.0.center/0.0.1366.738@0.0.1366.738" timestamp="1641111976163" />
+    <state width="1129" height="317" key="GridCell.Tab.0.left" timestamp="1641111976163">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="317" key="GridCell.Tab.0.left/0.0.1366.738@0.0.1366.738" timestamp="1640926033560" />
-    <state width="1129" height="317" key="GridCell.Tab.0.right" timestamp="1640926033561">
+    <state width="1129" height="317" key="GridCell.Tab.0.left/0.0.1366.738@0.0.1366.738" timestamp="1641111976163" />
+    <state width="1129" height="317" key="GridCell.Tab.0.right" timestamp="1641111976164">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="317" key="GridCell.Tab.0.right/0.0.1366.738@0.0.1366.738" timestamp="1640926033561" />
-    <state width="1129" height="317" key="GridCell.Tab.1.bottom" timestamp="1640926033562">
+    <state width="1129" height="317" key="GridCell.Tab.0.right/0.0.1366.738@0.0.1366.738" timestamp="1641111976164" />
+    <state width="1129" height="317" key="GridCell.Tab.1.bottom" timestamp="1641111976165">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="317" key="GridCell.Tab.1.bottom/0.0.1366.738@0.0.1366.738" timestamp="1640926033562" />
-    <state width="1129" height="317" key="GridCell.Tab.1.center" timestamp="1640926033562">
+    <state width="1129" height="317" key="GridCell.Tab.1.bottom/0.0.1366.738@0.0.1366.738" timestamp="1641111976165" />
+    <state width="1129" height="317" key="GridCell.Tab.1.center" timestamp="1641111976164">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="317" key="GridCell.Tab.1.center/0.0.1366.738@0.0.1366.738" timestamp="1640926033562" />
-    <state width="1129" height="317" key="GridCell.Tab.1.left" timestamp="1640926033562">
+    <state width="1129" height="317" key="GridCell.Tab.1.center/0.0.1366.738@0.0.1366.738" timestamp="1641111976164" />
+    <state width="1129" height="317" key="GridCell.Tab.1.left" timestamp="1641111976164">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="317" key="GridCell.Tab.1.left/0.0.1366.738@0.0.1366.738" timestamp="1640926033562" />
-    <state width="1129" height="317" key="GridCell.Tab.1.right" timestamp="1640926033562">
+    <state width="1129" height="317" key="GridCell.Tab.1.left/0.0.1366.738@0.0.1366.738" timestamp="1641111976164" />
+    <state width="1129" height="317" key="GridCell.Tab.1.right" timestamp="1641111976164">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
-    <state width="1129" height="317" key="GridCell.Tab.1.right/0.0.1366.738@0.0.1366.738" timestamp="1640926033562" />
+    <state width="1129" height="317" key="GridCell.Tab.1.right/0.0.1366.738@0.0.1366.738" timestamp="1641111976164" />
     <state width="1323" height="227" key="GridCell.Tab.2.bottom" timestamp="1640019163845">
       <screen x="0" y="0" width="1366" height="738" />
     </state>

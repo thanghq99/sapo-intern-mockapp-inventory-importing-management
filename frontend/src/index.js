@@ -4,12 +4,14 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App';
 import { ContextProvider } from './contextAPI/AuthContext';
 import './index.scss';
-ReactDOM.render(
 
+ReactDOM.render(
   <React.StrictMode>
-    <ContextProvider>
+    <BrowserRouter>
+      <ContextProvider>
         <App />
-    </ContextProvider>
+      </ContextProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

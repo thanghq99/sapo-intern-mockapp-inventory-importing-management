@@ -1,15 +1,17 @@
 import React from 'react';
 import "./login.scss";
 import { useContext, useRef } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from '../../contextAPI/AuthContext';
 import Login_RegisterAPI from '../../api/Login_RegisterAPI';
+import axios from 'axios';
 
 export default function Login() {
 
     const username = useRef("");
     const password = useRef("");
     const { dispatch } = useContext(AuthContext);
+    const history = useHistory();
 
     const LoginCall = async (e) => {
         e.preventDefault();
@@ -17,12 +19,11 @@ export default function Login() {
             username: username.current.value,
             password: password.current.value
         }
-        console.log(inputlogin);
         try {
-            const res = await Login_RegisterAPI.logincall(inputlogin);
-            console.log(res.data);
+            const res = await axios.post("http://localhost:9191/login", inputlogin);
             dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
-            window.location.replace("/");
+            window.location.replace("/san-pham");
+            // history.push("/san-pham")
         } catch (error) {
             dispatch({ type: "LOGIN_FAILURE", payload: error });
         }

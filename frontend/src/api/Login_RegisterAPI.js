@@ -1,10 +1,10 @@
-import callAPI from "./index";
+import CallAPI from "./CallAPI";
 
 function Login_RegisterAPI() {
     
     // [LOGIN] 
     this.logincall = (user) => {
-        return callAPI.post('login', user);
+        return CallAPI.post('login', user);
     }
 }
 
