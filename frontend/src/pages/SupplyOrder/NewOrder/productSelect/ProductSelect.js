@@ -76,13 +76,18 @@ export default function ProductSelect({setProduct}) {
         if(newValue == null) {}
         else {
             setCheck(false);
-            await productSelect.map((product) => {
-                if(product.id == newValue.id) {
+            let checked = false;
+            productSelect.map((product) => {
+                if (product.id == newValue.id) {
+                    checked = true;
                     setCheck(true);
-                } 
+                }
             })
             console.log(check);
-            add(newValue);
+            if(!checked){
+                add(newValue);
+            }
+            
             // const productAdd = [
             //     // copy the current users state
             //     ...productSelect,
@@ -152,7 +157,7 @@ export default function ProductSelect({setProduct}) {
         let tmp = 0;
         let numCate = 0;
         let totalTmp = 0;
-        setLastProduct([]);
+        const test = [];
         console.log(lastProduct);
         console.log(num);
         productSelect.map((item) => {
@@ -163,14 +168,17 @@ export default function ProductSelect({setProduct}) {
             productTmp["variantId"] = item.id;
             productTmp["price"] = originalPrice[item.id];
             productTmp["quantity"] = Number(num[item.id]);
-            setLastProduct( [
-                // copy the current users state
-                ...lastProduct,  (productTmp)
-                // now you can add a new object to add to the array
+            test.push(productTmp);
+            
+            // setLastProduct( [
+            //     // copy the current users state
+            //     ...lastProduct,  (productTmp)
+            //     // now you can add a new object to add to the array
                
-            ]);
+            // ]);
             
         });
+        setProduct(test);
         setNumProduct(tmp);
         setNumCategory(numCate);
         setTotal(totalTmp);

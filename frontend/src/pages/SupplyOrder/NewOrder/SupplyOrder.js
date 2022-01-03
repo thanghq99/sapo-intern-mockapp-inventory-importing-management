@@ -34,8 +34,10 @@ import ProductSelect from './productSelect/ProductSelect';
 
 export default function SupplyOrder() {
     const [supplier, setSupplier] = React.useState();
+    const code = React.useRef("");
+    const [description, setDescription] = React.useState('');
     const [product, setProduct] = React.useState();
-    const [date, setDate] = React.useState(null);
+    const [date, setDate] = React.useState('');
     const history = useHistory();
 
     // const handleChangeSupply = (event) => {
@@ -81,10 +83,24 @@ export default function SupplyOrder() {
         'Thanh toán',
     ];
 
+    const SubmitOrder = () => {
+        let data = {
+            orderCode: code.current.value,
+            supplierId: supplier,
+            description: description,
+            deliveryTime: date,
+            createdBy: 2,
+            lineItems: product
+        };
+        console.log(data);
+    
+       
+    }
+
     React.useEffect(() => {
         
     }, [])
-    console.log(supplier);
+    console.log(product);
     return (
 
         <div>
@@ -95,7 +111,7 @@ export default function SupplyOrder() {
                         <Box>Đơn nhập hàng</Box>
                     </Box>
                     <SupplySelect setSupplier={setSupplier} />
-                    <ProductSelect productSelect={product} setProductSelect={setProduct} />
+                    <ProductSelect setProduct={setProduct} />
                 </Box>
                 <Box sx={{ paddingLeft: "10px" }} className="more-info">
 
@@ -112,7 +128,7 @@ export default function SupplyOrder() {
                         <Box className="title">Thông tin bổ sung</Box>
                         <Box className="code-supply-order">
                             <Box className='title'>Mã đơn nhập hàng</Box>
-                            <TextField id="outlined-basic" className="info" variant="outlined" />
+                            <TextField inputRef={code} id="outlined-basic" className="info" variant="outlined" />
                         </Box>
                         <Box className="time-supply-order">
                             <Box className='title'>Ngày nhận hàng</Box>
@@ -131,10 +147,10 @@ export default function SupplyOrder() {
                         </Box>
                         <Box className="note">
                             <Box className="title">Ghi chú</Box>
-                            <textarea className="content-note"></textarea>
+                            <textarea className="content-note" onChange={(e) => setDescription(e.target.value)}></textarea>
                         </Box>
 
-                        <Button variant="outlined" className="btn-order">Đặt hàng</Button>
+                        <Button variant="outlined" className="btn-order" onClick={SubmitOrder}>Đặt hàng</Button>
 
                     </Box>
                 </Box>

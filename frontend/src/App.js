@@ -13,6 +13,7 @@ import CreateSupplier from "./pages/Suppliers/CreateSupplier";
 import DetailSupplier from "./pages/Suppliers/DetailSupplier";
 import ListOrder from "./pages/SupplyOrder/ListOrder/ListOrder";
 import DetailOrder from "./pages/SupplyOrder/DetailOrder/DetailOrder";
+import UpdateOrder from "./pages/SupplyOrder/UpdateOrder/UpdateOrder";
 
 function App() {
   const [headerTitle, setHeaderTitle] = useState('');
@@ -43,6 +44,7 @@ function App() {
               <Route exact path="/nhap-hang" component={ListOrder} />
               <Route path="/nhap-hang/tao-don-nhap-hang" component={SupplyOrder}></Route>
               <Route path="/nhap-hang/don-hang" component={DetailOrder} />
+              <Route path="/nhap-hang/chinh-sua-don-hang" component={UpdateOrder} />
 
               <Route path="/cai-dat"></Route>
             </Switch>
