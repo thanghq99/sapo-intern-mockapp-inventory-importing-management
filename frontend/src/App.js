@@ -12,6 +12,7 @@ import Topbar from "./components/topbar/Topbar";
 import CreateSupplier from "./pages/Suppliers/CreateSupplier";
 import DetailSupplier from "./pages/Suppliers/DetailSupplier";
 import ListOrder from "./pages/SupplyOrder/ListOrder/ListOrder";
+import DetailOrder from "./pages/SupplyOrder/DetailOrder/DetailOrder";
 
 function App() {
   const [headerTitle, setHeaderTitle] = useState('');
@@ -41,7 +42,8 @@ function App() {
               <Route path="/thong-tin-nha-cung-cap" component={DetailSupplier}></Route>
               <Route exact path="/nhap-hang" component={ListOrder} />
               <Route path="/nhap-hang/tao-don-nhap-hang" component={SupplyOrder}></Route>
-              
+              <Route path="/nhap-hang/don-hang" component={DetailOrder} />
+
               <Route path="/cai-dat"></Route>
             </Switch>
           </Box>

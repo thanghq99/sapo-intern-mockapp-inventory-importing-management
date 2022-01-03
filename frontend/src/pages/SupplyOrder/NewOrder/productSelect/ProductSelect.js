@@ -33,18 +33,14 @@ import ProductAPI from '../../../../api/ProductAPI';
 export default function ProductSelect() {
 
     const [detailSupply, setDetailSupply] = React.useState(false);
-    const [productList, setProductList] = React.useState([]);
+    const [productList, setProductList] = React.useState([
+        // {id: 1, code: 'ANHVU', inventoryQuantity: 10, sellableQuantity: 10, originalPrice: 120}
+    ]);
     // const [value, setValue] = React.useState();
-    let productSelect = [];
-    // const [supplier, setSupplier] = React.useState();
+    const [productSelect, setProductSelect] = React.useState([]);
 
     const [originalPrice, setOriginalPrice] = React.useState([])
-    const [num, setNum] = React.useState([]
-        // productList.reduce(
-        //     (obj, product) => ({ ...obj,[product.id]: 1 }),
-        //     {}
-        //   )
-    )
+    const [num, setNum] = React.useState([])
     function handleChangeNum(evt) {
         const value1 = evt.target.value;
         setNum({
@@ -60,7 +56,14 @@ export default function ProductSelect() {
         });
       }
     function handleSelectProd(event, newValue){
-        productSelect.push(newValue);
+        const dataSource = [...productSelect];
+        setProductSelect(
+            ...productSelect, [...dataSource, newValue]
+          )
+    }
+    function handDeleteProduct(id){
+        const dataSource = [...productList];
+        setProductList( ...productList, dataSource.filter(item => item.id !== id));
     }
 
     const useStyles = makeStyles((theme) => ({
@@ -96,9 +99,6 @@ export default function ProductSelect() {
     }));
     const classes = useStyles();
     const handleOriPrice = async (list) => {
-
-       
-          
             setOriginalPrice (
                 list.reduce(
                     (obj, product) => ({ ...obj,[product.id]: product.originalPrice }),
@@ -111,8 +111,6 @@ export default function ProductSelect() {
                     {}
                   )
             )
-        
-       
     }
     // React.useEffect(() => {
     //     handleOriPrice(productList);
@@ -124,7 +122,7 @@ export default function ProductSelect() {
         
         setProductList(result.data);
         handleOriPrice(result.data);
-        // setOriginalPrice({ ...originalPrice, [item.id]: .value })
+       
   
         return true;
     }
@@ -135,7 +133,7 @@ export default function ProductSelect() {
     }, []);
 
     
-    console.log(originalPrice);
+    console.log(productSelect);
     
     return (
         <div>
@@ -189,13 +187,13 @@ export default function ProductSelect() {
                     <List>
                         {
                             
-                            productList.map(item => {
+                            productSelect.map(item => {
                                 return (
                                 <ListItem className="product-item"
                                 >
                                     <Typography sx={{ width: '10%' }}>{item.code}</Typography>
-                                    <Typography sx={{ width: '48%', paddingLeft: "5px" }} >{item.product.name}</Typography>
-                                    <Typography sx={{ width: '10%', textAlign: "center" }}>{item.unit}</Typography>
+                                    {/* <Typography sx={{ width: '48%', paddingLeft: "5px" }} >{item.product.name}</Typography> */}
+                                    {/* <Typography sx={{ width: '10%', textAlign: "center" }}>{item.unit}</Typography> */}
                                     <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="num" value={num[item.id]} 
                                     onChange={e =>
                                         setNum({ ...num, [item.id]: e.target.value })} 
@@ -205,7 +203,7 @@ export default function ProductSelect() {
                                     /></Box>
         
                                     <Typography sx={{ width: '10%', textAlign: "center" }}>{num[item.id]*originalPrice[item.id]}</Typography>
-                                    <CancelIcon sx={{ width: '2%', textAlign: "center" }} />
+                                    <CancelIcon sx={{ width: '2%', textAlign: "center" }} onClick={() => handDeleteProduct(item.id)} />
                                 
                                 </ListItem>)
                             })

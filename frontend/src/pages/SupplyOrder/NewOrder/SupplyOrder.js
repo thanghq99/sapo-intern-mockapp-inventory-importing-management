@@ -33,8 +33,8 @@ import SupplySelect from './supplySelect/SupplySelect';
 import ProductSelect from './productSelect/ProductSelect';
 
 export default function SupplyOrder() {
-    // const [supply, setSupply] = React.useState('');
-    // const [product, setProduct] = React.useState('');
+    const [supplier, setSupplier] = React.useState();
+    const [product, setProduct] = React.useState();
     const [date, setDate] = React.useState(null);
     const history = useHistory();
 
@@ -84,7 +84,7 @@ export default function SupplyOrder() {
     React.useEffect(() => {
         
     }, [])
-
+    console.log(supplier);
     return (
 
         <div>
@@ -94,13 +94,13 @@ export default function SupplyOrder() {
                         <ArrowBackIosIcon />
                         <Box>Đơn nhập hàng</Box>
                     </Box>
-                    <SupplySelect />
+                    <SupplySelect setSupplier={setSupplier} />
                     <ProductSelect />
                 </Box>
                 <Box sx={{ paddingLeft: "10px" }} className="more-info">
 
                     <Box sx={{ width: '100%' }} className="time-line">
-                        <Stepper activeStep={2} alternativeLabel>
+                        <Stepper activeStep={0} alternativeLabel>
                             {steps.map((label) => (
                                 <Step key={label}>
                                     <StepLabel>{label}</StepLabel>
@@ -108,7 +108,7 @@ export default function SupplyOrder() {
                             ))}
                         </Stepper>
                     </Box>
-                    <Box className="more-info-detail">
+                    <Box className="more-info-detail-created">
                         <Box className="title">Thông tin bổ sung</Box>
                         <Box className="code-supply-order">
                             <Box className='title'>Mã đơn nhập hàng</Box>

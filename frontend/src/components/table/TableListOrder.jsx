@@ -63,7 +63,7 @@ const headCells = [
     },
     {
         id: 'nameSupplier',
-        numeric: false,
+        numeric: true,
         disablePadding: true,
         label: 'Tên nhà cung cấp',
     },
@@ -94,13 +94,13 @@ const headCells = [
     },
     {
         id: 'createdBy',
-        numeric: false,
+        numeric: true,
         disablePadding: false,
         label: 'Nhân Viên Tạo',
     },
     {
         id: 'expectedTime',
-        numeric: false,
+        numeric: true,
         disablePadding: false,
         label: 'Ngày hẹn giao',
     },
@@ -340,9 +340,10 @@ export default function TableSupply() {
                                                 id={labelId}
                                                 scope="row"
                                                 padding="none"
+                                                align="center"
                                             >
-                                                {/* <Link to={`/thong-tin-nha-cung-cap?id=${row.id}`} >{row.code}</Link> */}
-                                                {row.code}
+                                                <Link to={`/nhap-hang/don-hang?code=${row.id}`} className="link-detail">{row.code}</Link>
+                                        
                                             </TableCell>
                                             <TableCell align="center">{row.supplier.name}</TableCell>
                                             <TableCell align="center">{row.status}</TableCell>
