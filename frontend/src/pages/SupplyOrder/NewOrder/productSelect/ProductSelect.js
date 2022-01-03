@@ -30,14 +30,15 @@ import StepLabel from '@mui/material/StepLabel';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ProductAPI from '../../../../api/ProductAPI';
 
-export default function ProductSelect() {
+export default function ProductSelect({setProduct}) {
 
-    const [detailSupply, setDetailSupply] = React.useState(false);
-    const [productList, setProductList] = React.useState([
-        // {id: 1, code: 'ANHVU', inventoryQuantity: 10, sellableQuantity: 10, originalPrice: 120}
-    ]);
-    // const [value, setValue] = React.useState();
+    const [lastProduct, setLastProduct] = React.useState([]);
+    const [productList, setProductList] = React.useState([]);
+    const [numProduct, setNumProduct] = React.useState(0);
+    const [numCategory, setNumCategory] = React.useState(0);
+    const [total, setTotal] = React.useState(0);
     const [productSelect, setProductSelect] = React.useState([]);
+    const [check, setCheck] = React.useState(false);
 
     const [originalPrice, setOriginalPrice] = React.useState([])
     const [num, setNum] = React.useState([])
@@ -55,15 +56,50 @@ export default function ProductSelect() {
           [productList.id]: value1
         });
       }
-    function handleSelectProd(event, newValue){
-        const dataSource = [...productSelect];
-        setProductSelect(
-            ...productSelect, [...dataSource, newValue]
-          )
+    function add (newValue){
+        const productAdd = [
+            // copy the current users state
+            ...productSelect,  (newValue)
+            // now you can add a new object to add to the array
+           
+        ];
+          if(!check) {
+            setProductSelect(
+               productAdd
+            )
+        }
+     
+    }
+
+    async function handleSelectProd(event, newValue){
+        console.log(newValue);
+        if(newValue == null) {}
+        else {
+            setCheck(false);
+            await productSelect.map((product) => {
+                if(product.id == newValue.id) {
+                    setCheck(true);
+                } 
+            })
+            console.log(check);
+            add(newValue);
+            // const productAdd = [
+            //     // copy the current users state
+            //     ...productSelect,
+            //     // now you can add a new object to add to the array
+            //     (newValue)
+            //   ];
+            // console.log(check);
+            // if(!check) {
+            //     setProductSelect(
+            //        productAdd
+            //     )
+            // }
+        }
     }
     function handDeleteProduct(id){
-        const dataSource = [...productList];
-        setProductList( ...productList, dataSource.filter(item => item.id !== id));
+        
+        setProductSelect(productSelect.filter(item => item.id !== id));
     }
 
     const useStyles = makeStyles((theme) => ({
@@ -112,10 +148,34 @@ export default function ProductSelect() {
                   )
             )
     }
-    // React.useEffect(() => {
-    //     handleOriPrice(productList);
+    React.useEffect(() => {
+        let tmp = 0;
+        let numCate = 0;
+        let totalTmp = 0;
+        setLastProduct([]);
+        console.log(lastProduct);
+        console.log(num);
+        productSelect.map((item) => {
+            tmp += Number(num[item.id]);
+            numCate +=1;
+            totalTmp += Number(num[item.id])*Number(originalPrice[item.id]);
+            let productTmp = {}
+            productTmp["variantId"] = item.id;
+            productTmp["price"] = originalPrice[item.id];
+            productTmp["quantity"] = Number(num[item.id]);
+            setLastProduct( [
+                // copy the current users state
+                ...lastProduct,  (productTmp)
+                // now you can add a new object to add to the array
+               
+            ]);
+            
+        });
+        setNumProduct(tmp);
+        setNumCategory(numCate);
+        setTotal(totalTmp);
  
-    // }, [productList]);
+    }, [num, productSelect, originalPrice]);
 
     async function getData() {
         const result = await ProductAPI.ProductList();
@@ -134,6 +194,7 @@ export default function ProductSelect() {
 
     
     console.log(productSelect);
+    console.log(lastProduct);
     
     return (
         <div>
@@ -189,11 +250,11 @@ export default function ProductSelect() {
                             
                             productSelect.map(item => {
                                 return (
-                                <ListItem className="product-item"
+                                <ListItem className="product-item" key={item.id}
                                 >
                                     <Typography sx={{ width: '10%' }}>{item.code}</Typography>
-                                    {/* <Typography sx={{ width: '48%', paddingLeft: "5px" }} >{item.product.name}</Typography> */}
-                                    {/* <Typography sx={{ width: '10%', textAlign: "center" }}>{item.unit}</Typography> */}
+                                    <Typography sx={{ width: '48%', paddingLeft: "5px" }} >{item.product.name}</Typography>
+                                    <Typography sx={{ width: '10%', textAlign: "center" }}>{item.unit}</Typography>
                                     <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="num" value={num[item.id]} 
                                     onChange={e =>
                                         setNum({ ...num, [item.id]: e.target.value })} 
@@ -213,15 +274,15 @@ export default function ProductSelect() {
                     <Box className="pay-info">
                         <Box className="pay-info-item">
                             <Typography>Tổng sản phẩm</Typography>
-                            <Typography>5</Typography>
+                            <Typography>{numProduct}</Typography>
                         </Box>
                         <Box className="pay-info-item">
                             <Typography>Tổng loại sản phẩm</Typography>
-                            <Typography>2</Typography>
+                            <Typography>{numCategory}</Typography>
                         </Box>
                         <Box className="pay-info-item">
                             <Typography>Tổng tiền</Typography>
-                            <Typography>123456</Typography>
+                            <Typography>{total} vnd</Typography>
                         </Box>
                         <Box className="pay-info-item" sx={{ color: "#007BFF" }}>
                             <Typography >Tổng chiết khấu</Typography>
@@ -229,7 +290,7 @@ export default function ProductSelect() {
                         </Box>
                         <Box className="pay-info-item">
                             <Typography sx={{ fontWeight: 700 }}>Phải trả</Typography>
-                            <Typography>500000vnd</Typography>
+                            <Typography>{(total*0.94).toFixed(2)} vnd</Typography>
                         </Box>
 
                     </Box>

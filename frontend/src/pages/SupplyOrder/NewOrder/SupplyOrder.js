@@ -95,7 +95,7 @@ export default function SupplyOrder() {
                         <Box>Đơn nhập hàng</Box>
                     </Box>
                     <SupplySelect setSupplier={setSupplier} />
-                    <ProductSelect />
+                    <ProductSelect productSelect={product} setProductSelect={setProduct} />
                 </Box>
                 <Box sx={{ paddingLeft: "10px" }} className="more-info">
 
