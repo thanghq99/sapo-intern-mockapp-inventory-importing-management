@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/payment-invoices")
+@CrossOrigin
 public class PaymentInvoiceController {
     private final PaymentInvoiceService paymentInvoiceService;
 

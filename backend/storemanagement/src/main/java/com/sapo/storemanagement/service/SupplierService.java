@@ -2,9 +2,13 @@ package com.sapo.storemanagement.service;
 
 import com.sapo.storemanagement.entities.Supplier;
 
+import java.util.Optional;
+
 public interface SupplierService {
 
     Iterable<Supplier> listAllSuppliers();
+
+    Iterable<Supplier> listAllSuppliersByRecordStatus();
 
     Supplier getSupplierById(Long id);
 

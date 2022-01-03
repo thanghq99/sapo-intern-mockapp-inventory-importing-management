@@ -1,4 +1,4 @@
-import callAPI from './index';
+import callAPI from './CallAPI';
 
 
 function SupplierAPI() {
@@ -15,7 +15,7 @@ function SupplierAPI() {
 
     // [POST]
     this.createSupplier = (supplier) => {
-        return callAPI.post('suppliers/', supplier)
+        return callAPI.post('suppliers', supplier)
     }
 
     // [PUT]
