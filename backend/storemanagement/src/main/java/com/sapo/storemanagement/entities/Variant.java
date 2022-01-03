@@ -21,7 +21,7 @@ public class Variant {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_id", nullable = false)
-    @JsonIgnore
+//    @JsonIgnore
     private Product product;
 
     @Column(name = "code", nullable = false, unique = true, length = 16)

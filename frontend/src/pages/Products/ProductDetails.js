@@ -1,57 +1,51 @@
 import React, { useState, useEffect } from "react";
 import ProductAPI from "../../api/ProductAPI";
-import {
-  Box,
-  Typography,
-  Button,
-  Divider,
-  Grid,
-} from "@mui/material";
+import { Box, Typography, Button, Divider, Grid } from "@mui/material";
 import { ArrowBackIosNew } from "@mui/icons-material";
 import { useHistory, useParams } from "react-router-dom";
 import VariantsTable from "./VariantsTable";
+import VariantDetails from "./VariantDetails";
 
 function ProductDetails() {
   const history = useHistory();
   const params = useParams();
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState([]);
   const [variants, setVariants] = useState([]);
-  const [variantInfo, setVariantInfo] = useState(
-    {
-      id: "---",
-      code: "---",
-      inventoryQuantity: "---",
-      sellableQuantity: "---",
-      size: "---",
-      color: "---",
-      material: "---",
-      unit: "---",
-      originalPrice: "---",
-      wholeSalePrice: "---",
-      retailPrice: "---",
-      recordStatus: "---",
-      sellableStatus: "---"
-    }
-  );
+  const [variantInfo, setVariantInfo] = useState({
+    id: "---",
+    code: "---",
+    inventoryQuantity: "---",
+    sellableQuantity: "---",
+    size: "---",
+    color: "---",
+    material: "---",
+    unit: "---",
+    originalPrice: "---",
+    wholeSalePrice: "---",
+    retailPrice: "---",
+    recordStatus: "---",
+    sellableStatus: "---",
+  });
   async function getData() {
-    const result = await ProductAPI.product(params.id);
-    setProduct(result.data);
-    setVariants(result.data.variants);
+    const productData = await ProductAPI.product(params.id);
+    setProduct(productData.data);
+    const variantsData = await ProductAPI.variantList(params.id);
+    setVariants(variantsData.data);
+    console.log(variantsData);
     setLoading(false);
   }
+
   useEffect(() => {
     getData();
     return () => {
       setLoading(true);
-    }
+    };
   }, []);
-  return (
-    !loading ?
+  return !loading ? (
     <Box
       px={4}
       backgroundColor="#F4F6F8"
-      minHeight="90vh"
       display="flex"
       flexDirection="column"
     >
@@ -179,98 +173,11 @@ function ProductDetails() {
           width="66.6667%"
           height="30px"
         >
-          <Box
-            py={2}
-            px={1}
-            display="flex"
-            flexDirection="column"
-            backgroundColor="white"
-          >
-            <Typography variant="subtitle1" id="tableTitle" px={1}>
-              Thông tin chi tiết phiên bản
-            </Typography>
-            <Divider sx={{ my: 1 }} />
-            <Box display="flex" px={1} py={2}>
-              <Box
-                width="33.3333%"
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-between"
-              >
-                <Typography variant="body2">Mã SKU</Typography>
-                <Typography variant="body2">Đơn vị tính</Typography>
-                <Typography variant="body2">Kích thước</Typography>
-                <Typography variant="body2">Chất liệu</Typography>
-                <Typography variant="body2">Màu sắc</Typography>
-              </Box>
-              <Box
-                width="33.3333%"
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-between"
-              >
-                <Typography variant="body2">: {variantInfo.code}</Typography>
-                <Typography variant="body2">: {variantInfo.unit}</Typography>
-                <Typography variant="body2">: {variantInfo.size}</Typography>
-                <Typography variant="body2">: {variantInfo.material}</Typography>
-                <Typography variant="body2">: {variantInfo.color}</Typography>
-              </Box>
-              <Box width="33.3333%" textAlign="center">
-                <Box
-                  component="img"
-                  src="https://sapo.dktcdn.net/100/583/900/variants/3b602191-ec13-43ff-a785-76ecffaff3be.jpg"
-                  width="129px"
-                />
-              </Box>
-            </Box>
-          </Box>
-          <Box
-            mt={3}
-            py={2}
-            px={1}
-            display="flex"
-            flexDirection="column"
-            backgroundColor="white"
-          >
-            <Typography
-              // sx={{ flex: "1 1 100%" }}
-              variant="subtitle1"
-              id="tableTitle"
-              px={1}
-            >
-              Giá sản phẩm
-            </Typography>
-            <Divider sx={{ my: 1 }} />
-            <Box display="flex" flexDirection="column" px={1} py={2}>
-              <Grid container>
-                <Grid item xs={2}>
-                  <Typography variant="body2">Giá bán buôn</Typography>
-                </Grid>
-                <Grid item xs={4}>
-                  <Typography variant="body2">: {variantInfo.wholeSalePrice.toLocaleString('de-DE')}</Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <Typography variant="body2">Giá bán lẻ</Typography>
-                </Grid>
-                <Grid item xs={4}>
-                  <Typography variant="body2">: {variantInfo.retailPrice.toLocaleString('de-DE')}</Typography>
-                </Grid>
-              </Grid>
-              <Divider sx={{ my: 1 }} />
-              <Grid container>
-                <Grid item xs={2}>
-                  <Typography variant="body2">Giá nhập</Typography>
-                </Grid>
-                <Grid item xs={4}>
-                  <Typography variant="body2">: {variantInfo.originalPrice.toLocaleString('de-DE')}</Typography>
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
+          <VariantDetails variantInfo={variantInfo}/>
         </Box>
       </Box>
     </Box>
-    :
+  ) : (
     <div>loading</div>
   );
 }

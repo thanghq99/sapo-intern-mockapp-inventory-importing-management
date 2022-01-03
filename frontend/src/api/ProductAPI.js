@@ -2,8 +2,8 @@ import callAPI from "./index";
 
 function ProductAPI() {
   // [GET] /
-  this.VariantList = () => {
-    return callAPI.get("variants");
+  this.variantList = (id) => {
+    return callAPI.get(`products/${id}/variants`);
   };
   // [GET] /
   this.productList = () => {

@@ -8,6 +8,8 @@ public interface VariantService {
 
     List<Variant> listAllVariants();
 
+    List<Variant> listAllVariantsByProductId(Long id);
+
     Variant getVariantById(Long id);
 
     Variant saveVariant(Variant variant);

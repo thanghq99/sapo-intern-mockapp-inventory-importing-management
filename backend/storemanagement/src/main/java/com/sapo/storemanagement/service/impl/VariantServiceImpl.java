@@ -32,6 +32,11 @@ public class VariantServiceImpl implements VariantService {
     }
 
     @Override
+    public List<Variant> listAllVariantsByProductId(Long id) {
+        return variantRepository.findAllByProductId(id);
+    }
+
+    @Override
     public Variant getVariantById(Long id) {
         if(id <= 0) {
             throw new BadNumberException("id must be greater than 0");
