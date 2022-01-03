@@ -75,7 +75,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-const navList = [{ title: 'Danh sách sản phẩm', url: '/san-pham/' }, { title: 'Quản lý kho', url: '/kho-hang' }, { title: 'Nhập hàng', url: '/nhap-hang' }, { title: 'Kiểm hàng', url: '/kiem-hang' }, { title: 'Nhà cung cấp', url: '/nha-cung-cap' }, { title: 'Cài đặt', url: '/cai-dat' }];
+const navList = [{ title: 'Danh sách sản phẩm', url: '/san-pham' }, { title: 'Quản lý kho', url: '/kho-hang' }, { title: 'Nhập hàng', url: '/nhap-hang' }, { title: 'Kiểm hàng', url: '/kiem-hang' }, { title: 'Nhà cung cấp', url: '/nha-cung-cap' }, { title: 'Cài đặt', url: '/cai-dat' }];
 const subMenuList = [{ title: 'Hotline: 1900 0000', url: '/hotline' }, { title: 'Trợ giúp', url: '/tro-giup' }, { title: 'Thông tin tài khoản', url: '/tai-khoan' }, { title: 'Đăng xuất', url: '/dang-xuat' }]
 const navListIcons = [
     <LocalMallIcon />, <WarehouseIcon />, <AddShoppingCartIcon />, <AssignmentTurnedInIcon />, <AddBusinessIcon />, <SettingsIcon />

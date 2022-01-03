@@ -22,7 +22,7 @@ export default function Supplier() {
             <Box display='flex' flexDirection='column'>
                 <Box display='flex' pb={1}>
                     <ArrowBack />
-                    <Link underline="none">
+                    <Link to="/nha-cung-cap" underline="none">
                         Quay lại trang trước
                     </Link>
                 </Box>

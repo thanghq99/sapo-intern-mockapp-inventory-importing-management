@@ -24,24 +24,25 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    public Iterable<Supplier> listAllSuppliersByRecordStatus() {
+        return supplierRepository.findByRecordStatus(RecordStatus.ACTIVE.getStatus());
+    }
+
+    @Override
     public Supplier getSupplierById(Long id) {
-        if(id <= 0) {
+        if (id <= 0) {
             throw new BadNumberException("id must be greater than 0");
         }
 
         return supplierRepository
-            .findById(id)
-            .orElseThrow(() -> new RecordNotFoundException("Supplier not found"));
-    }
-
-    public Optional<Supplier> getSupplierByCode(String code) {
-        return supplierRepository.findByCode(code);
+                .findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Supplier not found"));
     }
 
     @Override
     @Transactional
     public Supplier saveSupplier(Supplier supplier) {
-        if(supplierRepository.existsByCode(supplier.getCode())) {
+        if (supplierRepository.existsByCode(supplier.getCode())) {
             throw new UniqueKeyConstraintException("Supplier code already existed");
         }
         return supplierRepository.save(supplier);
@@ -50,7 +51,7 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     @Transactional
     public Supplier updateSupplier(long id, Supplier supplier) {
-        if(id <= 0) {
+        if (id <= 0) {
             throw new BadNumberException("id must be greater than 0");
         }
 
@@ -73,7 +74,7 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     @Transactional
     public String deleteSupplier(Long id) {
-        if(id <= 0) {
+        if (id <= 0) {
             throw new BadNumberException("id must be greater than 0");
         }
 
@@ -87,7 +88,7 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     @Transactional
     public Supplier decreaseDebt(long supplierId, double offset) {
-        if(offset < 0) {
+        if (offset < 0) {
             throw new BadNumberException("Offset cant be negative");
         }
 
@@ -99,7 +100,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public Supplier increaseDebt(long supplierId, double offset) {
-        if(offset < 0) {
+        if (offset < 0) {
             throw new BadNumberException("Offset cant be negative");
         }
 

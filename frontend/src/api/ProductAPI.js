@@ -1,4 +1,5 @@
-import callAPI from "./index";
+import callAPI from './CallAPI';
+
 
 function ProductAPI() {
   // [GET] /
