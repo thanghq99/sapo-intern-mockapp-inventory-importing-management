@@ -107,7 +107,8 @@ function EnhancedTableHead(props) {
     rowCount,
     onRequestSort,
     variants,
-    setViewState
+    setViewState,
+    handleDelete
   } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -178,7 +179,7 @@ function EnhancedTableHead(props) {
             )}
 
             {numSelected > 0 && (
-              <Button variant="outlined" color="error">
+              <Button variant="outlined" color="error" onClick={handleDelete}>
                 Xóa
               </Button>
             )}
@@ -199,6 +200,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
   variants: PropTypes.array.isRequired,
   setViewState: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
 };
 
 const EnhancedTableToolbar = (props) => {
@@ -258,7 +260,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ setVariantInfo, variants, setViewState }) {
+export default function EnhancedTable({ setVariantInfo, variants, setViewState, handleDeleteVariant }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
@@ -281,6 +283,16 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState }
     }
     setSelected([]);
   };
+
+  const handleDelete = () => {
+    const IDs = [];
+    for(let i=0; i<selected.length; i++) {
+      let result = variants.filter(v => v.code === selected[i]);
+      IDs.push(result[0].id);
+      handleDeleteVariant(result[0].id);
+    }
+    
+  }
 
   const handleClick = (event, code) => {
     const selectedIndex = selected.indexOf(code);
@@ -341,6 +353,7 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState }
               rowCount={variants.length}
               variants={variants}
               setViewState={setViewState}
+              handleDelete={handleDelete}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
@@ -375,7 +388,9 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState }
                           inputProps={{
                             "aria-labelledby": labelId,
                           }}
-                          onClick={(event) => handleClick(event, row.code)}
+                          onClick={(event) => {
+                            handleClick(event, row.code)
+                          }}
                           icon={
                             <SquareRounded
                               stroke={"gray"}

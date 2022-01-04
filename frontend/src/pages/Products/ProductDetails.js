@@ -55,6 +55,10 @@ function ProductDetails() {
     history.push(`/san-pham`);
   };
 
+  const handleDeleteVariant = (id) => {
+      ProductAPI.deleteVariant(id);
+  }
+
   const triggerReload = () => {
     setTrigger(!trigger);
   };
@@ -190,6 +194,7 @@ function ProductDetails() {
             setVariantInfo={setVariantInfo}
             variants={variants}
             setViewState={setViewState}
+            handleDeleteVariant={handleDeleteVariant}
           />
         </Box>
         <Box display="flex" flexDirection="column" width="66.6667%">
