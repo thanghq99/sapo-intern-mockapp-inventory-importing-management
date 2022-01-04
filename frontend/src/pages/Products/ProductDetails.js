@@ -7,7 +7,7 @@ import VariantsTable from "./VariantsTable";
 import VariantDetails from "./VariantDetails";
 import CreateVariant from "./CreateVariant";
 import EditVariant from "./EditVariant";
-import ViewControl from "./ViewControl";
+import DescriptionDialog from "./DescriptionDialog"
 
 function ProductDetails() {
   const history = useHistory();
@@ -164,7 +164,7 @@ function ProductDetails() {
             >
               <Typography>Ngày tạo</Typography>
               <Typography>Ngày cập nhật cuối</Typography>
-              <Typography>Xem Mô tả</Typography>
+              <DescriptionDialog description={product.description}/>
             </Box>
             <Box
               width="25%"
