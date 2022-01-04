@@ -12,6 +12,8 @@ import Topbar from "./components/topbar/Topbar";
 import CreateSupplier from "./pages/Suppliers/CreateSupplier";
 import DetailSupplier from "./pages/Suppliers/DetailSupplier";
 import ListOrder from "./pages/SupplyOrder/ListOrder/ListOrder";
+import DetailOrder from "./pages/SupplyOrder/DetailOrder/DetailOrder";
+import UpdateOrder from "./pages/SupplyOrder/UpdateOrder/UpdateOrder";
 import Login from "./pages/Login_Register/Login";
 import Register from "./pages/Login_Register/Register";
 import { AuthContext } from "./contextAPI/AuthContext";
@@ -65,6 +67,7 @@ function App() {
                 <Route path="/thong-tin-nha-cung-cap" component={DetailSupplier}></Route>
                 <Route exact path="/nhap-hang" component={ListOrder} />
                 <Route path="/nhap-hang/tao-don-nhap-hang" component={SupplyOrder}></Route>
+                <Route path="/nhap-hang/don-hang" component={DetailOrder}></Route>
                 <Route path="/cai-dat"></Route>
               </Box>
             </Box>}
