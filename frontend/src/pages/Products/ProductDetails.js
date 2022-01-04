@@ -196,7 +196,7 @@ function ProductDetails() {
           {(() => {
             switch (viewState) {
               case 1:
-                return <VariantDetails variantInfo={variantInfo} />;
+                return <VariantDetails variantInfo={variantInfo} setViewState={setViewState}/>;
               case 2:
                 return (
                   <CreateVariant
@@ -206,7 +206,14 @@ function ProductDetails() {
                   />
                 );
               case 3:
-                return <EditVariant />;
+                return (
+                  <EditVariant
+                    triggerReload={triggerReload}
+                    productId={product.id}
+                    setViewState={setViewState}
+                    variantData={variantInfo}
+                  />
+                );
             }
           })()}
 

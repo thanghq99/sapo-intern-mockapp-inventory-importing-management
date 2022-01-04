@@ -35,5 +35,9 @@ function ProductAPI() {
   this.createVariant = (data) => {
     return callAPI.post(`variants`, data);
   };
+  // [put] /
+  this.updateVariant = (id,data) => {
+    return callAPI.put(`variants/${id}`, data);
+  };
 }
 export default new ProductAPI();

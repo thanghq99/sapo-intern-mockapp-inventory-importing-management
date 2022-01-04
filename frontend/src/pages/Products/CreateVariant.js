@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import ProductAPI from "../../api/ProductAPI";
 
-function VariantDetails({ productId, triggerReload, setViewState }) {
+function CreateVariant({ productId, triggerReload, setViewState }) {
   const [variantInfo, setVariantInfo] = useState({
     variantCode: "",
     inventoryQuantity: "",
@@ -303,4 +303,4 @@ function VariantDetails({ productId, triggerReload, setViewState }) {
   );
 }
 
-export default VariantDetails;
+export default CreateVariant;

@@ -1,7 +1,10 @@
 import React from "react";
 import { Box, Typography, Button, Divider, Grid } from "@mui/material";
 
-function VariantDetails({ variantInfo }) {
+function VariantDetails({ variantInfo, setViewState }) {
+  const showEditForm = () => {
+    setViewState(3);
+  }
   return (
     (variantInfo && <React.Fragment>
       <Box
@@ -11,9 +14,13 @@ function VariantDetails({ variantInfo }) {
         flexDirection="column"
         backgroundColor="white"
       >
+        <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="subtitle1" id="tableTitle" px={1}>
           Thông tin chi tiết phiên bản
         </Typography>
+        <Button variant="contained" color="primary" onClick={() => {showEditForm()}}>Chỉnh sửa phiển bản</Button>
+        </Box>
+        
         <Divider sx={{ my: 1 }} />
         <Box display="flex" px={1} py={2}>
           <Box
