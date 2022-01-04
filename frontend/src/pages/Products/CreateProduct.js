@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -14,24 +14,94 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { ArrowBackIosNew, Info, Add } from "@mui/icons-material";
+import { ArrowBackIosNew, Info, Add, Co2Sharp } from "@mui/icons-material";
 import { Link, useHistory } from "react-router-dom";
 import "./createProduct.scss";
+import CategoryAPI from "../../api/CategoryAPI";
+import ProductAPI from "../../api/ProductAPI";
 
 function CreateProduct() {
   const history = useHistory();
   const longText =
     "Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus. Praesent non nunc mollis, fermentum neque at, semper arcu.";
-  const [category, setCategory] = React.useState();
-  const [brand, setBrand] = React.useState();
 
-  const handleChangeCategory = (event) => {
-    setCategory(event.target.value);
+  const [categories, setCategories] = useState([]);
+  const [brands, setBrands] = useState([
+    { label: "Adidas", id: 1 },
+    { label: "Nike", id: 2 },
+    { label: "Puma", id: 3 },
+  ]);
+  const [product, setProduct] = useState({
+    variantCode: "",
+    inventoryQuantity: "",
+    sellableQuantity: "",
+    size: "",
+    color: "",
+    material: "",
+    unit: "",
+    originalPrice: "",
+    wholeSalePrice: "",
+    retailPrice: "",
+    //khi khởi tạo măc định true?
+    recordStatus: true,
+    sellableStatus: "",
+    productName: "",
+    categoryId: "",
+    weight: "",
+    brand: "",
+    description: "",
+    imageUrl: "fake url",
+  });
+
+  useEffect(() => {
+    CategoryAPI.CategoryList().then((res) => {
+      setCategories(res.data);
+      console.log(res.data);
+    });
+  }, []);
+
+  function handleChange(evt) {
+    const value = evt.target.value;
+    setProduct({
+      ...product,
+      [evt.target.name]: value,
+    });
+  }
+
+  const handleChangeCategory = (evt) => {
+    const value = evt.target.value;
+    setProduct({
+      ...product,
+      ["categoryId"]: value,
+    });
   };
 
-  const handleChangeBrand = (event) => {
-    setBrand(event.target.value);
+  const handleChangeBrand = (evt) => {
+    const value = evt.target.value;
+    setProduct({
+      ...product,
+      ["brand"]: value,
+    });
   };
+
+  const handleChangeSellableStatus = (evt) => {
+    const value = evt.target.checked;
+    setProduct({
+      ...product,
+      ["sellableStatus"]: value,
+    });
+  };
+  
+  const handleCreateProduct = () => {
+    ProductAPI.createProduct(product)
+    .then((res) => {
+      console.log("product created!");
+      console.log(res.data);
+      history.go("/san-pham");
+    })
+    .catch(err => console.log(err));
+  }
+
   return (
     <Box
       px={4}
@@ -67,7 +137,14 @@ function CreateProduct() {
           <Button variant="outlined" sx={{ mr: 2 }}>
             Thoát
           </Button>
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              console.log(product);
+              handleCreateProduct();
+            }}
+          >
             Lưu sản phẩm
           </Button>
         </Box>
@@ -96,9 +173,14 @@ function CreateProduct() {
                       <Info fontSize="small" color="primary" />
                     </Tooltip>
                   </Box>
-                  <TextField fullWidth placeholder="Nhập tên sản phẩm" />
+                  <TextField
+                    fullWidth
+                    name="productName"
+                    placeholder="Nhập tên sản phẩm"
+                    onChange={handleChange}
+                  />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                   <Box display="flex">
                     <Typography variant="subtitle1" id="tableTitle">
                       Mã sản phẩm/SKU
@@ -107,7 +189,12 @@ function CreateProduct() {
                       <Info fontSize="small" color="primary" />
                     </Tooltip>
                   </Box>
-                  <TextField fullWidth placeholder="Nhập mã sản phẩm" />
+                  <TextField
+                    fullWidth
+                    name="variantCode"
+                    placeholder="Nhập mã sản phẩm"
+                    onChange={handleChange}
+                  />
                 </Grid>
                 <Grid item xs={6}>
                   <Box display="flex">
@@ -118,9 +205,13 @@ function CreateProduct() {
                       <Info fontSize="small" color="primary" />
                     </Tooltip>
                   </Box>
-                  <TextField fullWidth placeholder="Nhập khối lượng" />
+                  <TextField
+                    fullWidth
+                    name="weight"
+                    placeholder="Nhập khối lượng"
+                    onChange={handleChange}
+                  />
                 </Grid>
-                <Grid item xs={6}></Grid>
                 <Grid item xs={6}>
                   <Box display="flex">
                     <Typography variant="subtitle1" id="tableTitle">
@@ -130,20 +221,12 @@ function CreateProduct() {
                       <Info fontSize="small" color="primary" />
                     </Tooltip>
                   </Box>
-                  <TextField fullWidth placeholder="Nhập đơn vị tính" />
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    variant="text"
-                    size="small"
-                    sx={{
-                      textTransform: "none",
-                      fontWeight: "400",
-                      fontSize: "1rem",
-                    }}
-                  >
-                    Mô tả sản phẩm
-                  </Button>
+                  <TextField
+                    fullWidth
+                    name="unit"
+                    placeholder="Nhập đơn vị tính"
+                    onChange={handleChange}
+                  />
                 </Grid>
               </Grid>
             </Box>
@@ -171,7 +254,12 @@ function CreateProduct() {
                       <Info fontSize="small" color="primary" />
                     </Tooltip>
                   </Box>
-                  <TextField fullWidth placeholder="Nhập giá bán buôn" />
+                  <TextField
+                    fullWidth
+                    name="retailPrice"
+                    placeholder="Nhập giá bán buôn"
+                    onChange={handleChange}
+                  />
                 </Grid>
                 <Grid item xs={6}>
                   <Box display="flex">
@@ -182,7 +270,12 @@ function CreateProduct() {
                       <Info fontSize="small" color="primary" />
                     </Tooltip>
                   </Box>
-                  <TextField fullWidth placeholder="Nhập giá bán buôn" />
+                  <TextField
+                    fullWidth
+                    name="wholeSalePrice"
+                    placeholder="Nhập giá bán buôn"
+                    onChange={handleChange}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <Divider></Divider>
@@ -196,7 +289,77 @@ function CreateProduct() {
                       <Info fontSize="small" color="primary" />
                     </Tooltip>
                   </Box>
-                  <TextField fullWidth placeholder="Nhập giá nhập" />
+                  <TextField
+                    fullWidth
+                    name="originalPrice"
+                    placeholder="Nhập giá nhập"
+                    onChange={handleChange}
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+          <Box
+            py={2}
+            px={1}
+            mt={3}
+            display="flex"
+            flexDirection="column"
+            backgroundColor="white"
+          >
+            <Typography variant="h6" id="tableTitle" px={1}>
+              Thông số phiên bản
+            </Typography>
+            <Divider sx={{ my: 1 }} />
+            <Box display="flex" px={1} py={2}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Box display="flex">
+                    <Typography variant="subtitle1" id="tableTitle">
+                      Màu sắc
+                    </Typography>
+                    <Tooltip arrow title={longText}>
+                      <Info fontSize="small" color="primary" />
+                    </Tooltip>
+                  </Box>
+                  <TextField
+                    fullWidth
+                    name="color"
+                    placeholder="Nhập màu sắc"
+                    onChange={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Box display="flex">
+                    <Typography variant="subtitle1" id="tableTitle">
+                      Chất liệu
+                    </Typography>
+                    <Tooltip arrow title={longText}>
+                      <Info fontSize="small" color="primary" />
+                    </Tooltip>
+                  </Box>
+                  <TextField
+                    fullWidth
+                    name="material"
+                    placeholder="Nhập chất liệu"
+                    onChange={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Box display="flex">
+                    <Typography variant="subtitle1" id="tableTitle">
+                      Kích thước
+                    </Typography>
+                    <Tooltip arrow title={longText}>
+                      <Info fontSize="small" color="primary" />
+                    </Tooltip>
+                  </Box>
+                  <TextField
+                    fullWidth
+                    name="size"
+                    placeholder="Nhập kích thước"
+                    onChange={handleChange}
+                  />
                 </Grid>
               </Grid>
             </Box>
@@ -239,6 +402,55 @@ function CreateProduct() {
               </Box>
             </Box>
           </Box>
+          <Box
+            py={2}
+            px={1}
+            mt={3}
+            display="flex"
+            flexDirection="column"
+            backgroundColor="white"
+          >
+            <Typography variant="h6" id="tableTitle" px={1}>
+              Khởi tạo kho hàng
+            </Typography>
+            <Divider sx={{ my: 1 }} />
+            <Box display="flex" px={1} py={2}>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <Box display="flex">
+                    <Typography variant="subtitle1" id="tableTitle">
+                      Số lượng trong kho
+                    </Typography>
+                    <Tooltip arrow title={longText}>
+                      <Info fontSize="small" color="primary" />
+                    </Tooltip>
+                  </Box>
+                  <TextField
+                    fullWidth
+                    name="inventoryQuantity"
+                    placeholder="Nhập số lượng trong kho"
+                    onChange={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Box display="flex">
+                    <Typography variant="subtitle1" id="tableTitle">
+                      Số lượng có thể bán
+                    </Typography>
+                    <Tooltip arrow title={longText}>
+                      <Info fontSize="small" color="primary" />
+                    </Tooltip>
+                  </Box>
+                  <TextField
+                    fullWidth
+                    name="sellableQuantity"
+                    placeholder="Nhập số lượng có thể bán"
+                    onChange={handleChange}
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
         </Grid>
         <Grid item xs={4}>
           <Box
@@ -268,16 +480,22 @@ function CreateProduct() {
                     </Tooltip>
                   </Box>
                   <Select
-                    value={category}
+                    id='category-select'
+                    value={product.categoryId}
                     onChange={handleChangeCategory}
                     fullWidth
                     displayEmpty={true}
                     renderValue={
-                      category !== "" ? undefined : () => "placeholder text"
+                      product.categoryId !== ""
+                        ? undefined
+                        : () => "Chọn loại sản phẩm"
                     }
                   >
-                    <MenuItem value="Áo">Áo</MenuItem>
-                    <MenuItem value="Quần">Quần</MenuItem>
+                    {categories.map((category, index) => {
+                      return (
+                        <MenuItem key={index} value={category.id}>{category.name}</MenuItem>
+                      );
+                    })}
                   </Select>
                 </Grid>
                 <Grid item xs={12}>
@@ -294,9 +512,23 @@ function CreateProduct() {
                       <Info fontSize="small" color="primary" />
                     </Tooltip>
                   </Box>
-                  <Select value={brand} onChange={handleChangeBrand} fullWidth>
-                    <MenuItem value={10}>Adidas</MenuItem>
-                    <MenuItem value={20}>Nike</MenuItem>
+                  <Select
+                    id='brand-select'
+                    value={product.brand}
+                    onChange={handleChangeBrand}
+                    fullWidth
+                    displayEmpty={true}
+                    renderValue={
+                      product.brand !== ""
+                        ? undefined
+                        : () => "Chọn nhãn hiệu"
+                    }
+                  >
+                    {brands.map((brand, index) => {
+                      return (
+                        <MenuItem key={index} value={brand.label}>{brand.label}</MenuItem>
+                      );
+                    })}
                   </Select>
                 </Grid>
                 <Grid item xs={12}>
@@ -306,13 +538,19 @@ function CreateProduct() {
                       id="tableTitle"
                       sx={{ fontWeight: "500" }}
                     >
-                      Tags
+                      Mô tả sản phẩm
                     </Typography>
                     <Tooltip arrow title={longText}>
                       <Info fontSize="small" color="primary" />
                     </Tooltip>
                   </Box>
-                  <TextField fullWidth multiline rows={3} />
+                  <TextField
+                    fullWidth
+                    name="description"
+                    multiline
+                    rows={3}
+                    onChange={handleChange}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <Box display="flex">
@@ -331,8 +569,8 @@ function CreateProduct() {
                     <Typography>Cho phép bán</Typography>
                     <Switch
                       inputProps={{ "aria-label": "Trạng thái" }}
-                      defaultChecked
                       size="small"
+                      onChange={handleChangeSellableStatus}
                     />
                   </Box>
                 </Grid>

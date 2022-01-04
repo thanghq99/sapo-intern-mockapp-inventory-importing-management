@@ -106,7 +106,6 @@ export default function ProductSelect({setProduct}) {
             },
             "&:hover .MuiOutlinedInput-notchedOutline": {
                 borderWidth: "0px",
-                // borderColor: "white"
 
             },
             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
