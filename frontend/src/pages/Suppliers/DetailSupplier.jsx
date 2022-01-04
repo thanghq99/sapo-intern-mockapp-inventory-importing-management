@@ -6,15 +6,15 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Fade from '@mui/material/Fade';
 import { ContactTable, DebtTable, HistoryOrderTable } from '../../components/table/TableDetailSupplier';
 import DeleteIcon from '@mui/icons-material/Delete';
 import BrowserUpdatedIcon from '@mui/icons-material/BrowserUpdated';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
+import { ArrowBackIosNew } from "@mui/icons-material";
 import Slide from '@mui/material/Slide';
 import SupplierAPI from '../../api/SupplierAPI';
+import { useHistory } from 'react-router-dom';
 
 
 const style = {
@@ -71,24 +71,9 @@ function SlideTransition(props) {
 
 /////////////////////////////////////////////////////////////////////////////main func /////////////////////////////////////////////
 export default function DetailSupplier() {
+    const history = useHistory();
 
-    // handle Alert
-    const [alert, setAlert] = React.useState({
-        openAlert: false,
-        Transition: Fade,
-    });
-    const handleOpenAlert = (Transition) => () => {
-        setAlert({
-            openAlert: true,
-            Transition,
-        });
-    };
-    const handleCloseAlert = () => {
-        setAlert({
-            ...alert,
-            openAlert: false,
-        });
-    }; //end handle alert
+    const [stateAlert, setStateAlert] = useState({ severity: "", variant: "", open: false, content: "" });
 
 
 
@@ -129,10 +114,10 @@ export default function DetailSupplier() {
     const handleDeleteSupplier = async () => {
         try {
             await SupplierAPI.deleteSupplier(searchParam);
-            console.log("test");
-            handleOpenAlert(SlideTransition);
+            setStateAlert({ severity: "info", variant: "filled", open: true, content: "Đã xóa nhà cung cấp thành công" })
             setTrigger(!trigger);
             handleCloseModal();
+            history.push("/nha-cung-cap");
         } catch (error) {
             console.log(error);
         }
@@ -161,9 +146,11 @@ export default function DetailSupplier() {
                 fax: faxSupplier
             }
             await SupplierAPI.updateSupplier(searchParam, currentSupplier);
+            setStateAlert({ severity: "success", variant: "filled", open: true, content: "Bạn đã cập nhật mới nhà cung cấp" })
             setTrigger(!trigger);
             handleCloseModal();
         } catch (error) {
+            setStateAlert({ severity: "error", variant: "filled", open: true, content: error.response.data })
             console.log(error);
         }
     }
@@ -180,8 +167,19 @@ export default function DetailSupplier() {
         <div className="detail_supplier_page">
             <div className="detail_supplier_content">
                 <div className="navig">
-                    <i className="fas fa-arrow-left"></i>
-                    <a href="#">Quay lại trang trước</a>
+                    <Typography
+                        underline="none"
+                        onClick={() => history.push("/nha-cung-cap")}
+                        sx={{
+                            display: 'flex',
+                            '&:hover': {
+                                cursor: 'pointer',
+                            }
+                        }}
+                    >
+                        <ArrowBackIosNew sx={{ mr: 2 }} />
+                        Quay lại trang trước
+                    </Typography>
                 </div>
                 <div className="activity">
                     <Button className="button_activity" variant="outlined"><i className="far fa-question-circle"></i> <span>Trợ giúp</span> </Button>                </div>
@@ -335,15 +333,9 @@ export default function DetailSupplier() {
                     </Box>
                 }
             </Modal>
-            <Snackbar
-                open={alert.openAlert}
-                onClose={handleCloseAlert}
-                TransitionComponent={alert.Transition}
-                key={alert.Transition.name}
-            >
-                <Alert severity="success">
-                    <AlertTitle>Thanh cong</AlertTitle>
-                    Ban da xoa nha cung cap thanh cong
+            <Snackbar open={stateAlert.open} autoHideDuration={3000} onClose={() => setStateAlert({ ...stateAlert, open: false })}>
+                <Alert onClose={() => setStateAlert({ ...stateAlert, open: false })} severity={stateAlert.severity} variant={stateAlert.variant} sx={{ width: '100%' }}>
+                    {stateAlert.content}
                 </Alert>
             </Snackbar>
         </div >
