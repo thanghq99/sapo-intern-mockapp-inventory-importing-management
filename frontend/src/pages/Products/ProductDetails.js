@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductAPI from "../../api/ProductAPI";
 import { Box, Typography, Button, Divider, Grid } from "@mui/material";
-import { ArrowBackIosNew } from "@mui/icons-material";
+import { ArrowBackIosNew, HistorySharp } from "@mui/icons-material";
 import { useHistory, useParams } from "react-router-dom";
 import VariantsTable from "./VariantsTable";
 import VariantDetails from "./VariantDetails";
@@ -42,6 +42,13 @@ function ProductDetails() {
       setLoading(true);
     };
   }, []);
+
+  const handleDeleteProduct = () => {
+    ProductAPI.deleteProduct(product.id);
+    alert(product.name + " has been deleted!");
+    history.push(`/san-pham`);
+  }
+
   return !loading ? (
     <Box
       px={4}
@@ -73,10 +80,10 @@ function ProductDetails() {
       >
         <Typography variant="h4">{product.name}</Typography>
         <Box display="flex">
-          <Button variant="outlined" color="error" sx={{ mr: 2 }}>
+          <Button variant="outlined" color="error" sx={{ mr: 2 }} onClick={() => handleDeleteProduct()}>
             Xóa
           </Button>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={() => history.push(`/san-pham/${product.id}/chinh-sua`)}>
             Chỉnh sửa sản phẩm
           </Button>
         </Box>
@@ -163,15 +170,14 @@ function ProductDetails() {
       <Typography variant="h4" sx={{ pt: 2 }}>
         Phiên bản sản phẩm
       </Typography>
-      <Box pt={1} display="flex">
-        <Box display="flex" width="33.3333%" mr={3}>
+      <Box pt={1} pb={2} display="flex">
+        <Box width="33.3333%" mr={3}>
           <VariantsTable setVariantInfo={setVariantInfo} variants={variants} />
         </Box>
         <Box
           display="flex"
           flexDirection="column"
           width="66.6667%"
-          height="30px"
         >
           <VariantDetails variantInfo={variantInfo}/>
         </Box>

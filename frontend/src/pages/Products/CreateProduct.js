@@ -228,19 +228,6 @@ function CreateProduct() {
                     onChange={handleChange}
                   />
                 </Grid>
-                {/* <Grid item xs={12}>
-                  <Button
-                    variant="text"
-                    size="small"
-                    sx={{
-                      textTransform: "none",
-                      fontWeight: "400",
-                      fontSize: "1rem",
-                    }}
-                  >
-                    Mô tả sản phẩm
-                  </Button>
-                </Grid> */}
               </Grid>
             </Box>
           </Box>

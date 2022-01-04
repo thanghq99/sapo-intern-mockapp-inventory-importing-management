@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Link, NavLink, useLocation } from "react-router-dom";
-import { styled, useTheme } from '@mui/material/styles';
+import { BrowserRouter as Link} from "react-router-dom";
+import { styled} from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -114,7 +114,7 @@ export default function MiniDrawer({setHeaderTitle}) {
                 </DrawerHeader>
                 <List className="nav_leftbar">
                     {navList.map((navItem, index) => (
-                        <Link to={navItem.url} className="nav_link">
+                        <Link to={navItem.url} className="nav_link" key={index}>
                             <ListItem className="nav_leftbar_item" button key={navItem.title} onClick={() => setHeaderTitle(navItem.title)}>
                                 <ListItemIcon className="nav_item_icon">
                                     {navListIcons[index]}
@@ -134,7 +134,7 @@ export default function MiniDrawer({setHeaderTitle}) {
                     <Collapse in={openSubMenu} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
                             {subMenuList.map((navItem, index) => (
-                                <Link to={navItem.url} className="nav_link">
+                                <Link to={navItem.url} className="nav_link" key={index}>
                                     <ListItemButton className="nav_leftbar_item" button key={navItem.title} sx={{ pl: 4 }}>
                                         <ListItemIcon className="nav_item_icon">
                                             {userNavListIcons[index]}

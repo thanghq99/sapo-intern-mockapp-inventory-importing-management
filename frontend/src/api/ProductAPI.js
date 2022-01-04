@@ -2,10 +2,8 @@ import callAPI from './CallAPI';
 
 
 function ProductAPI() {
-  // [GET] /
-  this.variantList = (id) => {
-    return callAPI.get(`products/${id}/variants`);
-  };
+
+  //PRODUCT
   // [GET] /
   this.productList = () => {
     return callAPI.get("products");
@@ -17,6 +15,21 @@ function ProductAPI() {
   // [POST] /
   this.createProduct = (data) => {
     return callAPI.post(`products`, data);
+  };
+  // [PUT] /
+  this.updateProduct = (id, data) => {
+    return callAPI.put(`products/${id}`, data);
+  };
+  // [DELETE] /
+  this.deleteProduct = (id) => {
+    return callAPI.delete(`products/${id}`);
+  };
+  
+
+  //VARIANT
+  // [GET] /
+  this.variantList = (id) => {
+    return callAPI.get(`products/${id}/variants`);
   };
 }
 export default new ProductAPI();
