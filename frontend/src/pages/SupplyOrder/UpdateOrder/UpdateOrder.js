@@ -21,7 +21,7 @@ import {
 } from "react-router-dom";
 
 
-import './DetailOrder.scss';
+import './UpdateOrder.scss';
 import OrderAPI from '../../../api/OrderAPI'
 import { Collapse } from "@mui/material";
 import ProductAPI from "../../../api/ProductAPI";
@@ -41,7 +41,6 @@ export default function DetailOrder() {
     const searchParam = window.location.search.replace("?code=", "");
 
     const [date, setDate] = React.useState(null);
-    const [numProduct, setNumProduct] = React.useState(0);
     const history = useHistory();
 
     const [openMenu, setOpenMenu] = React.useState(false);
@@ -92,7 +91,7 @@ export default function DetailOrder() {
         try {
             console.log(searchParam);
             const orderRes = await OrderAPI.OrderItem(searchParam);
-            const ProductRes = await OrderAPI.VariantOrder(searchParam);
+            const ProductRes = await ProductAPI.ProductList();
             setProductList(ProductRes.data);
             setOrder(orderRes.data);
             setNameSupplier(orderRes.data.supplier.name);
@@ -103,13 +102,6 @@ export default function DetailOrder() {
             setExpectedTime(orderRes.data.expectedTime);
             setTotalAmount(orderRes.data.totalAmount);
 
-            let tmp = 0;
-            ProductRes.data.map((item) => {
-                tmp += item.suppliedQuantity;
-
-            })
-            setNumProduct(tmp);
-
         }
         catch (err) {
             console.log(err);
@@ -119,7 +111,7 @@ export default function DetailOrder() {
     React.useEffect(() => {
         getData();
     }, [])
-    console.log(productList);
+    console.log(order);
 
     return (
 
@@ -140,7 +132,7 @@ export default function DetailOrder() {
                     </Box>
                     <Collapse in={openMenu} timeout="auto" unmountOnExit 
                     sx={{display: "block", zIndex: 101, width: "100px", position: "absolute",
-                     backgroundColor: "#FFFFFF", border: "1px solid #cfcfcf", marginLeft: "100px", marginTop: "-10px"}}>
+                     backgroundColor: "#FFFFFF", border: "1px solid #cfcfcf", marginLeft: "80px", marginTop: "-10px"}}>
                         <List component="div" disablePadding>
                             <ListItem>
                                 Sửa
@@ -204,17 +196,17 @@ export default function DetailOrder() {
                             <List>
                                 {
 
-                                    productList?.map(item => {
+                                    productList.map(item => {
                                         return (
                                             <ListItem className="product-item"
                                             >
-                                                <Typography sx={{ width: '10%', alignItems: "center" }}>{item.variant.code}</Typography>
-                                                <Typography sx={{ width: '48%', paddingLeft: "5px" }} >{item.variant.product.name}</Typography>
-                                                <Typography sx={{ width: '10%', textAlign: "center" }}>{item.variant.unit}</Typography>
-                                                <Box sx={{ width: '10%', textAlign: "center" }}>{item.suppliedQuantity}</Box>
-                                                <Box sx={{ width: '10%', textAlign: "center" }}>{item.price}</Box>
+                                                <Typography sx={{ width: '10%', alignItems: "center" }}>{item.code}</Typography>
+                                                <Typography sx={{ width: '48%', paddingLeft: "5px" }} >{item.product.name}</Typography>
+                                                <Typography sx={{ width: '10%', textAlign: "center" }}>{item.unit}</Typography>
+                                                <Box sx={{ width: '10%', textAlign: "center" }}></Box>
+                                                <Box sx={{ width: '10%', textAlign: "center" }}></Box>
 
-                                                <Typography sx={{ width: '10%', textAlign: "center" }}>{item.suppliedQuantity* item.price}</Typography>
+                                                <Typography sx={{ width: '10%', textAlign: "center" }}></Typography>
 
                                             </ListItem>)
                                     })
@@ -224,15 +216,15 @@ export default function DetailOrder() {
                             <Box className="pay-info">
                                 <Box className="pay-info-item">
                                     <Typography>Tổng sản phẩm</Typography>
-                                    <Typography>{numProduct}</Typography>
+                                    <Typography>5</Typography>
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography>Tổng loại sản phẩm</Typography>
-                                    <Typography>{productList?.length}</Typography>
+                                    <Typography>2</Typography>
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography>Tổng tiền</Typography>
-                                    <Typography>{totalAmount} vnd</Typography>
+                                    <Typography>{totalAmount*1.06}</Typography>
                                 </Box>
                                 <Box className="pay-info-item" sx={{ color: "#007BFF" }}>
                                     <Typography >Tổng chiết khấu</Typography>
@@ -240,7 +232,7 @@ export default function DetailOrder() {
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography sx={{ fontWeight: 700 }}>Phải trả</Typography>
-                                    <Typography>{totalAmount* 0.94} vnd</Typography>
+                                    <Typography>{totalAmount} vnd</Typography>
                                 </Box>
 
                             </Box>

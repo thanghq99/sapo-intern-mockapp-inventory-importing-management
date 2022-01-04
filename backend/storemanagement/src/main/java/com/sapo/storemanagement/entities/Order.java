@@ -160,7 +160,7 @@ public class Order {
         return updatedAt;
     }
 
-    private void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
