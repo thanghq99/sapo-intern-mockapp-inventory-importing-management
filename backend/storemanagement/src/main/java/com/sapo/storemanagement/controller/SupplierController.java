@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/suppliers")
@@ -21,27 +22,27 @@ public class SupplierController {
     }
 
     @GetMapping("/{id}")
-    public Supplier findSupplierById(@PathVariable long id){
+    public Supplier findSupplierById(@PathVariable long id) {
         return supplierService.getSupplierById(id);
     }
 
     @GetMapping
-    public Iterable<Supplier> findAllSuppliers(){
-        return supplierService.listAllSuppliers();
+    public Iterable<Supplier> findAllSuppliers() {
+        return supplierService.listAllSuppliersByRecordStatus();
     }
 
     @PostMapping
-    public Supplier createSupplier(@RequestBody @Valid Supplier supplier){
+    public Supplier createSupplier(@RequestBody @Valid Supplier supplier) {
         return supplierService.saveSupplier(supplier);
     }
 
     @PutMapping("/{id}")
-    public Supplier updateSupplier(@PathVariable long id, @RequestBody @Valid Supplier supplier){
+    public Supplier updateSupplier(@PathVariable long id, @RequestBody @Valid Supplier supplier) {
         return supplierService.updateSupplier(id, supplier);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteSupplier(@PathVariable long id){
+    public String deleteSupplier(@PathVariable long id) {
         return supplierService.deleteSupplier(id);
     }
 

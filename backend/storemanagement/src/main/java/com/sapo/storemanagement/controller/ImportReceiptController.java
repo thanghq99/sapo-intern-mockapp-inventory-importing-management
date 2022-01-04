@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/import-receipts")
+@CrossOrigin
 public class ImportReceiptController {
     private final ImportReceiptService importReceiptService;
 

@@ -140,7 +140,7 @@ export default function DetailOrder() {
                     </Box>
                     <Collapse in={openMenu} timeout="auto" unmountOnExit 
                     sx={{display: "block", zIndex: 101, width: "100px", position: "absolute",
-                     backgroundColor: "#FFFFFF", border: "1px solid #cfcfcf", marginLeft: "80px", marginTop: "-10px"}}>
+                     backgroundColor: "#FFFFFF", border: "1px solid #cfcfcf", marginLeft: "100px", marginTop: "-10px"}}>
                         <List component="div" disablePadding>
                             <ListItem>
                                 Sửa
@@ -232,7 +232,7 @@ export default function DetailOrder() {
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography>Tổng tiền</Typography>
-                                    <Typography>{totalAmount*1.06}</Typography>
+                                    <Typography>{totalAmount} vnd</Typography>
                                 </Box>
                                 <Box className="pay-info-item" sx={{ color: "#007BFF" }}>
                                     <Typography >Tổng chiết khấu</Typography>
@@ -240,7 +240,7 @@ export default function DetailOrder() {
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography sx={{ fontWeight: 700 }}>Phải trả</Typography>
-                                    <Typography>{totalAmount} vnd</Typography>
+                                    <Typography>{totalAmount* 0.94} vnd</Typography>
                                 </Box>
 
                             </Box>

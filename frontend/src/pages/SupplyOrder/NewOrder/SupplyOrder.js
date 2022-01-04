@@ -17,6 +17,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import * as moment  from 'moment';
 import {
     BrowserRouter as Router,
     Switch,
@@ -31,6 +32,7 @@ import { sizing } from '@mui/system';
 import './SupplyOrder.scss';
 import SupplySelect from './supplySelect/SupplySelect';
 import ProductSelect from './productSelect/ProductSelect';
+import OrderAPI from '../../../api/OrderAPI';
 
 export default function SupplyOrder() {
     const [supplier, setSupplier] = React.useState();
@@ -39,13 +41,6 @@ export default function SupplyOrder() {
     const [product, setProduct] = React.useState();
     const [date, setDate] = React.useState('');
     const history = useHistory();
-
-    // const handleChangeSupply = (event) => {
-    //     setSupply(event.target.value);
-    // };
-    // const handleChangeProduct = (event) => {
-    //     setProduct(event.target.value);
-    // };
 
     const useStyles = makeStyles((theme) => ({
         inputRoot: {
@@ -83,24 +78,31 @@ export default function SupplyOrder() {
         'Thanh toán',
     ];
 
-    const SubmitOrder = () => {
+    const SubmitOrder =  async () => {
         let data = {
             orderCode: code.current.value,
             supplierId: supplier,
             description: description,
-            deliveryTime: date,
+            deliveryTime: moment(date).format('YYYY-MM-DD'),
             createdBy: 2,
             lineItems: product
         };
         console.log(data);
-    
-       
+        try {
+            await OrderAPI.createOrder(data);
+            history.push("/nhap-hang");
+        } catch (error) {
+            console.log(error);
+        }
+   
     }
 
     React.useEffect(() => {
         
     }, [])
-    console.log(product);
+    // console.log(product);
+
+    // console.log(moment(date).format('YYYY-MM-DD'));
     return (
 
         <div>
@@ -135,10 +137,11 @@ export default function SupplyOrder() {
                             <Box className="time">
                                 <LocalizationProvider dateAdapter={AdapterDateFns}  >
                                     <DatePicker
-
+                                        inputFormat="yyyy/MM/dd"
                                         value={date}
-                                        onChange={(newValue) => {
-                                            setDate(newValue);
+                                        
+                                        onChange={(views) => {
+                                            setDate(views);
                                         }}
                                         renderInput={(params) => <TextField {...params} placeholder="Ngày nhận" />}
                                     />
