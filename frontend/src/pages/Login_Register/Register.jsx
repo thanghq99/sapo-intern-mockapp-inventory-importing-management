@@ -1,8 +1,31 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import "./register.scss";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import Login_RegisterAPI from '../../api/Login_RegisterAPI';
+import axios from 'axios';
 
 export default function Register() {
+
+    const username = useRef();
+    const password = useRef();
+    const email = useRef();
+    const history = useHistory();
+
+    const RegisterHandle = async (e) => {
+        e.preventDefault();
+        const newAdmin = {
+            username: username.current.value,
+            email: email.current.value,
+            password: password.current.value
+        }
+        try {
+            await axios.post("http://localhost:9191/register", newAdmin);
+            history.push("/login");
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <div className="login">
             <div className="background">
@@ -13,14 +36,14 @@ export default function Register() {
                     <img className='logo_image' src="https://www.sapo.vn/Themes/Portal/Default/StylesV2/images/logo/Sapo-logo.svg" alt="" />
                 </div>
                 <div className="login-content">
-                    <form action="">
+                    <form onSubmit={RegisterHandle}>
                         <h2 className="title">Đăng ký</h2>
                         <div className="input-div one">
                             <div className="i">
                                 <i className="fas fa-user" />
                             </div>
                             <div className="div">
-                                <input type="text" placeholder='Tên người dùng' className="input" />
+                                <input ref={username} type="text" placeholder='Tên người dùng' className="input" />
                             </div>
                         </div>
                         <div className="input-div pass">
@@ -28,7 +51,7 @@ export default function Register() {
                                 <i className="fas fa-envelope"></i>
                             </div>
                             <div className="div">
-                                <input type="email" placeholder='Email' className="input" />
+                                <input ref={email} type="email" placeholder='Email' className="input" />
                             </div>
                         </div>
                         <div className="input-div pass">
@@ -36,11 +59,11 @@ export default function Register() {
                                 <i className="fas fa-lock" />
                             </div>
                             <div className="div">
-                                <input type="password" placeholder='Mật khẩu' className="input" />
+                                <input ref={password} type="password" placeholder='Mật khẩu' className="input" />
                             </div>
                         </div>
                         <div className="submit">
-                            <button>Xác nhận</button>
+                            <button type='submit'>Xác nhận</button>
                             <Link to={"/login"} className='back_to_login'>
                                 Bạn đã có tài khoản
                             </Link>

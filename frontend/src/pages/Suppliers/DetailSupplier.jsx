@@ -15,6 +15,7 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Slide from '@mui/material/Slide';
 import SupplierAPI from '../../api/SupplierAPI';
+import { useHistory } from 'react-router-dom';
 
 
 const style = {
@@ -71,6 +72,9 @@ function SlideTransition(props) {
 
 /////////////////////////////////////////////////////////////////////////////main func /////////////////////////////////////////////
 export default function DetailSupplier() {
+    const history = useHistory();
+
+    
 
     // handle Alert
     const [alert, setAlert] = React.useState({
@@ -129,10 +133,10 @@ export default function DetailSupplier() {
     const handleDeleteSupplier = async () => {
         try {
             await SupplierAPI.deleteSupplier(searchParam);
-            console.log("test");
             handleOpenAlert(SlideTransition);
             setTrigger(!trigger);
             handleCloseModal();
+            history.push("/nha-cung-cap");
         } catch (error) {
             console.log(error);
         }

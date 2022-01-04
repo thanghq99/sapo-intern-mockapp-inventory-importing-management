@@ -46,11 +46,12 @@ export default function CreateSupplier() {
             debt: debt.current.value
         }
         try {
+            const res = await SupplierAPI.createSupplier(supplier);
+            console.log(res.data);
             setOpenAlertSuccess(true);
-            await SupplierAPI.createSupplier(supplier);
             history.push("/nha-cung-cap");
         } catch (error) {
-            console.log(error);
+            console.log(error.response.data);
         }
     }
 
@@ -141,7 +142,7 @@ export default function CreateSupplier() {
                 </div>
             </div>
             <Stack spacing={2} sx={{ width: '100%' }}>
-                <Snackbar open={openAlertSuccess} autoHideDuration={6000} onClose={handleCloseAlertSuccess}>
+                <Snackbar open={openAlertSuccess} autoHideDuration={4000} onClose={handleCloseAlertSuccess}>
                     <Alert onClose={handleCloseAlertSuccess} severity="success" sx={{ width: '100%' }}>
                         Tạo mới nhà cung cấp thành công!
                     </Alert>
