@@ -51,7 +51,7 @@ export default function Products() {
                         variant='outlined'
                         sx={{ mr: 2 }}
                         endIcon={<AddCircle />}
-                        onClick={() => { history.push('/san-pham/tao-san-pham') }}
+                        onClick={() => { history.push('/tao-san-pham') }}
                     >Thêm sản phẩm
                     </Button>
                     <Button

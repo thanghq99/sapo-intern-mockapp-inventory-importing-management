@@ -30,24 +30,6 @@ function App() {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
 
-          {/* {
-            pathRoute.map((route) => (
-              !token ?
-                <Login />
-                :
-                <Box sx={{ display: "flex", width: "100%", background: "#27274b", }}>
-                  <CssBaseline />
-                  <Sidebar setHeaderTitle={setHeaderTitle} />
-                  <Box className="box_content" component="main">
-                    <Topbar headerTitle={headerTitle} />
-                    <Route path={route.path} >
-                      {route.component}
-                    </Route>
-                  </Box>
-                </Box>
-            ))
-          } */}
-
           {!token ?
             <Login />
             :
@@ -57,7 +39,7 @@ function App() {
               <Box className="box_content" component="main">
                 <Topbar headerTitle={headerTitle} ></Topbar>
                 <Route exact path="/san-pham" component={Products}></Route>
-                <Route path="/san-pham/tao-san-pham" component={CreateProduct}></Route>
+                <Route path="/tao-san-pham" component={CreateProduct}></Route>
                 <Route exact path="/san-pham/:id" component={ProductDetails}></Route>
                 <Route path="/san-pham/:id/chinh-sua" component={EditProduct}></Route>
                 <Route path="/kho-hang"></Route>
