@@ -1,5 +1,5 @@
 import { Box, Autocomplete, Button, TextField, Divider, InputAdornment } from '@mui/material'
-import { ArrowBack, Download, Upload, Group, AddCircle, Search, FilterAlt } from '@mui/icons-material';
+import {Download, Upload, Group, AddCircle, Search, FilterAlt } from '@mui/icons-material';
 import React from 'react'
 import { Link } from 'react-router-dom'
 import TableSupply from '../../components/table/TableListSuppliers'

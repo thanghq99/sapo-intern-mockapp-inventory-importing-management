@@ -12,6 +12,12 @@ const Reducer = (state, action) => {
                 error: action.payload
             }
         }
+        case "LOGOUT" : {
+            return {
+                token: null,
+                error: null
+            }
+        }
         default:
             return state;
     }

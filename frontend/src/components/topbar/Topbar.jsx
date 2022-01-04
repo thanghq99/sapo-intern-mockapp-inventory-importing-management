@@ -6,12 +6,19 @@ import "./topbar.scss";
 import { Avatar, Button, Typography } from '@mui/material';
 import HelpIcon from '@mui/icons-material/Help';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { AuthContext } from '../../contextAPI/AuthContext';
+import { Link } from 'react-router-dom';
 
 
-export default function Topbar({headerTitle}) {
+export default function Topbar({ headerTitle }) {
+
+    const { dispatch } = React.useContext(AuthContext);
+    const handleClick = () => {
+        dispatch({ type: "LOGOUT" });
+    }
 
     return (
-        <Box sx={{ flexGrow: 1, background: "white"}}>
+        <Box sx={{ flexGrow: 1, background: "white" }}>
             <AppBar sx={{ background: "white" }} position="static">
                 <Toolbar>
                     <Typography className="title_topbar" >
@@ -22,9 +29,11 @@ export default function Topbar({headerTitle}) {
                             <HelpIcon className="button_icon" />
                         </Button>
                         <Button className="right_topbar_button" variant="text">Gop y
-                            <FavoriteBorderIcon className="button_icon"/>
+                            <FavoriteBorderIcon className="button_icon" />
                         </Button>
-                        <Avatar src=""/>
+                        <Link to="/login">
+                            <Avatar onClick={handleClick} src="" />
+                        </Link>
                     </Box>
                 </Toolbar>
             </AppBar>
