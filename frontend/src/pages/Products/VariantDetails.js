@@ -3,7 +3,7 @@ import { Box, Typography, Button, Divider, Grid } from "@mui/material";
 
 function VariantDetails({ variantInfo }) {
   return (
-    <React.Fragment>
+    (variantInfo && <React.Fragment>
       <Box
         py={2}
         px={1}
@@ -99,7 +99,7 @@ function VariantDetails({ variantInfo }) {
         </Box>
       </Box>
     </React.Fragment>
-  );
+  ));
 }
 
 export default VariantDetails;

@@ -106,11 +106,15 @@ function EnhancedTableHead(props) {
     numSelected,
     rowCount,
     onRequestSort,
-    variants
+    variants,
+    setViewState
   } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  const showCreateForm = () => {
+    setViewState(2);
+  }
 
   return (
     <TableHead>
@@ -137,6 +141,7 @@ function EnhancedTableHead(props) {
             height="30px"
           >
             {numSelected === 0 && (
+              <React.Fragment>
               <Typography
                 // sx={{ flex: "1 1 100%" }}
                 variant="subtitle2"
@@ -146,8 +151,9 @@ function EnhancedTableHead(props) {
               >
                 Phiên bản ({variants.length})
               </Typography>
+              <Button variant="contained" color="primary" onClick={() => {showCreateForm()}}>Thêm phiên bản</Button>
+              </React.Fragment>
             )}
-
             {numSelected !== variants.length && numSelected > 0 && (
               <Typography
                 // sx={{ flex: "1 1 100%" }}
@@ -191,7 +197,8 @@ EnhancedTableHead.propTypes = {
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
-  variants: PropTypes.array.isRequired
+  variants: PropTypes.array.isRequired,
+  setViewState: PropTypes.func.isRequired,
 };
 
 const EnhancedTableToolbar = (props) => {
@@ -251,7 +258,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ setVariantInfo, variants }) {
+export default function EnhancedTable({ setVariantInfo, variants, setViewState }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
@@ -297,6 +304,7 @@ export default function EnhancedTable({ setVariantInfo, variants }) {
 
   const handleChoseVariant = (even, code) => {
     setVariantInfo(variants.find(variant => variant.code === code));
+    setViewState(1);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -332,6 +340,7 @@ export default function EnhancedTable({ setVariantInfo, variants }) {
               onRequestSort={handleRequestSort}
               rowCount={variants.length}
               variants={variants}
+              setViewState={setViewState}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:

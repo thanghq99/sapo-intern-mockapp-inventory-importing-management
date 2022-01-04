@@ -66,22 +66,25 @@ public class ProductServiceImpl implements ProductService {
             productVariantDto.getMaterial(), productVariantDto.getUnit(),
             productVariantDto.getOriginalPrice(), productVariantDto.getWholeSalePrice(), productVariantDto.getRetailPrice()
         );
-        variantService.saveVariant(newVariant);
+        variantService.saveDefaultVariant(newVariant);
 
         return newProduct;
     }
 
     @Override
     @Transactional
-    public Product updateProduct(long id, Product product) {
+    public Product updateProduct(long id, ProductVariantDto productVariantDto) {
+        Category category = categoryService.getCategoryById(productVariantDto.getCategoryId());
+
         Product productToUpdate = productRepository
                 .findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("product not found"));
-        productToUpdate.setName(product.getName());
-        productToUpdate.setDescription(product.getDescription());
-        productToUpdate.setImageUrl(product.getImageUrl());
-        productToUpdate.setCategory(product.getCategory());
-        productToUpdate.setBrand(product.getBrand());
+        productToUpdate.setName(productVariantDto.getProductName());
+        productToUpdate.setCategory(category);
+        productToUpdate.setDescription(productVariantDto.getDescription());
+        productToUpdate.setImageUrl(productVariantDto.getImageUrl());
+        productToUpdate.setBrand(productVariantDto.getBrand());
+        productToUpdate.setWeight(productVariantDto.getWeight());
         return productRepository.save(productToUpdate);
     }
 

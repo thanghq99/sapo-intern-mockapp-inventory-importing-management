@@ -2,6 +2,7 @@ package com.sapo.storemanagement.dto;
 
 public class ProductVariantDto {
     private String productName;
+    private Long productId;
     private Long categoryId;
     private String brand;
     private Double weight;
@@ -24,6 +25,8 @@ public class ProductVariantDto {
     public String getProductName() {
         return productName;
     }
+
+    public Long getProductId() { return productId; }
 
     public Long getCategoryId() {
         return categoryId;

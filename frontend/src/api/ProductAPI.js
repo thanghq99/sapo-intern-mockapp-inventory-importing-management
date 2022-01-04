@@ -31,5 +31,9 @@ function ProductAPI() {
   this.variantList = (id) => {
     return callAPI.get(`products/${id}/variants`);
   };
+  // [POST] /
+  this.createVariant = (data) => {
+    return callAPI.post(`variants`, data);
+  };
 }
 export default new ProductAPI();

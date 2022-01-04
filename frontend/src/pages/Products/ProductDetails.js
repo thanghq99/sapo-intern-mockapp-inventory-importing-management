@@ -5,11 +5,16 @@ import { ArrowBackIosNew, HistorySharp } from "@mui/icons-material";
 import { useHistory, useParams } from "react-router-dom";
 import VariantsTable from "./VariantsTable";
 import VariantDetails from "./VariantDetails";
+import CreateVariant from "./CreateVariant";
+import EditVariant from "./EditVariant";
+import ViewControl from "./ViewControl";
 
 function ProductDetails() {
   const history = useHistory();
   const params = useParams();
   const [loading, setLoading] = useState(true);
+  const [trigger, setTrigger] = useState(false);
+  const [viewState, setViewState] = useState(1); // 1: view details, 2: create, 3: edit
   const [product, setProduct] = useState([]);
   const [variants, setVariants] = useState([]);
   const [variantInfo, setVariantInfo] = useState({
@@ -32,6 +37,7 @@ function ProductDetails() {
     setProduct(productData.data);
     const variantsData = await ProductAPI.variantList(params.id);
     setVariants(variantsData.data);
+    setVariantInfo(variantsData.data[0]);
     console.log(variantsData);
     setLoading(false);
   }
@@ -41,21 +47,20 @@ function ProductDetails() {
     return () => {
       setLoading(true);
     };
-  }, []);
+  }, [trigger]);
 
   const handleDeleteProduct = () => {
     ProductAPI.deleteProduct(product.id);
     alert(product.name + " has been deleted!");
     history.push(`/san-pham`);
-  }
+  };
+
+  const triggerReload = () => {
+    setTrigger(!trigger);
+  };
 
   return !loading ? (
-    <Box
-      px={4}
-      backgroundColor="#F4F6F8"
-      display="flex"
-      flexDirection="column"
-    >
+    <Box px={4} backgroundColor="#F4F6F8" display="flex" flexDirection="column">
       <Box py={1}>
         <Typography
           underline="none"
@@ -80,10 +85,19 @@ function ProductDetails() {
       >
         <Typography variant="h4">{product.name}</Typography>
         <Box display="flex">
-          <Button variant="outlined" color="error" sx={{ mr: 2 }} onClick={() => handleDeleteProduct()}>
+          <Button
+            variant="outlined"
+            color="error"
+            sx={{ mr: 2 }}
+            onClick={() => handleDeleteProduct()}
+          >
             Xóa
           </Button>
-          <Button variant="contained" color="primary" onClick={() => history.push(`/san-pham/${product.id}/chinh-sua`)}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => history.push(`/san-pham/${product.id}/chinh-sua`)}
+          >
             Chỉnh sửa sản phẩm
           </Button>
         </Box>
@@ -172,14 +186,31 @@ function ProductDetails() {
       </Typography>
       <Box pt={1} pb={2} display="flex">
         <Box width="33.3333%" mr={3}>
-          <VariantsTable setVariantInfo={setVariantInfo} variants={variants} />
+          <VariantsTable
+            setVariantInfo={setVariantInfo}
+            variants={variants}
+            setViewState={setViewState}
+          />
         </Box>
-        <Box
-          display="flex"
-          flexDirection="column"
-          width="66.6667%"
-        >
-          <VariantDetails variantInfo={variantInfo}/>
+        <Box display="flex" flexDirection="column" width="66.6667%">
+          {(() => {
+            switch (viewState) {
+              case 1:
+                return <VariantDetails variantInfo={variantInfo} />;
+              case 2:
+                return (
+                  <CreateVariant
+                    triggerReload={triggerReload}
+                    productId={product.id}
+                    setViewState={setViewState}
+                  />
+                );
+              case 3:
+                return <EditVariant />;
+            }
+          })()}
+
+          {/* <ViewControl viewState={viewState} variantInfo={variantInfo} /> */}
         </Box>
       </Box>
     </Box>
