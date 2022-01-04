@@ -33,7 +33,6 @@ export default function CreateSupplier() {
 
     const handleCreate = async (e) => {
         e.preventDefault();
-
         const supplier = {
             code: code.current.value,
             name: name.current.value,
@@ -47,11 +46,10 @@ export default function CreateSupplier() {
         }
         try {
             const res = await SupplierAPI.createSupplier(supplier);
-            console.log(res.data);
-            setOpenAlertSuccess(true);
+            setStateAlert({ severity: "success", variant: "filled", open: true, content: "Đã tạo mới nhà cung cấp thành công" })
             history.push("/nha-cung-cap");
         } catch (error) {
-            console.log(error.response.data);
+            setStateAlert({ severity: "error", variant: "standard", open: true, content: error.response.data })
         }
     }
 
@@ -62,12 +60,8 @@ export default function CreateSupplier() {
     };
 
 
-    const [openAlertSuccess, setOpenAlertSuccess] = React.useState(false);
-    const handleCloseAlertSuccess = (event, reason) => {
-        if (reason === 'clickaway')
-            return;
-        setOpenAlertSuccess(false);
-    };
+    const [stateAlert, setStateAlert] = useState({ severity: "", variant: "", open: false, content: "" });
+    //const [openAlertSuccess, setOpenAlertSuccess] = React.useState(false);
 
     return (
         <div className='createSupplier_page'>
@@ -141,13 +135,11 @@ export default function CreateSupplier() {
                     </div>
                 </div>
             </div>
-            <Stack spacing={2} sx={{ width: '100%' }}>
-                <Snackbar open={openAlertSuccess} autoHideDuration={4000} onClose={handleCloseAlertSuccess}>
-                    <Alert onClose={handleCloseAlertSuccess} severity="success" sx={{ width: '100%' }}>
-                        Tạo mới nhà cung cấp thành công!
-                    </Alert>
-                </Snackbar>
-            </Stack>
-        </div>
+            <Snackbar open={stateAlert.open} autoHideDuration={3000} onClose={() => setStateAlert({ ...stateAlert, open: false })}>
+                <Alert onClose={() => setStateAlert({ ...stateAlert, open: false })} severity={stateAlert.severity} variant={stateAlert.variant} sx={{ width: '100%' }}>
+                    {stateAlert.content}
+                </Alert>
+            </Snackbar>
+        </div >
     )
 }

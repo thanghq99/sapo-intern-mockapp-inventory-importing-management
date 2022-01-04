@@ -1,10 +1,14 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import "./register.scss";
 import { Link, useHistory } from "react-router-dom";
 import Login_RegisterAPI from '../../api/Login_RegisterAPI';
 import axios from 'axios';
+import { Alert, Snackbar } from '@mui/material';
+
 
 export default function Register() {
+    const [stateAlert, setStateAlert] = useState({ severity: "", variant: "", open: false, content: "" });
+
 
     const username = useRef();
     const password = useRef();
@@ -18,11 +22,15 @@ export default function Register() {
             email: email.current.value,
             password: password.current.value
         }
-        try {
-            await axios.post("http://localhost:9191/register", newAdmin);
-            history.push("/login");
-        } catch (error) {
-            console.log(error);
+        if (username.current.value == "" || password.current.value == "" || email.current.value == "") {
+            setStateAlert({ severity: "error", variant: "standard", open: true, content: "Yêu cầu điền tên đăng ký, email và mật khẩu" })
+        } else {
+            try {
+                await axios.post("http://localhost:9191/register", newAdmin);
+                history.push("/login");
+            } catch (error) {
+                setStateAlert({ severity: "error", variant: "filled", open: true, content: "Người dùng hoặc email này đã tồn tại" })
+            }
         }
     }
 
@@ -71,6 +79,21 @@ export default function Register() {
                     </form>
                 </div>
             </div >
+            <Snackbar
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                open={stateAlert.open}
+                autoHideDuration={2000}
+                onClose={() => setStateAlert({ ...stateAlert, open: false })}
+            >
+                <Alert
+                    onClose={() => setStateAlert({ ...stateAlert, open: false })}
+                    severity={stateAlert.severity}
+                    variant={stateAlert.variant}
+                    sx={{ width: '100%' }}
+                >
+                    {stateAlert.content}
+                </Alert>
+            </Snackbar>
         </div >
     )
 }
