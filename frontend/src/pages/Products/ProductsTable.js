@@ -16,138 +16,13 @@ import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 
 import { Link } from "react-router-dom";
 
-function createData(
-  img,
-  name,
-  code,
-  category,
-  importPrice,
-  salePrice,
-  stock,
-  saleStatus
-) {
-  return {
-    img,
-    name,
-    code,
-    category,
-    importPrice,
-    salePrice,
-    stock,
-    saleStatus,
-  };
-}
-
-const rows = [
-  createData(
-    "img here",
-    "Iphone 14",
-    "IP420",
-    "Apple",
-    15000000,
-    16000000,
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 15",
-    "IP420",
-    "Apple",
-    15000000,
-    16000000,
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 16",
-    "IP420",
-    "Apple",
-    15000000,
-    16000000,
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 17",
-    "IP420",
-    "Apple",
-    15000000,
-    16000000,
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 18",
-    "IP420",
-    "Apple",
-    15000000,
-    16000000,
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 19",
-    "IP420",
-    "Apple",
-    15000000,
-    16000000,
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 20",
-    "IP420",
-    "Apple",
-    15000000,
-    16000000,
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 21",
-    "IP420",
-    "Apple",
-    15000000,
-    16000000,
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 22",
-    "IP420",
-    "Apple",
-    15000000,
-    16000000,
-    420,
-    "Đang bán"
-  ),
-  createData(
-    "img here",
-    "Iphone 23",
-    "IP420",
-    "Apple",
-    15000000,
-    16000000,
-    420,
-    "Đang bán"
-  ),
-];
+const rows = [];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -185,48 +60,35 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: "Ảnh",
+    width: "5%",
   },
   {
     id: "name",
     numeric: false,
     disablePadding: true,
     label: "Tên sản phẩm",
-  },
-  {
-    id: "code",
-    numeric: false,
-    disablePadding: true,
-    label: "Mã sản phẩm",
+    width: "35%",
   },
   {
     id: "category",
     numeric: false,
     disablePadding: true,
     label: "Loại hàng",
+    width: "20%",
   },
   {
-    id: "importPrice",
-    numeric: true,
-    disablePadding: false,
-    label: "Giá nhập",
-  },
-  {
-    id: "salePrice",
-    numeric: true,
-    disablePadding: false,
-    label: "Giá bán",
+    id: "brand",
+    numeric: false,
+    disablePadding: true,
+    label: "Thương hiệu",
+    width: "20%",
   },
   {
     id: "stock",
     numeric: true,
-    disablePadding: false,
-    label: "Lượng tồn kho",
-  },
-  {
-    id: "saleStatus",
-    numeric: false,
     disablePadding: true,
-    label: "Trạng thái bán",
+    label: "Lượng tồn kho",
+    width: "20%",
   },
 ];
 
@@ -263,6 +125,7 @@ function EnhancedTableHead(props) {
             align={headCell.numeric ? "center" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
+            width={headCell.width}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -364,7 +227,7 @@ export default function EnhancedTable({products}) {
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event) => {
+  const handleSelectAllClick = (event, rows) => {
     if (event.target.checked) {
       const newSelecteds = rows.map((n) => n.name);
       setSelected(newSelecteds);
@@ -406,7 +269,7 @@ export default function EnhancedTable({products}) {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - products.length) : 0;
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -421,7 +284,7 @@ export default function EnhancedTable({products}) {
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
+              onSelectAllClick={(event) => handleSelectAllClick(event, products)}
               onRequestSort={handleRequestSort}
               rowCount={products.length}
             />
@@ -472,12 +335,9 @@ export default function EnhancedTable({products}) {
                           <Typography>{row.name}</Typography>
                         </Link>
                       </TableCell>
-                      <TableCell align="left">{row.code}</TableCell>
                       <TableCell align="left">{row.category.name}</TableCell>
-                      <TableCell align="center">{row.importPrice}</TableCell>
-                      <TableCell align="center">{row.salePrice}</TableCell>
+                      <TableCell align="left">{row.brand}</TableCell>
                       <TableCell align="center">{row.stock}</TableCell>
-                      <TableCell align="left">{row.saleStatus}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -496,7 +356,7 @@ export default function EnhancedTable({products}) {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={products.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

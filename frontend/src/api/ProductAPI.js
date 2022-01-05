@@ -31,9 +31,21 @@ function ProductAPI() {
   this.variantList = (id) => {
     return callAPI.get(`products/${id}/variants`);
   };
+  // [GET] /
+  this.getAllVariants = () => {
+    return callAPI.get(`variants`);
+  };
   // [POST] /
   this.createVariant = (data) => {
     return callAPI.post(`variants`, data);
+  };
+  // [put] /
+  this.updateVariant = (id,data) => {
+    return callAPI.put(`variants/${id}`, data);
+  };
+  // [DELETE] /
+  this.deleteVariant = (id) => {
+    return callAPI.delete(`variants/${id}`);
   };
 }
 export default new ProductAPI();

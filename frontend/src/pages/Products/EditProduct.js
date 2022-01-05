@@ -67,7 +67,12 @@ function EditProduct() {
       }
     console.log("it will update these data: ");
     console.log(updateProduct);
-    ProductAPI.updateProduct(params.id, updateProduct);
+    ProductAPI.updateProduct(params.id, updateProduct)
+    .then((res) => {
+      console.log("updated data: ");
+      console.log(res.data);
+      history.push("/san-pham");
+    })
   };
 
   function handleChange(evt) {
@@ -123,7 +128,7 @@ function EditProduct() {
       >
         <Typography variant="h4">Chỉnh sửa thông tin sản phẩm</Typography>
         <Box display="flex">
-          <Button variant="outlined" sx={{ mr: 2 }}>
+          <Button variant="outlined" sx={{ mr: 2 }} onClick={() => history.go(-1)}>
             Thoát
           </Button>
           <Button
