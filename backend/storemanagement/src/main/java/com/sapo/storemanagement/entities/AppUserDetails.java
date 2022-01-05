@@ -16,6 +16,10 @@ public class AppUserDetails implements UserDetails {
         user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
     }
 
+    public User getUser() {
+        return user;
+    }
+
     /**
      * Returns the username used to authenticate the user. Cannot return
      * <code>null</code>.
