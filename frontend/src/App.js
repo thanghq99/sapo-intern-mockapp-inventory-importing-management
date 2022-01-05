@@ -1,7 +1,7 @@
 import "./app.scss";
 import React, { useContext, useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Box, CssBaseline } from '@mui/material';
+import { Box, CssBaseline, Snackbar, Alert } from '@mui/material';
 import Sidebar from "./components/sidebar/Sidebar";
 import Products from "./pages/Products/Products";
 import SupplyOrder from "./pages/SupplyOrder/NewOrder/SupplyOrder";
@@ -17,57 +17,17 @@ import UpdateOrder from "./pages/SupplyOrder/UpdateOrder/UpdateOrder";
 import Login from "./pages/Login_Register/Login";
 import Register from "./pages/Login_Register/Register";
 import { AuthContext } from "./contextAPI/AuthContext";
+import EditProduct from "./pages/Products/EditProduct";
 
 function App() {
   const [headerTitle, setHeaderTitle] = useState('');
   const { token } = useContext(AuthContext);
-
-  const pathRoute = [
-    {
-      path: "/san-pham",
-      component: <Products />
-    },
-    {
-      path: "/san-pham/tao-san-pham",
-      component: <CreateProduct />
-    },
-    {
-      path: "san-pham/san-pham-x",
-      component: <ProductDetails />
-    },
-    {
-      path: "/kho-hang",
-      component: null
-    },
-    {
-      path: "/kiem-hang",
-      component: null
-    },
-    {
-      path: "/nha-cung-cap",
-      component: <Supplier />
-    },
-    {
-      path: "/nha-cung-cap/tao-moi-nha-cung-cap",
-      component: <CreateSupplier />
-    },
-    {
-      path: "/thong-tin-nha-cung-cap",
-      component: <DetailSupplier />
-    },
-    {
-      path: "/nhap-hang",
-      component: <ListOrder />
-    },
-    {
-      path: "/nhap-hang/tao-don-nhap-hang",
-      component: <SupplyOrder />
-    },
-    {
-      path: "/cai-dat",
-      component: null
-    },
-  ];
+  const [stateAlert, setStateAlert] = useState({
+    severity: "",
+    variant: "",
+    open: false,
+    content: "",
+  });
 
   return (
     <div className="App" style={{ display: "flex", flexDirection: "column" }}>
@@ -75,24 +35,6 @@ function App() {
         <Switch>
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
-
-          {/* {
-            pathRoute.map((route) => (
-              !token ?
-                <Login />
-                :
-                <Box sx={{ display: "flex", width: "100%", background: "#27274b", }}>
-                  <CssBaseline />
-                  <Sidebar setHeaderTitle={setHeaderTitle} />
-                  <Box className="box_content" component="main">
-                    <Topbar headerTitle={headerTitle} />
-                    <Route path={route.path} >
-                      {route.component}
-                    </Route>
-                  </Box>
-                </Box>
-            ))
-          } */}
 
           {!token ?
             <Login />
@@ -103,8 +45,15 @@ function App() {
               <Box className="box_content" component="main">
                 <Topbar headerTitle={headerTitle} ></Topbar>
                 <Route exact path="/san-pham" component={Products}></Route>
-                <Route path="/san-pham/tao-san-pham" component={CreateProduct}></Route>
-                <Route path="/san-pham/san-pham-x" component={ProductDetails}></Route>
+                <Route path="/tao-san-pham">
+                  <CreateProduct setStateAlert={setStateAlert} />
+                </Route>
+                <Route exact path="/san-pham/:id">
+                  <ProductDetails setStateAlert={setStateAlert} />
+                </Route>
+                <Route path="/san-pham/:id/chinh-sua" >
+                  <EditProduct setStateAlert={setStateAlert} />
+                </Route>
                 <Route path="/kho-hang"></Route>
                 <Route path="/kiem-hang"></Route>
                 <Route exact path="/nha-cung-cap" component={Supplier} />
@@ -114,6 +63,23 @@ function App() {
                 <Route path="/nhap-hang/tao-don-nhap-hang" component={SupplyOrder}></Route>
                 <Route path="/nhap-hang/don-hang" component={DetailOrder}></Route>
                 <Route path="/cai-dat"></Route>
+                {stateAlert.severity && (
+                  <Snackbar
+                    anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                    open={stateAlert.open}
+                    autoHideDuration={2000}
+                    onClose={() => setStateAlert({ ...stateAlert, open: false })}
+                  >
+                    <Alert
+                      onClose={() => setStateAlert({ ...stateAlert, open: false })}
+                      severity={stateAlert.severity}
+                      variant={stateAlert.variant}
+                      sx={{ width: "100%" }}
+                    >
+                      {stateAlert.content}
+                    </Alert>
+                  </Snackbar>
+                )}
               </Box>
             </Box>}
         </Switch>

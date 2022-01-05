@@ -1,11 +1,13 @@
 package com.sapo.storemanagement.controller;
 
+import com.sapo.storemanagement.entities.Order;
 import com.sapo.storemanagement.entities.Supplier;
 import com.sapo.storemanagement.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -46,4 +48,8 @@ public class SupplierController {
         return supplierService.deleteSupplier(id);
     }
 
+    @GetMapping("/{id}/orders")
+    public List<Order> findAllOrdersOfSupplier(@PathVariable long id) {
+        return supplierService.findAllSuppliedOrders(id);
+    }
 }

@@ -1,5 +1,6 @@
 package com.sapo.storemanagement.service;
 
+import com.sapo.storemanagement.dto.PayOrderDto;
 import com.sapo.storemanagement.entities.PaymentInvoice;
 
 import java.util.List;
@@ -9,5 +10,5 @@ public interface PaymentInvoiceService {
 
     List<PaymentInvoice> listAllPaymentInvoices();
 
-    PaymentInvoice savePaymentInvoice(PaymentInvoice paymentInvoice);
+    PaymentInvoice savePaymentInvoice(long invoiceCreatorId, long orderId, PayOrderDto payOrderDto);
 }

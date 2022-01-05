@@ -10,7 +10,7 @@ public interface ProductService {
 
     Product saveProduct(ProductVariantDto productVariantDto);
 
-    Product updateProduct(long id, Product product);
+    Product updateProduct(long id, ProductVariantDto productVariantDto);
 
     String deleteProduct(Long id);
 }

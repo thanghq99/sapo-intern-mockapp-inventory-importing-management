@@ -1,5 +1,7 @@
 package com.sapo.storemanagement.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -19,6 +21,7 @@ public class Variant {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_id", nullable = false)
+//    @JsonIgnore
     private Product product;
 
     @Column(name = "code", nullable = false, unique = true, length = 16)

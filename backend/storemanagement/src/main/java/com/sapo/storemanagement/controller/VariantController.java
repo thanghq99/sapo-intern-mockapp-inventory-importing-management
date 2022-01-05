@@ -1,5 +1,6 @@
 package com.sapo.storemanagement.controller;
 
+import com.sapo.storemanagement.dto.ProductVariantDto;
 import com.sapo.storemanagement.entities.Variant;
 import com.sapo.storemanagement.service.VariantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +31,13 @@ public class VariantController {
     }
 
     @PostMapping
-    public Variant createVariant(@RequestBody @Valid Variant variant){
-        return variantService.saveVariant(variant);
+    public Variant createVariant(@RequestBody @Valid ProductVariantDto newVariant){
+        return variantService.saveVariant(newVariant);
     }
 
     @PutMapping("/{id}")
-    public Variant updateVariant(@PathVariable long id, @RequestBody @Valid Variant variant){
-        return variantService.updateVariant(id, variant);
+    public Variant updateVariant(@PathVariable long id, @RequestBody @Valid ProductVariantDto productVariantDto){
+        return variantService.updateVariant(id, productVariantDto);
     }
 
     @DeleteMapping("/{id}")
