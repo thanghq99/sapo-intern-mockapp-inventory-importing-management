@@ -45,13 +45,15 @@ function App() {
               <Box className="box_content" component="main">
                 <Topbar headerTitle={headerTitle} ></Topbar>
                 <Route exact path="/san-pham" component={Products}></Route>
-                <Route path="/tao-san-pham" component={CreateProduct}>
-                  <CreateProduct setStateAlert={setStateAlert}/>
+                <Route path="/tao-san-pham">
+                  <CreateProduct setStateAlert={setStateAlert} />
                 </Route>
-                <Route exact path="/san-pham/:id" component={ProductDetails}>
-                  <ProductDetails setStateAlert={setStateAlert}/>
+                <Route exact path="/san-pham/:id">
+                  <ProductDetails setStateAlert={setStateAlert} />
                 </Route>
-                <Route path="/san-pham/:id/chinh-sua" component={EditProduct}></Route>
+                <Route path="/san-pham/:id/chinh-sua" >
+                  <EditProduct setStateAlert={setStateAlert} />
+                </Route>
                 <Route path="/kho-hang"></Route>
                 <Route path="/kiem-hang"></Route>
                 <Route exact path="/nha-cung-cap" component={Supplier} />

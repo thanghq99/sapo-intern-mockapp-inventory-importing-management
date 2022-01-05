@@ -90,6 +90,11 @@ function CreateProduct({setStateAlert}) {
     });
   };
   
+  const cancelAction = () => {
+    setStateAlert({ severity: "warning", variant: "filled", open: true, content: "Đã hủy tạo thêm phiên bản sản phẩm" });
+    history.push("/san-pham");
+  }
+
   const handleCreateProduct = () => {
     ProductAPI.createProduct(product)
     .then((res) => {
@@ -113,7 +118,7 @@ function CreateProduct({setStateAlert}) {
       <Box py={1}>
         <Typography
           underline="none"
-          onClick={() => history.push("/san-pham")}
+          onClick={cancelAction}
           sx={{
             display: "flex",
             "&:hover": {
@@ -134,7 +139,7 @@ function CreateProduct({setStateAlert}) {
       >
         <Typography variant="h4">Tạo mới sản phẩm</Typography>
         <Box display="flex">
-          <Button variant="outlined" sx={{ mr: 2 }}>
+          <Button variant="outlined" sx={{ mr: 2 }} onClick={cancelAction}>
             Thoát
           </Button>
           <Button

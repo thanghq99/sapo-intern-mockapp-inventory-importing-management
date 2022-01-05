@@ -6,7 +6,7 @@ import "./createProduct.scss";
 import CategoryAPI from "../../api/CategoryAPI";
 import ProductAPI from "../../api/ProductAPI";
 
-function EditProduct() {
+function EditProduct({setStateAlert}) {
   const history = useHistory();
   const params = useParams();
   const longText =
@@ -39,7 +39,10 @@ function EditProduct() {
     };
   }, []);
 
-  
+  const cancelAction = () => {
+    setStateAlert({ severity: "warning", variant: "filled", open: true, content: "Đã hủy tạo thêm phiên bản sản phẩm" });
+    history.push("/san-pham");
+  }
 
   const handleEditProduct = () => {
     let updateProduct = {
@@ -69,10 +72,13 @@ function EditProduct() {
     console.log(updateProduct);
     ProductAPI.updateProduct(params.id, updateProduct)
     .then((res) => {
-      console.log("updated data: ");
-      console.log(res.data);
-      history.push("/san-pham");
+      setStateAlert({ severity: "success", variant: "filled", open: true, content: "Đã chỉnh sửa sản phẩm" });
+      history.go(-1);
     })
+    .catch(err => {
+      setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra khi chỉnh sửa sản phẩm" });
+      history.go(-1);
+    });
   };
 
   function handleChange(evt) {
@@ -115,7 +121,7 @@ function EditProduct() {
             },
           }}
         >
-          <ArrowBackIosNew sx={{ mr: 2 }} />
+          <ArrowBackIosNew sx={{ mr: 2 }}  onClick={cancelAction}/>
           Quay lại Danh sách sản phẩm
         </Typography>
       </Box>
@@ -128,7 +134,7 @@ function EditProduct() {
       >
         <Typography variant="h4">Chỉnh sửa thông tin sản phẩm</Typography>
         <Box display="flex">
-          <Button variant="outlined" sx={{ mr: 2 }} onClick={() => history.go(-1)}>
+          <Button variant="outlined" sx={{ mr: 2 }} onClick={cancelAction}>
             Thoát
           </Button>
           <Button
