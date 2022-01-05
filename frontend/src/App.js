@@ -113,6 +113,7 @@ function App() {
                 <Route exact path="/nhap-hang" component={ListOrder} />
                 <Route path="/nhap-hang/tao-don-nhap-hang" component={SupplyOrder}></Route>
                 <Route path="/nhap-hang/don-hang" component={DetailOrder}></Route>
+                <Route path="/nhap-hang/sua-don-hang" component={UpdateOrder}></Route>
                 <Route path="/cai-dat"></Route>
               </Box>
             </Box>}

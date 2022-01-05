@@ -143,7 +143,7 @@ export default function DetailOrder() {
                      backgroundColor: "#FFFFFF", border: "1px solid #cfcfcf", marginLeft: "100px", marginTop: "-10px"}}>
                         <List component="div" disablePadding>
                             <ListItem>
-                                Sửa
+                            <Link to={`/nhap-hang/sua-don-hang?code=${searchParam}`} className="link-update">Sửa</Link>
                             </ListItem>
                             <Divider />
                             <ListItem>
