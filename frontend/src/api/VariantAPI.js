@@ -1,35 +1,35 @@
 import callAPI from './CallAPI';
 
 
-function ProductAPI() {
+function VariantAPI() {
 
   //PRODUCT
   // [GET] /
-  this.productList = () => {
-    return callAPI.get("products");
+  this.variantsList = () => {
+    return callAPI.get("variants");
   };
   // [GET] /
-  this.product = (id) => {
-    return callAPI.get(`products/${id}`);
+  this.variants = (id) => {
+    return callAPI.get(`variantss/${id}`);
   };
   // [POST] /
-  this.createProduct = (data) => {
-    return callAPI.post(`products`, data);
+  this.createVariant = (data) => {
+    return callAPI.post(`variantss`, data);
   };
   // [PUT] /
-  this.updateProduct = (id, data) => {
-    return callAPI.put(`products/${id}`, data);
+  this.updateVariant = (id, data) => {
+    return callAPI.put(`variants/${id}`, data);
   };
   // [DELETE] /
-  this.deleteProduct = (id) => {
-    return callAPI.delete(`products/${id}`);
+  this.deleteVariant = (id) => {
+    return callAPI.delete(`variants/${id}`);
   };
   
 
   //VARIANT
   // [GET] /
   this.variantList = (id) => {
-    return callAPI.get(`products/${id}/variants`);
+    return callAPI.get(`variants/${id}/variants`);
   };
   // [GET] /
   this.getAllVariants = () => {
@@ -48,4 +48,4 @@ function ProductAPI() {
     return callAPI.delete(`variants/${id}`);
   };
 }
-export default new ProductAPI();
+export default new VariantAPI();

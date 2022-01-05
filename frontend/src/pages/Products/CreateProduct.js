@@ -14,8 +14,8 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { ArrowBackIosNew, Info, Add, Co2Sharp } from "@mui/icons-material";
-import { Link, useHistory } from "react-router-dom";
+import { ArrowBackIosNew, Info, Add} from "@mui/icons-material";
+import { useHistory } from "react-router-dom";
 import "./createProduct.scss";
 import CategoryAPI from "../../api/CategoryAPI";
 import ProductAPI from "../../api/ProductAPI";
@@ -56,7 +56,6 @@ function CreateProduct() {
   useEffect(() => {
     CategoryAPI.CategoryList().then((res) => {
       setCategories(res.data);
-      console.log(res.data);
     });
   }, []);
 
@@ -97,9 +96,12 @@ function CreateProduct() {
     .then((res) => {
       console.log("product created!");
       console.log(res.data);
-      history.go("/san-pham");
+      history.push("/san-pham");
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      console.log(err);
+      history.push("/san-pham");
+    });
   }
 
   return (

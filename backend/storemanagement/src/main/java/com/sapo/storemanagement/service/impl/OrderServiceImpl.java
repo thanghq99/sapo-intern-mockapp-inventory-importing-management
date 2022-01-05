@@ -80,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
             newOrder.setTotalAmount(newOrder.getTotalAmount() + item.getPrice()*item.getQuantity());
             supplierService.increaseDebt(newOrder.getSupplier().getId(), newOrder.getTotalAmount());
         } );
-
+        newOrder.setTotalAmount(newOrder.getTotalAmount() * 0.94);
         return newOrder;
     }
 
@@ -179,5 +179,10 @@ public class OrderServiceImpl implements OrderService {
 
         order.setPaidAmount(order.getPaidAmount() + offset);
         return order;
+    }
+
+    @Override
+    public List<VariantsOrder> findAllVariantInOrder(long id) {
+        return variantsOrderRepository.findVariantByOrderId(id);
     }
 }

@@ -1,7 +1,9 @@
 package com.sapo.storemanagement.controller;
 
 import com.sapo.storemanagement.dto.OrderDto;
+import com.sapo.storemanagement.dto.PayOrderDto;
 import com.sapo.storemanagement.entities.Order;
+import com.sapo.storemanagement.entities.VariantsOrder;
 import com.sapo.storemanagement.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +38,16 @@ public class OrderController {
     @PutMapping("/{id}")
     public Order updateOrder(@PathVariable long id, @RequestBody OrderDto orderDto){
         return orderService.updateOrder(id, orderDto);
+    }
+
+    @GetMapping("/{id}/variants")
+    public List<VariantsOrder> findAllVariantInOrder(@PathVariable long id) {
+        return orderService.findAllVariantInOrder(id);
+    }
+
+    @PostMapping("/{id}/payment")
+    public void payOrder(@PathVariable long orderId, @RequestBody PayOrderDto amount) {
+        
     }
 }
 // @Valid put
