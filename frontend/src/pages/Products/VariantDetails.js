@@ -105,6 +105,73 @@ function VariantDetails({ variantInfo, setViewState }) {
           </Grid>
         </Box>
       </Box>
+      <Box
+        mt={3}
+        py={2}
+        px={1}
+        display="flex"
+        flexDirection="column"
+        backgroundColor="white"
+      >
+        <Typography
+          // sx={{ flex: "1 1 100%" }}
+          variant="subtitle1"
+          id="tableTitle"
+          px={1}
+        >
+          Tình trạng kho hàng
+        </Typography>
+        <Divider sx={{ my: 1 }} />
+        <Box display="flex" flexDirection="column" px={1} py={2}>
+          <Grid container>
+            <Grid item xs={2}>
+              <Typography variant="body2">Số lượng trong kho</Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography variant="body2">
+                : {variantInfo.inventoryQuantity}
+              </Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Typography variant="body2">Số lượng có thể bán</Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography variant="body2">
+                : {variantInfo.sellableQuantity}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+      <Box
+        my={3}
+        py={2}
+        px={1}
+        display="flex"
+        flexDirection="column"
+        backgroundColor="white"
+      >
+        <Typography
+          // sx={{ flex: "1 1 100%" }}
+          variant="subtitle1"
+          id="tableTitle"
+          px={1}
+        >
+          Trạng thái
+        </Typography>
+        <Divider sx={{ my: 1 }} />
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+          px={1}
+          py={2}
+        >
+          <Box>
+            <Typography variant="body2" color="primary">{variantInfo.sellableStatus}</Typography>
+          </Box>
+        </Box>
+      </Box>
     </React.Fragment>
   ));
 }
