@@ -17,7 +17,7 @@ public interface VariantService {
 
     Variant saveVariant(ProductVariantDto productVariantDto);
 
-    Variant updateVariant(long id, Variant variant);
+    Variant updateVariant(long id, ProductVariantDto productVariantDto);
 
     String deleteVariant(Long id);
 }
