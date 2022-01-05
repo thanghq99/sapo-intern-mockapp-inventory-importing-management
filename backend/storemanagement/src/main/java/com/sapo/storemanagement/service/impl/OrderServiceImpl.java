@@ -56,9 +56,9 @@ public class OrderServiceImpl implements OrderService {
     // luu thong tin 1 don nhap hang
     @Override
     @Transactional
-    public Order createdOrder(OrderDto orderDto) {
+    public Order createdOrder(Long orderCreatorId, OrderDto orderDto) {
         Supplier supplier = supplierService.getSupplierById(orderDto.getSupplierId());
-        User user = userRepository.findById(orderDto.getCreatedBy()).orElseThrow( () -> new RecordNotFoundException("User not found") );
+        User user = userService.getUserById(orderCreatorId);
         Order newOrder = orderRepository.save(new Order(
 
                 orderDto.getOrderCode(),
