@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from "react";
 import ProductAPI from "../../api/ProductAPI";
-import { Box, Typography, Button, Divider, Grid } from "@mui/material";
-import { ArrowBackIosNew, HistorySharp } from "@mui/icons-material";
+import {
+  Box,
+  Typography,
+  Button,
+  Divider,
+  Snackbar,
+  Alert,
+} from "@mui/material";
+import { ArrowBackIosNew } from "@mui/icons-material";
 import { useHistory, useParams } from "react-router-dom";
 import VariantsTable from "./VariantsTable";
 import VariantDetails from "./VariantDetails";
 import CreateVariant from "./CreateVariant";
 import EditVariant from "./EditVariant";
-import DescriptionDialog from "./DescriptionDialog"
+import DescriptionDialog from "./DescriptionDialog";
 
-function ProductDetails() {
+function ProductDetails({setStateAlert}) {
   const history = useHistory();
   const params = useParams();
   const [loading, setLoading] = useState(true);
@@ -38,7 +45,6 @@ function ProductDetails() {
     const variantsData = await ProductAPI.variantList(params.id);
     setVariants(variantsData.data);
     setVariantInfo(variantsData.data[0]);
-    console.log(variantsData);
     setLoading(false);
   }
 
@@ -56,8 +62,8 @@ function ProductDetails() {
   };
 
   const handleDeleteVariant = (id) => {
-      ProductAPI.deleteVariant(id);
-  }
+    ProductAPI.deleteVariant(id);
+  };
 
   const triggerReload = () => {
     setTrigger(!trigger);
@@ -168,7 +174,7 @@ function ProductDetails() {
             >
               <Typography>Ngày tạo</Typography>
               <Typography>Ngày cập nhật cuối</Typography>
-              <DescriptionDialog description={product.description}/>
+              <DescriptionDialog description={product.description} />
             </Box>
             <Box
               width="25%"
@@ -201,13 +207,19 @@ function ProductDetails() {
           {(() => {
             switch (viewState) {
               case 1:
-                return <VariantDetails variantInfo={variantInfo} setViewState={setViewState}/>;
+                return (
+                  <VariantDetails
+                    variantInfo={variantInfo}
+                    setViewState={setViewState}
+                  />
+                );
               case 2:
                 return (
                   <CreateVariant
                     triggerReload={triggerReload}
                     productId={product.id}
                     setViewState={setViewState}
+                    setStateAlert={setStateAlert}
                   />
                 );
               case 3:
@@ -217,12 +229,11 @@ function ProductDetails() {
                     productId={product.id}
                     setViewState={setViewState}
                     variantData={variantInfo}
+                    setStateAlert={setStateAlert}
                   />
                 );
             }
           })()}
-
-          {/* <ViewControl viewState={viewState} variantInfo={variantInfo} /> */}
         </Box>
       </Box>
     </Box>
