@@ -45,8 +45,8 @@ public class Product {
     @Size(max = 255, message = "Image URL length cannot exceed {max}")
     private String imageUrl;
 
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "product")
-//    private List<Variant> variants;
+    @Column(name = "record_status", columnDefinition = "varchar(32) DEFAULT 'Đang hoạt động'")
+    private RecordStatus recordStatus = RecordStatus.ACTIVE;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -123,12 +123,16 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-//    public List<Variant> getVariants() {
-//        return variants;
-//    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public String getRecordStatus() {
+        return recordStatus.getStatus();
+    }
+
+    public void setRecordStatus(RecordStatus recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public LocalDateTime getUpdatedAt() {
