@@ -211,7 +211,7 @@ export default function TableSupply() {
 
 
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
+    const [orderBy, setOrderBy] = React.useState('');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
@@ -225,7 +225,7 @@ export default function TableSupply() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = listSuppliers.map((n) => n.name);
+            const newSelecteds = listSuppliers.map((n) => n.code);
             setSelected(newSelecteds);
             return;
         }
@@ -293,17 +293,17 @@ export default function TableSupply() {
                             {stableSort(listSuppliers, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
+                                    const isItemSelected = isSelected(row.code);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.name)}
+                                            onClick={(event) => handleClick(event, row.code)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.name}
+                                            key={row.code}
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">

@@ -1,5 +1,6 @@
 package com.sapo.storemanagement.service.impl;
 
+import com.sapo.storemanagement.dto.PayOrderDto;
 import com.sapo.storemanagement.entities.*;
 import com.sapo.storemanagement.exception.BadNumberException;
 import com.sapo.storemanagement.exception.ForeignKeyConstraintException;
@@ -28,6 +29,9 @@ public class PaymentInvoiceServiceImpl implements PaymentInvoiceService {
     private OrderService orderService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     public PaymentInvoiceServiceImpl(PaymentInvoiceRepository paymentInvoiceRepository, OrderRepository orderRepository) {
         this.paymentInvoiceRepository = paymentInvoiceRepository;
     }
@@ -50,9 +54,13 @@ public class PaymentInvoiceServiceImpl implements PaymentInvoiceService {
 
     @Override
     @Transactional
-    public PaymentInvoice savePaymentInvoice(PaymentInvoice paymentInvoice) {
-        Order order = orderService.increasePaidAmount(paymentInvoice.getOrder().getId(), paymentInvoice.getAmount());
-        Supplier supplier = supplierService.decreaseDebt(order.getSupplier().getId(), paymentInvoice.getAmount());
+    public PaymentInvoice savePaymentInvoice(long invoiceCreatorId, long orderId, PayOrderDto payOrderDto) {
+        User user = userService.getUserById(invoiceCreatorId);
+
+        Order order = orderService.increasePaidAmount(orderId, payOrderDto.getAmount());
+        Supplier supplier = supplierService.decreaseDebt(order.getSupplier().getId(), payOrderDto.getAmount());
+
+        PaymentInvoice paymentInvoice = new PaymentInvoice(payOrderDto.getAmount(), order, user);
 
         return paymentInvoiceRepository.save(paymentInvoice);
     }

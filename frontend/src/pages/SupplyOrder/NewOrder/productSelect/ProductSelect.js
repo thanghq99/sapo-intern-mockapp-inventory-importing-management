@@ -168,7 +168,7 @@ export default function ProductSelect({setProduct}) {
     }, [num, productSelect, originalPrice]);
 
     async function getData() {
-        const result = await ProductAPI.ProductList();
+        const result = await ProductAPI.getAllVariants();
         
         setProductList(result.data);
         handleOriPrice(result.data);
@@ -179,12 +179,13 @@ export default function ProductSelect({setProduct}) {
 
     React.useEffect(() => {
         getData();
- 
+        
     }, []);
 
     
     console.log(productSelect);
     console.log(lastProduct);
+    console.log(productList);
     
     return (
         <div>

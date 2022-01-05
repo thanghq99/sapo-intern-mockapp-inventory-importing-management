@@ -2,7 +2,8 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import MuiAlert from '@mui/material/Alert';
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField, Snackbar, Stack } from '@mui/material';
+import { ArrowBackIosNew } from "@mui/icons-material";
+import { Button, FormControl, InputLabel, MenuItem, Select, TextField, Snackbar, Stack, Typography } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import "./createSupplier.scss"
 import { useHistory } from 'react-router-dom';
@@ -67,8 +68,19 @@ export default function CreateSupplier() {
         <div className='createSupplier_page'>
             <div className="createSupplier_content">
                 <div className="navig">
-                    <i className="fas fa-arrow-left"></i>
-                    <a href="#">Quay lại trang trước</a>
+                    <Typography
+                        underline="none"
+                        onClick={() => history.push("/nha-cung-cap")}
+                        sx={{
+                            display: 'flex',
+                            '&:hover': {
+                                cursor: 'pointer',
+                            }
+                        }}
+                    >
+                        <ArrowBackIosNew sx={{ mr: 2 }} />
+                        Quay lại trang trước
+                    </Typography>
                 </div>
                 <div className="activity">
                     <Button onClick={handleCreate} className="button_activity" variant="contained"><i className="far fa-save"></i> <span>Lưu kết quả</span> </Button>

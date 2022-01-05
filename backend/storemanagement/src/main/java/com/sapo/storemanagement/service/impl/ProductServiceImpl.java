@@ -1,10 +1,7 @@
 package com.sapo.storemanagement.service.impl;
 
 import com.sapo.storemanagement.dto.ProductVariantDto;
-import com.sapo.storemanagement.entities.Category;
-import com.sapo.storemanagement.entities.Product;
-import com.sapo.storemanagement.entities.SellableStatus;
-import com.sapo.storemanagement.entities.Variant;
+import com.sapo.storemanagement.entities.*;
 import com.sapo.storemanagement.exception.BadNumberException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
 import com.sapo.storemanagement.repository.ProductRepository;
@@ -31,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> listAllProducts() {
-        return productRepository.findAll();
+        return productRepository.findAllByRecordStatus(RecordStatus.ACTIVE.getStatus());
     }
 
     @Override
@@ -97,7 +94,10 @@ public class ProductServiceImpl implements ProductService {
         Product productToDelete = productRepository
                 .findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("product not found"));
-        productRepository.deleteById(id);
+        productToDelete.setRecordStatus(RecordStatus.DELETED);
+
+        variantService.listAllVariantsByProductId(productToDelete.getId())
+            .forEach(variant -> variant.setRecordStatus(RecordStatus.DELETED));
         return productToDelete.getName() + "was deleted!";
     }
 
