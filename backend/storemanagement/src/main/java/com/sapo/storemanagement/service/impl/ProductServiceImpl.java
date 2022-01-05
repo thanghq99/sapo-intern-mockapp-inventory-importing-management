@@ -36,12 +36,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getProductById(Long id) {
-        if(id <= 0) {
+        if (id <= 0) {
             throw new BadNumberException("id must be greater than 0");
         }
         return productRepository
-                        .findById(id)
-                        .orElseThrow(() -> new RecordNotFoundException("product not found"));
+                .findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("product not found"));
     }
 
     @Override
@@ -50,22 +50,21 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryService.getCategoryById(productVariantDto.getCategoryId());
 
         Product newProduct = productRepository.save(new Product(
-            productVariantDto.getProductName(),
-            category,
-            productVariantDto.getBrand(),
-            productVariantDto.getDescription(),
-            productVariantDto.getWeight(),
-            productVariantDto.getImageUrl(),
-            SellableStatus.SELLABLE
-        ));
+                productVariantDto.getProductName(),
+                category,
+                productVariantDto.getBrand(),
+                productVariantDto.getDescription(),
+                productVariantDto.getWeight(),
+                productVariantDto.getImageUrl(),
+                SellableStatus.SELLABLE));
 
         Variant newVariant = new Variant(
-            newProduct, productVariantDto.getVariantCode(),
-            productVariantDto.getInventoryQuantity(), productVariantDto.getSellableQuantity(),
-            productVariantDto.getSize(), productVariantDto.getColor(),
-            productVariantDto.getMaterial(), productVariantDto.getUnit(),
-            productVariantDto.getOriginalPrice(), productVariantDto.getWholeSalePrice(), productVariantDto.getRetailPrice()
-        );
+                newProduct, productVariantDto.getVariantCode(),
+                productVariantDto.getInventoryQuantity(), productVariantDto.getSellableQuantity(),
+                productVariantDto.getSize(), productVariantDto.getColor(),
+                productVariantDto.getMaterial(), productVariantDto.getUnit(),
+                productVariantDto.getOriginalPrice(), productVariantDto.getWholeSalePrice(),
+                productVariantDto.getRetailPrice());
         variantService.saveVariant(newVariant);
 
         return newProduct;
@@ -88,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public String deleteProduct(Long id) {
-        if(id <= 0) {
+        if (id <= 0) {
             throw new BadNumberException("id must be greater than 0");
         }
         Product productToDelete = productRepository

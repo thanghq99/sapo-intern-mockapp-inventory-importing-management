@@ -1,6 +1,7 @@
 package com.sapo.storemanagement.controller;
 
 import com.sapo.storemanagement.entities.Variant;
+import com.sapo.storemanagement.entities.VariantsOrder;
 import com.sapo.storemanagement.service.VariantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @CrossOrigin
 public class VariantController {
     private final VariantService variantService;
+
 
     @Autowired
     public VariantController(VariantService variantService) {
@@ -27,6 +29,11 @@ public class VariantController {
     @GetMapping
     public List<Variant> findAllVariants(){
         return variantService.listAllVariants();
+    }
+
+    @GetMapping("/variantOrder/{orderId}")
+    public List<VariantsOrder> variantList(@PathVariable long orderId) {
+        return variantService.listVariantByOrderId(orderId);
     }
 
     @PostMapping

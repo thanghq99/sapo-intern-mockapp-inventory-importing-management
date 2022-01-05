@@ -2,12 +2,14 @@ package com.sapo.storemanagement.service.impl;
 
 import com.sapo.storemanagement.entities.RecordStatus;
 import com.sapo.storemanagement.entities.Variant;
+import com.sapo.storemanagement.entities.VariantsOrder;
 import com.sapo.storemanagement.exception.BadNumberException;
 import com.sapo.storemanagement.exception.ForeignKeyConstraintException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
 import com.sapo.storemanagement.exception.UniqueKeyConstraintException;
 import com.sapo.storemanagement.repository.ProductRepository;
 import com.sapo.storemanagement.repository.VariantRepository;
+import com.sapo.storemanagement.repository.VariantsOrderRepository;
 import com.sapo.storemanagement.service.VariantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,16 +21,29 @@ import java.util.List;
 public class VariantServiceImpl implements VariantService {
     private final VariantRepository variantRepository;
     private final ProductRepository productRepository;
+    private final VariantsOrderRepository variantsOrderRepository;
 
     @Autowired
-    public VariantServiceImpl(VariantRepository variantRepository, ProductRepository productRepository) {
+    public VariantServiceImpl(VariantRepository variantRepository, ProductRepository productRepository, VariantsOrderRepository variantsOrderRepository) {
         this.variantRepository = variantRepository;
         this.productRepository = productRepository;
+        this.variantsOrderRepository = variantsOrderRepository;
     }
 
     @Override
     public List<Variant> listAllVariants() {
         return variantRepository.findAll();
+    }
+
+    @Override
+    public List<VariantsOrder> listVariantByOrderId(long orderId) {
+        List<VariantsOrder> variantListByOrder = variantsOrderRepository.findVariantByOrderId(orderId);
+//        List<Variant> variantList = null;
+//        variantListByOrder.forEach((item) -> {
+//            Variant variant = variantRepository.findById(item.getVariant().getId()).orElseThrow(() -> new RecordNotFoundException("variant not found"));
+//            variantList.add(variant);
+//        });
+        return variantListByOrder;
     }
 
     @Override
