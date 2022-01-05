@@ -23,5 +23,5 @@ public interface VariantRepository extends JpaRepository<Variant, Long> {
     List<Variant> findAllByProductId(@Param("product_id") Long id);
 
     @Query(value = "select * from variants where record_status like :record_status ", nativeQuery = true)
-    List<Product> findAllByRecordStatus(@Param("record_status") String recordStatus);
+    List<Variant> findAllByRecordStatus(@Param("record_status") String recordStatus);
 }

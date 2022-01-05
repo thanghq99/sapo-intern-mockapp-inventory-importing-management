@@ -28,7 +28,7 @@ public class VariantServiceImpl implements VariantService {
 
     @Override
     public List<Variant> listAllVariants() {
-        return variantRepository.findAll();
+        return variantRepository.findAllByRecordStatus(RecordStatus.ACTIVE.getStatus());
     }
 
     @Override
