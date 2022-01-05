@@ -36,8 +36,8 @@ public class VariantController {
     }
 
     @PutMapping("/{id}")
-    public Variant updateVariant(@PathVariable long id, @RequestBody @Valid Variant variant){
-        return variantService.updateVariant(id, variant);
+    public Variant updateVariant(@PathVariable long id, @RequestBody @Valid ProductVariantDto productVariantDto){
+        return variantService.updateVariant(id, productVariantDto);
     }
 
     @DeleteMapping("/{id}")
