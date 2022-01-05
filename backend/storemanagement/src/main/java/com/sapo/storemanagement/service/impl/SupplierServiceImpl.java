@@ -1,22 +1,28 @@
 package com.sapo.storemanagement.service.impl;
 
+import com.sapo.storemanagement.entities.Order;
 import com.sapo.storemanagement.entities.RecordStatus;
 import com.sapo.storemanagement.entities.Supplier;
 import com.sapo.storemanagement.exception.BadNumberException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
 import com.sapo.storemanagement.exception.UniqueKeyConstraintException;
+import com.sapo.storemanagement.repository.OrderRepository;
 import com.sapo.storemanagement.repository.SupplierRepository;
 import com.sapo.storemanagement.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class SupplierServiceImpl implements SupplierService {
     @Autowired
     private SupplierRepository supplierRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Override
     public Iterable<Supplier> listAllSuppliers() {
@@ -108,5 +114,13 @@ public class SupplierServiceImpl implements SupplierService {
         supplier.setDebt(supplier.getDebt() + offset);
 
         return supplier;
+    }
+
+    @Override
+    public List<Order> findAllSuppliedOrders(long supplierId) {
+        if(supplierId < 0) {
+            throw new BadNumberException("Offset cant be negative");
+        }
+        return orderRepository.findAllOrdersBySupplierId(supplierId);
     }
 }

@@ -4,10 +4,9 @@ import {
   Typography,
   Button,
   Divider,
-  Checkbox,
+  Snackbar,
   Grid,
-  FormControl,
-  InputLabel,
+  Alert,
   TextField,
   Tooltip,
   Switch,
@@ -20,7 +19,7 @@ import "./createProduct.scss";
 import CategoryAPI from "../../api/CategoryAPI";
 import ProductAPI from "../../api/ProductAPI";
 
-function CreateProduct() {
+function CreateProduct({setStateAlert}) {
   const history = useHistory();
   const longText =
     "Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus. Praesent non nunc mollis, fermentum neque at, semper arcu.";
@@ -91,15 +90,19 @@ function CreateProduct() {
     });
   };
   
+  const cancelAction = () => {
+    setStateAlert({ severity: "warning", variant: "filled", open: true, content: "Đã hủy tạo thêm phiên bản sản phẩm" });
+    history.push("/san-pham");
+  }
+
   const handleCreateProduct = () => {
     ProductAPI.createProduct(product)
     .then((res) => {
-      console.log("product created!");
-      console.log(res.data);
+      setStateAlert({ severity: "success", variant: "filled", open: true, content: "Đã tạo thêm sản phẩm" });
       history.push("/san-pham");
     })
     .catch(err => {
-      console.log(err);
+      setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra khi tạo thêm sản phẩm" });
       history.push("/san-pham");
     });
   }
@@ -115,7 +118,7 @@ function CreateProduct() {
       <Box py={1}>
         <Typography
           underline="none"
-          onClick={() => history.push("/san-pham")}
+          onClick={cancelAction}
           sx={{
             display: "flex",
             "&:hover": {
@@ -136,7 +139,7 @@ function CreateProduct() {
       >
         <Typography variant="h4">Tạo mới sản phẩm</Typography>
         <Box display="flex">
-          <Button variant="outlined" sx={{ mr: 2 }}>
+          <Button variant="outlined" sx={{ mr: 2 }} onClick={cancelAction}>
             Thoát
           </Button>
           <Button

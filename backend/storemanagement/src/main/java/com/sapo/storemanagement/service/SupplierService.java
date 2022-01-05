@@ -1,7 +1,9 @@
 package com.sapo.storemanagement.service;
 
+import com.sapo.storemanagement.entities.Order;
 import com.sapo.storemanagement.entities.Supplier;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface SupplierService {
@@ -22,4 +24,5 @@ public interface SupplierService {
 
     Supplier increaseDebt(long supplierId, double offset);
 
+    List<Order> findAllSuppliedOrders(long supplierId);
 }
