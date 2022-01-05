@@ -7,7 +7,6 @@ import VariantsTable from "./VariantsTable";
 import VariantDetails from "./VariantDetails";
 import CreateVariant from "./CreateVariant";
 import EditVariant from "./EditVariant";
-import DescriptionDialog from "./DescriptionDialog"
 
 function ProductDetails() {
   const history = useHistory();
@@ -54,10 +53,6 @@ function ProductDetails() {
     alert(product.name + " has been deleted!");
     history.push(`/san-pham`);
   };
-
-  const handleDeleteVariant = (id) => {
-      ProductAPI.deleteVariant(id);
-  }
 
   const triggerReload = () => {
     setTrigger(!trigger);
@@ -168,7 +163,7 @@ function ProductDetails() {
             >
               <Typography>Ngày tạo</Typography>
               <Typography>Ngày cập nhật cuối</Typography>
-              <DescriptionDialog description={product.description}/>
+              <Typography>Xem Mô tả</Typography>
             </Box>
             <Box
               width="25%"
@@ -194,14 +189,13 @@ function ProductDetails() {
             setVariantInfo={setVariantInfo}
             variants={variants}
             setViewState={setViewState}
-            handleDeleteVariant={handleDeleteVariant}
           />
         </Box>
         <Box display="flex" flexDirection="column" width="66.6667%">
           {(() => {
             switch (viewState) {
               case 1:
-                return <VariantDetails variantInfo={variantInfo} setViewState={setViewState}/>;
+                return <VariantDetails variantInfo={variantInfo} />;
               case 2:
                 return (
                   <CreateVariant
@@ -211,14 +205,7 @@ function ProductDetails() {
                   />
                 );
               case 3:
-                return (
-                  <EditVariant
-                    triggerReload={triggerReload}
-                    productId={product.id}
-                    setViewState={setViewState}
-                    variantData={variantInfo}
-                  />
-                );
+                return <EditVariant />;
             }
           })()}
 

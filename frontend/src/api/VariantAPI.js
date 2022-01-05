@@ -10,11 +10,11 @@ function VariantAPI() {
   };
   // [GET] /
   this.variants = (id) => {
-    return callAPI.get(`variantss/${id}`);
+    return callAPI.get(`variants/${id}`);
   };
   // [POST] /
   this.createVariant = (data) => {
-    return callAPI.post(`variantss`, data);
+    return callAPI.post(`variants`, data);
   };
   // [PUT] /
   this.updateVariant = (id, data) => {
