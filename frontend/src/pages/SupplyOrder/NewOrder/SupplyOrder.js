@@ -84,7 +84,6 @@ export default function SupplyOrder() {
             supplierId: supplier,
             description: description,
             deliveryTime: moment(date).format('YYYY-MM-DD'),
-            createdBy: 2,
             lineItems: product
         };
         console.log(data);
