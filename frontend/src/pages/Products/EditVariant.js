@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import ProductAPI from "../../api/ProductAPI";
 
-function EditVariant({ productId, triggerReload, setViewState, variantData }) {
+function EditVariant({ productId, triggerReload, setViewState, variantData, setStateAlert }) {
   const [variantInfo, setVariantInfo] = useState(variantData);
 
   function handleChange(evt) {
@@ -32,7 +32,8 @@ function EditVariant({ productId, triggerReload, setViewState, variantData }) {
   };
 
   const cancelAction = () => {
-      setViewState(1);
+    setStateAlert({ severity: "warning", variant: "filled", open: true, content: "Đã hủy chỉnh sửa phiên bản sản phẩm" });
+    setViewState(1);
   }
 
   function handleUpdateVariant() {
@@ -61,12 +62,14 @@ function EditVariant({ productId, triggerReload, setViewState, variantData }) {
     };
     ProductAPI.updateVariant(variantInfo.id, updateVariant)
       .then((res) => {
-        console.log("variant updated!");
-        console.log(res.data);
+        setStateAlert({ severity: "success", variant: "filled", open: true, content: "Đã chỉnh sửa phiên bản sản phẩm" });
         triggerReload();
         setViewState(1);
       })
-      .catch((err) => console.log(err));
+      .catch(err => {
+        setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra khi chỉnh sửa phiên bản sản phẩm" });
+        console.log(err)
+      });
   }
   return (
     <React.Fragment>

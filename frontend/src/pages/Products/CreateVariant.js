@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import ProductAPI from "../../api/ProductAPI";
 
-function CreateVariant({ productId, triggerReload, setViewState }) {
+function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }) {
   const [variantInfo, setVariantInfo] = useState({
     variantCode: "",
     inventoryQuantity: "",
@@ -51,14 +51,21 @@ function CreateVariant({ productId, triggerReload, setViewState }) {
     });
   };
 
+  const cancelAction = () => {
+    setStateAlert({ severity: "warning", variant: "filled", open: true, content: "Đã hủy chỉnh sửa phiên bản sản phẩm" });
+    setViewState(1);
+  }
+
   function handleCreateVariant() {
     ProductAPI.createVariant(variantInfo).then((res) => {
-        console.log("variant created!");
-        console.log(res.data);
+        setStateAlert({ severity: "success", variant: "filled", open: true, content: "Đã tạo thêm phiên bản sản phẩm" });
         triggerReload();
         setViewState(1);
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra khi tạo thêm phiên bản sản phẩm" });
+        console.log(err)
+      });
   }
   return (
     <React.Fragment>
@@ -296,7 +303,7 @@ function CreateVariant({ productId, triggerReload, setViewState }) {
         display="flex"
         justifyContent="flex-end"
       >
-        <Button variant="outlined" color="error" sx={{mr: 2}}>Hủy</Button>
+        <Button variant="outlined" color="error" sx={{mr: 2}} onClick={cancelAction}>Hủy</Button>
         <Button variant="contained" color="primary" onClick={() => handleCreateVariant()}>Thêm phiên bản</Button>
       </Box>
     </React.Fragment>
