@@ -28,9 +28,4 @@ public class PaymentInvoiceController {
     public List<PaymentInvoice> findAllPaymentInvoices(){
         return paymentInvoiceService.listAllPaymentInvoices();
     }
-
-    @PostMapping
-    public PaymentInvoice createPaymentInvoice(@RequestBody @Valid PaymentInvoice paymentInvoice){
-        return paymentInvoiceService.savePaymentInvoice(paymentInvoice);
-    }
 }
