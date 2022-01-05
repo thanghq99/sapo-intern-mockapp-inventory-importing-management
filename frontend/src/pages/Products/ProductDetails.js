@@ -1,57 +1,79 @@
-import React, {useState} from "react";
-import { Box, Typography, Button, Divider, Checkbox, Grid } from "@mui/material";
-import { ArrowBackIosNew } from "@mui/icons-material";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import ProductAPI from "../../api/ProductAPI";
+import { Box, Typography, Button, Divider, Grid } from "@mui/material";
+import { ArrowBackIosNew, HistorySharp } from "@mui/icons-material";
+import { useHistory, useParams } from "react-router-dom";
 import VariantsTable from "./VariantsTable";
-
-const variants = [
-  {
-    id: 1,
-    name: "phien ban 1",
-    SKU: "M01",
-    salePrice: "100.000d",
-    wholesalePrice: "90.000d",
-    importPrice: "80.000d",
-  },
-  {
-    id: 2,
-    name: "phien ban 2",
-    SKU: "M02",
-    salePrice: "100.000d",
-    wholesalePrice: "90.000d",
-    importPrice: "80.000d",
-  },
-  {
-    id: 3,
-    name: "phien ban 3",
-    SKU: "M03",
-    salePrice: "100.000d",
-    wholesalePrice: "90.000d",
-    importPrice: "80.000d",
-  },
-];
+import VariantDetails from "./VariantDetails";
+import CreateVariant from "./CreateVariant";
+import EditVariant from "./EditVariant";
+import DescriptionDialog from "./DescriptionDialog"
 
 function ProductDetails() {
-  const history = useHistory()
+  const history = useHistory();
+  const params = useParams();
+  const [loading, setLoading] = useState(true);
+  const [trigger, setTrigger] = useState(false);
+  const [viewState, setViewState] = useState(1); // 1: view details, 2: create, 3: edit
+  const [product, setProduct] = useState([]);
+  const [variants, setVariants] = useState([]);
+  const [variantInfo, setVariantInfo] = useState({
+    id: "---",
+    code: "---",
+    inventoryQuantity: "---",
+    sellableQuantity: "---",
+    size: "---",
+    color: "---",
+    material: "---",
+    unit: "---",
+    originalPrice: "---",
+    wholeSalePrice: "---",
+    retailPrice: "---",
+    recordStatus: "---",
+    sellableStatus: "---",
+  });
+  async function getData() {
+    const productData = await ProductAPI.product(params.id);
+    setProduct(productData.data);
+    const variantsData = await ProductAPI.variantList(params.id);
+    setVariants(variantsData.data);
+    setVariantInfo(variantsData.data[0]);
+    console.log(variantsData);
+    setLoading(false);
+  }
 
-  const [variantInfo, setVariantInfo] = useState();
-  return (
-    <Box
-      px={4}
-      backgroundColor="#F4F6F8"
-      minHeight="90vh"
-      display="flex"
-      flexDirection="column"
-    >
+  useEffect(() => {
+    getData();
+    return () => {
+      setLoading(true);
+    };
+  }, [trigger]);
+
+  const handleDeleteProduct = () => {
+    ProductAPI.deleteProduct(product.id);
+    alert(product.name + " has been deleted!");
+    history.push(`/san-pham`);
+  };
+
+  const handleDeleteVariant = (id) => {
+      ProductAPI.deleteVariant(id);
+  }
+
+  const triggerReload = () => {
+    setTrigger(!trigger);
+  };
+
+  return !loading ? (
+    <Box px={4} backgroundColor="#F4F6F8" display="flex" flexDirection="column">
       <Box py={1}>
         <Typography
           underline="none"
           onClick={() => history.push("/san-pham")}
           sx={{
-            display: 'flex',
-            '&:hover': {
-              cursor: 'pointer',
-            }
+            display: "flex",
+            "&:hover": {
+              cursor: "pointer",
+            },
           }}
         >
           <ArrowBackIosNew sx={{ mr: 2 }} />
@@ -65,26 +87,33 @@ function ProductDetails() {
         pt={1}
         pb={2}
       >
-        <Typography variant="h4">
-          Điện thoại Iphone 13 XS Pro Plus Max
-        </Typography>
+        <Typography variant="h4">{product.name}</Typography>
         <Box display="flex">
-          <Button variant="outlined" color="error" sx={{ mr: 2 }}>
+          <Button
+            variant="outlined"
+            color="error"
+            sx={{ mr: 2 }}
+            onClick={() => handleDeleteProduct()}
+          >
             Xóa
           </Button>
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => history.push(`/san-pham/${product.id}/chinh-sua`)}
+          >
             Chỉnh sửa sản phẩm
           </Button>
         </Box>
       </Box>
 
-        <Box
-          py={2}
-          px={1}
-          display="flex"
-          flexDirection="column"
-          backgroundColor="white"
-        >
+      <Box
+        py={2}
+        px={1}
+        display="flex"
+        flexDirection="column"
+        backgroundColor="white"
+      >
         <Typography variant="subtitle1" id="tableTitle" px={1}>
           Chi tiết sản phẩm
         </Typography>
@@ -126,9 +155,9 @@ function ProductDetails() {
               justifyContent="space-evenly"
               height="100%"
             >
-              <Typography>: Điện thoại</Typography>
-              <Typography>: Nhãn hiệu</Typography>
-              <Typography>: Số phiên bản</Typography>
+              <Typography>: {product.category.name}</Typography>
+              <Typography>: {product.brand}</Typography>
+              <Typography>: {variants.length}</Typography>
             </Box>
             <Box
               width="25%"
@@ -139,7 +168,7 @@ function ProductDetails() {
             >
               <Typography>Ngày tạo</Typography>
               <Typography>Ngày cập nhật cuối</Typography>
-              <Typography>Xem Mô tả</Typography>
+              <DescriptionDialog description={product.description}/>
             </Box>
             <Box
               width="25%"
@@ -148,8 +177,8 @@ function ProductDetails() {
               justifyContent="space-evenly"
               height="100%"
             >
-              <Typography>: 17/11/2021 09:42</Typography>
-              <Typography>: 22/12/2021 11:16</Typography>
+              <Typography>: {product.createdAt}</Typography>
+              <Typography>: {product.updatedAt}</Typography>
               {/* placeholder */}
               <Typography sx={{ opacity: "0" }}>.</Typography>
             </Box>
@@ -159,102 +188,46 @@ function ProductDetails() {
       <Typography variant="h4" sx={{ pt: 2 }}>
         Phiên bản sản phẩm
       </Typography>
-      <Box pt={1} display="flex">
-        <Box display="flex" width="33.3333%" mr={3}>
-          <VariantsTable setVariantInfo={setVariantInfo} />
+      <Box pt={1} pb={2} display="flex">
+        <Box width="33.3333%" mr={3}>
+          <VariantsTable
+            setVariantInfo={setVariantInfo}
+            variants={variants}
+            setViewState={setViewState}
+            handleDeleteVariant={handleDeleteVariant}
+          />
         </Box>
-        <Box
-          display="flex"
-          flexDirection="column"
-          width="66.6667%"
-          height="30px"
-        >
-          <Box
-            py={2}
-            px={1}
-            display="flex"
-            flexDirection="column"
-            backgroundColor="white"
-          >
-            <Typography
-              variant="subtitle1"
-              id="tableTitle"
-              px={1}
-            >
-              Thông tin chi tiết phiên bản                             {variantInfo}
-            </Typography>
-            <Divider sx={{ my: 1 }} />
-            <Box display="flex" px={1}  py={2}>
-              <Box
-                width="33.3333%"
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-between"
-              >
-                <Typography variant="body2">Tên phiên bản sản phẩm</Typography>
-                <Typography variant="body2">Mã SKU</Typography>
-                <Typography variant="body2">Đơn vị tính</Typography>
-                <Typography variant="body2">Khối lượng</Typography>
-                <Typography variant="body2">Màu sắc</Typography>
-              </Box>
-              <Box
-                width="33.3333%"
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-evenly"
-              >
-                <Typography variant="body2">
-                  : Áo khoác Chino thời thượng SID56708 - Trắng
-                </Typography>
-                <Typography variant="body2">: PVN05</Typography>
-                <Typography variant="body2">: SID56708</Typography>
-                <Typography variant="body2">: 1KG</Typography>
-                <Typography variant="body2">: Trắng</Typography>
-              </Box>
-              <Box width="33.3333%" textAlign="center">
-                <Box
-                  component="img"
-                  src="https://sapo.dktcdn.net/100/583/900/variants/3b602191-ec13-43ff-a785-76ecffaff3be.jpg"
-                  height="150px"
-                  width="129px"
-                />
-              </Box>
-            </Box>
-          </Box>
-          <Box
-            mt={3}
-            py={2}
-            px={1}
-            display="flex"
-            flexDirection="column"
-            backgroundColor="white"
-          >
-            <Typography
-              // sx={{ flex: "1 1 100%" }}
-              variant="subtitle1"
-              id="tableTitle"
-              px={1}
-            >
-              Giá sản phẩm
-            </Typography>
-            <Divider sx={{ my: 1 }} />
-            <Box display="flex" flexDirection="column" px={1} py={2}>
-              <Grid container>
-                <Grid item xs={2}><Typography variant="body2">Giá bán buôn</Typography></Grid>
-                <Grid item xs={4}><Typography variant="body2">: 200.000</Typography></Grid>
-                <Grid item xs={2}><Typography variant="body2">Giá bán lẻ</Typography></Grid>
-                <Grid item xs={4}><Typography variant="body2">: 150.000</Typography></Grid>
-              </Grid>
-              <Divider sx={{my: 1}} />
-              <Grid container>
-                <Grid item xs={2}><Typography variant="body2">Giá nhập</Typography></Grid>
-                <Grid item xs={4}><Typography variant="body2">: 100.000</Typography></Grid>
-              </Grid>
-            </Box>
-          </Box>
+        <Box display="flex" flexDirection="column" width="66.6667%">
+          {(() => {
+            switch (viewState) {
+              case 1:
+                return <VariantDetails variantInfo={variantInfo} setViewState={setViewState}/>;
+              case 2:
+                return (
+                  <CreateVariant
+                    triggerReload={triggerReload}
+                    productId={product.id}
+                    setViewState={setViewState}
+                  />
+                );
+              case 3:
+                return (
+                  <EditVariant
+                    triggerReload={triggerReload}
+                    productId={product.id}
+                    setViewState={setViewState}
+                    variantData={variantInfo}
+                  />
+                );
+            }
+          })()}
+
+          {/* <ViewControl viewState={viewState} variantInfo={variantInfo} /> */}
         </Box>
       </Box>
     </Box>
+  ) : (
+    <div>loading</div>
   );
 }
 

@@ -56,9 +56,9 @@ public class OrderServiceImpl implements OrderService {
     // luu thong tin 1 don nhap hang
     @Override
     @Transactional
-    public Order createdOrder(OrderDto orderDto) {
+    public Order createdOrder(Long orderCreatorId, OrderDto orderDto) {
         Supplier supplier = supplierService.getSupplierById(orderDto.getSupplierId());
-        User user = userRepository.findById(orderDto.getCreatedBy()).orElseThrow( () -> new RecordNotFoundException("User not found") );
+        User user = userService.getUserById(orderCreatorId);
         Order newOrder = orderRepository.save(new Order(
 
                 orderDto.getOrderCode(),
@@ -80,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
             newOrder.setTotalAmount(newOrder.getTotalAmount() + item.getPrice()*item.getQuantity());
             supplierService.increaseDebt(newOrder.getSupplier().getId(), newOrder.getTotalAmount());
         } );
-
+        newOrder.setTotalAmount(newOrder.getTotalAmount() * 0.94);
         return newOrder;
     }
 
@@ -179,5 +179,10 @@ public class OrderServiceImpl implements OrderService {
 
         order.setPaidAmount(order.getPaidAmount() + offset);
         return order;
+    }
+
+    @Override
+    public List<VariantsOrder> findAllVariantInOrder(long id) {
+        return variantsOrderRepository.findVariantByOrderId(id);
     }
 }

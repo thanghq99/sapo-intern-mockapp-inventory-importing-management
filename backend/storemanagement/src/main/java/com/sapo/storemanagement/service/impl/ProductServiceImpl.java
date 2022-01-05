@@ -1,10 +1,7 @@
 package com.sapo.storemanagement.service.impl;
 
 import com.sapo.storemanagement.dto.ProductVariantDto;
-import com.sapo.storemanagement.entities.Category;
-import com.sapo.storemanagement.entities.Product;
-import com.sapo.storemanagement.entities.SellableStatus;
-import com.sapo.storemanagement.entities.Variant;
+import com.sapo.storemanagement.entities.*;
 import com.sapo.storemanagement.exception.BadNumberException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
 import com.sapo.storemanagement.repository.ProductRepository;
@@ -31,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> listAllProducts() {
-        return productRepository.findAll();
+        return productRepository.findAllByRecordStatus(RecordStatus.ACTIVE.getStatus());
     }
 
     @Override
@@ -65,22 +62,25 @@ public class ProductServiceImpl implements ProductService {
                 productVariantDto.getMaterial(), productVariantDto.getUnit(),
                 productVariantDto.getOriginalPrice(), productVariantDto.getWholeSalePrice(),
                 productVariantDto.getRetailPrice());
-        variantService.saveVariant(newVariant);
+        variantService.saveDefaultVariant(newVariant);
 
         return newProduct;
     }
 
     @Override
     @Transactional
-    public Product updateProduct(long id, Product product) {
+    public Product updateProduct(long id, ProductVariantDto productVariantDto) {
+        Category category = categoryService.getCategoryById(productVariantDto.getCategoryId());
+
         Product productToUpdate = productRepository
                 .findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("product not found"));
-        productToUpdate.setName(product.getName());
-        productToUpdate.setDescription(product.getDescription());
-        productToUpdate.setImageUrl(product.getImageUrl());
-        productToUpdate.setCategory(product.getCategory());
-        productToUpdate.setBrand(product.getBrand());
+        productToUpdate.setName(productVariantDto.getProductName());
+        productToUpdate.setCategory(category);
+        productToUpdate.setDescription(productVariantDto.getDescription());
+        productToUpdate.setImageUrl(productVariantDto.getImageUrl());
+        productToUpdate.setBrand(productVariantDto.getBrand());
+        productToUpdate.setWeight(productVariantDto.getWeight());
         return productRepository.save(productToUpdate);
     }
 
@@ -93,7 +93,10 @@ public class ProductServiceImpl implements ProductService {
         Product productToDelete = productRepository
                 .findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("product not found"));
-        productRepository.deleteById(id);
+        productToDelete.setRecordStatus(RecordStatus.DELETED);
+
+        variantService.listAllVariantsByProductId(productToDelete.getId())
+                .forEach(variant -> variant.setRecordStatus(RecordStatus.DELETED));
         return productToDelete.getName() + "was deleted!";
     }
 

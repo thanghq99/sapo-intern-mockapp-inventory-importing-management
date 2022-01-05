@@ -1,10 +1,15 @@
-import CallAPI from "./CallAPI";
+import callAPI from "./CallAPI";
 
 function Login_RegisterAPI() {
-    
+
     // [LOGIN] 
-    this.logincall = (user) => {
-        return CallAPI.post('login', user);
+    this.loginCall = (admin) => {
+        return callAPI.post('login', admin);
+    }
+
+    // [REGISTER]
+    this.registerCall = (newAdmin) => {
+        return callAPI.post("register", newAdmin);
     }
 }
 

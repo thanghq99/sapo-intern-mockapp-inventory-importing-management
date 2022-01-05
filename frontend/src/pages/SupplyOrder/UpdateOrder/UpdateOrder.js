@@ -15,6 +15,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import CancelIcon from '@mui/icons-material/Cancel';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
 
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -59,6 +62,8 @@ export default function DetailOrder() {
     const [productSelect, setProductSelect] = React.useState([]);
     const [variantOrder, setVariantOrder] = React.useState([]);
 
+    const [productSelectLast, setProductSelectLast] = React.useState([]);
+
     const [originalPrice, setOriginalPrice] = React.useState([]);
     const [num, setNum] = React.useState([]);
 
@@ -66,15 +71,15 @@ export default function DetailOrder() {
         setOpenMenu(!openMenu);
     }
 
-    function add(newValue) {
+    async function add(newValue) {
         const productAdd = [
             // copy the current users state
-            ...productList, (newValue)
+            ...productSelect, (newValue)
             // now you can add a new object to add to the array
 
         ];
 
-        setProductSelect(
+        await setProductSelect(
             productAdd
         )
 
@@ -83,7 +88,7 @@ export default function DetailOrder() {
 
     async function handleSelectProd(event, newValue) {
         console.log(newValue);
-        if (newValue == null) { }
+        if (newValue == null) {}
         else {
             // setCheck(false);
             let checked = false;
@@ -93,9 +98,9 @@ export default function DetailOrder() {
                     // setCheck(true);
                 }
             })
-            // console.log(check);
+            console.log(checked);
             if (!checked) {
-                add(newValue);
+               await add(newValue);
             }
         }
     }
@@ -108,18 +113,32 @@ export default function DetailOrder() {
     const handleOriPrice = async (list) => {
         setOriginalPrice(
             list.reduce(
-                (obj, product) => ({ ...obj, [product.id]: product.originalPrice }),
+                (obj, product) => ({ ...obj, [product.variant.id]: product.price }),
                 {}
             )
         )
         setNum(
             list.reduce(
-                (obj, product) => ({ ...obj, [product.id]: 1 }),
+                (obj, product) => ({ ...obj, [product.variant.id]: product.suppliedQuantity }),
                 {}
             )
         )
-        Quantity();
+        // Quantity();
     }
+    const handleOriPriceProduct = async (list) => {
+        setOriginalPrice (
+            list.reduce(
+                (obj, product) => ({ ...obj,[product.id]: product.originalPrice }),
+                {}
+              )
+        )
+        setNum(
+            list.reduce(
+                (obj, product) => ({ ...obj,[product.id]: 1 }),
+                {}
+              )
+        )
+}
     const Quantity = async () => {
         variantOrder.map((item) => {
             setNum({ ...num, [item.variant.id]: item.suppliedQuantity })
@@ -131,8 +150,9 @@ export default function DetailOrder() {
         let numCate = 0;
         let totalTmp = 0;
         const test = [];
-        console.log(lastProduct);
+        // console.log(lastProduct);
         console.log(num);
+        console.log(originalPrice);
         productSelect.map((item) => {
             tmp += Number(num[item.id]);
             numCate +=1;
@@ -151,7 +171,7 @@ export default function DetailOrder() {
             // ]);
             
         });
-        setProductSelect(test);
+        setProductSelectLast(test);
         setNumProduct(tmp);
         setNumCategory(numCate);
         setTotal(totalTmp);
@@ -196,16 +216,24 @@ export default function DetailOrder() {
 
     async function getData() {
         try {
-            console.log(searchParam);
+            // console.log(searchParam);
             const orderRes = await OrderAPI.OrderItem(searchParam);
-            const ProductRes = await ProductAPI.ProductList();
+            const ProductRes = await ProductAPI.getAllVariants();
             const VariantOrdertRes = await OrderAPI.VariantOrder(searchParam);
+
+            let tmp = [];
+            VariantOrdertRes.data.map( (item) => {
+                tmp.push(item.variant)
+            })
+            setProductSelect(tmp);
 
             setVariantOrder(VariantOrdertRes.data);
             setProductList(ProductRes.data);
             setOrder(orderRes.data);
-
-            handleOriPrice(ProductRes.data);
+            handleOriPriceProduct(ProductRes.data);
+            handleOriPrice(VariantOrdertRes.data);
+           
+            setDate(orderRes.data.expectedTime);
 
             setNameSupplier(orderRes.data.supplier.name);
             setDebt(orderRes.data.supplier.debt);
@@ -222,14 +250,9 @@ export default function DetailOrder() {
 
     }
     React.useEffect(() => {
-        variantOrder.map((item) => {
-            handleSelectProd(1, item.variant);
-        })
-    }, [variantOrder])
-    React.useEffect(() => {
         getData();
     }, [])
-    console.log(productSelect);
+    console.log(variantOrder);
 
     return (
 
@@ -242,25 +265,7 @@ export default function DetailOrder() {
                     </Box>
                     <Box sx={{ display: "flex" }} ml={2}>
                         <Typography sx={{ fontSize: 36, fontWeight: 450 }}>{codeOrder}</Typography>
-                        {/* <Box onClick={handleMenu} sx={{ display: "flex", alignItems: "center" }} ml={2} >
-                            <Typography>Thêm thao tác</Typography>
-                            {openMenu ? <ExpandLess /> : <ExpandMore />}
-
-                        </Box> */}
                     </Box>
-                    {/* <Collapse in={openMenu} timeout="auto" unmountOnExit 
-                    sx={{display: "block", zIndex: 101, width: "100px", position: "absolute",
-                     backgroundColor: "#FFFFFF", border: "1px solid #cfcfcf", marginLeft: "80px", marginTop: "-10px"}}>
-                        <List component="div" disablePadding>
-                            <ListItem>
-                                Sửa
-                            </ListItem>
-                            <Divider />
-                            <ListItem>
-                                Huỷ
-                            </ListItem>
-                        </List>
-                    </Collapse> */}
                 </Box>
                 <Box className="test"  >
                     <Box className="supplier">
@@ -289,7 +294,7 @@ export default function DetailOrder() {
                                 <Typography>Email: {email}</Typography>
                             </Box>
                             <Box className="billing-ex-add">
-                                <Typography className="title-add" >Địa chỉ xuất hàng</Typography>
+                                <Typography className="title-add" >Địa chỉ xuất hoá đơn</Typography>
                                 <Typography>Giao hàng</Typography>
                                 <Typography>----</Typography>
                                 <Typography>{address}</Typography>
@@ -348,7 +353,7 @@ export default function DetailOrder() {
                             <List>
                                 {
 
-                                    productSelect.map(item => {
+                                    productSelect?.map(item => {
                                         return (
                                             <ListItem className="product-item"
                                             >
@@ -363,7 +368,7 @@ export default function DetailOrder() {
                                                     onChange={e => setOriginalPrice({ ...originalPrice, [item.id]: e.target.value })}
                                                 /></Box>
 
-                                                <Typography sx={{ width: '10%', textAlign: "center" }}></Typography>
+                                                <Typography sx={{ width: '10%', textAlign: "center" }}>{Number(num[item.id]) * Number(originalPrice[item.id])}</Typography>
                                                 <CancelIcon sx={{ width: '2%', textAlign: "center" }} onClick={() => handDeleteProduct(item.id)} />
                                             </ListItem>)
                                     })
@@ -417,12 +422,26 @@ export default function DetailOrder() {
                         <Box className="time-supply-order">
                             <Box className='title'>Ngày nhận hàng</Box>
                             <Box className="time">
-                                {expectedTime}
+                                <LocalizationProvider dateAdapter={AdapterDateFns}  >
+                                    <DatePicker
+                                        inputFormat="yyyy/MM/dd"
+                                        value={date}
+                                        
+                                        onChange={(views) => {
+                                            setDate(views);
+                                        }}
+                                        renderInput={(params) => <TextField {...params} placeholder="Ngày nhận" />}
+                                    />
+                                </LocalizationProvider>
                             </Box>
+                            {/* <Box className="time">
+                                {expectedTime}
+                            </Box> */}
                         </Box>
                         <Box className="note">
                             <Box className="title">Ghi chú</Box>
-                            <Box>{description}</Box>
+                            <textarea className="content-note" onChange={(e) => setDescription(e.target.value)}>{description}</textarea>
+                            <Box></Box>
                         </Box>
 
                     </Box>

@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -43,6 +44,9 @@ public class Product {
     @NotBlank(message = "Image URL cannot be blank")
     @Size(max = 255, message = "Image URL length cannot exceed {max}")
     private String imageUrl;
+
+    @Column(name = "record_status", columnDefinition = "varchar(32) DEFAULT 'Đang hoạt động'")
+    private RecordStatus recordStatus = RecordStatus.ACTIVE;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -123,6 +127,14 @@ public class Product {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public String getRecordStatus() {
+        return recordStatus.getStatus();
+    }
+
+    public void setRecordStatus(RecordStatus recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public LocalDateTime getUpdatedAt() {

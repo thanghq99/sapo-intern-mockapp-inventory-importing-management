@@ -178,7 +178,7 @@ export default function DetailOrder() {
                                 <Typography>Email: {email}</Typography>
                             </Box>
                             <Box className="billing-ex-add">
-                                <Typography className="title-add" >Địa chỉ xuất hàng</Typography>
+                                <Typography className="title-add" >Địa chỉ xuất hoá đơn</Typography>
                                 <Typography>Giao hàng</Typography>
                                 <Typography>----</Typography>
                                 <Typography>{address}</Typography>
@@ -240,7 +240,7 @@ export default function DetailOrder() {
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography sx={{ fontWeight: 700 }}>Phải trả</Typography>
-                                    <Typography>{totalAmount* 0.94} vnd</Typography>
+                                    <Typography>{(totalAmount* 0.94).toFixed(2)} vnd</Typography>
                                 </Box>
 
                             </Box>

@@ -1,5 +1,5 @@
 import { Box, Autocomplete, Button, TextField, Divider, InputAdornment } from '@mui/material'
-import { ArrowBack, Download, Upload, Group, AddCircle, Search, FilterAlt } from '@mui/icons-material';
+import {Download, Upload, Group, AddCircle, Search, FilterAlt } from '@mui/icons-material';
 import React from 'react'
 import { Link } from 'react-router-dom'
 import TableSupply from '../../components/table/TableListSuppliers'
@@ -18,15 +18,8 @@ const topFilter = [
 ]
 export default function Supplier() {
     return (
-        <Box px={4} pt={2} backgroundColor="#F4F6F8" minHeight='90vh'>
+        <Box className="navig" px={4} pt={2} backgroundColor="#F4F6F8" minHeight='90vh'>
             <Box display='flex' flexDirection='column'>
-                <Box display='flex' pb={1}>
-                    <ArrowBack />
-                    <Link to="/nha-cung-cap" underline="none">
-                        Quay lại trang trước
-                    </Link>
-                </Box>
-
                 <Box display='flex' justifyContent='space-between' py={2} px={2} backgroundColor='white'>
                     <Box display='flex' alignItems='center'>
                         <Box display='flex' pr={2}>
@@ -72,7 +65,7 @@ export default function Supplier() {
                         size='small'
                     />
                     <Box display='flex' alignItems='center'>
-                        <FilterAlt fontSize="large"/>
+                        <FilterAlt fontSize="large" />
                         <Autocomplete
                             multiple
                             options={topFilter}
