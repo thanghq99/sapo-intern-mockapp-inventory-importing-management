@@ -1,9 +1,13 @@
 package com.sapo.storemanagement.controller;
 
+import com.sapo.storemanagement.dto.ImportReceiptDto;
 import com.sapo.storemanagement.dto.OrderDto;
 import com.sapo.storemanagement.dto.PayOrderDto;
+import com.sapo.storemanagement.entities.ImportReceipt;
 import com.sapo.storemanagement.entities.Order;
+import com.sapo.storemanagement.entities.PaymentInvoice;
 import com.sapo.storemanagement.entities.VariantsOrder;
+import com.sapo.storemanagement.service.ImportReceiptService;
 import com.sapo.storemanagement.service.OrderService;
 import com.sapo.storemanagement.service.PaymentInvoiceService;
 import com.sapo.storemanagement.utils.RequestUtils;
@@ -22,6 +26,9 @@ public class OrderController {
 
     @Autowired
     private PaymentInvoiceService paymentInvoiceService;
+
+    @Autowired
+    private ImportReceiptService importReceiptService;
 
     @Autowired
     private RequestUtils requestUtils;
@@ -58,14 +65,15 @@ public class OrderController {
     }
 
     @PostMapping("/{orderId}/payment")
-    public void payOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody PayOrderDto payOrderDto) {
+    public PaymentInvoice payOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody PayOrderDto payOrderDto) {
         Long invoiceCreatorId = requestUtils.getUserIdFromRequest(servletRequest);
-        paymentInvoiceService.savePaymentInvoice(invoiceCreatorId, orderId, payOrderDto);
+        return paymentInvoiceService.savePaymentInvoice(invoiceCreatorId, orderId, payOrderDto);
     }
 
-    @PostMapping("/{id}/import")
-    public void importOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody PayOrderDto amount) {
-        Long orderCreatorId = requestUtils.getUserIdFromRequest(servletRequest);
+    @PostMapping("/{orderId}/import")
+    public ImportReceipt importOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody ImportReceiptDto importReceiptDto) {
+        Long creatorId = requestUtils.getUserIdFromRequest(servletRequest);
+        return importReceiptService.saveImportReceipt(creatorId, orderId, importReceiptDto);
     }
 }
 // @Valid put
