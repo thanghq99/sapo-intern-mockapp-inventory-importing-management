@@ -78,9 +78,9 @@ public class OrderServiceImpl implements OrderService {
 
             variantsOrderRepository.save(variantsOrder);
             newOrder.setTotalAmount(newOrder.getTotalAmount() + item.getPrice()*item.getQuantity());
-            supplierService.increaseDebt(newOrder.getSupplier().getId(), newOrder.getTotalAmount());
         } );
         newOrder.setTotalAmount(newOrder.getTotalAmount() * 0.94);
+        supplierService.increaseDebt(newOrder.getSupplier().getId(), newOrder.getTotalAmount());
         return newOrder;
     }
 
