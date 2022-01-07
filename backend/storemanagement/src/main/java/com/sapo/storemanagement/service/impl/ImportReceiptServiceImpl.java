@@ -1,34 +1,47 @@
 package com.sapo.storemanagement.service.impl;
 
-import com.sapo.storemanagement.entities.ImportReceipt;
-import com.sapo.storemanagement.entities.ImportedStatus;
-import com.sapo.storemanagement.entities.Order;
-import com.sapo.storemanagement.entities.OrderStatus;
+import com.sapo.storemanagement.dto.ImportReceiptDto;
+import com.sapo.storemanagement.entities.*;
 import com.sapo.storemanagement.exception.BadNumberException;
-import com.sapo.storemanagement.exception.ForeignKeyConstraintException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
-import com.sapo.storemanagement.exception.UniqueKeyConstraintException;
 import com.sapo.storemanagement.repository.ImportReceiptRepository;
-import com.sapo.storemanagement.repository.OrderRepository;
-import com.sapo.storemanagement.repository.UserRepository;
+import com.sapo.storemanagement.repository.VariantsOrderRepository;
 import com.sapo.storemanagement.service.ImportReceiptService;
+import com.sapo.storemanagement.service.OrderService;
+import com.sapo.storemanagement.service.VariantService;
+import com.sapo.storemanagement.utils.itemcodegenerator.ItemCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @Service
 public class ImportReceiptServiceImpl implements ImportReceiptService {
     private final ImportReceiptRepository importReceiptRepository;
-    private final OrderRepository orderRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private OrderService orderService;
 
     @Autowired
-    public ImportReceiptServiceImpl(ImportReceiptRepository importReceiptRepository, OrderRepository orderRepository) {
+    private UserService userService;
+
+    @Autowired
+    private VariantsOrderRepository variantsOrderRepository;
+
+    @Autowired
+    private VariantService variantService;
+
+    @Autowired
+    @Qualifier("import-receipt-code-generator")
+    private ItemCodeGenerator itemCodeGenerator;
+
+    @Autowired
+    public ImportReceiptServiceImpl(ImportReceiptRepository importReceiptRepository) {
         this.importReceiptRepository = importReceiptRepository;
-        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -48,27 +61,43 @@ public class ImportReceiptServiceImpl implements ImportReceiptService {
     }
 
     @Override
-    public ImportReceipt saveImportReceipt(ImportReceipt importReceipt) {
-        // check unique key constraint
-        if(importReceiptRepository.existsByCode(importReceipt.getCode())) {
-            throw new UniqueKeyConstraintException("Import receipt's code already existed");
-        }
+    @Transactional
+    public ImportReceipt saveImportReceipt(long creatorId, long orderId, ImportReceiptDto importReceiptDto) {
+        User user = userService.getUserById(creatorId);
+        Order order = orderService.getOrderById(orderId);
 
-        // check foreign key constraint
-        if(!userRepository.existsById(importReceipt.getCreatedBy().getId())) {
-            throw new ForeignKeyConstraintException("Import receipt's creator does not exist");
-        }
-
-        Order order = orderRepository
-            .findById(importReceipt.getOrder().getId())
-            .orElseThrow(() -> new ForeignKeyConstraintException("Referenced order does not exist"));
-
-        if(!order.getImportedStatus().equals(ImportedStatus.AWAITING.getStatus()) ||
-            !order.getStatus().equals(OrderStatus.PROCESSING.getStatus())) {
+        if(!order.getStatus().equals(OrderStatus.PROCESSING.getStatus())) {
             throw new IllegalStateException("Order is not in awaiting status");
         }
-        order.setImportedStatus(ImportedStatus.IMPORTED);
 
+        List<VariantsOrder> variantsOrders = variantsOrderRepository.findVariantByOrderId(orderId);
+        long totalQuantity = 0;
+        for (VariantsOrder variantsOrder : variantsOrders) {
+            totalQuantity += variantsOrder.getSuppliedQuantity();
+        }
+
+        long importedQuantity = importReceiptDto.getTotalQuantity();
+        ImportedStatus importedStatus;
+
+        if(importedQuantity < totalQuantity) {
+            importedStatus = ImportedStatus.PARTIAL_IMPORTED;
+        }
+        else if(importedQuantity == totalQuantity) {
+            importedStatus = ImportedStatus.IMPORTED;
+        }
+        else {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Imported quantity cannot exceed total quantity");
+        }
+        order.setImportedStatus(importedStatus);
+
+        importReceiptDto.getLineItems().forEach(lineItemDto -> {
+            Variant variant = variantService.getVariantById(lineItemDto.getVariantId());
+            variant.setInventoryQuantity(variant.getInventoryQuantity() + lineItemDto.getQuantity());
+            variant.setSellableQuantity(variant.getSellableQuantity() + lineItemDto.getQuantity());
+        });
+
+        String code = itemCodeGenerator.generate();
+        ImportReceipt importReceipt = new ImportReceipt(code, order, user);
         return importReceiptRepository.save(importReceipt);
     }
 }
