@@ -28,9 +28,4 @@ public class ImportReceiptController {
     public List<ImportReceipt> findAllImportReceipts(){
         return importReceiptService.listAllImportReceipts();
     }
-
-    @PostMapping
-    public ImportReceipt createImportReceipt(@RequestBody @Valid ImportReceipt importReceipt){
-        return importReceiptService.saveImportReceipt(importReceipt);
-    }
 }
