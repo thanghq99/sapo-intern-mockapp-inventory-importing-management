@@ -4,6 +4,8 @@ import java.util.List;
 public class VariantsListDto {
     private String code;
 
+    private List<String> size;
+    private String unit;
     private List<String> color;
     private List<String> material;
 
@@ -15,6 +17,10 @@ public class VariantsListDto {
     private Long sellableQuantity;
 
     public String getCode() { return code; }
+
+    public List<String> getSize() { return size; }
+
+    public String getUnit() { return unit; }
 
     public List<String> getColor() { return color; }
 
