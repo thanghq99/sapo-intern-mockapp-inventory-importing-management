@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import ProductAPI from '../../api/ProductAPI'
 import { Box, TextField, InputAdornment, Button, Divider, Card, CardContent, Typography } from '@mui/material'
-import { Search, FilterAltOutlined, AddCircle } from '@mui/icons-material';
+import { Search, FilterAltOutlined, AddCircle, FactCheck } from '@mui/icons-material';
 import ProductsTable from './ProductsTable'
 import "./products.scss"
 
@@ -13,7 +13,7 @@ export default function Products() {
     const [variants, setVariants] = useState([]);
     const [totalStorage, setTotalStorage] = useState(0);
     const [activeVariants, setActiveVariants] = useState();
-    const [outStockProducts, setOutStockProducts] = useState(null);
+    const [outStockProducts, setOutStockProducts] = useState();
     function getData() {
         ProductAPI.productList()
             .then((pResult) => {
@@ -22,14 +22,14 @@ export default function Products() {
         ProductAPI.getAllVariants()
             .then((vResult) => {
                 setVariants(vResult.data);
-                console.log(variants)
+                console.log(vResult);
+                setTotalStorage(vResult.data.reduce((sum, v) => sum + v.inventoryQuantity, 0));
+                setActiveVariants(vResult.data.filter((variant) => variant.sellableStatus === "Có thể bán").length);
+                setOutStockProducts(vResult.data.filter((variant) => variant.inventoryQuantity === 0).length);
             }).then(() => {
                 //couting
-                var sum = variants.reduce((sum, v) => sum + v.inventoryQuantity, 0);
-                setTotalStorage(sum);
-                setActiveVariants(variants.filter((variant) => variant.sellableStatus === "Có thể bán").length);
-                setOutStockProducts(variants.filter((variant) => variant.inventoryQuantity === 0).length);
-            })
+                
+            });
         return true;
     }
     useEffect(() => {
@@ -45,7 +45,7 @@ export default function Products() {
                         size='small'
                         sx={{ mr: 2, width: 600 }}
                         InputProps={{
-                            endAdornment: (
+                            startAdornment: (
                                 <InputAdornment position="end">
                                     <Search />
                                 </InputAdornment>
@@ -56,7 +56,7 @@ export default function Products() {
                         variant="outlined"
                         size='small'
                         InputProps={{
-                            endAdornment: (
+                            startAdornment: (
                                 <InputAdornment position="start">
                                     <FilterAltOutlined />
                                 </InputAdornment>
@@ -65,16 +65,19 @@ export default function Products() {
                 </Box>
                 <Box>
                     <Button
-                        variant='outlined'
+                        variant='contained'
                         sx={{ mr: 2 }}
-                        endIcon={<AddCircle />}
+                        startIcon={<AddCircle />}
                         onClick={() => { history.push('/tao-san-pham') }}
                     >Thêm sản phẩm
                     </Button>
-                    <Button
-                        variant='outlined'
-                        endIcon={<AddCircle />}
-                    >Xuất file Excel</Button>
+                    <Link style={{ textDecoration: "none" }} to="/kiem-hang">
+                        <Button
+                            variant='contained'
+                            startIcon={<FactCheck />}
+                        >Kiểm hàng</Button>
+                    </Link>
+
                 </Box>
             </Box>
             <Divider />

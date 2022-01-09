@@ -5,13 +5,17 @@ import com.sapo.storemanagement.entities.*;
 import com.sapo.storemanagement.exception.BadNumberException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
 import com.sapo.storemanagement.repository.ProductRepository;
+import com.sapo.storemanagement.repository.VariantRepository;
 import com.sapo.storemanagement.service.CategoryService;
 import com.sapo.storemanagement.service.ProductService;
 import com.sapo.storemanagement.service.VariantService;
+import com.sapo.storemanagement.utils.itemcodegenerator.ItemCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,10 +25,17 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Autowired
+    private VariantRepository variantRepository;
+
+    @Autowired
     private CategoryService categoryService;
 
     @Autowired
     private VariantService variantService;
+
+    @Autowired
+    @Qualifier("variant-code-generator")
+    private ItemCodeGenerator itemCodeGenerator;
 
     @Override
     public List<Product> listAllProducts() {
@@ -56,15 +67,57 @@ public class ProductServiceImpl implements ProductService {
             SellableStatus.SELLABLE
         ));
 
-        Variant newVariant = new Variant(
-            newProduct, productVariantDto.getVariantCode(),
-            productVariantDto.getInventoryQuantity(), productVariantDto.getSellableQuantity(),
-            productVariantDto.getSize(), productVariantDto.getColor(),
-            productVariantDto.getMaterial(), productVariantDto.getUnit(),
-            productVariantDto.getOriginalPrice(), productVariantDto.getWholeSalePrice(), productVariantDto.getRetailPrice()
-        );
-        variantService.saveDefaultVariant(newVariant);
+//        Variant newVariant = new Variant(
+//            newProduct, productVariantDto.getVariantCode(),
+//            productVariantDto.getInventoryQuantity(), productVariantDto.getSellableQuantity(),
+//            productVariantDto.getSize(), productVariantDto.getColor(),
+//            productVariantDto.getMaterial(), productVariantDto.getUnit(),
+//            productVariantDto.getOriginalPrice(), productVariantDto.getWholeSalePrice(), productVariantDto.getRetailPrice()
+//        );
+//        variantService.saveDefaultVariant(newVariant);
+        List<Variant> newVariantsList = new ArrayList<Variant>();
+        int colorNumbers = productVariantDto.getColor().toArray().length;
+        int materialNumbers = productVariantDto.getMaterial().toArray().length;
+        int sizeNumbers = productVariantDto.getSize().toArray().length;
 
+        if(colorNumbers == 0 && materialNumbers == 0 && sizeNumbers == 0) {
+            Variant newVariant = new Variant(
+                    newProduct,
+                    itemCodeGenerator.generate(),
+                    productVariantDto.getInventoryQuantity(),
+                    productVariantDto.getSellableQuantity(),
+                    "",
+                    "",
+                    "",
+                    productVariantDto.getUnit(),
+                    productVariantDto.getOriginalPrice(),
+                    productVariantDto.getWholeSalePrice(),
+                    productVariantDto.getRetailPrice()
+            );
+            variantRepository.save(newVariant);
+        } else {
+            for (String color : productVariantDto.getColor()) {
+                for (String material : productVariantDto.getMaterial()) {
+                    for (String size : productVariantDto.getSize()) {
+                        Variant newVariant = new Variant(
+                                newProduct,
+                                itemCodeGenerator.generate(),
+                                productVariantDto.getInventoryQuantity(),
+                                productVariantDto.getSellableQuantity(),
+                                size,
+                                color,
+                                material,
+                                productVariantDto.getUnit(),
+                                productVariantDto.getOriginalPrice(),
+                                productVariantDto.getWholeSalePrice(),
+                                productVariantDto.getRetailPrice()
+                        );
+                        newVariantsList.add(newVariant);
+                        variantRepository.save(newVariant);
+                    }
+                }
+            }
+        }
         return newProduct;
     }
 

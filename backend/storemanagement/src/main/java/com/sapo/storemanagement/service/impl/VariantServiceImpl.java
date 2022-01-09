@@ -1,6 +1,7 @@
 package com.sapo.storemanagement.service.impl;
 
 import com.sapo.storemanagement.dto.ProductVariantDto;
+import com.sapo.storemanagement.dto.VariantsListDto;
 import com.sapo.storemanagement.entities.*;
 import com.sapo.storemanagement.exception.BadNumberException;
 import com.sapo.storemanagement.exception.ForeignKeyConstraintException;
@@ -9,16 +10,23 @@ import com.sapo.storemanagement.exception.UniqueKeyConstraintException;
 import com.sapo.storemanagement.repository.ProductRepository;
 import com.sapo.storemanagement.repository.VariantRepository;
 import com.sapo.storemanagement.service.VariantService;
+import com.sapo.storemanagement.utils.itemcodegenerator.ItemCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class VariantServiceImpl implements VariantService {
     private final VariantRepository variantRepository;
     private final ProductRepository productRepository;
+
+    @Autowired
+    @Qualifier("variant-code-generator")
+    private ItemCodeGenerator itemCodeGenerator;
 
     @Autowired
     public VariantServiceImpl(VariantRepository variantRepository, ProductRepository productRepository) {
@@ -64,18 +72,63 @@ public class VariantServiceImpl implements VariantService {
     }
 
     @Override
-    @Transactional
     public Variant saveVariant(ProductVariantDto productVariantDto) {
-        Product product = productRepository.findById(productVariantDto.getProductId()).get();
-        Variant newVariant = new Variant(
-                product,
-                productVariantDto.getVariantCode(),
-                productVariantDto.getInventoryQuantity(), productVariantDto.getSellableQuantity(),
-                productVariantDto.getSize(), productVariantDto.getColor(),
-                productVariantDto.getMaterial(), productVariantDto.getUnit(),
-                productVariantDto.getOriginalPrice(), productVariantDto.getWholeSalePrice(), productVariantDto.getRetailPrice()
-        );
-        return variantRepository.save(newVariant);
+        return null;
+    }
+
+    //    @Override
+//    @Transactional
+//    public Variant saveVariant(ProductVariantDto productVariantDto) {
+//        Product product = productRepository.findById(productVariantDto.getProductId()).get();
+//        if(variantRepository.existsByCode(productVariantDto.getVariantCode())) {
+//            throw new UniqueKeyConstraintException("Variant code duplicated");
+//        }
+//        Variant newVariant = new Variant(
+//                product,
+//                productVariantDto.getVariantCode(),
+//                productVariantDto.getInventoryQuantity(), productVariantDto.getSellableQuantity(),
+//                productVariantDto.getSize(), productVariantDto.getColor(),
+//                productVariantDto.getMaterial(), productVariantDto.getUnit(),
+//                productVariantDto.getOriginalPrice(), productVariantDto.getWholeSalePrice(), productVariantDto.getRetailPrice()
+//        );
+//        return variantRepository.save(newVariant);
+//    }
+    @Override
+    @Transactional
+    public List<Variant> saveVariant(VariantsListDto variantDto) {
+        Product product = productRepository.findById(3L).get();
+//        if(variantRepository.existsByCode(variantDto.getCode())) {
+//            throw new UniqueKeyConstraintException("Variant code duplicated");
+//        }
+        List<Variant> newVariantsList = new ArrayList<Variant>();
+
+        for (String color : variantDto.getColor()) {
+            for (String material : variantDto.getMaterial()) {
+                    for (String size : variantDto.getSize()) {
+                        Variant newVariant = new Variant(
+                                product,
+//                              variantDto.getCode() + GetVariantPostfixAttribute.getVariantPostfixAttribute(size)
+//                                        + GetVariantPostfixAttribute.getVariantPostfixAttribute(color)
+//                                        + GetVariantPostfixAttribute.getVariantPostfixAttribute(material),
+//                                variantDto.getCode(),
+                                itemCodeGenerator.generate(),
+                                variantDto.getInventoryQuantity(),
+                                variantDto.getSellableQuantity(),
+                                size,
+                                color,
+                                material,
+                                variantDto.getUnit(),
+                                variantDto.getOriginalPrice(),
+                                variantDto.getWholeSalePrice(),
+                                variantDto.getRetailPrice()
+                        );
+                        newVariantsList.add(newVariant);
+                        variantRepository.save(newVariant);
+                    }
+            }
+        }
+
+        return newVariantsList;
     }
 
     @Override
@@ -98,27 +151,27 @@ public class VariantServiceImpl implements VariantService {
             throw new ForeignKeyConstraintException("Referenced product does not exist");
         }
 
-        existingVariant.setCode(productVariantDto.getVariantCode());
-        existingVariant.setColor(productVariantDto.getColor());
-        existingVariant.setMaterial(productVariantDto.getMaterial());
-        existingVariant.setInventoryQuantity(productVariantDto.getInventoryQuantity());
-        existingVariant.setSellableQuantity(productVariantDto.getSellableQuantity());
-        existingVariant.setOriginalPrice(productVariantDto.getOriginalPrice());
-        existingVariant.setRetailPrice(productVariantDto.getRetailPrice());
-        existingVariant.setWholeSalePrice(productVariantDto.getWholeSalePrice());
-        existingVariant.setSize(productVariantDto.getSize());
-        existingVariant.setUnit(productVariantDto.getUnit());
+//        existingVariant.setCode(productVariantDto.getVariantCode());
+//        existingVariant.setColor(productVariantDto.getColor());
+//        existingVariant.setMaterial(productVariantDto.getMaterial());
+//        existingVariant.setInventoryQuantity(productVariantDto.getInventoryQuantity());
+//        existingVariant.setSellableQuantity(productVariantDto.getSellableQuantity());
+//        existingVariant.setOriginalPrice(productVariantDto.getOriginalPrice());
+//        existingVariant.setRetailPrice(productVariantDto.getRetailPrice());
+//        existingVariant.setWholeSalePrice(productVariantDto.getWholeSalePrice());
+//        existingVariant.setSize(productVariantDto.getSize());
+//        existingVariant.setUnit(productVariantDto.getUnit());
 
         return variantRepository.save(existingVariant);
     }
 
     @Override
     @Transactional
-    public String deleteVariant(Long id) {
+    public Variant deleteVariant(Long id) {
         Variant variant = this.getVariantById(id);
         variant.setRecordStatus(RecordStatus.DELETED);
         variantRepository.save(variant);
 
-        return "Delete Variant " + id;
+        return variant;
     }
 }

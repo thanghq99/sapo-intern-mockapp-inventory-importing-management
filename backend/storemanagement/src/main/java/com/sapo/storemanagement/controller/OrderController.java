@@ -70,10 +70,10 @@ public class OrderController {
         return paymentInvoiceService.savePaymentInvoice(invoiceCreatorId, orderId, payOrderDto);
     }
 
-    @PostMapping("/{orderId}/import")
-    public ImportReceipt importOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody ImportReceiptDto importReceiptDto) {
-        Long creatorId = requestUtils.getUserIdFromRequest(servletRequest);
-        return importReceiptService.saveImportReceipt(creatorId, orderId, importReceiptDto);
-    }
+//    @PostMapping("/{orderId}/import")
+//    public ImportReceipt importOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody ImportReceiptDto importReceiptDto) {
+//        Long creatorId = requestUtils.getUserIdFromRequest(servletRequest);
+//        return importReceiptService.saveImportReceipt(creatorId, orderId, importReceiptDto);
+//    }
 }
 // @Valid put
