@@ -200,7 +200,6 @@ function ProductDetails({setStateAlert}) {
             setVariantInfo={setVariantInfo}
             variants={variants}
             setViewState={setViewState}
-            handleDeleteVariant={handleDeleteVariant}
           />
         </Box>
         <Box display="flex" flexDirection="column" width="66.6667%">

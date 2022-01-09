@@ -12,13 +12,7 @@ import Divider from "@mui/material/Divider";
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link,
-    useHistory
-} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 
 import './UpdateOrder.scss';
@@ -130,9 +124,11 @@ export default function DetailOrder() {
 
                         </Box>
                     </Box>
-                    <Collapse in={openMenu} timeout="auto" unmountOnExit 
-                    sx={{display: "block", zIndex: 101, width: "100px", position: "absolute",
-                     backgroundColor: "#FFFFFF", border: "1px solid #cfcfcf", marginLeft: "80px", marginTop: "-10px"}}>
+                    <Collapse in={openMenu} timeout="auto" unmountOnExit
+                        sx={{
+                            display: "block", zIndex: 101, width: "100px", position: "absolute",
+                            backgroundColor: "#FFFFFF", border: "1px solid #cfcfcf", marginLeft: "80px", marginTop: "-10px"
+                        }}>
                         <List component="div" disablePadding>
                             <ListItem>
                                 Sửa
@@ -224,7 +220,7 @@ export default function DetailOrder() {
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography>Tổng tiền</Typography>
-                                    <Typography>{totalAmount*1.06}</Typography>
+                                    <Typography>{totalAmount * 1.06}</Typography>
                                 </Box>
                                 <Box className="pay-info-item" sx={{ color: "#007BFF" }}>
                                     <Typography >Tổng chiết khấu</Typography>

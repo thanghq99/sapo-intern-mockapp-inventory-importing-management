@@ -6,13 +6,12 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { ContactTable, DebtTable, HistoryOrderTable } from '../../components/table/TableDetailSupplier';
+import { DebtTable, HistoryOrderTable } from '../../components/table/TableDetailSupplier';
 import DeleteIcon from '@mui/icons-material/Delete';
 import BrowserUpdatedIcon from '@mui/icons-material/BrowserUpdated';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { ArrowBackIosNew } from "@mui/icons-material";
-import Slide from '@mui/material/Slide';
 import SupplierAPI from '../../api/SupplierAPI';
 import { useHistory } from 'react-router-dom';
 
@@ -63,9 +62,18 @@ function a11yProps(index) {
     };
 }// end tab panel
 
-// transition of alert 
-function SlideTransition(props) {
-    return <Slide {...props} direction="up" />;
+// function set color status supplier ***********************/
+const handleColor = (key) => {
+    switch (key) {
+        case "UNCOOPERATIVE":
+            return "red";
+
+        case "COOPERATIVE":
+            return "#1ec709";
+
+        default:
+            return "black";
+    }
 }
 
 
@@ -75,8 +83,6 @@ export default function DetailSupplier() {
 
     const [stateAlert, setStateAlert] = useState({ severity: "", variant: "", open: false, content: "" });
 
-
-
     //open and close Modal
     const [openModal, setOpenModal] = React.useState(false);
     const handleOpenModal = (string) => {
@@ -84,10 +90,9 @@ export default function DetailSupplier() {
         setOpenModal(true);
     }
     const handleCloseModal = () => setOpenModal(false);
+
     //set mode modal ==> delete or edit
     const [modeModal, setModeModal] = useState("")
-
-
 
     //get info supplier
     const searchParam = window.location.search.replace("?id=", "");
@@ -156,6 +161,18 @@ export default function DetailSupplier() {
     }
 
 
+    //get orders by supplier
+    const [historyOrders, setHistoryOrders] = React.useState([])
+    React.useEffect(() => {
+        const fetchHistoryOrder = async () => {
+            const res = await SupplierAPI.ordersBySupplier(searchParam);
+            setHistoryOrders(res.data);
+        }
+        fetchHistoryOrder();
+    }, [searchParam])
+
+
+
     // set value tab panel 
     const [value, setValue] = useState(0);
     const handleChange = (event, newValue) => {
@@ -185,7 +202,7 @@ export default function DetailSupplier() {
                     <Button className="button_activity" variant="outlined"><i className="far fa-question-circle"></i> <span>Trợ giúp</span> </Button>                </div>
                 <hr />
                 <div className="tagname_supplier">
-                    <h2>Tên nhà cung cấp</h2>
+                    <h2 style={{ fontSize: "2em" }}>{supplier.name}</h2>
                 </div>
                 <div className="info_supplier">
                     <div className="first_info">
@@ -195,14 +212,14 @@ export default function DetailSupplier() {
                                     Thông tin nhà cung cấp
                                 </Grid>
                                 <Grid className="upper_item" item xs={4}>
-                                    <p style={{ color: "#1ec709" }}>{supplier.activityStatus}</p>
+                                    <p style={{ color: handleColor(supplier.activityStatus) }}>{supplier.activityStatus}</p>
                                 </Grid>
                                 <Grid className="upper_item" item xs={4}>
                                     <Button onClick={() => handleOpenModal("edit")} variant="outlined" startIcon={<BrowserUpdatedIcon />}>
-                                        Chinh sua
+                                        Chỉnh sửa
                                     </Button>&emsp;
                                     <Button color="error" onClick={() => handleOpenModal("delete")} variant="outlined" startIcon={<DeleteIcon />}>
-                                        Xoa
+                                        Xóa
                                     </Button>
                                 </Grid>
                             </Grid>
@@ -251,19 +268,15 @@ export default function DetailSupplier() {
                             >
                                 <Tab label="Lịch sử nhập hàng" {...a11yProps(0)} />
                                 <Tab label="Công nợ" {...a11yProps(1)} />
-                                <Tab label="Liên hệ" {...a11yProps(2)} />
-                                <Tab label="Ghi chú" {...a11yProps(3)} />
+                                <Tab label="Ghi chú" {...a11yProps(2)} />
                             </Tabs>
                             <TabPanel style={{ width: "100%" }} value={value} index={0}>
-                                <HistoryOrderTable />
+                                <HistoryOrderTable ordersBySupplier={historyOrders} />
                             </TabPanel>
                             <TabPanel style={{ width: "100%" }} value={value} index={1}>
-                                <DebtTable />
+                                <DebtTable ordersBySupplier={historyOrders} />
                             </TabPanel>
-                            <TabPanel style={{ width: "100%" }} value={value} index={2}>
-                                <ContactTable />
-                            </TabPanel>
-                            <TabPanel value={value} index={3}>
+                            <TabPanel value={value} index={2}>
                                 <TextareaAutosize
                                     disabled
                                     aria-label="minimum height"
