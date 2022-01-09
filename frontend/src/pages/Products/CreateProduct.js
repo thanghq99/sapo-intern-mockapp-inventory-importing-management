@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Typography,
@@ -6,13 +6,12 @@ import {
   Divider,
   Grid,
   TextField,
-  Tooltip,
   Switch,
   Select,
   MenuItem,
   Chip
 } from "@mui/material";
-import { ArrowBackIosNew, Info, Add } from "@mui/icons-material";
+import { ArrowBackIosNew, Add } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 import "./createProduct.scss";
 import CategoryAPI from "../../api/CategoryAPI";
@@ -21,8 +20,9 @@ import CategorySelect from "../../components/product/category/CategorySelect";
 
 function CreateProduct({ setStateAlert }) {
   const history = useHistory();
-  const longText =
-    "Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus. Praesent non nunc mollis, fermentum neque at, semper arcu.";
+  const colorRef = useRef(null);
+  const materialRef = useRef(null);
+  const sizeRef = useRef(null);
 
   const [categories, setCategories] = useState([]);
   const [colors, setColors] = useState(['vang', 'do', 'xanh']);
@@ -65,7 +65,7 @@ function CreateProduct({ setStateAlert }) {
   }
 
   //PROPERTIES
-  const handleKeyDown = (evt, array, setArray) => {
+  const handleKeyDown = (evt, array, setArray, ref) => {
     if(evt.keyCode == 13 && evt.target.value) {
       let newArray = array;
       if (newArray.includes(evt.target.value)) {
@@ -79,6 +79,7 @@ function CreateProduct({ setStateAlert }) {
         newArray.push(evt.target.value);
       }
       setArray([...newArray]);
+      ref.current.value = ""
     }
    };
 
@@ -132,6 +133,7 @@ function CreateProduct({ setStateAlert }) {
 
   const handleCreateProduct = () => {
     updateProductProperties();
+    console.log(product);
     ProductAPI.createProduct(product)
       .then((res) => {
         setStateAlert({
@@ -191,7 +193,6 @@ function CreateProduct({ setStateAlert }) {
             variant="contained"
             color="primary"
             onClick={() => {
-              console.log(product);
               handleCreateProduct();
             }}
           >
@@ -219,9 +220,6 @@ function CreateProduct({ setStateAlert }) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Tên sản phẩm
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
@@ -235,9 +233,6 @@ function CreateProduct({ setStateAlert }) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Khối lượng
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
@@ -251,9 +246,6 @@ function CreateProduct({ setStateAlert }) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Đơn vị tính
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
@@ -284,9 +276,6 @@ function CreateProduct({ setStateAlert }) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Giá bán lẻ
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
@@ -300,9 +289,6 @@ function CreateProduct({ setStateAlert }) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Giá bán buôn
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
@@ -319,9 +305,6 @@ function CreateProduct({ setStateAlert }) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Giá nhập
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
@@ -352,16 +335,14 @@ function CreateProduct({ setStateAlert }) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Màu sắc
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
                     name="colors"
                     placeholder="Nhập màu sắc"
+                    inputRef={colorRef}
                     // onChange={handleChange}
-                    onKeyDown={(evt) => handleKeyDown(evt, colors, setColors)}
+                    onKeyDown={(evt) => handleKeyDown(evt, colors, setColors, colorRef)}
                     InputProps={{
                       startAdornment: colors.map((item, index) => (
                         <Chip
@@ -378,16 +359,14 @@ function CreateProduct({ setStateAlert }) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Chất liệu
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
                     name="materials"
                     placeholder="Nhập chất liệu"
+                    inputRef={materialRef}
                     // onChange={handleChange}
-                    onKeyDown={(evt) => handleKeyDown(evt, materials, setMaterials)}
+                    onKeyDown={(evt) => handleKeyDown(evt, materials, setMaterials, materialRef)}
                     InputProps={{
                       startAdornment: materials.map((item, index) => (
                         <Chip
@@ -404,16 +383,14 @@ function CreateProduct({ setStateAlert }) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Kích thước
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
                     name="materials"
                     placeholder="Nhập kích thước"
+                    inputRef={sizeRef}
                     // onChange={handleChange}
-                    onKeyDown={(evt) => handleKeyDown(evt, sizes, setSizes)}
+                    onKeyDown={(evt) => handleKeyDown(evt, sizes, setSizes, sizeRef)}
                     InputProps={{
                       startAdornment: sizes.map((item, index) => (
                         <Chip
@@ -485,9 +462,6 @@ function CreateProduct({ setStateAlert }) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Số lượng trong kho
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
@@ -501,9 +475,6 @@ function CreateProduct({ setStateAlert }) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Số lượng có thể bán
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
@@ -539,9 +510,6 @@ function CreateProduct({ setStateAlert }) {
                     >
                       Loại sản phẩm
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <Select
                     id="category-select"
@@ -573,9 +541,6 @@ function CreateProduct({ setStateAlert }) {
                     >
                       Nhãn hiệu
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
@@ -593,9 +558,6 @@ function CreateProduct({ setStateAlert }) {
                     >
                       Mô tả sản phẩm
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
@@ -614,9 +576,6 @@ function CreateProduct({ setStateAlert }) {
                     >
                       Trạng thái
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <Box display="flex" justifyContent="space-between">
                     <Typography>Cho phép bán</Typography>

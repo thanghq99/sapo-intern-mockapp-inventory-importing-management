@@ -76,29 +76,48 @@ public class ProductServiceImpl implements ProductService {
 //        );
 //        variantService.saveDefaultVariant(newVariant);
         List<Variant> newVariantsList = new ArrayList<Variant>();
+        int colorNumbers = productVariantDto.getColor().toArray().length;
+        int materialNumbers = productVariantDto.getMaterial().toArray().length;
+        int sizeNumbers = productVariantDto.getSize().toArray().length;
 
-        for (String color : productVariantDto.getColor()) {
-            for (String material : productVariantDto.getMaterial()) {
-                for (String size : productVariantDto.getSize()) {
-                    Variant newVariant = new Variant(
-                            newProduct,
-                            itemCodeGenerator.generate(),
-                            productVariantDto.getInventoryQuantity(),
-                            productVariantDto.getSellableQuantity(),
-                            size,
-                            color,
-                            material,
-                            productVariantDto.getUnit(),
-                            productVariantDto.getOriginalPrice(),
-                            productVariantDto.getWholeSalePrice(),
-                            productVariantDto.getRetailPrice()
-                    );
-                    newVariantsList.add(newVariant);
-                    variantRepository.save(newVariant);
+        if(colorNumbers == 0 && materialNumbers == 0 && sizeNumbers == 0) {
+            Variant newVariant = new Variant(
+                    newProduct,
+                    itemCodeGenerator.generate(),
+                    productVariantDto.getInventoryQuantity(),
+                    productVariantDto.getSellableQuantity(),
+                    "",
+                    "",
+                    "",
+                    productVariantDto.getUnit(),
+                    productVariantDto.getOriginalPrice(),
+                    productVariantDto.getWholeSalePrice(),
+                    productVariantDto.getRetailPrice()
+            );
+            variantRepository.save(newVariant);
+        } else {
+            for (String color : productVariantDto.getColor()) {
+                for (String material : productVariantDto.getMaterial()) {
+                    for (String size : productVariantDto.getSize()) {
+                        Variant newVariant = new Variant(
+                                newProduct,
+                                itemCodeGenerator.generate(),
+                                productVariantDto.getInventoryQuantity(),
+                                productVariantDto.getSellableQuantity(),
+                                size,
+                                color,
+                                material,
+                                productVariantDto.getUnit(),
+                                productVariantDto.getOriginalPrice(),
+                                productVariantDto.getWholeSalePrice(),
+                                productVariantDto.getRetailPrice()
+                        );
+                        newVariantsList.add(newVariant);
+                        variantRepository.save(newVariant);
+                    }
                 }
             }
         }
-
         return newProduct;
     }
 
