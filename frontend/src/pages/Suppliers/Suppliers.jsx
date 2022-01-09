@@ -1,21 +1,11 @@
-import { Box, Autocomplete, Button, TextField, Divider, InputAdornment } from '@mui/material'
-import {Download, Upload, Group, AddCircle, Search, FilterAlt } from '@mui/icons-material';
+import { Box, Button, TextField, Divider, InputAdornment } from '@mui/material'
+import { Download, Upload, Group, AddCircle, Search, FilterAltOutlined } from '@mui/icons-material';
 import React from 'react'
 import { Link } from 'react-router-dom'
 import TableSupply from '../../components/table/TableListSuppliers'
 import "./suppliers.scss"
 
-const topFilter = [
-    { title: 'lua chon so 1 ' },
-    { title: 'lua chon so 2 ' },
-    { title: 'lua chon so 3 ' },
-    { title: 'lua chon so 4 ' },
-    { title: 'lua chon so 5 ' },
-    { title: 'lua chon so 6 ' },
-    { title: 'lua chon so 7 ' },
-    { title: 'lua chon so 8 ' },
-    { title: 'lua chon so 9 ' }
-]
+
 export default function Supplier() {
     return (
         <Box className="navig" px={4} pt={2} backgroundColor="#F4F6F8" minHeight='90vh'>
@@ -65,22 +55,18 @@ export default function Supplier() {
                         size='small'
                     />
                     <Box display='flex' alignItems='center'>
-                        <FilterAlt fontSize="large" />
-                        <Autocomplete
-                            multiple
-                            options={topFilter}
-                            sx={{ width: 200 }}
-                            getOptionLabel={(option) => option.title}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    variant="standard"
-                                    size='small'
-                                    variant="outlined"
-                                    placeholder="Lọc nhiều giá trị"
-                                />
-                            )}
-                        />
+                        <TextField
+                            placeholder="Lọc sản phẩm"
+                            variant="outlined"
+                            size='small'
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="start">
+                                        <FilterAltOutlined />
+                                    </InputAdornment>
+                                ),
+                            }}>
+                        </TextField>
                     </Box>
                 </Box>
                 <TableSupply />

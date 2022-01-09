@@ -29,5 +29,11 @@ function SupplierAPI() {
     }
 
 
+
+    //[GET] - [Order_Supplier]
+    this.ordersBySupplier = (id) => {
+        return callAPI.get(`suppliers/${id}/orders`);
+    }
+
 }
 export default new SupplierAPI();

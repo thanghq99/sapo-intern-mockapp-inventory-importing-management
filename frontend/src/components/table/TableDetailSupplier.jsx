@@ -12,73 +12,10 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import SupplierAPI from '../../api/SupplierAPI';
 
-function createHistoryOrderTable(Id, Code, TransactionStatus, ImportedStatus, Status, CreatedBy, CreatedAt, UpdatedAt, TotalAmount, TotalPrice, ExpectedTime) {
-    return {
-        Id, Code, TransactionStatus, ImportedStatus, Status, CreatedBy, CreatedAt, UpdatedAt, TotalAmount, TotalPrice, ExpectedTime,
-    };
-}
 
-function Row(props) {
-    const { row } = props;
-    const [open, setOpen] = React.useState(false);
 
-    return (
-        <React.Fragment>
-            <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-                <TableCell>
-                    <IconButton
-                        aria-label="expand row"
-                        size="small"
-                        onClick={() => setOpen(!open)}
-                    >
-                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                    </IconButton>
-                </TableCell>
-                <TableCell component="th" scope="row">
-                    {row.Id}
-                </TableCell>
-                <TableCell>{row.Code}</TableCell>
-                <TableCell>{row.TransactionStatus}</TableCell>
-                <TableCell>{row.ImportedStatus}</TableCell>
-                <TableCell>{row.Status}</TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                        <Box sx={{ margin: 1 }}>
-                            <Typography variant="h6" gutterBottom component="div">
-                                Chi tiết
-                            </Typography>
-                            <Table size="small" aria-label="purchases">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Nhân viên</TableCell>
-                                        <TableCell>Tạo đơn</TableCell>
-                                        <TableCell>Cập nhật</TableCell>
-                                        <TableCell>Tổng số lượng</TableCell>
-                                        <TableCell>Tổng giá</TableCell>
-                                        <TableCell>Nhập dự kiến</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">{row.CreatedBy}</TableCell>
-                                        <TableCell>{row.CreatedAt}</TableCell>
-                                        <TableCell>{row.UpdatedAt}</TableCell>
-                                        <TableCell>{row.TotalAmount}</TableCell>
-                                        <TableCell>{row.TotalPrice}</TableCell>
-                                        <TableCell>{row.ExpectedTime}</TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </Box>
-                    </Collapse>
-                </TableCell>
-            </TableRow>
-        </React.Fragment>
-    );
-}
 
 // Row.propTypes = {
 //     row: PropTypes.shape({
@@ -98,13 +35,98 @@ function Row(props) {
 //     }).isRequired,
 // };
 
-const rowsHistoryOrder = [
-    createHistoryOrderTable('No1', "CODE1", "Chưa giao dịch", "Đã nhập hàng", "Đang hoạt động", "Nhân viên 1", "12/12/2021", "13/12/2021", "200", "100.000", "14/12/2021"),
-    createHistoryOrderTable('No1', "CODE1", "Chưa giao dịch", "Đã nhập hàng", "Đang hoạt động", "Nhân viên 1", "12/12/2021", "13/12/2021", "200", "100.000", "14/12/2021"),
-    createHistoryOrderTable('No1', "CODE1", "Chưa giao dịch", "Đã nhập hàng", "Đang hoạt động", "Nhân viên 1", "12/12/2021", "13/12/2021", "200", "100.000", "14/12/2021"),
-    createHistoryOrderTable('No1', "CODE1", "Chưa giao dịch", "Đã nhập hàng", "Đang hoạt động", "Nhân viên 1", "12/12/2021", "13/12/2021", "200", "100.000", "14/12/2021")
-];
-export function HistoryOrderTable() {
+// function set color -- status of activity ***********************/
+const handleColor = (key) => {
+    switch (key) {
+        case "Chưa thanh toán":
+            return "red";
+
+        case "Thanh toán một phần":
+            return "blue";
+
+        case "Đã thanh toán":
+            return "#1ec709";
+
+        case "Đang giao dịch":
+            return "blue";
+
+        case "Chờ nhập kho":
+            return "black";
+
+        case "Đã nhập kho":
+            return "#1ec709";
+
+        default:
+            return "black";
+    }
+}
+
+
+function Row(props) {
+    const { row } = props;
+    const [open, setOpen] = React.useState(false);
+
+    return (
+        <React.Fragment>
+            <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+                <TableCell>
+                    <IconButton
+                        aria-label="expand row"
+                        size="small"
+                        onClick={() => setOpen(!open)}
+                    >
+                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    </IconButton>
+                </TableCell>
+                <TableCell component="th" scope="row">
+                    {row.id}
+                </TableCell>
+                <TableCell>{row.code}</TableCell>
+                <TableCell sx={{ color: handleColor(row.transactionStatus) }}>{row.transactionStatus}</TableCell>
+                <TableCell sx={{ color: handleColor(row.importedStatus) }}>{row.importedStatus}</TableCell>
+                <TableCell sx={{ color: handleColor(row.status) }}>{row.status}</TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Box sx={{ margin: 1 }}>
+                            <Typography variant="h6" gutterBottom component="div">
+                                Chi tiết
+                            </Typography>
+                            <Table size="small" aria-label="purchases">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Nhân viên</TableCell>
+                                        <TableCell>Tạo đơn</TableCell>
+                                        <TableCell>Cập nhật</TableCell>
+                                        <TableCell>Tổng tiền hàng</TableCell>
+                                        <TableCell>Đã trả</TableCell>
+                                        <TableCell>Ngày nhập dự kiến</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell component="th" scope="row">{row.createdBy.username}</TableCell>
+                                        <TableCell>{row.createdAt}</TableCell>
+                                        <TableCell>{row.updatedAt}</TableCell>
+                                        <TableCell>{(row.totalAmount).toLocaleString()}</TableCell>
+                                        <TableCell>{(row.paidAmount).toLocaleString()}</TableCell>
+                                        <TableCell>{row.expectedTime}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </Box>
+                    </Collapse>
+                </TableCell>
+            </TableRow>
+        </React.Fragment>
+    );
+}
+
+
+
+export function HistoryOrderTable({ ordersBySupplier }) {
+
     return (
         <TableContainer component={Paper}>
             <Table aria-label="collapsible table">
@@ -113,13 +135,13 @@ export function HistoryOrderTable() {
                         <TableCell />
                         <TableCell>Id Đơn nhập</TableCell>
                         <TableCell>Mã</TableCell>
-                        <TableCell>Trạng thái thanh toan</TableCell>
+                        <TableCell>Trạng thái thanh toán</TableCell>
                         <TableCell>Trạng thái nhập</TableCell>
-                        <TableCell>Trạng thái giao dich</TableCell>
+                        <TableCell>Trạng thái giao dịch</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rowsHistoryOrder.map((row) => (
+                    {ordersBySupplier.map((row) => (
                         <Row key={row.name} row={row} />
                     ))}
                 </TableBody>
@@ -130,67 +152,8 @@ export function HistoryOrderTable() {
 
 
 
+export function DebtTable({ ordersBySupplier }) {
 
-function createContactTable(Name, PhoneNumber, Gene, Age, Address) {
-    return { Name, PhoneNumber, Gene, Age, Address };
-}
-const rowsContactTable = [
-    createContactTable('Nguyen Van A', "0987654321", "Nam", "30", "Hai Ba Trung, Ha Noi"),
-    createContactTable('Nguyen Van A', "0987654321", "Nam", "30", "Hai Ba Trung, Ha Noi"),
-    createContactTable('Nguyen Van A', "0987654321", "Nam", "30", "Hai Ba Trung, Ha Noi")
-];
-export function ContactTable() {
-    return (
-        <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Tên người đại diện</TableCell>
-                        <TableCell align="center">Số điện thoại</TableCell>
-                        <TableCell align="center">Giới tính</TableCell>
-                        <TableCell align="center">Tuổi</TableCell>
-                        <TableCell align="center">Địa chỉ</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rowsContactTable.map((row) => (
-                        <TableRow
-                            key={row.name}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            <TableCell component="th" scope="row">
-                                {row.Name}
-                            </TableCell>
-                            <TableCell align="center">{row.PhoneNumber}</TableCell>
-                            <TableCell align="center">{row.Gene}</TableCell>
-                            <TableCell align="center">{row.Age}</TableCell>
-                            <TableCell align="center">{row.Address}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-    );
-}
-
-
-
-
-
-function createDebtTable(IdBill, TotalAmount, PaidAmount) {
-    const Debt = TotalAmount - PaidAmount;
-    return { IdBill, TotalAmount, PaidAmount, Debt };
-}
-function subtotal(items) {
-    return items.map(({ Debt }) => Debt).reduce((sum, i) => sum + i, 0);
-}
-const rowsDebtTable = [
-    createDebtTable('BILL 01', 100000, 20000),
-    createDebtTable('BILL 02', 75000, 45000),
-    createDebtTable('Bill 03', 200000, 170000),
-];
-const TotalDebt = subtotal(rowsDebtTable);
-export function DebtTable() {
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 700 }} aria-label="spanning table">
@@ -202,29 +165,29 @@ export function DebtTable() {
                         <TableCell align="center">Số nợ</TableCell>
                     </TableRow>
                     <TableRow>
-                        <TableCell>Id đơn nợ</TableCell>
+                        <TableCell align="center">Id đơn nợ</TableCell>
                         <TableCell align="center">Tổng tiền</TableCell>
                         <TableCell align="center">Đã trả</TableCell>
                         <TableCell align="center">Còn nợ</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rowsDebtTable.map((row) => (
+                    {ordersBySupplier.map((row) => (
                         <TableRow key={row.desc}>
-                            <TableCell>{row.IdBill}</TableCell>
-                            <TableCell style={{ color: "blue" }} align="center">{row.TotalAmount}</TableCell>
-                            <TableCell style={{ color: "green" }} align="center">{row.PaidAmount}</TableCell>
-                            <TableCell style={{ color: "red" }} align="center">{row.Debt}</TableCell>
+                            <TableCell align="center">{row.id}</TableCell>
+                            <TableCell style={{ color: "blue" }} align="center">{(row.totalAmount.toLocaleString())}</TableCell>
+                            <TableCell style={{ color: "green" }} align="center">{(row.paidAmount.toLocaleString())}</TableCell>
+                            <TableCell style={{ color: "red" }} align="center">{(row.totalAmount - row.paidAmount).toLocaleString()}</TableCell>
                         </TableRow>
                     ))}
 
                     <TableRow>
                         <TableCell rowSpan={3} />
                         <TableCell colSpan={2}>Tổng nợ</TableCell>
-                        <TableCell style={{ color: "red" }} align="center">{TotalDebt}</TableCell>
+                        <TableCell style={{ color: "red" }} align="center">{(ordersBySupplier.map((row) => (row.totalAmount - row.paidAmount)).reduce((sum, i) => sum + i, 0)).toLocaleString()}</TableCell>
                     </TableRow>
                 </TableBody>
             </Table>
-        </TableContainer>
+        </TableContainer >
     );
 }
