@@ -64,7 +64,7 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
       })
       .catch(err => {
         setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra khi tạo thêm phiên bản sản phẩm" });
-        console.log(err)
+        console.log(err.response.data)
       });
   }
   return (
