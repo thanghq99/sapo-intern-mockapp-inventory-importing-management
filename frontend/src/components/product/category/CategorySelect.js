@@ -1,32 +1,100 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   TextField,
   Typography,
   InputAdornment,
-  InputBase,
+  Button,
+  MenuItem
 } from "@mui/material";
-import { Search, ArrowDropDown, Add } from "@mui/icons-material";
+import { makeStyles } from "@material-ui/core/styles";
+import { Search, ArrowDropDown, Add, Category } from "@mui/icons-material";
 import { useHistory, Link } from "react-router-dom";
 import CategoryAPI from "../../../api/CategoryAPI";
+import CreateCategoryModal from './CreateCategoryModal'
 import "./style.scss";
 
-function CategorySelect({}) {
+const useStyles = makeStyles(() => ({
+  noBorder: {
+    border: "none"
+  }
+}));
+
+function CategorySelect({handleSelectCategory}) {
+  const classes = useStyles();
+  const searchRef = useRef(null);
   const history = useHistory();
+  const [searchInput, setSearchInput] = useState('');
   const [category, setCategory] = useState(null);
   const [categories, setCategories] = useState([]);
   const [searchedCategories, setSearchedCategories] = useState([]);
+  const [categoryData, setCategoryData] = useState({});
 
   const [menuOpen, setMenuOpen] = useState(false);
 
   function getData() {
-    CategoryAPI.CategoryList().then((pResult) => {
-      setCategories(pResult.data);
-    });
+    CategoryAPI.CategoryList().then((result) => {
+      setCategories(result.data);
+      setSearchedCategories(result.data);
+    }).catch((err) => {
+      console.log(err);
+    })
   }
   useEffect(() => {
     getData();
   }, []);
+
+  const onClickChild = (e) => {
+    e.stopPropagation();
+    console.log('magic!');
+  }
+
+  //inputs
+  const handleChange = (e) => {
+    let value = e.target.value.toLowerCase();
+    setSearchInput(value);
+    let input = value.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
+    let result = categories.filter(category => category.name.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
+    setSearchedCategories([...result]);
+  }
+
+  //create category in text input
+  const handleKeyDown = (evt) => {
+    if(evt.keyCode == 13 && evt.target.value) {
+      try {
+        CategoryAPI.CreateCategory({
+          name: searchRef.current.value,
+          description: ""
+        })
+          .then(() => {
+            CategoryAPI.CategoryList()
+              .then((res) => {
+                let category = res.data.pop();
+                setCategory(category.name)
+                handleSelectCategory(category.id);
+                setMenuOpen(!menuOpen);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (err) {
+        console.log(err);
+      }
+      searchRef.current.value = "";
+    }
+   };
+
+   //
+   const handleSelect = (id) => {
+    let selectedCategory = categories.find(category => category.id === id);
+    setCategory(selectedCategory.name);
+    handleSelectCategory(id);
+    setMenuOpen(!menuOpen);
+   }
 
   return (
     <Box>
@@ -35,37 +103,51 @@ function CategorySelect({}) {
         onClick={() => setMenuOpen(!menuOpen)}
       >
         <Typography>
-          {category ? category.name : "Chọn loại sản phẩm"}
+          {category ? category : "Chọn loại sản phẩm"}
         </Typography>
         <ArrowDropDown
           className={`dropDownIcon` + (menuOpen ? " iconOpen" : "")}
         />
-      </div>
-      {menuOpen ? (
-        <div className="menuDiv">
-          <div>
-            <InputBase
+        {menuOpen ? (
+        <div className="menuDiv" onClick={(e)=> onClickChild(e)}>
+          <Box>
+            <TextField
+              variant="outlined"
               fullWidth
               name="category"
+              value={searchInput}
               placeholder="Tìm kiếm hoặc thêm sản phẩm mới"
-              // onChange={handleChange}
+              inputRef={searchRef}
+              onChange={(e) => handleChange(e)}
+              onKeyDown={(evt) => handleKeyDown(evt)}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <Search />
                   </InputAdornment>
                 ),
+                classes: { notchedOutline: classes.noBorder }
               }}
             />
-          </div>
-          <div>
-            <Add />
-            <Typography>Thêm loại sản phẩm mới</Typography>
-          </div>
+          </Box>
+          <Box>
+            {searchedCategories.map(category => (
+              <MenuItem key={category.id} onClick={() => handleSelect(category.id)}>
+                <Typography >{category.name}</Typography>
+              </MenuItem>
+            ))}
+          </Box>
+          <Box>
+          {/* <Button fullWidth startIcon={<Add />}>
+            Thêm loại sản phẩm mới
+          </Button> */}
+            <CreateCategoryModal handleSelectCategory={handleSelectCategory} setCategory={setCategory} setMenuOpen={setMenuOpen} menuOpen={menuOpen}/>
+          </Box>
         </div>
       ) : (
         ""
       )}
+      </div>
     </Box>
   );
 }

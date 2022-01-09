@@ -1,16 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Box,
-  Typography,
-  Button,
-  Divider,
-  Grid,
-  TextField,
-  Switch,
-  Select,
-  MenuItem,
-  Chip
-} from "@mui/material";
+import { Box, Typography, Button, Divider, Grid, TextField, Switch, Chip } from "@mui/material";
 import { ArrowBackIosNew, Add } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 import "./createProduct.scss";
@@ -99,14 +88,6 @@ function CreateProduct({ setStateAlert }) {
   }
 
   //category
-  const handleChangeCategory = (evt) => {
-    const value = evt.target.value;
-    setProduct({
-      ...product,
-      ["categoryId"]: value,
-    });
-  };
-
   const handleSelectCategory = (categoryId) => {
     setProduct({ ...product, categoryId: categoryId });
   };
@@ -511,25 +492,7 @@ function CreateProduct({ setStateAlert }) {
                       Loại sản phẩm
                     </Typography>
                   </Box>
-                  <Select
-                    id="category-select"
-                    value={product.categoryId}
-                    onChange={handleChangeCategory}
-                    fullWidth
-                    displayEmpty={true}
-                    renderValue={
-                      product.categoryId !== ""
-                        ? undefined
-                        : () => "Chọn loại sản phẩm"
-                    }
-                  >
-                    {categories.map((category, index) => {
-                      return (
-                        <MenuItem key={index} value={category.id}>{category.name}</MenuItem>
-                      );
-                    })}
-                  </Select>
-                  {/* <CategorySelect handleSelectCategory={handleSelectCategory} /> */}
+                  <CategorySelect handleSelectCategory={handleSelectCategory} />
                 </Grid>
                 <Grid item xs={12}>
                   <Box display="flex">

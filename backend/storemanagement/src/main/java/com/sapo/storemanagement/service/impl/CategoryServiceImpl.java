@@ -8,6 +8,7 @@ import com.sapo.storemanagement.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -39,6 +40,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public Category saveCategory(Category category) {
-        return categoryRepository.save(category);
+        Category newCategory = new Category(
+                StringUtils.capitalize(category.getName()),
+                category.getDescription()
+        );
+        return categoryRepository.save(newCategory);
     }
 }
