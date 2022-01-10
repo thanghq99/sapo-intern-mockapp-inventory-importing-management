@@ -1,10 +1,14 @@
 package com.sapo.storemanagement.dto;
 
+import java.util.List;
+
 public class ProductVariantDto {
     private String productName;
     private Long productId;
+
     private Long categoryId;
     private String brand;
+
     private Double weight;
     private String unit;
     private String description;
@@ -15,9 +19,9 @@ public class ProductVariantDto {
     private Double wholeSalePrice;
     private Double originalPrice;
 
-    private String color;
-    private String material;
-    private String size;
+    private List<String> size;
+    private List<String> color;
+    private List<String> material;
 
     private Long inventoryQuantity;
     private Long sellableQuantity;
@@ -64,15 +68,15 @@ public class ProductVariantDto {
         return originalPrice;
     }
 
-    public String getColor() {
+    public List<String> getColor() {
         return color;
     }
 
-    public String getMaterial() {
+    public List<String> getMaterial() {
         return material;
     }
 
-    public String getSize() {
+    public List<String> getSize() {
         return size;
     }
 
