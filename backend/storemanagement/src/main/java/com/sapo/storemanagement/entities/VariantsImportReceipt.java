@@ -12,7 +12,6 @@ public class VariantsImportReceipt {
 
     @Column(name = "quantity", nullable = false)
     @NotNull(message = "Quantity cannot be null")
-    @Size(min = 0, message = "Quantity cannot be less than {max}")
     private Long quantity;
 
     @ManyToOne
@@ -28,8 +27,10 @@ public class VariantsImportReceipt {
     public VariantsImportReceipt() {
     }
 
-    public VariantsImportReceipt(long variantId, long importReceiptId, long quantity) {
-        this.id = new VariantsImportReceiptId(variantId, importReceiptId);
+    public VariantsImportReceipt(Variant variant, ImportReceipt importReceipt, long quantity) {
+        this.variant = variant;
+        this.importReceipt = importReceipt;
+        this.id = new VariantsImportReceiptId(variant.getId(), importReceipt.getId());
         this.quantity = quantity;
     }
 
