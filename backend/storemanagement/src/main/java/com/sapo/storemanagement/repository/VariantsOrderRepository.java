@@ -16,4 +16,16 @@ public interface VariantsOrderRepository extends JpaRepository<VariantsOrder, Va
     List<VariantsOrder> findVariantByOrderId(@Param("orderId") long orderId);
     @Query(value = "delete from variants_orders where variants_orders.variant_id = :variantId and variants_orders.order_id = :orderId ", nativeQuery = true)
     VariantsOrder deleteVariantOderInOrder(@Param("orderId") long orderId, @Param("variantId") long variantId);
+
+    @Query(
+        value = "SELECT COUNT(1) FROM variants_orders WHERE order_id = :orderId AND variant_id = :variantId",
+        nativeQuery = true
+    )
+    int isVariantSuppliedInOrder(@Param("variantId") long variantId, @Param("orderId") long orderId);
+
+    @Query(
+        value = "SELECT supplied_quantity FROM variants_orders WHERE variant_id = :variantId AND order_id = :orderId",
+        nativeQuery = true
+    )
+    long totalSuppliedQuantityOfVariantInOrder(@Param("variantId") long variantId, @Param("orderId") long orderId);
 }
