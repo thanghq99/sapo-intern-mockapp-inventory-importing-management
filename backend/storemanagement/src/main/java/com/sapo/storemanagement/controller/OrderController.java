@@ -64,16 +64,26 @@ public class OrderController {
         return orderService.findAllVariantInOrder(id);
     }
 
-    @PostMapping("/{orderId}/payment")
+    @PostMapping("/{orderId}/payment-invoices")
     public PaymentInvoice payOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody PayOrderDto payOrderDto) {
         Long invoiceCreatorId = requestUtils.getUserIdFromRequest(servletRequest);
         return paymentInvoiceService.savePaymentInvoice(invoiceCreatorId, orderId, payOrderDto);
     }
 
-//    @PostMapping("/{orderId}/import")
-//    public ImportReceipt importOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody ImportReceiptDto importReceiptDto) {
-//        Long creatorId = requestUtils.getUserIdFromRequest(servletRequest);
-//        return importReceiptService.saveImportReceipt(creatorId, orderId, importReceiptDto);
-//    }
+    @GetMapping("/{orderId}/payment-invoices")
+    public List<PaymentInvoice> findAllPaymentInvoicesOfOrder(@PathVariable long orderId) {
+        return paymentInvoiceService.listAllPaymentInvoicesByOrder(orderId);
+    }
+
+    @PostMapping("/{orderId}/import-receipts")
+    public ImportReceipt importOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody ImportReceiptDto importReceiptDto) {
+        Long creatorId = requestUtils.getUserIdFromRequest(servletRequest);
+        return importReceiptService.saveImportReceipt(creatorId, orderId, importReceiptDto);
+    }
+
+    @GetMapping("/{orderId}/import-receipts")
+    public List<ImportReceipt> findAllImportReceiptsOfOrder(@PathVariable long orderId) {
+        return importReceiptService.listAllImportReceiptsByOrder(orderId);
+    }
 }
 // @Valid put

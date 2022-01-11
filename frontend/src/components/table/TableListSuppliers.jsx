@@ -1,31 +1,50 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+import {
+    Button,
+    Modal,
+    Box,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TablePagination,
+    TableRow,
+    TableSortLabel,
+    Toolbar,
+    Typography,
+    Paper,
+    Checkbox,
+    Tooltip,
+    FormControlLabel,
+    Switch,
+    IconButton,
+    Snackbar,
+    Alert
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import SupplierAPI from '../../api/SupplierAPI';
 
+// style modal ********************************************/
+const style = {
+    textAlign: "center",
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '1px solid gray',
+    boxShadow: 24,
+    p: 4,
+};
 
+//block func sort table *********************************/
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -35,13 +54,11 @@ function descendingComparator(a, b, orderBy) {
     }
     return 0;
 }
-
 function getComparator(order, orderBy) {
     return order === 'desc'
         ? (a, b) => descendingComparator(a, b, orderBy)
         : (a, b) => -descendingComparator(a, b, orderBy);
 }
-
 function stableSort(array, comparator) {
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
@@ -53,7 +70,9 @@ function stableSort(array, comparator) {
     });
     return stabilizedThis.map((el) => el[0]);
 }
+// end sort func ***************************************/
 
+// set title for table list suppliers ***************************/
 const headCells = [
     {
         id: 'name',
@@ -87,13 +106,28 @@ const headCells = [
     },
 ];
 
+// function set color status supplier ***********************/
+const handleColor = (key) => {
+    switch (key) {
+        case "UNCOOPERATIVE":
+            return "red";
+
+        case "COOPERATIVE":
+            return "#06b106";
+
+        default:
+            return "black";
+    }
+}
+
+
+
 function EnhancedTableHead(props) {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
         props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
-
     return (
         <TableHead>
             <TableRow>
@@ -144,8 +178,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-    const { numSelected } = props;
-
+    const { numSelected, handleOpenModal } = props;
     return (
         <Toolbar
             sx={{
@@ -180,7 +213,7 @@ const EnhancedTableToolbar = (props) => {
             {numSelected > 0 ? (
                 <Tooltip title="Delete">
                     <IconButton>
-                        <DeleteIcon />
+                        <DeleteIcon onClick={() => handleOpenModal(true)} />
                     </IconButton>
                 </Tooltip>
             ) : (
@@ -193,13 +226,17 @@ const EnhancedTableToolbar = (props) => {
         </Toolbar>
     );
 };
-
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
+
+
+///////////////////////////// main function ***********************///////////////////////////////
 export default function TableSupply() {
 
+    // get all infos_suppliers********************************//
+    const [trigger, setTrigger] = React.useState(false); // trigger to re-render supplier's info
     const [listSuppliers, setListSuppliers] = React.useState([]);
     React.useEffect(() => {
         const fetchSuppliers = async () => {
@@ -207,9 +244,26 @@ export default function TableSupply() {
             setListSuppliers(res.data);
         }
         fetchSuppliers();
-    }, [])
+    }, [trigger])
+
+    // handle delete all suppliers *****************************************************/
+    const [stateAlert, setStateAlert] = React.useState({ severity: "", variant: "", open: false, content: "" });
+    const handleDeleteAllSuppliers = async (listSelected) => {
+        await listSelected.map(async (item) => {
+            try {
+                await SupplierAPI.deleteSupplier(item);
+                setStateAlert({ severity: "info", variant: "filled", open: true, content: "Đã xóa nhà cung cấp thành công" })
+                setOpenModal(false);
+            } catch (error) {
+                console.log(error);
+            }
+        });
+        setSelected([]);
+        setTrigger(!trigger);
+    }
 
 
+    // block func handle table ListSuppliers   ****************************/
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('');
     const [selected, setSelected] = React.useState([]);
@@ -225,7 +279,7 @@ export default function TableSupply() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = listSuppliers.map((n) => n.code);
+            const newSelecteds = listSuppliers.map((n) => n.id);
             setSelected(newSelecteds);
             return;
         }
@@ -266,13 +320,25 @@ export default function TableSupply() {
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
     // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - listSuppliers.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - listSuppliers.length) : 0; // end block handle table ******/
+
+
+
+
+    //open and close Modal
+    const [openModal, setOpenModal] = React.useState(false);
+    const handleOpenModal = (value) => {
+        setOpenModal(value);
+    }
+
 
     return (
         <Box className='table_box' sx={{ width: '100%', marginTop: "1em" }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar
+                    numSelected={selected.length}
+                    handleOpenModal={handleOpenModal}
+                />
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -293,17 +359,17 @@ export default function TableSupply() {
                             {stableSort(listSuppliers, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.code);
+                                    const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.code)}
+                                            onClick={(event) => handleClick(event, row.id)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.code}
+                                            key={row.id}
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">
@@ -326,7 +392,9 @@ export default function TableSupply() {
                                             <TableCell align="center">{row.code}</TableCell>
                                             <TableCell align="center">{row.fax}</TableCell>
                                             <TableCell align="center">{row.phone}</TableCell>
-                                            <TableCell align="center">{row.activityStatus}</TableCell>
+                                            <TableCell
+                                                style={{ color: handleColor(row.activityStatus) }}
+                                                align="center">{row.activityStatus}</TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -357,6 +425,26 @@ export default function TableSupply() {
                 control={<Switch checked={dense} onChange={handleChangeDense} />}
                 label="Xóa padding"
             />
-        </Box>
+            <Modal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <h2 style={{ color: "red", fontSize: "3em" }}>Cảnh báo</h2>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Bạn xác nhận xóa nhà cung cấp đã chọn
+                    </Typography><br />
+                    <Button onClick={() => setOpenModal(false)} variant="contained">Quay lại</Button>&emsp;&emsp;
+                    <Button onClick={() => handleDeleteAllSuppliers(selected)} color="error" variant="contained">Xóa</Button>
+                </Box>
+            </Modal >
+            <Snackbar open={stateAlert.open} autoHideDuration={3000} onClose={() => setStateAlert({ ...stateAlert, open: false })}>
+                <Alert onClose={() => setStateAlert({ ...stateAlert, open: false })} severity={stateAlert.severity} variant={stateAlert.variant} sx={{ width: '100%' }}>
+                    {stateAlert.content}
+                </Alert>
+            </Snackbar>
+        </Box >
     );
 }

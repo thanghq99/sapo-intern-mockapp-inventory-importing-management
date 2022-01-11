@@ -5,7 +5,7 @@ import { Box, TextField, InputAdornment, Button, Divider, Card, CardContent, Typ
 import { Search, FilterAltOutlined, AddCircle, FactCheck } from '@mui/icons-material';
 import ProductsTable from './ProductsTable'
 import "./products.scss"
-import { set } from 'date-fns/esm';
+
 
 export default function Products() {
     const history = useHistory();

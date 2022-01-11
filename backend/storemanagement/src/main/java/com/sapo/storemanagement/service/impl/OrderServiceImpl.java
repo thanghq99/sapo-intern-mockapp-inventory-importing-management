@@ -11,7 +11,9 @@ import com.sapo.storemanagement.repository.VariantsOrderRepository;
 import com.sapo.storemanagement.service.OrderService;
 import com.sapo.storemanagement.service.SupplierService;
 import com.sapo.storemanagement.service.VariantService;
+import com.sapo.storemanagement.utils.itemcodegenerator.ItemCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,10 @@ public class OrderServiceImpl implements OrderService {
     private VariantsOrderRepository variantsOrderRepository;
 
     @Autowired
+    @Qualifier("order-code-generator")
+    private ItemCodeGenerator orderCodeGenerator;
+
+    @Autowired
     public OrderServiceImpl(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
@@ -57,23 +63,27 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order createdOrder(Long orderCreatorId, OrderDto orderDto) {
+        String orderCode = orderDto.getOrderCode();
+        if(orderCode == null || orderCode.isBlank()) {
+            orderCode = orderCodeGenerator.generate();
+        }
+
         Supplier supplier = supplierService.getSupplierById(orderDto.getSupplierId());
         User user = userService.getUserById(orderCreatorId);
         Order newOrder = orderRepository.save(new Order(
-
-                orderDto.getOrderCode(),
-                supplier,
-                orderDto.getDescription(),
-                orderDto.getDeliveryTime(),
-                user
+            orderCode,
+            supplier,
+            orderDto.getDescription(),
+            orderDto.getDeliveryTime(),
+            user
         ));
         orderDto.getLineItems().forEach(item -> {
             Variant variant = variantService.getVariantById(item.getVariantId());
             VariantsOrder variantsOrder = new VariantsOrder(
-                    newOrder,
-                    variant,
-                    item.getQuantity(),
-                    item.getPrice()
+                newOrder,
+                variant,
+                item.getQuantity(),
+                item.getPrice()
             );
 
             variantsOrderRepository.save(variantsOrder);
