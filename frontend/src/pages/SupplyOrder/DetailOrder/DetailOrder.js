@@ -12,19 +12,12 @@ import Divider from "@mui/material/Divider";
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link,
-    useHistory
-} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 
 import './DetailOrder.scss';
 import OrderAPI from '../../../api/OrderAPI'
 import { Collapse } from "@mui/material";
-import ProductAPI from "../../../api/ProductAPI";
 
 
 export default function DetailOrder() {
@@ -138,9 +131,11 @@ export default function DetailOrder() {
 
                         </Box>
                     </Box>
-                    <Collapse in={openMenu} timeout="auto" unmountOnExit 
-                    sx={{display: "block", zIndex: 101, width: "100px", position: "absolute",
-                     backgroundColor: "#FFFFFF", border: "1px solid #cfcfcf", marginLeft: "100px", marginTop: "-10px"}}>
+                    <Collapse in={openMenu} timeout="auto" unmountOnExit
+                        sx={{
+                            display: "block", zIndex: 101, width: "100px", position: "absolute",
+                            backgroundColor: "#FFFFFF", border: "1px solid #cfcfcf", marginLeft: "100px", marginTop: "-10px"
+                        }}>
                         <List component="div" disablePadding>
                             <ListItem>
                                 Sửa
@@ -214,7 +209,7 @@ export default function DetailOrder() {
                                                 <Box sx={{ width: '10%', textAlign: "center" }}>{item.suppliedQuantity}</Box>
                                                 <Box sx={{ width: '10%', textAlign: "center" }}>{item.price}</Box>
 
-                                                <Typography sx={{ width: '10%', textAlign: "center" }}>{item.suppliedQuantity* item.price}</Typography>
+                                                <Typography sx={{ width: '10%', textAlign: "center" }}>{item.suppliedQuantity * item.price}</Typography>
 
                                             </ListItem>)
                                     })
@@ -240,7 +235,7 @@ export default function DetailOrder() {
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography sx={{ fontWeight: 700 }}>Phải trả</Typography>
-                                    <Typography>{totalAmount* 0.94} vnd</Typography>
+                                    <Typography>{totalAmount * 0.94} vnd</Typography>
                                 </Box>
 
                             </Box>
