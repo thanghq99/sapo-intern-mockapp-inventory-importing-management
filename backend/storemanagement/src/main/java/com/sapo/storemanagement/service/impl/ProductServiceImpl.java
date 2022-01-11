@@ -9,6 +9,7 @@ import com.sapo.storemanagement.repository.VariantRepository;
 import com.sapo.storemanagement.service.CategoryService;
 import com.sapo.storemanagement.service.ProductService;
 import com.sapo.storemanagement.service.VariantService;
+import com.sapo.storemanagement.utils.InputStringModifier;
 import com.sapo.storemanagement.utils.itemcodegenerator.ItemCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -57,28 +58,25 @@ public class ProductServiceImpl implements ProductService {
     public Product saveProduct(ProductVariantDto productVariantDto) {
         Category category = categoryService.getCategoryById(productVariantDto.getCategoryId());
 
+        String productName = productVariantDto.getProductName();
         Product newProduct = productRepository.save(new Product(
-            productVariantDto.getProductName(),
+            InputStringModifier.capitalizeFirstWord(productName),
             category,
-            productVariantDto.getBrand(),
-            productVariantDto.getDescription(),
+                productVariantDto.getBrand(),
+                InputStringModifier.capitalizeFirstWord(productVariantDto.getDescription()),
             productVariantDto.getWeight(),
             productVariantDto.getImageUrl(),
             SellableStatus.SELLABLE
         ));
 
-//        Variant newVariant = new Variant(
-//            newProduct, productVariantDto.getVariantCode(),
-//            productVariantDto.getInventoryQuantity(), productVariantDto.getSellableQuantity(),
-//            productVariantDto.getSize(), productVariantDto.getColor(),
-//            productVariantDto.getMaterial(), productVariantDto.getUnit(),
-//            productVariantDto.getOriginalPrice(), productVariantDto.getWholeSalePrice(), productVariantDto.getRetailPrice()
-//        );
-//        variantService.saveDefaultVariant(newVariant);
         List<Variant> newVariantsList = new ArrayList<Variant>();
-        int colorNumbers = productVariantDto.getColor().toArray().length;
-        int materialNumbers = productVariantDto.getMaterial().toArray().length;
-        int sizeNumbers = productVariantDto.getSize().toArray().length;
+
+        List<String> colors = new ArrayList<String>(productVariantDto.getColor());
+        List<String> materials = new ArrayList<String>(productVariantDto.getMaterial());
+        List<String> sizes = new ArrayList<String>(productVariantDto.getSize());
+        int colorNumbers = colors.size();
+        int materialNumbers = materials.size();
+        int sizeNumbers = sizes.size();
 
         if(colorNumbers == 0 && materialNumbers == 0 && sizeNumbers == 0) {
             Variant newVariant = new Variant(
@@ -96,17 +94,20 @@ public class ProductServiceImpl implements ProductService {
             );
             variantRepository.save(newVariant);
         } else {
-            for (String color : productVariantDto.getColor()) {
-                for (String material : productVariantDto.getMaterial()) {
-                    for (String size : productVariantDto.getSize()) {
+            if(colorNumbers == 0) colors.add(0, "");
+            if(sizeNumbers == 0) sizes.add(0, "");
+            if(materialNumbers == 0) materials.add(0, "");
+            for (String color : colors) {
+                for (String material : materials) {
+                    for (String size : sizes) {
                         Variant newVariant = new Variant(
                                 newProduct,
                                 itemCodeGenerator.generate(),
                                 productVariantDto.getInventoryQuantity(),
                                 productVariantDto.getSellableQuantity(),
-                                size,
-                                color,
-                                material,
+                                InputStringModifier.capitalizeFirstWord(size),
+                                InputStringModifier.capitalizeFirstWord(color),
+                                InputStringModifier.capitalizeFirstWord(material),
                                 productVariantDto.getUnit(),
                                 productVariantDto.getOriginalPrice(),
                                 productVariantDto.getWholeSalePrice(),

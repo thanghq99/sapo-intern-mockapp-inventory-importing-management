@@ -1,4 +1,4 @@
-package com.sapo.storemanagement.utils.itemcodegenerator;
+package com.sapo.storemanagement.utils;
 
 public class InputStringModifier {
     public static String capitalizeFirstWord(String str){

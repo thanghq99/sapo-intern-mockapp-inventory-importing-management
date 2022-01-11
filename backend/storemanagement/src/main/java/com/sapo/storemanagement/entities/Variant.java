@@ -108,6 +108,24 @@ public class Variant {
         this.retailPrice = retailPrice;
     }
 
+    public Variant(Product product, String code, Long inventoryQuantity,
+                   Long sellableQuantity, String size, String color,
+                   String material, String unit, Double originalPrice,
+                   Double wholeSalePrice, Double retailPrice, SellableStatus sellableStatus) {
+        this.product = product;
+        this.code = code;
+        this.inventoryQuantity = inventoryQuantity;
+        this.sellableQuantity = sellableQuantity;
+        this.size = size;
+        this.color = color;
+        this.material = material;
+        this.unit = unit;
+        this.originalPrice = originalPrice;
+        this.wholeSalePrice = wholeSalePrice;
+        this.retailPrice = retailPrice;
+        this.sellableStatus = sellableStatus;
+    }
+
     public Long getId() {
         return id;
     }
