@@ -1,7 +1,6 @@
 package com.sapo.storemanagement.service;
 
-import com.sapo.storemanagement.dto.ProductVariantDto;
-import com.sapo.storemanagement.dto.VariantsListDto;
+import com.sapo.storemanagement.dto.VariantDto;
 import com.sapo.storemanagement.entities.Variant;
 
 import java.util.List;
@@ -14,13 +13,9 @@ public interface VariantService {
 
     Variant getVariantById(Long id);
 
-    Variant saveDefaultVariant(Variant variant);
-
-    Variant saveVariant(ProductVariantDto productVariantDto);
-
-    List<Variant> saveVariant(VariantsListDto productVariantDto);
-
-    Variant updateVariant(long id, ProductVariantDto productVariantDto);
+    Variant updateVariant(long id, VariantDto variantDto);
 
     Variant deleteVariant(Long id);
+
+    String getLastestVariantCode();
 }

@@ -76,8 +76,7 @@ public class Variant {
     @Column(name = "sell_status", columnDefinition = "varchar(32) DEFAULT 'Có thể bán'")
     private SellableStatus sellableStatus = SellableStatus.SELLABLE;
 
-    public Variant() {
-    }
+    public Variant() {}
 
     public Variant(Product product, String code, Long inventoryQuantity,
                    Long sellableQuantity, Double originalPrice,

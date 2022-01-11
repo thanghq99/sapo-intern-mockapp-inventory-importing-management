@@ -35,6 +35,10 @@ function VariantAPI() {
   this.getAllVariants = () => {
     return callAPI.get(`variants`);
   };
+  // [GET] /
+  this.getLatestVariantCode = () => {
+    return callAPI.get(`variants/get-lastest-variant-code`);
+  };
   // [POST] /
   this.createVariant = (data) => {
     return callAPI.post(`variants`, data);

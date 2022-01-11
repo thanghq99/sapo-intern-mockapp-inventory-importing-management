@@ -2,9 +2,11 @@ package com.sapo.storemanagement.service.impl;
 
 import com.sapo.storemanagement.dto.ProductDto;
 import com.sapo.storemanagement.dto.ProductVariantDto;
+import com.sapo.storemanagement.dto.VariantDto;
 import com.sapo.storemanagement.entities.*;
 import com.sapo.storemanagement.exception.BadNumberException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
+import com.sapo.storemanagement.exception.UniqueKeyConstraintException;
 import com.sapo.storemanagement.repository.ProductRepository;
 import com.sapo.storemanagement.repository.VariantRepository;
 import com.sapo.storemanagement.service.CategoryService;
@@ -159,6 +161,34 @@ public class ProductServiceImpl implements ProductService {
         variantService.listAllVariantsByProductId(productToDelete.getId())
             .forEach(variant -> variant.setRecordStatus(RecordStatus.DELETED));
         return productToDelete.getName() + "was deleted!";
+    }
+
+    @Override
+    public Variant saveVariant(long id, VariantDto variantDto) {
+        if(variantRepository.existsByCode(variantDto.getVariantCode())) {
+            throw new UniqueKeyConstraintException("Mã phiên bản sản phẩm bị trùng với phiên bản khác");
+        }
+        if(variantDto.getVariantCode().equals("")) throw new BadNumberException("Không được bỏ trống mã phiên bản");
+        if(variantDto.getRetailPrice() == null) throw new BadNumberException("Không được bỏ trống giá bán lẻ");
+        if(variantDto.getWholeSalePrice() == null) throw new BadNumberException("Không được bỏ trống giá bán buôn");
+        if(variantDto.getOriginalPrice() == null) throw new BadNumberException("Không được bỏ trống giá nhập");
+        if(variantDto.getInventoryQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng trong kho");
+        if(variantDto.getSellableQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng có thể bán");
+        Product product = productRepository.findById(id).get();
+        Variant newVariant = new Variant(
+                product,
+                variantDto.getVariantCode(),
+                variantDto.getInventoryQuantity(),
+                variantDto.getSellableQuantity(),
+                variantDto.getSize(),
+                variantDto.getColor(),
+                variantDto.getMaterial(),
+                variantDto.getUnit(),
+                variantDto.getOriginalPrice(),
+                variantDto.getWholeSalePrice(),
+                variantDto.getRetailPrice()
+        );
+        return variantRepository.save(newVariant);
     }
 
 }
