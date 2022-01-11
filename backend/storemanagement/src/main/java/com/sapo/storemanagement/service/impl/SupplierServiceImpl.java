@@ -9,7 +9,9 @@ import com.sapo.storemanagement.exception.UniqueKeyConstraintException;
 import com.sapo.storemanagement.repository.OrderRepository;
 import com.sapo.storemanagement.repository.SupplierRepository;
 import com.sapo.storemanagement.service.SupplierService;
+import com.sapo.storemanagement.utils.itemcodegenerator.ItemCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,10 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    @Qualifier("supplier-code-generator")
+    private ItemCodeGenerator supplierCodeGenerator;
 
     @Override
     public Iterable<Supplier> listAllSuppliers() {
@@ -48,7 +54,12 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     @Transactional
     public Supplier saveSupplier(Supplier supplier) {
-        if (supplierRepository.existsByCode(supplier.getCode())) {
+        String supplierCode = supplier.getCode();
+        if(supplierCode.isBlank()) {
+            supplierCode = supplierCodeGenerator.generate();
+        }
+
+        if (supplierRepository.existsByCode(supplierCode)) {
             throw new UniqueKeyConstraintException("Supplier code already existed");
         }
         return supplierRepository.save(supplier);
@@ -59,6 +70,9 @@ public class SupplierServiceImpl implements SupplierService {
     public Supplier updateSupplier(long id, Supplier supplier) {
         if (id <= 0) {
             throw new BadNumberException("id must be greater than 0");
+        }
+        if (supplierRepository.existsByCode(supplier.getCode())) {
+            throw new UniqueKeyConstraintException("Supplier code already existed");
         }
 
         Supplier existingSupplier = this.getSupplierById(id);
