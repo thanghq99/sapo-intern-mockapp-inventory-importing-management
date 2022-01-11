@@ -57,6 +57,7 @@ public class SupplierServiceImpl implements SupplierService {
         String supplierCode = supplier.getCode();
         if(supplierCode.isBlank()) {
             supplierCode = supplierCodeGenerator.generate();
+            supplier.setCode(supplierCode);
         }
 
         if (supplierRepository.existsByCode(supplierCode)) {

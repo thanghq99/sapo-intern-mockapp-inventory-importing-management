@@ -21,7 +21,7 @@ public class Order {
     private Long id;
 
     @Column(name = "code", nullable = false, unique = true, length = 8)
-    @NotBlank(message = "Order code cannot be blank")
+    @NotNull(message = "Order code cannot be null")
     @Size(max = 8, message = "Order code length cannot exceed {max}")
     private String code;
 
