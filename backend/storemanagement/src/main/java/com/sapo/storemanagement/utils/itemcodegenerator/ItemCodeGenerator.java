@@ -9,7 +9,7 @@ public abstract class ItemCodeGenerator {
 
     public String generate() {
         StringBuilder s = new StringBuilder();
-        String postfix = formatLongToString(countRecords());
+        String postfix = formatLongToString(countRecords() + 1);
         s.append(getPrefix());
         s.append(postfix);
         return s.toString();

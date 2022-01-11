@@ -14,7 +14,7 @@ public class Supplier {
     private Long id;
 
     @Column(name = "code", nullable = false, unique = true, length = 16)
-    @NotBlank(message = "Supplier code cannot be blank")
+    @NotNull(message = "Supplier code cannot be null")
     @Size(max = 16, message = "Supplier code length cannot exceed {max}")
     private String code;
 
