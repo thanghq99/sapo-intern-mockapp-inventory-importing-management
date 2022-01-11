@@ -1,5 +1,6 @@
 package com.sapo.storemanagement.controller;
 
+import com.sapo.storemanagement.dto.ProductDto;
 import com.sapo.storemanagement.dto.ProductVariantDto;
 import com.sapo.storemanagement.entities.Product;
 import com.sapo.storemanagement.entities.Variant;
@@ -41,7 +42,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    Product updateProduct(@PathVariable(name = "id") long id, @RequestBody @Valid ProductVariantDto updateProduct) {
+    Product updateProduct(@PathVariable(name = "id") long id, @RequestBody @Valid ProductDto updateProduct) {
         return productService.updateProduct(id, updateProduct);
     }
 

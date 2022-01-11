@@ -1,5 +1,6 @@
 package com.sapo.storemanagement.service.impl;
 
+import com.sapo.storemanagement.dto.ProductDto;
 import com.sapo.storemanagement.dto.ProductVariantDto;
 import com.sapo.storemanagement.entities.*;
 import com.sapo.storemanagement.exception.BadNumberException;
@@ -124,18 +125,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Product updateProduct(long id, ProductVariantDto productVariantDto) {
-        Category category = categoryService.getCategoryById(productVariantDto.getCategoryId());
+    public Product updateProduct(long id, ProductDto productDto) {
+        Category category = categoryService.getCategoryById(productDto.getCategoryId());
 
         Product productToUpdate = productRepository
                 .findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("product not found"));
-        productToUpdate.setName(productVariantDto.getProductName());
+        productToUpdate.setName(productDto.getProductName());
         productToUpdate.setCategory(category);
-        productToUpdate.setDescription(productVariantDto.getDescription());
-        productToUpdate.setImageUrl(productVariantDto.getImageUrl());
-        productToUpdate.setBrand(productVariantDto.getBrand());
-        productToUpdate.setWeight(productVariantDto.getWeight());
+        productToUpdate.setDescription(productDto.getDescription());
+        productToUpdate.setImageUrl(productDto.getImageUrl());
+        productToUpdate.setBrand(productDto.getBrand());
+        productToUpdate.setWeight(productDto.getWeight());
         return productRepository.save(productToUpdate);
     }
 

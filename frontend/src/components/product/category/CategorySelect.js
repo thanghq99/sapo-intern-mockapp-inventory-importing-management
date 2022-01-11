@@ -20,15 +20,13 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-function CategorySelect({handleSelectCategory}) {
+function CategorySelect({handleSelectCategory, categoryName}) {
   const classes = useStyles();
   const searchRef = useRef(null);
-  const history = useHistory();
   const [searchInput, setSearchInput] = useState('');
   const [category, setCategory] = useState(null);
   const [categories, setCategories] = useState([]);
   const [searchedCategories, setSearchedCategories] = useState([]);
-  const [categoryData, setCategoryData] = useState({});
 
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -36,6 +34,7 @@ function CategorySelect({handleSelectCategory}) {
     CategoryAPI.CategoryList().then((result) => {
       setCategories(result.data);
       setSearchedCategories(result.data);
+      setCategory(categoryName)
     }).catch((err) => {
       console.log(err);
     })
@@ -138,9 +137,6 @@ function CategorySelect({handleSelectCategory}) {
             ))}
           </Box>
           <Box>
-          {/* <Button fullWidth startIcon={<Add />}>
-            Thêm loại sản phẩm mới
-          </Button> */}
             <CreateCategoryModal handleSelectCategory={handleSelectCategory} setCategory={setCategory} setMenuOpen={setMenuOpen} menuOpen={menuOpen}/>
           </Box>
         </div>
