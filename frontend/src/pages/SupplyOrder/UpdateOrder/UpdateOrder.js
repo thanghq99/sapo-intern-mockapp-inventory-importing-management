@@ -18,6 +18,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
+import * as moment  from 'moment';
 
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -42,11 +43,12 @@ export default function DetailOrder() {
     const [codeOrder, setCodeOrder] = React.useState();
     const [expectedTime, setExpectedTime] = React.useState();
     const [totalAmount, setTotalAmount] = React.useState();
-    const [description, setDescription] = React.useState();
+    const [description, setDescription] = React.useState("");
     const [debt, setDebt] = React.useState();
     const [nameSupplier, setNameSupplier] = React.useState();
     const [address, setAddRess] = React.useState();
     const [email, setEmail] = React.useState();
+
     const searchParam = window.location.search.replace("?code=", "");
 
     const [date, setDate] = React.useState(null);
@@ -67,8 +69,23 @@ export default function DetailOrder() {
     const [originalPrice, setOriginalPrice] = React.useState([]);
     const [num, setNum] = React.useState([]);
 
-    const handleMenu = () => {
-        setOpenMenu(!openMenu);
+    const SubmitUpdate = async () => {
+        let data = {
+            orderCode: codeOrder,
+            supplierId: order.supplier.id,
+            description: description,
+            deliveryTime:  moment(date).format('YYYY-MM-DD'),
+            lineItems: productSelectLast,
+            createdBy: 2
+        };
+        console.log(data);
+        try {
+            await OrderAPI.updateOrder(searchParam, data);
+            history.goBack();
+            // history.push("/nhap-hang");
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     async function add(newValue) {
@@ -252,7 +269,7 @@ export default function DetailOrder() {
     React.useEffect(() => {
         getData();
     }, [])
-    console.log(variantOrder);
+    console.log(productSelectLast);
 
     return (
 
@@ -277,10 +294,10 @@ export default function DetailOrder() {
                             <Box className="headerSupply">
                                 <Box className="nameSupply">
                                     <PersonRoundedIcon sx={{ marginRight: "10px" }} />
-                                    <Typography sx={{ marginRight: "5px" }}>{nameSupplier}</Typography>
+                                    <Typography sx={{ marginRight: "5px", fontWeight: 600 }}>{nameSupplier}</Typography>
 
                                 </Box>
-                                <Typography className="debt">Công nợ: {debt} vnd</Typography>
+                                <Typography className="debt" sx={{fontWeight: 600}} >Công nợ: {debt} vnd</Typography>
                             </Box>
                         </Box>
                         <Divider />
@@ -443,9 +460,14 @@ export default function DetailOrder() {
                             <textarea className="content-note" onChange={(e) => setDescription(e.target.value)}>{description}</textarea>
                             <Box></Box>
                         </Box>
+                        
 
                     </Box>
+                   
                 </Box>
+                <Button variant="contained" className="btn-order" sx={{position: "absolute"}}
+                         onClick={SubmitUpdate}
+                         >Lưu</Button>
 
                 {/* </Grid> */}
             </Box>

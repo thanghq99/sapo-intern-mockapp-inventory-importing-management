@@ -1,9 +1,12 @@
 import * as React from "react";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { makeStyles } from "@material-ui/core/styles";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
@@ -12,6 +15,8 @@ import Divider from "@mui/material/Divider";
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import {
     BrowserRouter as Router,
     Switch,
@@ -25,6 +30,7 @@ import './DetailOrder.scss';
 import OrderAPI from '../../../api/OrderAPI'
 import { Collapse } from "@mui/material";
 import ProductAPI from "../../../api/ProductAPI";
+import PaymentAPI from "../../../api/PaymentAPI";
 
 
 export default function DetailOrder() {
@@ -45,11 +51,31 @@ export default function DetailOrder() {
     const history = useHistory();
 
     const [openMenu, setOpenMenu] = React.useState(false);
+    const [openPayment, setOpenPayment] = React.useState(false);
+    const [openPaymented, setOpenPaymented] = React.useState(true);
+    const [payment, setPayment] = React.useState("");
 
     const [productList, setProductList] = React.useState([]);
 
     const handleMenu = () => {
         setOpenMenu(!openMenu);
+    }
+    const handleOpenPayment = () => {
+        setOpenPayment(!openPayment);
+        setOpenPaymented(!openPaymented);
+    }
+    const handlePayment = (event) => {
+        setPayment(event.target.value);
+      };
+    const SubmitPayment = async () => {
+        // handleOpenPayment();
+        const res = await PaymentAPI.Paid(searchParam, payment);
+        res.then(respons => {
+            handleOpenPayment();
+            // setOpenPaymented(true);
+        })
+       
+        
     }
 
     const useStyles = makeStyles((theme) => ({
@@ -57,24 +83,27 @@ export default function DetailOrder() {
             color: "black",
             fontFamily: "Roboto Mono",
             backgroundColor: "#ffff",
-            marginTop: 0,
-            height: 40,
+            marginTop: 17,
+            height: 42,
 
             "& .MuiOutlinedInput-notchedOutline": {
                 borderWidth: "1px",
-                borderColor: "white",
-                height: 40,
+                borderColor: "#888888",
+                height: 42,
                 padding: 0,
             },
             "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderWidth: "0px",
+                borderWidth: "1px",
+                color: "black"
 
             },
             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderWidth: "0px",
+                borderWidth: "1px",
+                color: "black"
             },
             "& #combo-box-demo": {
                 padding: 0,
+                color: "#888888"
             }
         },
         clearIndicator: {
@@ -87,6 +116,10 @@ export default function DetailOrder() {
         'Nhập Kho',
         'Thanh toán',
     ];
+    const paymentType = [
+        { label: 'Tiền mặt' },
+        { label: 'Chuyển khoản' }
+    ]
 
     async function getData() {
         try {
@@ -119,7 +152,8 @@ export default function DetailOrder() {
     React.useEffect(() => {
         getData();
     }, [])
-    console.log(productList);
+    console.log(order);
+    console.log(payment);
 
     return (
 
@@ -138,12 +172,14 @@ export default function DetailOrder() {
 
                         </Box>
                     </Box>
-                    <Collapse in={openMenu} timeout="auto" unmountOnExit 
-                    sx={{display: "block", zIndex: 101, width: "100px", position: "absolute",
-                     backgroundColor: "#FFFFFF", border: "1px solid #cfcfcf", marginLeft: "100px", marginTop: "-10px"}}>
+                    <Collapse in={openMenu} timeout="auto" unmountOnExit
+                        sx={{
+                            display: "block", zIndex: 101, width: "100px", position: "absolute",
+                            backgroundColor: "#FFFFFF", border: "1px solid #cfcfcf", marginLeft: "100px", marginTop: "-10px"
+                        }}>
                         <List component="div" disablePadding>
                             <ListItem>
-                            <Link to={`/nhap-hang/sua-don-hang?code=${searchParam}`} className="link-update">Sửa</Link>
+                                <Link to={`/nhap-hang/sua-don-hang?code=${searchParam}`} className="link-update">Sửa</Link>
                             </ListItem>
                             <Divider />
                             <ListItem>
@@ -161,10 +197,10 @@ export default function DetailOrder() {
                             <Box className="headerSupply">
                                 <Box className="nameSupply">
                                     <PersonRoundedIcon sx={{ marginRight: "10px" }} />
-                                    <Typography sx={{ marginRight: "5px" }}>{nameSupplier}</Typography>
+                                    <Typography sx={{ marginRight: "5px", fontWeight: 600 }}>{nameSupplier}</Typography>
 
                                 </Box>
-                                <Typography className="debt">Công nợ: {debt} vnd</Typography>
+                                <Typography className="debt" sx={{ fontWeight: 600 }}>Công nợ: {debt} vnd</Typography>
                             </Box>
                         </Box>
                         <Divider />
@@ -201,7 +237,7 @@ export default function DetailOrder() {
                         </Box>
                         <Box className="bodyProducts">
 
-                            <List>
+                            <List sx={{ width: "100%" }}>
                                 {
 
                                     productList?.map(item => {
@@ -214,7 +250,7 @@ export default function DetailOrder() {
                                                 <Box sx={{ width: '10%', textAlign: "center" }}>{item.suppliedQuantity}</Box>
                                                 <Box sx={{ width: '10%', textAlign: "center" }}>{item.price}</Box>
 
-                                                <Typography sx={{ width: '10%', textAlign: "center" }}>{item.suppliedQuantity* item.price}</Typography>
+                                                <Typography sx={{ width: '10%', textAlign: "center" }}>{item.suppliedQuantity * item.price}</Typography>
 
                                             </ListItem>)
                                     })
@@ -240,11 +276,77 @@ export default function DetailOrder() {
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography sx={{ fontWeight: 700 }}>Phải trả</Typography>
-                                    <Typography>{(totalAmount* 0.94).toFixed(2)} vnd</Typography>
+                                    <Typography>{(totalAmount * 0.94).toFixed(2)} vnd</Typography>
                                 </Box>
 
                             </Box>
                         </Box>
+
+                    </Box>
+                    <Box className="payment" pl={2} sx={{ backgroundColor: "white", border: "1px solid #e4e4e4" }}>
+                        <Box className="header-payment" pt={2} mb={2}>
+                            <Box className="header-payment-info">
+                                <Box sx={{ display: "flex" }}>
+                                    <AccountBalanceWalletIcon />
+                                    <Typography sx={{ fontWeight: 600 }} ml={2} >Thanh Toán</Typography>
+                                </Box>
+                                <Box sx={{ display: "flex", justifyContent: "space-between" }} mt={2}>
+                                    <Typography>Đã thanh toán: {order?.paidAmount} vnd </Typography>
+                                    <Typography>Còn phải trả: {order?.totalAmount - order?.paidAmount} vnd </Typography>
+                                </Box>
+                            </Box>
+                            <Box className="btn-payment">
+                                <Button variant="outlined"
+                                    onClick={handleOpenPayment}
+                                >Xác nhận thanh toán</Button>
+                            </Box>
+                        </Box>
+                        {
+                            openPayment ?
+                                <Box className="body-payment" mt={2}>
+                                    <Divider />
+                                    <Box className="body-payment-info" mt={2}>
+                                        <Box className="payment-type">
+                                            <Typography sx={{ fontWeight: 600 }} >Lựa chọn hình thức thanh toán</Typography>
+                                            <Autocomplete
+                                                disablePortal
+                                                id="combo-box-demo"
+                                                options={paymentType}
+                                                sx={{ width: 200, color: "black" }}
+                                                classes={classes}
+                                                renderInput={(params) => <TextField {...params} sx={{ color: "black" }} placeholder="Chọn phương thức thanh toán" />}
+                                            />
+                                        </Box>
+                                        <Box className="payment-amount">
+                                            <Typography sx={{ fontWeight: 600 }} mb={2}>Số tiền thanh toán</Typography>
+                                            <TextField id="outlined-basic" variant="outlined" 
+                                            sx={{ width: 200, height: 40 }}
+                                            value={payment}
+                                            onChange={handlePayment} />
+                                        </Box>
+                                    </Box>
+                                    <Box sx={{ display: "flex" }} mt={2} mb={2}>
+                                        <Button variant="outlined" ml={2}
+                                            onClick={handleOpenPayment}
+                                        >Đóng</Button>
+                                        <Button variant="contained" sx={{ marginLeft: "16px" }}
+                                        onClick={SubmitPayment}
+                                        >Thanh toán</Button>
+                                    </Box>
+                                </Box>
+                                 : null
+                        }
+                        {
+                            openPaymented ? 
+                            <Box sx={{display: "flex" }} mt={2} mb={2}>
+
+                                <Divider />
+                                
+                                <ChangeCircleIcon />
+                                <Typography ml={2}>Xác nhận thanh toán {order?.paidAmount} vnd thành công</Typography>
+                                
+                            </Box> : null
+                        }
                     </Box>
                 </Box>
 

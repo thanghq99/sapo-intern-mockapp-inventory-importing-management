@@ -8,6 +8,7 @@
 }
 .test {
     width: calc(100% - 300px);
+    display: inline-block;
 }
 .back {
     display: flex;
@@ -62,13 +63,15 @@
         display: flex;
         justify-content: space-between;
         padding: 5px 20px;
-        border: 1px solid #e4e4e4;
+        border: 1px solid #9b9999;
         background-color: #F4F6F8;
         font-weight: 600;
         font-size: 14px;
     }
     .bodyProducts {
         padding: 0;
+        background-color: #ffffff;
+        display: inline;
         .product-item {
             width: 100%;
             min-height: 50px;
@@ -81,8 +84,10 @@
         }
         .pay-info {
             width: 300px;
+            margin-left: calc(100% - 300px);
+            position: relative;
             // border: 1px solid black;
-            float: right;
+            right: 0;
             padding-top: 15px;
             .pay-info-item {
                 display: flex;
@@ -91,6 +96,43 @@
                 padding-right: 10px;
             }
         }
+    }
+}
+.payment {
+    margin-top: 20px;
+    width: 100%;
+    .header-payment {
+        display: flex;
+        justify-content: space-between;
+        .header-payment-info {
+            width: 65%;
+        }
+        .btn-payment {
+            width: 30%;
+            text-align: center;
+        }
+    }
+    .body-payment {
+        display: inline;
+        // justify-content: space-between;
+        .body-payment-info {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            .payment-type {
+                width: 50%;
+            }
+            .payment-amount {
+                width: 50%;
+                .MuiTextField-root {
+                    height: 40px;
+                }
+                .MuiOutlinedInput-root {
+                    height: 40px;
+                }
+            }
+        }
+        
     }
 }
 

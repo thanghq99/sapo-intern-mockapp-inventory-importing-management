@@ -98,3 +98,14 @@
        
     }
 }
+
+.btn-order {
+    position: absolute;
+    width: 250px;
+    right: 40px ;
+    bottom: 20px;
+    float: right;
+    .MuiButton-root {
+        position: absolute;
+    }
+}
