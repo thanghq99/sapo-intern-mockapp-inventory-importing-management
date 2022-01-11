@@ -148,7 +148,7 @@ function CreateProduct({ setStateAlert }) {
           severity: "error",
           variant: "filled",
           open: true,
-          content: "Có lỗi xảy ra khi tạo thêm sản phẩm",
+          content: err.response.data,
         });
       });
   };

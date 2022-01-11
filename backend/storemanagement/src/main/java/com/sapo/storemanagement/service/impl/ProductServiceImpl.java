@@ -57,6 +57,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product saveProduct(ProductVariantDto productVariantDto) {
+        if(productVariantDto.getProductName().equals("")) throw new BadNumberException("Không được bỏ trống tên sản phẩm");
+        if(productVariantDto.getCategoryId() == null) throw new BadNumberException("Không được bỏ trống loại sản phẩm");
+
         Category category = categoryService.getCategoryById(productVariantDto.getCategoryId());
 
         String productName = productVariantDto.getProductName();
@@ -64,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
             InputStringModifier.capitalizeFirstWord(productName),
             category,
                 productVariantDto.getBrand(),
-                InputStringModifier.capitalizeFirstWord(productVariantDto.getDescription()),
+                productVariantDto.getDescription(),
             productVariantDto.getWeight(),
             productVariantDto.getImageUrl(),
             SellableStatus.SELLABLE
@@ -106,9 +109,9 @@ public class ProductServiceImpl implements ProductService {
                                 itemCodeGenerator.generate(),
                                 productVariantDto.getInventoryQuantity(),
                                 productVariantDto.getSellableQuantity(),
-                                InputStringModifier.capitalizeFirstWord(size),
-                                InputStringModifier.capitalizeFirstWord(color),
-                                InputStringModifier.capitalizeFirstWord(material),
+                                size,
+                                color,
+                                material,
                                 productVariantDto.getUnit(),
                                 productVariantDto.getOriginalPrice(),
                                 productVariantDto.getWholeSalePrice(),
@@ -126,9 +129,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product updateProduct(long id, ProductDto productDto) {
+        if(productDto.getProductName().equals("")) throw new BadNumberException("Không được bỏ trống tên sản phẩm");
+
         Category category = categoryService.getCategoryById(productDto.getCategoryId());
-        if(productDto.getProductName() == null) throw new BadNumberException("Không được bỏ trống khối lượng!");
-        if(productDto.getWeight() == null) throw new BadNumberException("Không được bỏ trống khối lượng!");
 
         Product productToUpdate = productRepository
                 .findById(id)

@@ -51,7 +51,6 @@ function EditProduct({ setStateAlert }) {
       weight: weight,
       categoryId: product.categoryId
     });
-    console.log(3);
   }, [weightValue, weightUnit, product.categoryId]);
 
   //product properties
@@ -73,7 +72,8 @@ function EditProduct({ setStateAlert }) {
 
   //handle weight
   const handleChangeWeight = (evt) => {
-    setWeightValue(evt.target.valueAsNumber);
+    if(evt.target.valueAsNumber) setWeightValue(evt.target.valueAsNumber)
+    else setWeightValue(0);
   };
 
   function changeWeightUnit() {
@@ -92,13 +92,9 @@ function EditProduct({ setStateAlert }) {
   };
 
   const handleEditProduct = () => {
-    console.log({
-      ...product, //for weight and category
-      productName: product.name,
-      brand: product.brand,
-      description: product.description,
-      imageUrl: product.imageUrl,
-    });
+    console.log(
+      product
+    );
     ProductAPI.updateProduct(params.id, {
       productName: product.name,
       categoryId: product.categoryId,
@@ -113,7 +109,6 @@ function EditProduct({ setStateAlert }) {
     })
     .catch(err => {
       setStateAlert({ severity: "error", variant: "filled", open: true, content: err.response.data });
-      console.log(err.response.data)
       // history.go(-1);
     });
   };
@@ -204,7 +199,7 @@ function EditProduct({ setStateAlert }) {
                     name="weight"
                     placeholder="Nhập khối lượng"
                     type="number"
-                    defaultValue={weightValue}
+                    defaultValue={weightValue || 0}
                     onChange={(e) => handleChangeWeight(e)}
                     InputProps={{
                       endAdornment: (
