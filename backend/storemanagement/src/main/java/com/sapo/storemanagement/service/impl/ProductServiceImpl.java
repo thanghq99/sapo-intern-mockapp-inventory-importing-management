@@ -127,6 +127,8 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public Product updateProduct(long id, ProductDto productDto) {
         Category category = categoryService.getCategoryById(productDto.getCategoryId());
+        if(productDto.getProductName() == null) throw new BadNumberException("Không được bỏ trống khối lượng!");
+        if(productDto.getWeight() == null) throw new BadNumberException("Không được bỏ trống khối lượng!");
 
         Product productToUpdate = productRepository
                 .findById(id)

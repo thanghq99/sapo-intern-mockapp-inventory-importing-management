@@ -1,44 +1,58 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Button, Divider, Grid, TextField, IconButton } from "@mui/material";
-import { ArrowBackIosNew, Add, SwapHoriz} from "@mui/icons-material";
+import {
+  Box,
+  Typography,
+  Button,
+  Divider,
+  Grid,
+  TextField,
+  IconButton,
+} from "@mui/material";
+import { ArrowBackIosNew, Add, SwapHoriz } from "@mui/icons-material";
 import { useHistory, useParams } from "react-router-dom";
-import "./createProduct.scss"
+import "./createProduct.scss";
 import ProductAPI from "../../api/ProductAPI";
 import CategorySelect from "../../components/product/category/CategorySelect";
 
-function EditProduct({setStateAlert}) {
+function EditProduct({ setStateAlert }) {
   const history = useHistory();
   const params = useParams();
   const [loading, setLoading] = useState(true);
 
   const [weightUnit, setWeightUnit] = useState(false); //false: gram, true: kilogram
-  const [weightValue, setWeightValue] =useState(0);
-  const [categoryName, setCategoryName] = useState('');
+  const [weightValue, setWeightValue] = useState(0);
+  const [categoryName, setCategoryName] = useState("");
 
   const [product, setProduct] = useState({});
 
   async function getData() {
     const result = await ProductAPI.product(params.id);
-    setProduct(result.data);
+    setProduct({
+      ...result.data,
+      categoryId: result.data.category.id
+    });
     setCategoryName(result.data.category.name);
+    setWeightValue(result.data.weight);
     setLoading(false);
   }
 
   useEffect(() => {
     getData();
-    
+
     return () => {
       setLoading(true);
     };
   }, []);
 
   useEffect(() => {
-    let weight = weightUnit ? (weightValue*1000) : (weightValue);
+    let weight = weightUnit ? weightValue * 1000 : weightValue;
     setProduct({
       ...product,
-      weight: weight
+      weight: weight,
+      categoryId: product.categoryId
     });
-  }, [weightValue])
+    console.log(3);
+  }, [weightValue, weightUnit, product.categoryId]);
 
   //product properties
   function handleChange(evt) {
@@ -51,14 +65,16 @@ function EditProduct({setStateAlert}) {
 
   //category
   const handleSelectCategory = (categoryId) => {
-    console.log(categoryId);
-    setProduct({ ...product, categoryId: categoryId });
+    setProduct({
+      ...product,
+      categoryId: categoryId
+    })
   };
 
   //handle weight
   const handleChangeWeight = (evt) => {
     setWeightValue(evt.target.valueAsNumber);
-  }
+  };
 
   function changeWeightUnit() {
     setWeightUnit(!weightUnit);
@@ -66,15 +82,19 @@ function EditProduct({setStateAlert}) {
 
   //actions
   const cancelAction = () => {
-    setStateAlert({ severity: "warning", variant: "filled", open: true, content: "Đã hủy tạo thêm phiên bản sản phẩm" });
-    history.push("/san-pham");
-  }
+    setStateAlert({
+      severity: "warning",
+      variant: "filled",
+      open: true,
+      content: "Đã hủy tạo thêm phiên bản sản phẩm",
+    });
+    history.go(-1);
+  };
 
   const handleEditProduct = () => {
     console.log({
+      ...product, //for weight and category
       productName: product.name,
-      categoryId: product.categoryId,
-      weight: product.weight,
       brand: product.brand,
       description: product.description,
       imageUrl: product.imageUrl,
@@ -92,8 +112,9 @@ function EditProduct({setStateAlert}) {
       history.go(-1);
     })
     .catch(err => {
-      setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra khi chỉnh sửa sản phẩm" });
-      history.go(-1);
+      setStateAlert({ severity: "error", variant: "filled", open: true, content: err.response.data });
+      console.log(err.response.data)
+      // history.go(-1);
     });
   };
 
@@ -116,7 +137,7 @@ function EditProduct({setStateAlert}) {
             },
           }}
         >
-          <ArrowBackIosNew sx={{ mr: 2 }}  onClick={cancelAction}/>
+          <ArrowBackIosNew sx={{ mr: 2 }} onClick={cancelAction} />
           Quay lại Danh sách sản phẩm
         </Typography>
       </Box>
@@ -135,7 +156,9 @@ function EditProduct({setStateAlert}) {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => {handleEditProduct()}}
+            onClick={() => {
+              handleEditProduct();
+            }}
           >
             Lưu thông tin
           </Button>
@@ -167,7 +190,7 @@ function EditProduct({setStateAlert}) {
                     name="name"
                     placeholder="Nhập tên sản phẩm"
                     onChange={handleChange}
-                    value={product.name || ''}
+                    value={product.name || ""}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -181,7 +204,7 @@ function EditProduct({setStateAlert}) {
                     name="weight"
                     placeholder="Nhập khối lượng"
                     type="number"
-                    value={product.weight || ''}
+                    defaultValue={weightValue}
                     onChange={(e) => handleChangeWeight(e)}
                     InputProps={{
                       endAdornment: (
@@ -266,7 +289,10 @@ function EditProduct({setStateAlert}) {
                       Loại sản phẩm
                     </Typography>
                   </Box>
-                  <CategorySelect handleSelectCategory={handleSelectCategory} categoryName={categoryName}/>
+                  <CategorySelect
+                    handleSelectCategory={handleSelectCategory}
+                    categoryName={categoryName}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <Box display="flex">
@@ -284,7 +310,7 @@ function EditProduct({setStateAlert}) {
                     name="brand"
                     placeholder="Nhập nhãn hiệu"
                     onChange={handleChange}
-                    value={product.brand || ''}
+                    value={product.brand || ""}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -303,7 +329,7 @@ function EditProduct({setStateAlert}) {
                     multiline
                     rows={3}
                     onChange={handleChange}
-                    value={product.description || ''}
+                    value={product.description || ""}
                   />
                 </Grid>
               </Grid>
