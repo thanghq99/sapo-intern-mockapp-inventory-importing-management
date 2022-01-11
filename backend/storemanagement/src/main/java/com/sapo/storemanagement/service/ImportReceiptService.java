@@ -11,4 +11,6 @@ public interface ImportReceiptService {
     ImportReceipt getImportReceiptById(long id);
 
     ImportReceipt saveImportReceipt(long creatorId, long orderId, ImportReceiptDto importReceiptDto);
+
+    List<ImportReceipt> listAllImportReceiptsByOrder(long orderId);
 }

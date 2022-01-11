@@ -133,4 +133,9 @@ public class ImportReceiptServiceImpl implements ImportReceiptService {
 
         return importReceipt;
     }
+
+    @Override
+    public List<ImportReceipt> listAllImportReceiptsByOrder(long orderId) {
+        return importReceiptRepository.findAllByOrder_Id(orderId);
+    }
 }
