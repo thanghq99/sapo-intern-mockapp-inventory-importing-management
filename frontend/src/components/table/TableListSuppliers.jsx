@@ -357,6 +357,7 @@ export default function TableSupply() {
                             {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
                             {stableSort(listSuppliers, getComparator(order, orderBy))
+                                .reverse()
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.id);

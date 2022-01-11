@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 import TableSupply from '../../components/table/TableListSuppliers'
 import "./suppliers.scss"
 
-
 export default function Supplier() {
     return (
         <Box className="navig" px={4} pt={2} backgroundColor="#F4F6F8" minHeight='90vh'>
@@ -41,9 +40,7 @@ export default function Supplier() {
                 <Box py={3} px={2} display='flex' justifyContent='space-between' backgroundColor='white'>
                     <TextField
                         placeholder="Tìm kiếm"
-                        sx={{
-                            width: '70%'
-                        }}
+                        sx={{ width: '76%'}}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -59,6 +56,7 @@ export default function Supplier() {
                             placeholder="Lọc sản phẩm"
                             variant="outlined"
                             size='small'
+                            sx={{ width: '100%'}}
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="start">

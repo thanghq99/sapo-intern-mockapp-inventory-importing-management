@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 public class AppUserDetails implements UserDetails {
     private Collection<GrantedAuthority> authorities = new ArrayList<>();
@@ -19,6 +20,8 @@ public class AppUserDetails implements UserDetails {
     public User getUser() {
         return user;
     }
+
+    public Set<Role> getRolesUser(){ return this.user.getRoles();}
 
     /**
      * Returns the username used to authenticate the user. Cannot return

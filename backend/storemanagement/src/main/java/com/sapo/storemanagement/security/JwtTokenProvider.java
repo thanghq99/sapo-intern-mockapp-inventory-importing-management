@@ -22,18 +22,18 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION);
         return Jwts.builder()
-            .setSubject(userDetails.getUsername())
-            .setIssuedAt(now)
-            .setExpiration(expiryDate)
-            .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
-            .compact();
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
+                .compact();
     }
 
     public String getUsernameFromJwt(String token) {
         Claims claims = Jwts.parser()
-            .setSigningKey(JWT_SECRET)
-            .parseClaimsJws(token)
-            .getBody();
+                .setSigningKey(JWT_SECRET)
+                .parseClaimsJws(token)
+                .getBody();
 
         return claims.getSubject();
     }

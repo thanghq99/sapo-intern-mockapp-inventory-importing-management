@@ -13,21 +13,21 @@ import CreateSupplier from "./pages/Suppliers/CreateSupplier";
 import DetailSupplier from "./pages/Suppliers/DetailSupplier";
 import ListOrder from "./pages/SupplyOrder/ListOrder/ListOrder";
 import DetailOrder from "./pages/SupplyOrder/DetailOrder/DetailOrder";
-import UpdateOrder from "./pages/SupplyOrder/UpdateOrder/UpdateOrder";
 import Login from "./pages/Login_Register/Login";
 import Register from "./pages/Login_Register/Register";
 import { AuthContext } from "./contextAPI/AuthContext";
 import EditProduct from "./pages/Products/EditProduct";
+import User from "./pages/User/User";
 
 function App() {
-  const [headerTitle, setHeaderTitle] = useState('');
+  const [headerTitle, setHeaderTitle] = useState('Danh sách sản phẩm');
   const { token } = useContext(AuthContext);
   const [stateAlert, setStateAlert] = useState({
     severity: "",
     variant: "",
     open: false,
     content: "",
-  });
+  });  
 
   return (
     <div className="App" style={{ display: "flex", flexDirection: "column" }}>
@@ -43,7 +43,7 @@ function App() {
               <CssBaseline />
               <Sidebar setHeaderTitle={setHeaderTitle} />
               <Box className="box_content" component="main">
-                <Topbar headerTitle={headerTitle} ></Topbar>
+                <Topbar headerTitle={headerTitle} setHeaderTitle={setHeaderTitle} ></Topbar>
                 <Route exact path="/san-pham" component={Products}></Route>
                 <Route path="/tao-san-pham">
                   <CreateProduct setStateAlert={setStateAlert} />
@@ -62,6 +62,7 @@ function App() {
                 <Route exact path="/nhap-hang" component={ListOrder} />
                 <Route path="/nhap-hang/tao-don-nhap-hang" component={SupplyOrder}></Route>
                 <Route path="/nhap-hang/don-hang" component={DetailOrder}></Route>
+                <Route path="/nguoi-dung" component={User}></Route>
                 <Route path="/cai-dat"></Route>
                 {stateAlert.severity && (
                   <Snackbar
