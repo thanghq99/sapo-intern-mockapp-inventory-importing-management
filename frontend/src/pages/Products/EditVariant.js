@@ -15,10 +15,27 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
 
   function handleChange(evt) {
     const value = evt.target.value;
+    console.log(typeof(evt.target.value))
     setVariantInfo({
       ...variantInfo,
       [evt.target.name]: value,
     });
+  }
+
+  function handleChangeNumber(evt) {
+    console.log("edit as number")
+    if(evt.target.valueAsNumber) {
+      setVariantInfo({
+        ...variantInfo,
+        [evt.target.name]: evt.target.valueAsNumber,
+      });
+    }
+    else {
+      setVariantInfo({
+        ...variantInfo,
+        [evt.target.name]: 0,
+      });
+    }
   }
 
   const handleChangeSellableStatus = (evt) => {
@@ -27,8 +44,6 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
       ...variantInfo,
       ["sellableStatus"]: value,
     });
-    console.log(value);
-    console.log(variantInfo.sellableStatus)
   };
 
   const cancelAction = () => {
@@ -37,7 +52,7 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
   }
 
   function handleUpdateVariant() {
-    const updateVariant = {
+    console.log({
       variantCode: variantInfo.code,
       inventoryQuantity: variantInfo.inventoryQuantity,
       sellableQuantity: variantInfo.sellableQuantity,
@@ -48,27 +63,28 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
       originalPrice: variantInfo.originalPrice,
       wholeSalePrice: variantInfo.wholeSalePrice,
       retailPrice: variantInfo.retailPrice,
-      //khi khởi tạo măc định true?
-      recordStatus: true,
       sellableStatus: variantInfo.sellableStatus,
-      //update duy nhat 6 gia tri ben duoi
-      productName: "",
-      productId: productId,
-      categoryId: "",
-      weight: "",
-      brand: "",
-      description: "",
-      imageUrl: "fake url",
-    };
-    ProductAPI.updateVariant(variantInfo.id, updateVariant)
+    })
+    ProductAPI.updateVariant(variantInfo.id,{
+      variantCode: variantInfo.code,
+      inventoryQuantity: variantInfo.inventoryQuantity,
+      sellableQuantity: variantInfo.sellableQuantity,
+      size: variantInfo.size,
+      color: variantInfo.color,
+      material: variantInfo.material,
+      unit: variantInfo.unit,
+      originalPrice: variantInfo.originalPrice,
+      wholeSalePrice: variantInfo.wholeSalePrice,
+      retailPrice: variantInfo.retailPrice,
+      sellableStatus: variantInfo.sellableStatus,
+    })
       .then((res) => {
         setStateAlert({ severity: "success", variant: "filled", open: true, content: "Đã chỉnh sửa phiên bản sản phẩm" });
         triggerReload();
         setViewState(1);
       })
       .catch(err => {
-        setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra khi chỉnh sửa phiên bản sản phẩm" });
-        console.log(err)
+        setStateAlert({ severity: "error", variant: "filled", open: true, content: err.response.data });
       });
   }
   return (
@@ -113,31 +129,6 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
                 value={variantInfo.unit}
               />
             </Box>
-
-            <Box>
-              <Typography variant="body2">Kích thước</Typography>
-              <TextField
-                fullWidth
-                size="small"
-                name="size"
-                placeholder="Nhập kích thước"
-                onChange={handleChange}
-                value={variantInfo.size}
-              />
-            </Box>
-
-            <Box>
-              <Typography variant="body2">Chất liệu</Typography>
-              <TextField
-                fullWidth
-                size="small"
-                name="material"
-                placeholder="Nhập chát liệu"
-                onChange={handleChange}
-                value={variantInfo.material}
-              />
-            </Box>
-
             <Box>
               <Typography variant="body2">Màu sắc</Typography>
               <TextField
@@ -147,6 +138,28 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
                 placeholder="Nhập màu"
                 onChange={handleChange}
                 value={variantInfo.color}
+              />
+            </Box>
+            <Box>
+              <Typography variant="body2">Chất liệu</Typography>
+              <TextField
+                fullWidth
+                size="small"
+                name="material"
+                placeholder="Nhập chất liệu"
+                onChange={handleChange}
+                value={variantInfo.material}
+              />
+            </Box>
+            <Box>
+              <Typography variant="body2">Kích thước</Typography>
+              <TextField
+                fullWidth
+                size="small"
+                name="size"
+                placeholder="Nhập kích thước"
+                onChange={handleChange}
+                value={variantInfo.size}
               />
             </Box>
           </Box>
@@ -169,7 +182,6 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
         backgroundColor="white"
       >
         <Typography
-          // sx={{ flex: "1 1 100%" }}
           variant="subtitle1"
           id="tableTitle"
           px={1}
@@ -184,26 +196,28 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
           px={1}
           py={2}
         >
+        <Box>
+          <Typography variant="body2">Giá bán lẻ</Typography>
+          <TextField
+            fullWidth
+            size="small"
+            type="number"
+            name="retailPrice"
+            placeholder="Nhập giá bán lẻ"
+            onChange={handleChangeNumber}
+            value={variantInfo.retailPrice}
+          />
+        </Box>
           <Box>
             <Typography variant="body2">Giá bán buôn</Typography>
             <TextField
               fullWidth
               size="small"
+              type="number"
               name="wholeSalePrice"
               placeholder="Nhập giá bán buôn"
-              onChange={handleChange}
+              onChange={handleChangeNumber}
               value={variantInfo.wholeSalePrice}
-            />
-          </Box>
-          <Box>
-            <Typography variant="body2">Giá bán lẻ</Typography>
-            <TextField
-              fullWidth
-              size="small"
-              name="retailPrice"
-              placeholder="Nhập giá bán lẻ"
-              onChange={handleChange}
-              value={variantInfo.retailPrice}
             />
           </Box>
           <Box>
@@ -211,9 +225,10 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
             <TextField
               fullWidth
               size="small"
+              type="number"
               name="originalPrice"
               placeholder="Nhập giá nhập"
-              onChange={handleChange}
+              onChange={handleChangeNumber}
               value={variantInfo.originalPrice}
             />
           </Box>
@@ -248,9 +263,10 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
             <TextField
               fullWidth
               size="small"
+              type="number"
               name="inventoryQuantity"
               placeholder="Nhập số lượng kho khởi tạo"
-              onChange={handleChange}
+              onChange={handleChangeNumber}
               value={variantInfo.inventoryQuantity}
             />
           </Box>
@@ -259,9 +275,10 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
             <TextField
               fullWidth
               size="small"
+              type="number"
               name="sellableQuantity"
               placeholder="Nhập số lượng có thể bán"
-              onChange={handleChange}
+              onChange={handleChangeNumber}
               value={variantInfo.sellableQuantity}
             />
           </Box>

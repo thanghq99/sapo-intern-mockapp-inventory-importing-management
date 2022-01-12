@@ -11,4 +11,6 @@ public interface PaymentInvoiceService {
     List<PaymentInvoice> listAllPaymentInvoices();
 
     PaymentInvoice savePaymentInvoice(long invoiceCreatorId, long orderId, PayOrderDto payOrderDto);
+
+    List<PaymentInvoice> listAllPaymentInvoicesByOrder(long orderId);
 }

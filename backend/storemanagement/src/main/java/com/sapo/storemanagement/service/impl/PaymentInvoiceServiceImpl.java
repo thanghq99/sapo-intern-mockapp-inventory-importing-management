@@ -64,4 +64,9 @@ public class PaymentInvoiceServiceImpl implements PaymentInvoiceService {
 
         return paymentInvoiceRepository.save(paymentInvoice);
     }
+
+    @Override
+    public List<PaymentInvoice> listAllPaymentInvoicesByOrder(long orderId) {
+        return paymentInvoiceRepository.findAllByOrder_Id(orderId);
+    }
 }

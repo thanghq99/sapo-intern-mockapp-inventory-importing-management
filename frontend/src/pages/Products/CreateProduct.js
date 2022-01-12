@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Typography,
@@ -6,56 +6,64 @@ import {
   Divider,
   Grid,
   TextField,
-  Tooltip,
   Switch,
-  Select,
-  MenuItem,
+  Chip,
+  IconButton,
 } from "@mui/material";
-import { ArrowBackIosNew, Info, Add} from "@mui/icons-material";
+import { ArrowBackIosNew, Add, SwapHoriz } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 import "./createProduct.scss";
-import CategoryAPI from "../../api/CategoryAPI";
 import ProductAPI from "../../api/ProductAPI";
+import CategorySelect from "../../components/product/category/CategorySelect";
 
-function CreateProduct({setStateAlert}) {
+function CreateProduct({ setStateAlert }) {
   const history = useHistory();
-  const longText =
-    "Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus. Praesent non nunc mollis, fermentum neque at, semper arcu.";
+  const colorRef = useRef(null);
+  const materialRef = useRef(null);
+  const sizeRef = useRef(null);
 
-  const [categories, setCategories] = useState([]);
-  const [brands, setBrands] = useState([
-    { label: "Adidas", id: 1 },
-    { label: "Nike", id: 2 },
-    { label: "Puma", id: 3 },
-  ]);
+  const [colors, setColors] = useState([]);
+  const [materials, setMaterials] = useState([]);
+  const [sizes, setSizes] = useState([]);
+
+  const [weightUnit, setWeightUnit] = useState(false); //false: gram, true: kilogram
+  const [weightValue, setWeightValue] =useState(0);
+
   const [product, setProduct] = useState({
     variantCode: "",
-    inventoryQuantity: "",
-    sellableQuantity: "",
-    size: "",
-    color: "",
-    material: "",
+    inventoryQuantity: 0,
+    sellableQuantity: 0,
+    size: [],
+    color: [],
+    material: [],
     unit: "",
-    originalPrice: "",
-    wholeSalePrice: "",
-    retailPrice: "",
+    originalPrice: 0,
+    wholeSalePrice: 0,
+    retailPrice: 0,
     //khi khởi tạo măc định true?
     recordStatus: true,
-    sellableStatus: "",
+    sellableStatus: true,
     productName: "",
     categoryId: "",
-    weight: "",
+    //mặc định lưu bằng gram
+    weight: 0,
     brand: "",
     description: "",
     imageUrl: "fake url",
   });
 
   useEffect(() => {
-    CategoryAPI.CategoryList().then((res) => {
-      setCategories(res.data);
+    let weight = weightUnit ? (weightValue*1000) : (weightValue);
+    setProduct({
+      ...product,
+      weight: weight,
+      color: [...colors],
+      material: [...materials],
+      size: [...sizes],
     });
-  }, []);
+  }, [colors, sizes, materials, weightValue, weightUnit]);
 
+  //handle product attributes
   function handleChange(evt) {
     const value = evt.target.value;
     setProduct({
@@ -64,22 +72,62 @@ function CreateProduct({setStateAlert}) {
     });
   }
 
-  const handleChangeCategory = (evt) => {
-    const value = evt.target.value;
-    setProduct({
-      ...product,
-      ["categoryId"]: value,
-    });
+  function handleChangeNumber(evt) {
+    if(evt.target.valueAsNumber) {
+      setProduct({
+        ...product,
+        [evt.target.name]: evt.target.valueAsNumber,
+      });
+    }
+    else {
+      setProduct({
+        ...product,
+        [evt.target.name]: 0,
+      });
+    }
+  }
+
+  //handle weight
+  const handleChangeWeight = (evt) => {
+    if(evt.target.valueAsNumber) setWeightValue(evt.target.valueAsNumber)
+    else setWeightValue(0);
   };
 
-  const handleChangeBrand = (evt) => {
-    const value = evt.target.value;
-    setProduct({
-      ...product,
-      ["brand"]: value,
-    });
+  function changeWeightUnit() {
+    setWeightUnit(!weightUnit);
+  }
+
+  //PROPERTIES
+  const handleKeyDown = (evt, array, setArray, ref) => {
+    if (evt.keyCode == 13 && evt.target.value) {
+      let newArray = array;
+      if (newArray.includes(evt.target.value)) {
+        setStateAlert({
+          severity: "warning",
+          variant: "filled",
+          open: true,
+          content: "Giá trị bị trùng",
+        });
+      } else {
+        newArray.push(evt.target.value);
+      }
+      setArray([...newArray]);
+      ref.current.value = "";
+    }
   };
 
+  function handleDeleteChip(item, array, setArray) {
+    let newArray = array;
+    newArray = newArray.filter((chip) => chip !== item);
+    setArray([...newArray]);
+  }
+
+  //category
+  const handleSelectCategory = (categoryId) => {
+    setProduct({ ...product, categoryId: categoryId });
+  };
+
+  //status
   const handleChangeSellableStatus = (evt) => {
     const value = evt.target.checked;
     setProduct({
@@ -87,23 +135,39 @@ function CreateProduct({setStateAlert}) {
       ["sellableStatus"]: value,
     });
   };
-  
+
+  //actions
   const cancelAction = () => {
-    setStateAlert({ severity: "warning", variant: "filled", open: true, content: "Đã hủy tạo thêm phiên bản sản phẩm" });
+    setStateAlert({
+      severity: "warning",
+      variant: "filled",
+      open: true,
+      content: "Đã hủy tạo thêm phiên bản sản phẩm",
+    });
     history.push("/san-pham");
-  }
+  };
 
   const handleCreateProduct = () => {
+    console.log(product);
     ProductAPI.createProduct(product)
-    .then((res) => {
-      setStateAlert({ severity: "success", variant: "filled", open: true, content: "Đã tạo thêm sản phẩm" });
-      history.push("/san-pham");
-    })
-    .catch(err => {
-      setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra khi tạo thêm sản phẩm" });
-      history.push("/san-pham");
-    });
-  }
+      .then((res) => {
+        setStateAlert({
+          severity: "success",
+          variant: "filled",
+          open: true,
+          content: "Đã tạo thêm sản phẩm",
+        });
+        history.push("/san-pham");
+      })
+      .catch((err) => {
+        setStateAlert({
+          severity: "error",
+          variant: "filled",
+          open: true,
+          content: err.response.data,
+        });
+      });
+  };
 
   return (
     <Box
@@ -144,7 +208,6 @@ function CreateProduct({setStateAlert}) {
             variant="contained"
             color="primary"
             onClick={() => {
-              console.log(product);
               handleCreateProduct();
             }}
           >
@@ -172,9 +235,6 @@ function CreateProduct({setStateAlert}) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Tên sản phẩm
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
@@ -183,36 +243,33 @@ function CreateProduct({setStateAlert}) {
                     onChange={handleChange}
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <Box display="flex">
-                    <Typography variant="subtitle1" id="tableTitle">
-                      Mã sản phẩm/SKU
-                    </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
-                  </Box>
-                  <TextField
-                    fullWidth
-                    name="variantCode"
-                    placeholder="Nhập mã sản phẩm"
-                    onChange={handleChange}
-                  />
-                </Grid>
                 <Grid item xs={6}>
                   <Box display="flex">
                     <Typography variant="subtitle1" id="tableTitle">
                       Khối lượng
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
                     name="weight"
                     placeholder="Nhập khối lượng"
-                    onChange={handleChange}
+                    type="number"
+                    onChange={(e) => handleChangeWeight(e)}
+                    InputProps={{
+                      endAdornment: (
+                        <React.Fragment>
+                          <Typography
+                            aria-label="Thay đổi đơn vị khối lượng"
+                            edge="end"
+                          >
+                            {!weightUnit ? "g" : "kg"}
+                          </Typography>
+                          <IconButton onClick={() => changeWeightUnit()}>
+                            <SwapHoriz />
+                          </IconButton>
+                        </React.Fragment>
+                      ),
+                    }}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -220,9 +277,6 @@ function CreateProduct({setStateAlert}) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Đơn vị tính
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
@@ -253,15 +307,13 @@ function CreateProduct({setStateAlert}) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Giá bán lẻ
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
+                    type="number"
                     name="retailPrice"
                     placeholder="Nhập giá bán buôn"
-                    onChange={handleChange}
+                    onChange={handleChangeNumber}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -269,15 +321,13 @@ function CreateProduct({setStateAlert}) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Giá bán buôn
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
+                    type="number"
                     name="wholeSalePrice"
                     placeholder="Nhập giá bán buôn"
-                    onChange={handleChange}
+                    onChange={handleChangeNumber}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -288,15 +338,13 @@ function CreateProduct({setStateAlert}) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Giá nhập
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
+                    type="number"
                     name="originalPrice"
                     placeholder="Nhập giá nhập"
-                    onChange={handleChange}
+                    onChange={handleChangeNumber}
                   />
                 </Grid>
               </Grid>
@@ -321,15 +369,27 @@ function CreateProduct({setStateAlert}) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Màu sắc
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
-                    name="color"
+                    name="colors"
                     placeholder="Nhập màu sắc"
-                    onChange={handleChange}
+                    inputRef={colorRef}
+                    // onChange={handleChange}
+                    onKeyDown={(evt) =>
+                      handleKeyDown(evt, colors, setColors, colorRef)
+                    }
+                    InputProps={{
+                      startAdornment: colors.map((item, index) => (
+                        <Chip
+                          key={index}
+                          label={item}
+                          onDelete={() =>
+                            handleDeleteChip(item, colors, setColors)
+                          }
+                        />
+                      )),
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -337,15 +397,27 @@ function CreateProduct({setStateAlert}) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Chất liệu
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
-                    name="material"
+                    name="materials"
                     placeholder="Nhập chất liệu"
-                    onChange={handleChange}
+                    inputRef={materialRef}
+                    // onChange={handleChange}
+                    onKeyDown={(evt) =>
+                      handleKeyDown(evt, materials, setMaterials, materialRef)
+                    }
+                    InputProps={{
+                      startAdornment: materials.map((item, index) => (
+                        <Chip
+                          key={index}
+                          label={item}
+                          onDelete={() =>
+                            handleDeleteChip(item, materials, setMaterials)
+                          }
+                        />
+                      )),
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -353,15 +425,27 @@ function CreateProduct({setStateAlert}) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Kích thước
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
-                    name="size"
+                    name="sizes"
                     placeholder="Nhập kích thước"
-                    onChange={handleChange}
+                    inputRef={sizeRef}
+                    // onChange={handleChange}
+                    onKeyDown={(evt) =>
+                      handleKeyDown(evt, sizes, setSizes, sizeRef)
+                    }
+                    InputProps={{
+                      startAdornment: sizes.map((item, index) => (
+                        <Chip
+                          key={index}
+                          label={item}
+                          onDelete={() =>
+                            handleDeleteChip(item, sizes, setSizes)
+                          }
+                        />
+                      )),
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -424,15 +508,13 @@ function CreateProduct({setStateAlert}) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Số lượng trong kho
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
+                    type="number"
                     name="inventoryQuantity"
                     placeholder="Nhập số lượng trong kho"
-                    onChange={handleChange}
+                    onChange={handleChangeNumber}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -440,15 +522,13 @@ function CreateProduct({setStateAlert}) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Số lượng có thể bán
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
+                    type="number"
                     name="sellableQuantity"
                     placeholder="Nhập số lượng có thể bán"
-                    onChange={handleChange}
+                    onChange={handleChangeNumber}
                   />
                 </Grid>
               </Grid>
@@ -478,28 +558,8 @@ function CreateProduct({setStateAlert}) {
                     >
                       Loại sản phẩm
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
-                  <Select
-                    id='category-select'
-                    value={product.categoryId}
-                    onChange={handleChangeCategory}
-                    fullWidth
-                    displayEmpty={true}
-                    renderValue={
-                      product.categoryId !== ""
-                        ? undefined
-                        : () => "Chọn loại sản phẩm"
-                    }
-                  >
-                    {categories.map((category, index) => {
-                      return (
-                        <MenuItem key={index} value={category.id}>{category.name}</MenuItem>
-                      );
-                    })}
-                  </Select>
+                  <CategorySelect handleSelectCategory={handleSelectCategory} />
                 </Grid>
                 <Grid item xs={12}>
                   <Box display="flex">
@@ -511,28 +571,13 @@ function CreateProduct({setStateAlert}) {
                     >
                       Nhãn hiệu
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
-                  <Select
-                    id='brand-select'
-                    value={product.brand}
-                    onChange={handleChangeBrand}
+                  <TextField
                     fullWidth
-                    displayEmpty={true}
-                    renderValue={
-                      product.brand !== ""
-                        ? undefined
-                        : () => "Chọn nhãn hiệu"
-                    }
-                  >
-                    {brands.map((brand, index) => {
-                      return (
-                        <MenuItem key={index} value={brand.label}>{brand.label}</MenuItem>
-                      );
-                    })}
-                  </Select>
+                    name="brand"
+                    placeholder="Nhập nhãn hiệu"
+                    onChange={handleChange}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <Box display="flex">
@@ -543,9 +588,6 @@ function CreateProduct({setStateAlert}) {
                     >
                       Mô tả sản phẩm
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
@@ -564,15 +606,13 @@ function CreateProduct({setStateAlert}) {
                     >
                       Trạng thái
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <Box display="flex" justifyContent="space-between">
                     <Typography>Cho phép bán</Typography>
                     <Switch
                       inputProps={{ "aria-label": "Trạng thái" }}
                       size="small"
+                      checked={product.sellableStatus ? true : false}
                       onChange={handleChangeSellableStatus}
                     />
                   </Box>

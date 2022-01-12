@@ -1,6 +1,8 @@
 package com.sapo.storemanagement.service.impl;
 
 import com.sapo.storemanagement.dto.ProductVariantDto;
+import com.sapo.storemanagement.dto.VariantDto;
+import com.sapo.storemanagement.dto.VariantsListDto;
 import com.sapo.storemanagement.entities.*;
 import com.sapo.storemanagement.exception.BadNumberException;
 import com.sapo.storemanagement.exception.ForeignKeyConstraintException;
@@ -8,22 +10,33 @@ import com.sapo.storemanagement.exception.RecordNotFoundException;
 import com.sapo.storemanagement.exception.UniqueKeyConstraintException;
 import com.sapo.storemanagement.repository.ProductRepository;
 import com.sapo.storemanagement.repository.VariantRepository;
+import com.sapo.storemanagement.repository.VariantsOrderRepository;
 import com.sapo.storemanagement.service.VariantService;
+import com.sapo.storemanagement.utils.itemcodegenerator.ItemCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class VariantServiceImpl implements VariantService {
     private final VariantRepository variantRepository;
     private final ProductRepository productRepository;
+    private final VariantsOrderRepository variantsOrderRepository;
 
     @Autowired
-    public VariantServiceImpl(VariantRepository variantRepository, ProductRepository productRepository) {
+    @Qualifier("variant-code-generator")
+    private ItemCodeGenerator itemCodeGenerator;
+
+    @Autowired
+    public VariantServiceImpl(VariantRepository variantRepository, ProductRepository productRepository,
+            VariantsOrderRepository variantsOrderRepository) {
         this.variantRepository = variantRepository;
         this.productRepository = productRepository;
+        this.variantsOrderRepository = variantsOrderRepository;
     }
 
     @Override
@@ -37,88 +50,79 @@ public class VariantServiceImpl implements VariantService {
     }
 
     @Override
+    public List<VariantsOrder> listVariantByOrderId(long orderId) {
+        List<VariantsOrder> variantListByOrder = variantsOrderRepository.findVariantByOrderId(orderId);
+        // List<Variant> variantList = null;
+        // variantListByOrder.forEach((item) -> {
+        // Variant variant =
+        // variantRepository.findById(item.getVariant().getId()).orElseThrow(() -> new
+        // RecordNotFoundException("variant not found"));
+        // variantList.add(variant);
+        // });
+        return variantListByOrder;
+    }
+
+    @Override
     public Variant getVariantById(Long id) {
-        if(id <= 0) {
+        if (id <= 0) {
             throw new BadNumberException("id must be greater than 0");
         }
 
         return variantRepository
-            .findById(id)
-            .orElseThrow(() -> new RecordNotFoundException("Variant not found"));
+                .findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Variant not found"));
     }
 
     @Override
     @Transactional
-    public Variant saveDefaultVariant(Variant variant) {
-        // check unique key constraint
-        if(variantRepository.existsByCode(variant.getCode())) {
-            throw new UniqueKeyConstraintException("Variant code already existed");
-        }
-
-        // check foreign key constraint
-        if(!productRepository.existsById(variant.getProduct().getId())) {
-            throw new ForeignKeyConstraintException("Referenced product does not exist");
-        }
-
-        return variantRepository.save(variant);
-    }
-
-    @Override
-    @Transactional
-    public Variant saveVariant(ProductVariantDto productVariantDto) {
-        Product product = productRepository.findById(productVariantDto.getProductId()).get();
-        Variant newVariant = new Variant(
-                product,
-                productVariantDto.getVariantCode(),
-                productVariantDto.getInventoryQuantity(), productVariantDto.getSellableQuantity(),
-                productVariantDto.getSize(), productVariantDto.getColor(),
-                productVariantDto.getMaterial(), productVariantDto.getUnit(),
-                productVariantDto.getOriginalPrice(), productVariantDto.getWholeSalePrice(), productVariantDto.getRetailPrice()
-        );
-        return variantRepository.save(newVariant);
-    }
-
-    @Override
-    @Transactional
-    public Variant updateVariant(long id, ProductVariantDto productVariantDto) {
-        if(id <= 0) {
-            throw new BadNumberException("id must be greater than 0");
-        }
+    public Variant updateVariant(long id, VariantDto variantDto) {
+        if(variantDto.getVariantCode().equals("")) throw new BadNumberException("Không được bỏ trống mã phiên bản");
+//      if(variantDto.getRetailPrice() == null) throw new BadNumberException("Không được bỏ trống giá bán lẻ");
+        if(variantDto.getWholeSalePrice() == null) throw new BadNumberException("Không được bỏ trống giá bán buôn");
+        if(variantDto.getOriginalPrice() == null) throw new BadNumberException("Không được bỏ trống giá nhập");
+        if(variantDto.getInventoryQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng trong kho");
+        if(variantDto.getSellableQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng có thể bán");
 
         Variant existingVariant = this.getVariantById(id);
 
         // check unique key constraint
-        if(!existingVariant.getCode().equals(productVariantDto.getVariantCode()) &&
-            variantRepository.existsByCode(productVariantDto.getVariantCode())) {
-            throw new UniqueKeyConstraintException("Variant code already existed");
+        if(!existingVariant.getCode().equals(variantDto.getVariantCode()) &&
+            variantRepository.existsByCode(variantDto.getVariantCode())) {
+            throw new UniqueKeyConstraintException("Mã phiên bản sản phẩm bị trùng với phiên bản khác");
         }
 
-        // check foreign key constraint
-        if(!productRepository.existsById(productVariantDto.getProductId())) {
-            throw new ForeignKeyConstraintException("Referenced product does not exist");
-        }
+//        cái này chắc không thể xảy ra
+//        check foreign key constraint
+//        if(!productRepository.existsById(existingVariant.getProduct().getId())) {
+//            throw new ForeignKeyConstraintException("Không tìm thấy sản phẩm ứng với phiên bản này");
+//        }
 
-        existingVariant.setCode(productVariantDto.getVariantCode());
-        existingVariant.setColor(productVariantDto.getColor());
-        existingVariant.setMaterial(productVariantDto.getMaterial());
-        existingVariant.setInventoryQuantity(productVariantDto.getInventoryQuantity());
-        existingVariant.setSellableQuantity(productVariantDto.getSellableQuantity());
-        existingVariant.setOriginalPrice(productVariantDto.getOriginalPrice());
-        existingVariant.setRetailPrice(productVariantDto.getRetailPrice());
-        existingVariant.setWholeSalePrice(productVariantDto.getWholeSalePrice());
-        existingVariant.setSize(productVariantDto.getSize());
-        existingVariant.setUnit(productVariantDto.getUnit());
+        existingVariant.setCode(variantDto.getVariantCode());
+        existingVariant.setInventoryQuantity(variantDto.getInventoryQuantity());
+        existingVariant.setSellableQuantity(variantDto.getSellableQuantity());
+        existingVariant.setColor(variantDto.getColor());
+        existingVariant.setMaterial(variantDto.getMaterial());
+        existingVariant.setSize(variantDto.getSize());
+        existingVariant.setUnit(variantDto.getUnit());
+        existingVariant.setRetailPrice(variantDto.getRetailPrice());
+        existingVariant.setWholeSalePrice(variantDto.getWholeSalePrice());
+        existingVariant.setOriginalPrice(variantDto.getOriginalPrice());
 
         return variantRepository.save(existingVariant);
     }
 
     @Override
     @Transactional
-    public String deleteVariant(Long id) {
+    public Variant deleteVariant(Long id) {
         Variant variant = this.getVariantById(id);
         variant.setRecordStatus(RecordStatus.DELETED);
         variantRepository.save(variant);
 
-        return "Delete Variant " + id;
+        return variant;
+    }
+
+    @Override
+    public String getLastestVariantCode() {
+        return itemCodeGenerator.generate();
     }
 }
