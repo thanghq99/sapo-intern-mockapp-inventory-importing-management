@@ -1,5 +1,7 @@
 package com.sapo.storemanagement.security;
 
+import com.sapo.storemanagement.entities.Role;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -18,6 +20,9 @@ public class RegisterRequest {
     @Email
     private String email;
 
+    @NotNull(message = "Role cannot be blank")
+    private String role;
+
     public String getUsername() {
         return username;
     }
@@ -29,4 +34,6 @@ public class RegisterRequest {
     public String getEmail() {
         return email;
     }
+
+    public String getRole(){ return role;}
 }

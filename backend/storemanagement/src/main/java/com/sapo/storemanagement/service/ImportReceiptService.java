@@ -1,6 +1,7 @@
 package com.sapo.storemanagement.service;
 
 import com.sapo.storemanagement.dto.ImportReceiptDto;
+import com.sapo.storemanagement.dto.ImportReceiptResponseDto;
 import com.sapo.storemanagement.entities.ImportReceipt;
 
 import java.util.List;
@@ -12,5 +13,5 @@ public interface ImportReceiptService {
 
     ImportReceipt saveImportReceipt(long creatorId, long orderId, ImportReceiptDto importReceiptDto);
 
-    List<ImportReceipt> listAllImportReceiptsByOrder(long orderId);
+    List<ImportReceiptResponseDto> listAllImportReceiptsByOrder(long orderId);
 }

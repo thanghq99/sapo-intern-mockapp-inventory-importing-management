@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from "react-router-dom";
-import { styled} from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -25,6 +25,7 @@ import ContactMailIcon from '@mui/icons-material/ContactMail';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Box } from '@mui/material';
+import { AuthContext } from '../../contextAPI/AuthContext';
 
 
 const drawerWidth = 240;
@@ -76,13 +77,22 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 const navList = [{ title: 'Danh sách sản phẩm', url: '/san-pham' }, { title: 'Quản lý kho', url: '/kho-hang' }, { title: 'Nhập hàng', url: '/nhap-hang' }, { title: 'Kiểm hàng', url: '/kiem-hang' }, { title: 'Nhà cung cấp', url: '/nha-cung-cap' }, { title: 'Cài đặt', url: '/cai-dat' }];
-const subMenuList = [{ title: 'Hotline: 1900 0000', url: '/hotline' }, { title: 'Trợ giúp', url: '/tro-giup' }, { title: 'Thông tin tài khoản', url: '/tai-khoan' }, { title: 'Đăng xuất', url: '/dang-xuat' }]
+const subMenuList = [{ title: 'Hotline: 1900 0000', url: '/hotline' }, { title: 'Trợ giúp', url: '/tro-giup' }, { title: 'Thông tin tài khoản', url: '/tai-khoan' }]
 const navListIcons = [
     <LocalMallIcon />, <WarehouseIcon />, <AddShoppingCartIcon />, <AssignmentTurnedInIcon />, <AddBusinessIcon />, <SettingsIcon />
 ]
-const userNavListIcons = [<PhoneIcon />, <LiveHelpIcon />, <ContactMailIcon />, <LogoutIcon />]
+const userNavListIcons = [<PhoneIcon />, <LiveHelpIcon />, <ContactMailIcon />]
 
-export default function MiniDrawer({setHeaderTitle}) {
+
+
+export default function MiniDrawer({ setHeaderTitle }) {
+
+
+    const { dispatch } = React.useContext(AuthContext);
+    const handleClickLogout = () => {
+        dispatch({ type: "LOGOUT" });
+    }
+
     const [open, setOpen] = React.useState(false);
     const [openSubMenu, setopenSubMenu] = React.useState(false);
 
@@ -143,6 +153,14 @@ export default function MiniDrawer({setHeaderTitle}) {
                                     </ListItemButton>
                                 </Link>
                             ))}
+                            <Link onClick={handleClickLogout} to="/login" className="nav_link" >
+                                <ListItemButton className="nav_leftbar_item" sx={{ pl: 4 }}>
+                                    <ListItemIcon className="nav_item_icon">
+                                        <LogoutIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Đăng xuất" />
+                                </ListItemButton>
+                            </Link>
                         </List>
                     </Collapse>
                 </List>

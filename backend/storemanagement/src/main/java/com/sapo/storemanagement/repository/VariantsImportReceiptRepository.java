@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface VariantsImportReceiptRepository extends JpaRepository<VariantsImportReceipt, VariantsImportReceiptId> {
     @Query(
@@ -17,4 +19,6 @@ public interface VariantsImportReceiptRepository extends JpaRepository<VariantsI
         nativeQuery = true
     )
     long totalImportedQuantityOfVariantInOrder(@Param("variantId") long variantId, @Param("orderId") long orderId);
+
+    List<VariantsImportReceipt> findAllByImportReceipt_Id(Long importReceiptId);
 }

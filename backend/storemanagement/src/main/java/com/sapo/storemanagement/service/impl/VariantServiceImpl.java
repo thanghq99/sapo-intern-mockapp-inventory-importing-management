@@ -2,10 +2,8 @@ package com.sapo.storemanagement.service.impl;
 
 import com.sapo.storemanagement.dto.ProductVariantDto;
 import com.sapo.storemanagement.dto.VariantDto;
-import com.sapo.storemanagement.dto.VariantsListDto;
 import com.sapo.storemanagement.entities.*;
 import com.sapo.storemanagement.exception.BadNumberException;
-import com.sapo.storemanagement.exception.ForeignKeyConstraintException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
 import com.sapo.storemanagement.exception.UniqueKeyConstraintException;
 import com.sapo.storemanagement.repository.ProductRepository;
@@ -18,7 +16,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -77,7 +74,7 @@ public class VariantServiceImpl implements VariantService {
     @Transactional
     public Variant updateVariant(long id, VariantDto variantDto) {
         if(variantDto.getVariantCode().equals("")) throw new BadNumberException("Không được bỏ trống mã phiên bản");
-        if(variantDto.getRetailPrice() == null) throw new BadNumberException("Không được bỏ trống giá bán lẻ");
+//      if(variantDto.getRetailPrice() == null) throw new BadNumberException("Không được bỏ trống giá bán lẻ");
         if(variantDto.getWholeSalePrice() == null) throw new BadNumberException("Không được bỏ trống giá bán buôn");
         if(variantDto.getOriginalPrice() == null) throw new BadNumberException("Không được bỏ trống giá nhập");
         if(variantDto.getInventoryQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng trong kho");
@@ -91,8 +88,8 @@ public class VariantServiceImpl implements VariantService {
             throw new UniqueKeyConstraintException("Mã phiên bản sản phẩm bị trùng với phiên bản khác");
         }
 
-        // cái này chắc không thể xảy ra
-        // check foreign key constraint
+//        cái này chắc không thể xảy ra
+//        check foreign key constraint
 //        if(!productRepository.existsById(existingVariant.getProduct().getId())) {
 //            throw new ForeignKeyConstraintException("Không tìm thấy sản phẩm ứng với phiên bản này");
 //        }
@@ -117,6 +114,8 @@ public class VariantServiceImpl implements VariantService {
         Variant variant = this.getVariantById(id);
         variant.setRecordStatus(RecordStatus.DELETED);
         variantRepository.save(variant);
+
+        productRepository.deleteProductIfNoVariantAvailable(variant.getProduct().getId());
 
         return variant;
     }

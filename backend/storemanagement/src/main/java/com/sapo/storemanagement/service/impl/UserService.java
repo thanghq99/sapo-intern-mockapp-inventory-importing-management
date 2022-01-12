@@ -46,8 +46,8 @@ public class UserService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("Username" + username + " not found"));
+        User user = userRepository.findByUsername(username);
+          //  .orElseThrow(() -> new UsernameNotFoundException("Username" + username + " not found"));
         return new AppUserDetails(user);
     }
 
@@ -66,6 +66,26 @@ public class UserService implements UserDetailsService {
         String encodedPassword = passwordEncoder.encode(loginRequest.getPassword());
         User user = new User(username, encodedPassword, email);
         Role role = roleRepository.findByName("ADMIN").orElseThrow(() -> new RecordNotFoundException("Role not found"));
+        user.addRole(role);
+
+        userRepository.save(user);
+    }
+
+    public void createUserStaffAccount(RegisterRequest loginRequest) {
+        String username = loginRequest.getUsername();
+        String email = loginRequest.getEmail();
+
+        if(userRepository.existsByUsername(username)) {
+            throw new UniqueKeyConstraintException("Username already exists");
+        }
+
+        if(userRepository.existsByEmail(email)) {
+            throw new UniqueKeyConstraintException("Email already exists");
+        }
+
+        String encodedPassword = passwordEncoder.encode(loginRequest.getPassword());
+        User user = new User(username, encodedPassword, email);
+        Role role = roleRepository.findByName(loginRequest.getRole()).orElseThrow(() -> new RecordNotFoundException("Role not found"));
         user.addRole(role);
 
         userRepository.save(user);

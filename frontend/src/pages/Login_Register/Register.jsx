@@ -20,7 +20,8 @@ export default function Register() {
         const newAdmin = {
             username: username.current.value,
             email: email.current.value,
-            password: password.current.value
+            password: password.current.value,
+            role:"ADMIN"
         }
         if (username.current.value == "" || password.current.value == "" || email.current.value == "") {
             setStateAlert({ severity: "error", variant: "standard", open: true, content: "Yêu cầu điền tên đăng ký, email và mật khẩu" })
