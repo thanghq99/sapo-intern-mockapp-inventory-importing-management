@@ -36,11 +36,11 @@ function ProductAPI() {
     return callAPI.get(`variants`);
   };
   // [POST] /
-  this.createVariant = (data) => {
-    return callAPI.post(`variants`, data);
+  this.createVariant = (id, data) => {
+    return callAPI.post(`products/${id}/create-variant`, data);
   };
   // [put] /
-  this.updateVariant = (id,data) => {
+  this.updateVariant = (id, data) => {
     return callAPI.put(`variants/${id}`, data);
   };
   // [DELETE] /

@@ -266,7 +266,7 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(500); //list all variants
   const [chosenVariant, setChosenVariant] = React.useState(variants[0].code);
 
   const handleRequestSort = (event, property) => {

@@ -64,7 +64,7 @@ public class Product {
     }
 
     public Product(String name, Category category, String brand, String description,
-                   Double weight, String imageUrl, SellableStatus sellableStatus) {
+            Double weight, String imageUrl, SellableStatus sellableStatus) {
         this.name = name;
         this.category = category;
         this.brand = brand;
@@ -101,7 +101,9 @@ public class Product {
         this.weight = weight;
     }
 
-    public void setBrand(String brand) { this.brand = brand; }
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
 
     public String getBrand() {
         return brand;

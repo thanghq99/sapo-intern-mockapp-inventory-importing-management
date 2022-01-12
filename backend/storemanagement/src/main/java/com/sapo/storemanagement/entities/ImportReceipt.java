@@ -38,6 +38,10 @@ public class ImportReceipt {
         this.createdBy = createdBy;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getCode() {
         return code;
     }
