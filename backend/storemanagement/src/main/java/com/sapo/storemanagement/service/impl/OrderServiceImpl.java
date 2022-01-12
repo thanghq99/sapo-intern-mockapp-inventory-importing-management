@@ -55,7 +55,10 @@ public class OrderServiceImpl implements OrderService {
     // lay thong tin don nhap hang theo id
     @Override
     public Order getOrderById(long id) {
-        Order order = orderRepository.findById(id).get();
+        if(id <= 0) {
+            throw new BadNumberException("id must be greater than 0");
+        }
+        Order order = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
         return order;
     }
 
@@ -100,12 +103,7 @@ public class OrderServiceImpl implements OrderService {
     public Order updateOrder(long id, OrderDto newOrderDto) {
         Order orderUpdate = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("order not found"));
         double oldTotalAmount = orderUpdate.getTotalAmount();
-//        System.out.println("bandau: " + oldTotalAmount);
-//        orderUpdate.setTotalAmount(100);
-//        System.out.println("lan1 " + orderUpdate.getTotalAmount());
-//        orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() + 200);
-//        System.out.println("lan 2 " + orderUpdate.getTotalAmount());
-//        AtomicReference<Double> newTotalAmount = new AtomicReference<>((double) 0);
+
         if(orderUpdate.getStatus().equals("Đang giao dịch")) {
             List<LineItemDto> newVariantOrders = newOrderDto.getLineItems();
             List<VariantsOrder> variantsOrderUpdates = variantsOrderRepository.findVariantByOrderId(orderUpdate.getId());
@@ -115,7 +113,7 @@ public class OrderServiceImpl implements OrderService {
                 AtomicBoolean check = new AtomicBoolean(false);
                 newVariantOrders.forEach(newVariant -> {
                     if(newVariant.getVariantId().equals(oldVariant.getVariant().getId())){
-                        orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() - (oldVariant.getPrice() * oldVariant.getSuppliedQuantity()) + (newVariant.getPrice() * newVariant.getQuantity()));
+                        orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() - (oldVariant.getPrice() * oldVariant.getSuppliedQuantity() * 0.94) + (newVariant.getPrice() * newVariant.getQuantity() * 0.94));
                         oldVariant.setPrice(newVariant.getPrice());
                         oldVariant.setSuppliedQuantity(newVariant.getQuantity());
 
@@ -124,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
                     }
                 });
                 if(!check.get()){
-                    orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() - (oldVariant.getPrice() * oldVariant.getSuppliedQuantity()));
+                    orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() - (oldVariant.getPrice() * oldVariant.getSuppliedQuantity() * 0.94));
                     variantsOrderRepository.deleteVariantOderInOrder(oldVariant.getOrder().getId(), oldVariant.getVariant().getId());
                 }
             });
@@ -141,7 +139,7 @@ public class OrderServiceImpl implements OrderService {
                 });
 
                 if(!check.get()){
-                    orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() + (newVariant.getPrice() * newVariant.getQuantity()));
+                    orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() + (newVariant.getPrice() * newVariant.getQuantity() * 0.94));
                     Variant variant = variantService.getVariantById(newVariant.getVariantId());
                     VariantsOrder variantsOrderAdd = new VariantsOrder(
                             orderUpdate,

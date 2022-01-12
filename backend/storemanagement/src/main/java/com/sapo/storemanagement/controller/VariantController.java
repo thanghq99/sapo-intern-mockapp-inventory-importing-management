@@ -2,6 +2,7 @@ package com.sapo.storemanagement.controller;
 
 import com.sapo.storemanagement.dto.VariantDto;
 import com.sapo.storemanagement.entities.Variant;
+import com.sapo.storemanagement.entities.VariantsOrder;
 import com.sapo.storemanagement.service.VariantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +22,12 @@ public class VariantController {
     }
 
     @GetMapping("/{id}")
-    public Variant findVariantById(@PathVariable long id){
+    public Variant findVariantById(@PathVariable long id) {
         return variantService.getVariantById(id);
     }
 
     @GetMapping
-    public List<Variant> findAllVariants(){
+    public List<Variant> findAllVariants() {
         return variantService.listAllVariants();
     }
 
@@ -41,7 +42,7 @@ public class VariantController {
     }
 
     @DeleteMapping("/{id}")
-    public Variant deleteVariant(@PathVariable long id){
+    public Variant deleteVariant(@PathVariable long id) {
         return variantService.deleteVariant(id);
     }
 }

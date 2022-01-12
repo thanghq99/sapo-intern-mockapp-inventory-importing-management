@@ -11,15 +11,15 @@ public class OrderDto {
     private String orderCode;
     private String description;
     private LocalDate deliveryTime;
-    private Long createdBy;
+//    private Long createdBy;
 
-    public OrderDto(Long supplierId, List<LineItemDto> lineItems, String orderCode, String description, LocalDate deliveryTime, Long createdBy) {
+    public OrderDto(Long supplierId, List<LineItemDto> lineItems, String orderCode, String description, LocalDate deliveryTime) {
         this.supplierId = supplierId;
         this.lineItems = lineItems;
         this.orderCode = orderCode;
         this.description = description;
         this.deliveryTime = deliveryTime;
-        this.createdBy = createdBy;
+//        this.createdBy = createdBy;
     }
 
     public Long getSupplierId() {
@@ -42,7 +42,7 @@ public class OrderDto {
         return deliveryTime;
     }
 
-    public Long getCreatedBy() {
-        return createdBy;
-    }
+//    public Long getCreatedBy() {
+//        return createdBy;
+//    }
 }

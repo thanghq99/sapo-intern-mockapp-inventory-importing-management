@@ -22,6 +22,7 @@ function OrderAPI() {
     this.updateOrder = (id, data) => {
         return callAPI.put(`orders/${id}`,data)
     }
+    
     this.VariantOrder = (data) => {
         // return callAPI.get(`variants/variantOrder/${data}`)
         return callAPI.get(`orders/${data}/variants`);
