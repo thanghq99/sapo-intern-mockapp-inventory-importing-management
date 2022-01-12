@@ -15,16 +15,16 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
   const [lastestCode, setLastestCode] = useState('');
   const [variantInfo, setVariantInfo] = useState({
     variantCode: "",
-    inventoryQuantity: "",
-    sellableQuantity: "",
+    inventoryQuantity: 0,
+    sellableQuantity: 0,
     size: "",
     color: "",
     material: "",
     unit: "",
-    originalPrice: "",
-    wholeSalePrice: "",
-    retailPrice: "",
-    sellableStatus: "",
+    originalPrice: 0,
+    wholeSalePrice: 0,
+    retailPrice: 0,
+    sellableStatus: 0,
   });
 
   useEffect(() => {
@@ -48,6 +48,22 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
       ...variantInfo,
       [evt.target.name]: value,
     });
+  }
+
+  function handleChangeNumber(evt) {
+    console.log("edit as number")
+    if(evt.target.valueAsNumber) {
+      setVariantInfo({
+        ...variantInfo,
+        [evt.target.name]: evt.target.valueAsNumber,
+      });
+    }
+    else {
+      setVariantInfo({
+        ...variantInfo,
+        [evt.target.name]: 0,
+      });
+    }
   }
 
   const handleChangeSellableStatus = (evt) => {
@@ -188,10 +204,11 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
             <Typography variant="body2">Giá bán lẻ</Typography>
             <TextField
               fullWidth
+              type="number"
               size="small"
               name="retailPrice"
               placeholder="Nhập giá bán lẻ"
-              onChange={handleChange}
+              onChange={handleChangeNumber}
               value={variantInfo.retailPrice}
             />
           </Box>
@@ -199,10 +216,11 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
             <Typography variant="body2">Giá bán buôn</Typography>
             <TextField
               fullWidth
+              type="number"
               size="small"
               name="wholeSalePrice"
               placeholder="Nhập giá bán buôn"
-              onChange={handleChange}
+              onChange={handleChangeNumber}
               value={variantInfo.wholeSalePrice}
             />
           </Box>
@@ -210,10 +228,11 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
             <Typography variant="body2">Giá nhập</Typography>
             <TextField
               fullWidth
+              type="number"
               size="small"
               name="originalPrice"
               placeholder="Nhập giá nhập"
-              onChange={handleChange}
+              onChange={handleChangeNumber}
               value={variantInfo.originalPrice}
             />
           </Box>
@@ -247,10 +266,11 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
             <Typography variant="body2">Số lượng trong kho</Typography>
             <TextField
               fullWidth
+              type="number"
               size="small"
               name="inventoryQuantity"
               placeholder="Nhập số lượng kho khởi tạo"
-              onChange={handleChange}
+              onChange={handleChangeNumber}
               value={variantInfo.inventoryQuantity}
             />
           </Box>
@@ -258,10 +278,11 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
             <Typography variant="body2">Số lượng có thể bán</Typography>
             <TextField
               fullWidth
+              type="number"
               size="small"
               name="sellableQuantity"
               placeholder="Nhập số lượng có thể bán"
-              onChange={handleChange}
+              onChange={handleChangeNumber}
               value={variantInfo.sellableQuantity}
             />
           </Box>

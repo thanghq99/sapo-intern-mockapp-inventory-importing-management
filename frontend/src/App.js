@@ -1,7 +1,7 @@
 import "./app.scss";
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Box, CssBaseline, Snackbar, Alert } from '@mui/material';
+import { Box, CssBaseline, Snackbar, Alert } from "@mui/material";
 import Sidebar from "./components/sidebar/Sidebar";
 import Products from "./pages/Products/Products";
 import SupplyOrder from "./pages/SupplyOrder/NewOrder/SupplyOrder";
@@ -18,9 +18,20 @@ import Login from "./pages/Login_Register/Login";
 import Register from "./pages/Login_Register/Register";
 import { AuthContext } from "./contextAPI/AuthContext";
 import EditProduct from "./pages/Products/EditProduct";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { viVN } from "@mui/material/locale";
+
+const theme = createTheme(
+  {
+    palette: {
+      primary: { main: "#1976d2" },
+    },
+  },
+  viVN
+);
 
 function App() {
-  const [headerTitle, setHeaderTitle] = useState('');
+  const [headerTitle, setHeaderTitle] = useState("");
   const { token } = useContext(AuthContext);
   const [stateAlert, setStateAlert] = useState({
     severity: "",
@@ -30,11 +41,12 @@ function App() {
   });
 
   return (
-    <div className="App" style={{ display: "flex", flexDirection: "column" }}>
-      <Router className="App1">
-        <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
+    <ThemeProvider theme={theme}>
+      <div className="App" style={{ display: "flex", flexDirection: "column" }}>
+        <Router className="App1">
+          <Switch>
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
 
           {!token ?
             <Login />
@@ -77,15 +89,25 @@ function App() {
                       variant={stateAlert.variant}
                       sx={{ width: "100%" }}
                     >
-                      {stateAlert.content}
-                    </Alert>
-                  </Snackbar>
-                )}
+                      <Alert
+                        onClose={() =>
+                          setStateAlert({ ...stateAlert, open: false })
+                        }
+                        severity={stateAlert.severity}
+                        variant={stateAlert.variant}
+                        sx={{ width: "100%" }}
+                      >
+                        {stateAlert.content}
+                      </Alert>
+                    </Snackbar>
+                  )}
+                </Box>
               </Box>
-            </Box>}
-        </Switch>
-      </Router>
-    </div>
+            )}
+          </Switch>
+        </Router>
+      </div>
+    </ThemeProvider>
   );
 }
 

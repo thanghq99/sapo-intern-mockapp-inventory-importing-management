@@ -344,7 +344,7 @@ export default function ProductsTable({products}) {
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: (dense ? 33 : 50.5) * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />
@@ -354,6 +354,7 @@ export default function ProductsTable({products}) {
           </Table>
         </TableContainer>
         <TablePagination
+          labelRowsPerPage="Số hàng một trang"
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={products.length}

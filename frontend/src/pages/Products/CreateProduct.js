@@ -61,7 +61,7 @@ function CreateProduct({ setStateAlert }) {
       material: [...materials],
       size: [...sizes],
     });
-  }, [colors, sizes, materials, weightValue]);
+  }, [colors, sizes, materials, weightValue, weightUnit]);
 
   //handle product attributes
   function handleChange(evt) {
@@ -72,10 +72,26 @@ function CreateProduct({ setStateAlert }) {
     });
   }
 
+  function handleChangeNumber(evt) {
+    if(evt.target.valueAsNumber) {
+      setProduct({
+        ...product,
+        [evt.target.name]: evt.target.valueAsNumber,
+      });
+    }
+    else {
+      setProduct({
+        ...product,
+        [evt.target.name]: 0,
+      });
+    }
+  }
+
   //handle weight
   const handleChangeWeight = (evt) => {
-    setWeightValue(evt.target.valueAsNumber);
-  }
+    if(evt.target.valueAsNumber) setWeightValue(evt.target.valueAsNumber)
+    else setWeightValue(0);
+  };
 
   function changeWeightUnit() {
     setWeightUnit(!weightUnit);
@@ -297,7 +313,7 @@ function CreateProduct({ setStateAlert }) {
                     type="number"
                     name="retailPrice"
                     placeholder="Nhập giá bán buôn"
-                    onChange={handleChange}
+                    onChange={handleChangeNumber}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -311,7 +327,7 @@ function CreateProduct({ setStateAlert }) {
                     type="number"
                     name="wholeSalePrice"
                     placeholder="Nhập giá bán buôn"
-                    onChange={handleChange}
+                    onChange={handleChangeNumber}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -328,7 +344,7 @@ function CreateProduct({ setStateAlert }) {
                     type="number"
                     name="originalPrice"
                     placeholder="Nhập giá nhập"
-                    onChange={handleChange}
+                    onChange={handleChangeNumber}
                   />
                 </Grid>
               </Grid>
@@ -498,7 +514,7 @@ function CreateProduct({ setStateAlert }) {
                     type="number"
                     name="inventoryQuantity"
                     placeholder="Nhập số lượng trong kho"
-                    onChange={handleChange}
+                    onChange={handleChangeNumber}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -512,7 +528,7 @@ function CreateProduct({ setStateAlert }) {
                     type="number"
                     name="sellableQuantity"
                     placeholder="Nhập số lượng có thể bán"
-                    onChange={handleChange}
+                    onChange={handleChangeNumber}
                   />
                 </Grid>
               </Grid>
@@ -596,6 +612,7 @@ function CreateProduct({ setStateAlert }) {
                     <Switch
                       inputProps={{ "aria-label": "Trạng thái" }}
                       size="small"
+                      checked={product.sellableStatus ? true : false}
                       onChange={handleChangeSellableStatus}
                     />
                   </Box>
