@@ -72,11 +72,12 @@ public class SupplierServiceImpl implements SupplierService {
         if (id <= 0) {
             throw new BadNumberException("id must be greater than 0");
         }
-        if (supplierRepository.existsByCode(supplier.getCode())) {
+        Supplier existingSupplier = this.getSupplierById(id);
+
+        if (supplierRepository.existsByCode(supplier.getCode()) &&
+            !existingSupplier.getCode().equals(supplier.getCode())) {
             throw new UniqueKeyConstraintException("Supplier code already existed");
         }
-
-        Supplier existingSupplier = this.getSupplierById(id);
 
         existingSupplier.setActivityStatus(supplier.getActivityStatus());
         existingSupplier.setAddress(supplier.getAddress());

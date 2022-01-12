@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -9,8 +9,10 @@ import {
   Switch,
 } from "@mui/material";
 import ProductAPI from "../../api/ProductAPI";
+import VariantAPI from "../../api/VariantAPI";
 
 function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }) {
+  const [lastestCode, setLastestCode] = useState('');
   const [variantInfo, setVariantInfo] = useState({
     variantCode: "",
     inventoryQuantity: "",
@@ -22,18 +24,23 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
     originalPrice: "",
     wholeSalePrice: "",
     retailPrice: "",
-    //khi khởi tạo măc định true?
-    recordStatus: true,
     sellableStatus: "",
-    //update duy nhat 6 gia tri ben duoi
-    productName: "",
-    productId: productId,
-    categoryId: "",
-    weight: "",
-    brand: "",
-    description: "",
-    imageUrl: "fake url",
   });
+
+  useEffect(() => {
+    VariantAPI.getLatestVariantCode()
+    .then((res) => {
+      setLastestCode(res.data);
+      setVariantInfo({
+        ...variantInfo,
+        variantCode: res.data
+      });
+    })
+    .catch(err => {
+      setStateAlert({ severity: "warning", variant: "filled", open: true, content: "Đã hủy chỉnh sửa phiên bản sản phẩm" });
+      setViewState(1);
+    })
+  }, [])
 
   function handleChange(evt) {
     const value = evt.target.value;
@@ -57,14 +64,14 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
   }
 
   function handleCreateVariant() {
-    ProductAPI.createVariant(variantInfo).then((res) => {
+    console.log(variantInfo);
+    ProductAPI.createVariant(productId, variantInfo).then((res) => {
         setStateAlert({ severity: "success", variant: "filled", open: true, content: "Đã tạo thêm phiên bản sản phẩm" });
         triggerReload();
         setViewState(1);
       })
       .catch(err => {
-        setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra khi tạo thêm phiên bản sản phẩm" });
-        console.log(err.response.data)
+        setStateAlert({ severity: "error", variant: "filled", open: true, content: err.response.data });
       });
   }
   return (
@@ -95,7 +102,7 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
                 name="variantCode"
                 placeholder="Nhập mã SKU phiên bản"
                 onChange={handleChange}
-                value={variantInfo.variantCode}
+                value={variantInfo.variantCode || ""}
               />
             </Grid>
             <Box>
@@ -109,7 +116,28 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
                 value={variantInfo.unit}
               />
             </Box>
-
+            <Box>
+              <Typography variant="body2">Màu sắc</Typography>
+              <TextField
+                fullWidth
+                size="small"
+                name="color"
+                placeholder="Nhập màu sắc"
+                onChange={handleChange}
+                value={variantInfo.color}
+              />
+            </Box>
+            <Box>
+              <Typography variant="body2">Chất liệu</Typography>
+              <TextField
+                fullWidth
+                size="small"
+                name="material"
+                placeholder="Nhập chất liệu"
+                onChange={handleChange}
+                value={variantInfo.material}
+              />
+            </Box>
             <Box>
               <Typography variant="body2">Kích thước</Typography>
               <TextField
@@ -119,30 +147,6 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
                 placeholder="Nhập kích thước"
                 onChange={handleChange}
                 value={variantInfo.size}
-              />
-            </Box>
-
-            <Box>
-              <Typography variant="body2">Chất liệu</Typography>
-              <TextField
-                fullWidth
-                size="small"
-                name="material"
-                placeholder="Nhập chát liệu"
-                onChange={handleChange}
-                value={variantInfo.material}
-              />
-            </Box>
-
-            <Box>
-              <Typography variant="body2">Màu sắc</Typography>
-              <TextField
-                fullWidth
-                size="small"
-                name="color"
-                placeholder="Nhập màu"
-                onChange={handleChange}
-                value={variantInfo.color}
               />
             </Box>
           </Box>
@@ -181,17 +185,6 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
           py={2}
         >
           <Box>
-            <Typography variant="body2">Giá bán buôn</Typography>
-            <TextField
-              fullWidth
-              size="small"
-              name="wholeSalePrice"
-              placeholder="Nhập giá bán buôn"
-              onChange={handleChange}
-              value={variantInfo.wholeSalePrice}
-            />
-          </Box>
-          <Box>
             <Typography variant="body2">Giá bán lẻ</Typography>
             <TextField
               fullWidth
@@ -200,6 +193,17 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
               placeholder="Nhập giá bán lẻ"
               onChange={handleChange}
               value={variantInfo.retailPrice}
+            />
+          </Box>
+          <Box>
+            <Typography variant="body2">Giá bán buôn</Typography>
+            <TextField
+              fullWidth
+              size="small"
+              name="wholeSalePrice"
+              placeholder="Nhập giá bán buôn"
+              onChange={handleChange}
+              value={variantInfo.wholeSalePrice}
             />
           </Box>
           <Box>
