@@ -59,20 +59,23 @@ public class VariantServiceImpl implements VariantService {
     @Override
     @Transactional
     public Variant updateVariant(long id, VariantDto variantDto) {
-        if(variantDto.getVariantCode().equals("")) throw new BadNumberException("Không được bỏ trống mã phiên bản");
-        if(variantDto.getRetailPrice() == null) throw new BadNumberException("Không được bỏ trống giá bán lẻ");
-        if(variantDto.getWholeSalePrice() == null) throw new BadNumberException("Không được bỏ trống giá bán buôn");
-        if(variantDto.getOriginalPrice() == null) throw new BadNumberException("Không được bỏ trống giá nhập");
-        if(variantDto.getInventoryQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng trong kho");
-        if(variantDto.getSellableQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng có thể bán");
+//        if(variantRepository.existsByCode(variantDto.getVariantCode())) {
+//            throw new UniqueKeyConstraintException("Mã phiên bản sản phẩm bị trùng với phiên bản khác");
+//        }
+//        if(variantDto.getVariantCode().equals("")) throw new BadNumberException("Không được bỏ trống mã phiên bản");
+////        if(variantDto.getRetailPrice() == null) throw new BadNumberException("Không được bỏ trống giá bán lẻ");
+//        if(variantDto.getWholeSalePrice() == null) throw new BadNumberException("Không được bỏ trống giá bán buôn");
+//        if(variantDto.getOriginalPrice() == null) throw new BadNumberException("Không được bỏ trống giá nhập");
+//        if(variantDto.getInventoryQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng trong kho");
+//        if(variantDto.getSellableQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng có thể bán");
 
         Variant existingVariant = this.getVariantById(id);
 
         // check unique key constraint
-        if(!existingVariant.getCode().equals(variantDto.getVariantCode()) &&
-            variantRepository.existsByCode(variantDto.getVariantCode())) {
-            throw new UniqueKeyConstraintException("Mã phiên bản sản phẩm bị trùng với phiên bản khác");
-        }
+//        if(!existingVariant.getCode().equals(variantDto.getVariantCode()) &&
+//            variantRepository.existsByCode(variantDto.getVariantCode())) {
+//            throw new UniqueKeyConstraintException("Mã phiên bản sản phẩm bị trùng với phiên bản khác");
+//        }
 
         // cái này chắc không thể xảy ra
         // check foreign key constraint
