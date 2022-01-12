@@ -54,6 +54,7 @@ function CategorySelect({handleSelectCategory, categoryName}) {
     setSearchInput(value);
     let input = value.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
     let result = categories.filter(category => category.name.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
+    console.log(result)
     setSearchedCategories([...result]);
   }
 
@@ -115,7 +116,7 @@ function CategorySelect({handleSelectCategory, categoryName}) {
               fullWidth
               name="category"
               value={searchInput}
-              placeholder="Tìm kiếm hoặc thêm sản phẩm mới"
+              placeholder="Tìm kiếm hoặc thêm loại sản phẩm mới"
               inputRef={searchRef}
               onChange={(e) => handleChange(e)}
               onKeyDown={(evt) => handleKeyDown(evt)}
