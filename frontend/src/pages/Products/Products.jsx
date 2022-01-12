@@ -6,7 +6,6 @@ import { Search, FilterAltOutlined, AddCircle, FactCheck } from '@mui/icons-mate
 import ProductsTable from './ProductsTable'
 import "./products.scss"
 
-
 export default function Products() {
     const history = useHistory();
     const [products, setProducts] = useState([]);
@@ -17,7 +16,7 @@ export default function Products() {
     function getData() {
         ProductAPI.productList()
             .then((pResult) => {
-                setProducts(pResult.data);
+                setProducts(pResult.data.reverse());
             });
         ProductAPI.getAllVariants()
             .then((vResult) => {
