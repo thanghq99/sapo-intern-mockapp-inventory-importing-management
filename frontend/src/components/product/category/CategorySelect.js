@@ -54,7 +54,6 @@ function CategorySelect({handleSelectCategory, categoryName}) {
     setSearchInput(value);
     let input = value.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
     let result = categories.filter(category => category.name.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
-    console.log(result)
     setSearchedCategories([...result]);
   }
 
