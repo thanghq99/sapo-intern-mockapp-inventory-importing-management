@@ -38,38 +38,45 @@ public class OrderController {
         this.orderService = orderService;
     }
 
+    // Lấy thông tin order theo orderId
     @GetMapping("/{id}")
     public Order findOrderById(@PathVariable long id){
         return orderService.getOrderById(id);
     }
 
+    // Lấy danh sách Order
     @GetMapping
     public List<Order> findAllOrder(){
         return orderService.getAllOrder();
     }
 
+    // Tạo mới một order
     @PostMapping
     public Order createOrder(HttpServletRequest servletRequest, @RequestBody @Valid OrderDto orderDto){
         Long orderCreatorId = requestUtils.getUserIdFromRequest(servletRequest);
         return orderService.createdOrder(orderCreatorId, orderDto);
     }
 
+    // Chỉnh sửa thông tin order
     @PutMapping("/{id}")
     public Order updateOrder(@PathVariable long id, @RequestBody OrderDto orderDto){
         return orderService.updateOrder(id, orderDto);
     }
 
+    // lấy tất cả các variant thuộc cùng 1 orderId
     @GetMapping("/{id}/variants")
     public List<VariantsOrder> findAllVariantInOrder(@PathVariable long id) {
         return orderService.findAllVariantInOrder(id);
     }
 
+    // Thanh toán
     @PostMapping("/{orderId}/payment-invoices")
     public PaymentInvoice payOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody PayOrderDto payOrderDto) {
         Long invoiceCreatorId = requestUtils.getUserIdFromRequest(servletRequest);
         return paymentInvoiceService.savePaymentInvoice(invoiceCreatorId, orderId, payOrderDto);
     }
 
+    // History thanh toán
     @GetMapping("/{orderId}/payment-invoices")
     public List<PaymentInvoice> findAllPaymentInvoicesOfOrder(@PathVariable long orderId) {
         return paymentInvoiceService.listAllPaymentInvoicesByOrder(orderId);

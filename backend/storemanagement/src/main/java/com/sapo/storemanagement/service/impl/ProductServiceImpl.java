@@ -48,12 +48,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getProductById(Long id) {
-        if(id <= 0) {
+        if (id <= 0) {
             throw new BadNumberException("id must be greater than 0");
         }
         return productRepository
-                        .findById(id)
-                        .orElseThrow(() -> new RecordNotFoundException("product not found"));
+                .findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("product not found"));
     }
 
     @Override
@@ -84,7 +84,7 @@ public class ProductServiceImpl implements ProductService {
         int materialNumbers = materials.size();
         int sizeNumbers = sizes.size();
 
-        if(colorNumbers == 0 && materialNumbers == 0 && sizeNumbers == 0) {
+        if (colorNumbers == 0 && materialNumbers == 0 && sizeNumbers == 0) {
             Variant newVariant = new Variant(
                     newProduct,
                     itemCodeGenerator.generate(),
@@ -96,8 +96,7 @@ public class ProductServiceImpl implements ProductService {
                     productVariantDto.getUnit(),
                     productVariantDto.getOriginalPrice(),
                     productVariantDto.getWholeSalePrice(),
-                    productVariantDto.getRetailPrice()
-            );
+                    productVariantDto.getRetailPrice());
             variantRepository.save(newVariant);
         } else {
             if(colorNumbers == 0) colors.add(0, "");
@@ -117,8 +116,7 @@ public class ProductServiceImpl implements ProductService {
                                 productVariantDto.getUnit(),
                                 productVariantDto.getOriginalPrice(),
                                 productVariantDto.getWholeSalePrice(),
-                                productVariantDto.getRetailPrice()
-                        );
+                                productVariantDto.getRetailPrice());
                         newVariantsList.add(newVariant);
                         variantRepository.save(newVariant);
                     }
@@ -150,7 +148,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public String deleteProduct(Long id) {
-        if(id <= 0) {
+        if (id <= 0) {
             throw new BadNumberException("id must be greater than 0");
         }
         Product productToDelete = productRepository
@@ -159,7 +157,7 @@ public class ProductServiceImpl implements ProductService {
         productToDelete.setRecordStatus(RecordStatus.DELETED);
 
         variantService.listAllVariantsByProductId(productToDelete.getId())
-            .forEach(variant -> variant.setRecordStatus(RecordStatus.DELETED));
+                .forEach(variant -> variant.setRecordStatus(RecordStatus.DELETED));
         return productToDelete.getName() + "was deleted!";
     }
 

@@ -17,7 +17,7 @@ public interface OrderService {
     Order createdOrder(Long orderCreatorId, OrderDto orderDto);
 
     @Transactional
-    Order updateOrder(long id, OrderDto orderDto);
+    Order updateOrder(long id, OrderDto orderDto );
 
     @Transactional
     Order increasePaidAmount(long orderId, double offset);
