@@ -19,6 +19,7 @@ import { AuthContext } from "./contextAPI/AuthContext";
 import EditProduct from "./pages/Products/EditProduct";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { viVN } from "@mui/material/locale";
+import User from "./pages/User/User";
 
 const theme = createTheme(
   {
@@ -54,7 +55,7 @@ function App() {
                 <CssBaseline />
                 <Sidebar setHeaderTitle={setHeaderTitle} />
                 <Box className="box_content" component="main">
-                  <Topbar headerTitle={headerTitle} ></Topbar>
+                  <Topbar headerTitle={headerTitle} setHeaderTitle={setHeaderTitle} ></Topbar>
                   <Route exact path="/san-pham" component={Products}></Route>
                   <Route path="/tao-san-pham">
                     <CreateProduct setStateAlert={setStateAlert} />
@@ -73,6 +74,7 @@ function App() {
                   <Route exact path="/nhap-hang" component={ListOrder} />
                   <Route path="/nhap-hang/tao-don-nhap-hang" component={SupplyOrder}></Route>
                   <Route path="/nhap-hang/don-hang" component={DetailOrder}></Route>
+                  <Route path="/nguoi-dung" component={User}></Route>
                   <Route path="/cai-dat"></Route>
                   {stateAlert.severity && (
                     <Snackbar
