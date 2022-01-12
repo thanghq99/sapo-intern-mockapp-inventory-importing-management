@@ -2,10 +2,8 @@ package com.sapo.storemanagement.service.impl;
 
 import com.sapo.storemanagement.dto.ProductVariantDto;
 import com.sapo.storemanagement.dto.VariantDto;
-import com.sapo.storemanagement.dto.VariantsListDto;
 import com.sapo.storemanagement.entities.*;
 import com.sapo.storemanagement.exception.BadNumberException;
-import com.sapo.storemanagement.exception.ForeignKeyConstraintException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
 import com.sapo.storemanagement.exception.UniqueKeyConstraintException;
 import com.sapo.storemanagement.repository.ProductRepository;
@@ -18,7 +16,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -117,6 +114,8 @@ public class VariantServiceImpl implements VariantService {
         Variant variant = this.getVariantById(id);
         variant.setRecordStatus(RecordStatus.DELETED);
         variantRepository.save(variant);
+
+        productRepository.deleteProductIfNoVariantAvailable(variant.getProduct().getId());
 
         return variant;
     }

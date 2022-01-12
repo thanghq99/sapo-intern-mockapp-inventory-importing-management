@@ -2,6 +2,7 @@ package com.sapo.storemanagement.repository;
 
 import com.sapo.storemanagement.entities.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -14,4 +15,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "select * from products where record_status like :record_status ", nativeQuery = true)
     List<Product> findAllByRecordStatus(@Param("record_status") String recordStatus);
+
+    @Modifying
+    @Query(
+        value = "update products p1 set record_status = 'Đã xóa'" +
+            " where 0 = (select sum(if(v.record_status like 'Đang hoạt động', 1, 0))" +
+            " from variants v right join products p2 on (product_id = p2.id) where p2.id = p1.id)" +
+            " and p1.id = :productId",
+        nativeQuery = true
+    )
+    void deleteProductIfNoVariantAvailable(@Param("productId") Long productId);
 }
