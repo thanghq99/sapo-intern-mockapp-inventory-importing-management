@@ -17,6 +17,13 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
+import Timeline from '@mui/lab/Timeline';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineContent from '@mui/lab/TimelineContent';
+import TimelineDot from '@mui/lab/TimelineDot';
+
 import {
     BrowserRouter as Router,
     Switch,
@@ -54,6 +61,7 @@ export default function DetailOrder() {
     const [openPayment, setOpenPayment] = React.useState(false);
     const [openPaymented, setOpenPaymented] = React.useState(true);
     const [payment, setPayment] = React.useState("");
+    const [historyPaid, setHistoryPaid] = React.useState([]);
 
     const [productList, setProductList] = React.useState([]);
 
@@ -66,16 +74,16 @@ export default function DetailOrder() {
     }
     const handlePayment = (event) => {
         setPayment(event.target.value);
-      };
+    };
     const SubmitPayment = async () => {
         // handleOpenPayment();
-        const res = await PaymentAPI.Paid(searchParam, payment);
-        res.then(respons => {
+        const res = await PaymentAPI.Paid(searchParam, { amount: payment });
+        // res.then(respons => {
             handleOpenPayment();
             // setOpenPaymented(true);
-        })
-       
-        
+        // })
+
+
     }
 
     const useStyles = makeStyles((theme) => ({
@@ -126,7 +134,10 @@ export default function DetailOrder() {
             console.log(searchParam);
             const orderRes = await OrderAPI.OrderItem(searchParam);
             const ProductRes = await OrderAPI.VariantOrder(searchParam);
+            const HistoryPaidRes = await PaymentAPI.HistoryPaid(searchParam);
+
             setProductList(ProductRes.data);
+
             setOrder(orderRes.data);
             setNameSupplier(orderRes.data.supplier.name);
             setDebt(orderRes.data.supplier.debt);
@@ -135,6 +146,9 @@ export default function DetailOrder() {
             setCodeOrder(orderRes.data.code);
             setExpectedTime(orderRes.data.expectedTime);
             setTotalAmount(orderRes.data.totalAmount);
+            setDescription(orderRes.data.description);
+
+            setHistoryPaid(HistoryPaidRes.data);
 
             let tmp = 0;
             ProductRes.data.map((item) => {
@@ -151,7 +165,7 @@ export default function DetailOrder() {
     }
     React.useEffect(() => {
         getData();
-    }, [])
+    }, [openPaymented])
     console.log(order);
     console.log(payment);
 
@@ -268,7 +282,7 @@ export default function DetailOrder() {
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography>Tổng tiền</Typography>
-                                    <Typography>{totalAmount} vnd</Typography>
+                                    <Typography>{totalAmount * 1.06} vnd</Typography>
                                 </Box>
                                 <Box className="pay-info-item" sx={{ color: "#007BFF" }}>
                                     <Typography >Tổng chiết khấu</Typography>
@@ -276,7 +290,7 @@ export default function DetailOrder() {
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography sx={{ fontWeight: 700 }}>Phải trả</Typography>
-                                    <Typography>{(totalAmount * 0.94).toFixed(2)} vnd</Typography>
+                                    <Typography>{totalAmount} vnd</Typography>
                                 </Box>
 
                             </Box>
@@ -296,7 +310,7 @@ export default function DetailOrder() {
                                 </Box>
                             </Box>
                             <Box className="btn-payment">
-                                <Button variant="outlined"
+                                <Button variant="contained"
                                     onClick={handleOpenPayment}
                                 >Xác nhận thanh toán</Button>
                             </Box>
@@ -319,33 +333,50 @@ export default function DetailOrder() {
                                         </Box>
                                         <Box className="payment-amount">
                                             <Typography sx={{ fontWeight: 600 }} mb={2}>Số tiền thanh toán</Typography>
-                                            <TextField id="outlined-basic" variant="outlined" 
-                                            sx={{ width: 200, height: 40 }}
-                                            value={payment}
-                                            onChange={handlePayment} />
+                                            <TextField id="outlined-basic" variant="outlined"
+                                                sx={{ width: 200, height: 40 }}
+                                                value={payment}
+                                                onChange={handlePayment} />
                                         </Box>
                                     </Box>
                                     <Box sx={{ display: "flex" }} mt={2} mb={2}>
-                                        <Button variant="outlined" ml={2}
+                                        <Button variant="outlined" ml={2} color="error"
                                             onClick={handleOpenPayment}
                                         >Đóng</Button>
                                         <Button variant="contained" sx={{ marginLeft: "16px" }}
-                                        onClick={SubmitPayment}
+                                            onClick={SubmitPayment}
                                         >Thanh toán</Button>
                                     </Box>
                                 </Box>
-                                 : null
+                                : null
                         }
                         {
-                            openPaymented ? 
-                            <Box sx={{display: "flex" }} mt={2} mb={2}>
+                            openPaymented ?
+                                <Box className="history-paid" sx={{ display: "flex" }} mt={2} mb={2}>
 
-                                <Divider />
-                                
-                                <ChangeCircleIcon />
-                                <Typography ml={2}>Xác nhận thanh toán {order?.paidAmount} vnd thành công</Typography>
-                                
-                            </Box> : null
+                                    <Divider />
+                                    <Timeline>
+                                        {
+                                            historyPaid ? historyPaid.map((item, index) => {
+                                                return (
+                                                    <TimelineItem>
+                                                        <TimelineSeparator>
+                                                            <TimelineDot color="primary" />
+                                                            <TimelineConnector />
+                                                        </TimelineSeparator>
+                                                        <TimelineContent>
+                                                            <Typography ml={2}>Xác nhận thanh toán <span style={{fontWeight: 600}}>{item.amount} vnd</span> thành công</Typography>
+                                                            <Typography ml={2}>Thời gian: {item.createdAt}</Typography>
+                                                        </TimelineContent>
+                                                    </TimelineItem>
+                                                )
+                                            }) : null
+                                        }
+
+                                    </Timeline>
+
+
+                                </Box> : null
                         }
                     </Box>
                 </Box>
@@ -375,7 +406,7 @@ export default function DetailOrder() {
                         </Box>
                         <Box className="note">
                             <Box className="title">Ghi chú</Box>
-                            <Box>{description}</Box>
+                            <Box sx={{ paddingLeft: "20px" }}>{description}</Box>
                         </Box>
 
                     </Box>

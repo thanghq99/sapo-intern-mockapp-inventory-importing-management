@@ -22,13 +22,7 @@ import * as moment  from 'moment';
 
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link,
-    useHistory
-} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 
 import './UpdateOrder.scss';
@@ -75,8 +69,7 @@ export default function DetailOrder() {
             supplierId: order.supplier.id,
             description: description,
             deliveryTime:  moment(date).format('YYYY-MM-DD'),
-            lineItems: productSelectLast,
-            createdBy: 2
+            lineItems: productSelectLast
         };
         console.log(data);
         try {

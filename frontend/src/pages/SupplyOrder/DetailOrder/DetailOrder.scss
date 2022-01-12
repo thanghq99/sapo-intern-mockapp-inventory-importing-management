@@ -134,6 +134,13 @@
         }
         
     }
+    .history-paid {
+        display: inline;
+        width: 100%;
+        .css-ha3bif-MuiTimelineItem-root::before {
+            content: none;
+        }
+    }
 }
 
 .detail-supplier {

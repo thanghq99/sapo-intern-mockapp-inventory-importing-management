@@ -1,6 +1,7 @@
 package com.sapo.storemanagement.controller;
 
 import com.sapo.storemanagement.dto.ProductVariantDto;
+import com.sapo.storemanagement.dto.VariantsListDto;
 import com.sapo.storemanagement.entities.Variant;
 import com.sapo.storemanagement.entities.VariantsOrder;
 import com.sapo.storemanagement.service.VariantService;
@@ -31,13 +32,14 @@ public class VariantController {
         return variantService.listAllVariants();
     }
 
-    @GetMapping("/variantOrder/{orderId}")
-    public List<VariantsOrder> variantList(@PathVariable long orderId) {
-        return variantService.listVariantByOrderId(orderId);
-    }
+    // @PostMapping
+    // public Variant createVariant(@RequestBody @Valid ProductVariantDto
+    // newVariant){
+    // return variantService.saveVariant(newVariant);
+    // }
 
     @PostMapping
-    public Variant createVariant(@RequestBody @Valid ProductVariantDto newVariant) {
+    public List<Variant> createVariant(@RequestBody @Valid VariantsListDto newVariant) {
         return variantService.saveVariant(newVariant);
     }
 
@@ -47,7 +49,7 @@ public class VariantController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteVariant(@PathVariable long id) {
+    public Variant deleteVariant(@PathVariable long id) {
         return variantService.deleteVariant(id);
     }
 }

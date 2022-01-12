@@ -1,6 +1,7 @@
 package com.sapo.storemanagement.service;
 
 import com.sapo.storemanagement.dto.ProductVariantDto;
+import com.sapo.storemanagement.dto.VariantsListDto;
 import com.sapo.storemanagement.entities.Variant;
 import com.sapo.storemanagement.entities.VariantsOrder;
 
@@ -20,7 +21,9 @@ public interface VariantService {
 
     Variant saveVariant(ProductVariantDto productVariantDto);
 
+    List<Variant> saveVariant(VariantsListDto productVariantDto);
+
     Variant updateVariant(long id, ProductVariantDto productVariantDto);
 
-    String deleteVariant(Long id);
+    Variant deleteVariant(Long id);
 }
