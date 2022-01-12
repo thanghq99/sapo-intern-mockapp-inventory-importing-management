@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Box, Paper, Avatar, Button, Modal, Input, TableContainer, Table, TableCell, TablePagination, TableRow, TableHead, TableBody } from '@mui/material';
+import { Grid, Box, Radio, Snackbar, Alert, RadioGroup, Paper, FormControlLabel, TextField, Avatar, Button, Modal, Input, TableContainer, Table, TableCell, TablePagination, TableRow, TableHead, TableBody } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import PersonIcon from '@mui/icons-material/Person';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -40,67 +40,92 @@ const columns = [
     { id: 'email', label: 'Email nhân viên' }
 ];
 
-function createData(name, code, population, size) {
-    const density = population / size;
-    return { name, code, population, size, density };
-}
-
-const rows = [
-    createData('India', 'IN', 1324171354, 3287263),
-    createData('China', 'CN', 1403500365, 9596961),
-    createData('Italy', 'IT', 60483973, 301340),
-    createData('United States', 'US', 327167434, 9833520),
-    createData('Canada', 'CA', 37602103, 9984670),
-    createData('Australia', 'AU', 25475400, 7692024),
-    createData('Germany', 'DE', 83019200, 357578),
-    createData('Ireland', 'IE', 4857000, 70273),
-    createData('Mexico', 'MX', 126577691, 1972550),
-    createData('Japan', 'JP', 126317000, 377973),
-    createData('France', 'FR', 67022000, 640679),
-    createData('United Kingdom', 'GB', 67545757, 242495),
-    createData('Russia', 'RU', 146793744, 17098246),
-    createData('Nigeria', 'NG', 200962417, 923768),
-    createData('Brazil', 'BR', 210147125, 8515767),
-];
+const checkRole = (JSON.parse(sessionStorage.getItem("token"))?.role[0].name == "ADMIN");
 
 export default function User() {
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
-
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
 
 
+
+    //set mode modal ==> delete or edit
+    const [modeModal, setModeModal] = React.useState("")
     //open and close Modal
     const [openModal, setOpenModal] = React.useState(false);
     const handleOpenModal = (string) => {
+        setModeModal(string)
         setOpenModal(true);
     }
     const handleCloseModal = () => setOpenModal(false);
 
     // get all users********************************//
-    //const [trigger, setTrigger] = React.useState(false); // trigger to re-render supplier's info
+    const [trigger, setTrigger] = React.useState(false); // trigger to re-render supplier's info
     const [listUsers, setListUsers] = React.useState([]);
     React.useEffect(() => {
-        const fetchUsers = async () => {
+        const fetchListUsers = async () => {
             const res = await UsersApi.getAllUsers();
             setListUsers(res.data);
         }
-        fetchUsers();
+        fetchListUsers();
+    }, [trigger])
+
+    // get an user********************************//
+    const [currentUser, setCurrentUser] = React.useState({});
+    React.useEffect(() => {
+        const fetchCurrentUser = async () => {
+            const res = await UsersApi.getUserById(JSON.parse(sessionStorage.getItem("token")).id);
+            setCurrentUser(res.data);
+        }
+        fetchCurrentUser();
     }, [])
+
+    const [stateAlert, setStateAlert] = React.useState({ severity: "", variant: "", open: false, content: "" });
+    // create an user******************************************//
+    const [newUserRole, setNewUserRole] = React.useState()
+    const [newUsername, setNewUsername] = React.useState()
+    const [newUserPassword, setNewUserPassword] = React.useState()
+    const [newUserPasswordAgain, setNewUserPasswordAgain] = React.useState()
+    const [newUserEmail, setNewUserEmail] = React.useState()
+    const createNewUserHandle = async (e) => {
+        e.preventDefault();
+        const newUser = {
+            username: newUsername,
+            email: newUserEmail,
+            password: newUserPassword,
+            role: newUserRole
+        }
+        if (newUsername == "" || newUserEmail == "" || newUserPassword == "") {
+            setStateAlert({ severity: "error", variant: "standard", open: true, content: "Yêu cầu điền tên đăng ký, email và mật khẩu" })
+        } else {
+            if (newUserPassword != newUserPasswordAgain) {
+                setStateAlert({ severity: "error", variant: "filled", open: true, content: "Mật khẩu và xác nhận mật khẩu không khớp" })
+            } else {
+                try {
+                    await UsersApi.createUserStaff(newUser);
+                    setTrigger(!trigger);
+                    setStateAlert({ severity: "success", variant: "filled", open: true, content: "Tao nhan vien thanh cong" })
+                    setOpenModal(false);
+                } catch (error) {
+                    setStateAlert({ severity: "error", variant: "filled", open: true, content: "Người dùng hoặc email này đã tồn tại" })
+                }
+            }
+
+        }
+    }
 
 
     return (
         <div style={{ background: "#F4F6F8", padding: "0 2em 1em 0", height: "100%" }}>
             <Grid sx={{ textAlign: "end" }}>
-                {(parseJwt(JSON.parse(sessionStorage.getItem("token")).jwt).sub === "admin") && <Button variant="contained" sx={{ marginTop: "2em" }} startIcon={<AddCircle />}>Thêm nhân viên</Button>}
+                {checkRole && <Button onClick={() => handleOpenModal("create")} variant="outlined" sx={{ marginTop: "2em" }} startIcon={<AddCircle />}>Thêm nhân viên</Button>}
             </Grid>
             <Box sx={{ flexGrow: 1, margin: 0, backGround: "white" }}>
                 <Grid sx={{ margin: 0 }} container spacing={2}>
@@ -111,7 +136,7 @@ export default function User() {
                                 src="/static/images/avatar/1.jpg"
                                 sx={{ width: "14em", height: "14em", margin: "auto" }}
                             />
-                            <Button sx={{ fontSize: "0.8em", textTransform: 'capitalize', margin: "0.5em 0 2em 0" }} variant="contained">Thay ảnh</Button>
+                            <Button sx={{ fontSize: "0.8em", textTransform: 'capitalize', margin: "0.5em 0 2em 0" }} variant="outlined">Thay ảnh</Button>
                             <h3><strong style={{ fontSize: "1.5em" }}>Nhân viên kho</strong></h3>
                         </Item>
                     </Grid>
@@ -122,7 +147,7 @@ export default function User() {
                                     <PersonIcon sx={{ margin: "0 1em -0.2em 0" }} /> <strong  >Họ và tên</strong>
                                 </Grid>
                                 <Grid item xs={7} >
-                                    Nhân viên số 1
+                                    {currentUser.username}
                                 </Grid>
                             </Grid>
                             <Grid sx={{ display: "flex", textAlign: "left", padding: "1em 2em", alignItems: "center" }}>
@@ -130,7 +155,7 @@ export default function User() {
                                     <InfoIcon sx={{ margin: "0 1em -0.2em 0" }} /> <strong  >Id nhân viên</strong>
                                 </Grid>
                                 <Grid item xs={7} >
-                                    NVS1
+                                    {currentUser.id}
                                 </Grid>
                             </Grid>
                             <Grid sx={{ display: "flex", textAlign: "left", padding: "1em 2em", alignItems: "center" }}>
@@ -138,7 +163,7 @@ export default function User() {
                                     <MailIcon sx={{ margin: "0 1em -0.2em 0" }} /> <strong  >Email</strong>
                                 </Grid>
                                 <Grid item xs={7} >
-                                    nv1@gmail.com
+                                    {currentUser.email}
                                 </Grid>
                             </Grid>
                             <Grid sx={{ display: "flex", textAlign: "left", padding: "1em 2em", alignItems: "center" }}>
@@ -146,13 +171,13 @@ export default function User() {
                                     <LeaderboardIcon sx={{ margin: "0 1em -0.2em 0" }} /> <strong  >Vai trò</strong>
                                 </Grid>
                                 <Grid item xs={7} >
-                                    Nhân viên kho
+                                    {currentUser.roles?.map((role) => (role.name))}
                                 </Grid>
                             </Grid>
-                            <Grid sx={{ textAlign: "end", paddingTop: "2.4em" }}>
-                                <Button onClick={() => setOpenModal(true)} variant="outlined" startIcon={<BrowserUpdatedIcon />} sx={{ fontSize: "0.8em", textTransform: 'capitalize', margin: "0.5em 0 2em 0" }}>Chỉnh sửa thông tin</Button>
+                            {checkRole && <Grid sx={{ textAlign: "end", paddingTop: "2.4em" }}>
+                                <Button onClick={() => handleOpenModal("update")} variant="outlined" startIcon={<BrowserUpdatedIcon />} sx={{ fontSize: "0.8em", textTransform: 'capitalize', margin: "0.5em 0 2em 0" }}>Chỉnh sửa thông tin</Button>
                                 <Button onClick={() => setOpenModal(false)} variant="outlined" color="error" startIcon={<DeleteIcon />} sx={{ fontSize: "0.8em", textTransform: 'capitalize', margin: "0.5em 2em 2em 2em" }}>Xóa nhân viên</Button>
-                            </Grid>
+                            </Grid>}
                         </Item>
                     </Grid>
                 </Grid>
@@ -176,6 +201,7 @@ export default function User() {
                             </TableHead>
                             <TableBody>
                                 {listUsers
+                                    .reverse()
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row) => {
                                         return (
@@ -191,6 +217,7 @@ export default function User() {
                         </Table>
                     </TableContainer>
                     <TablePagination
+                        labelRowsPerPage="Số hàng một trang"
                         rowsPerPageOptions={[5, 10, 15]}
                         component="div"
                         count={listUsers.length}
@@ -201,56 +228,135 @@ export default function User() {
                     />
                 </Paper>
             </Grid>
-
-            <Modal
-                open={openModal}
-                onClose={handleCloseModal}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-                sx={{ margin: 0, padding: "6em", textAlign: "center" }}
+            {
+                (modeModal === "update") ?
+                    <Modal
+                        open={openModal}
+                        onClose={handleCloseModal}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                        sx={{ margin: 0, padding: "6em", textAlign: "center" }}
+                    >
+                        <Box sx={{ flexGrow: 1, margin: "auto", background: "white", width: "90vw" }}>
+                            <Grid sx={{ margin: 0, display: "grid", padding: "3em", textAlign: "center " }} container spacing={2}>
+                                <h3><strong style={{ fontSize: "1.5em" }} >Thay đổi thông tin nhân viên</strong></h3>
+                                <Grid sx={{ display: "flex", textAlign: "left", padding: "1em 2em", alignItems: "center" }}>
+                                    <Grid item xs={5} >
+                                        <PersonIcon sx={{ margin: "0 1em -0.2em 0" }} /> <strong  >Họ và tên</strong>
+                                    </Grid>
+                                    <Grid item xs={7} >
+                                        <Input sx={{ width: "90%" }} defaultValue={currentUser.username} />
+                                    </Grid>
+                                </Grid>
+                                <Grid sx={{ display: "flex", textAlign: "left", padding: "1em 2em", alignItems: "center" }}>
+                                    <Grid item xs={5} >
+                                        <InfoIcon sx={{ margin: "0 1em -0.2em 0" }} /> <strong  >Id nhân viên</strong>
+                                    </Grid>
+                                    <Grid item xs={7} >
+                                        <Input sx={{ width: "90%" }} defaultValue={currentUser.id} />
+                                    </Grid>
+                                </Grid>
+                                <Grid sx={{ display: "flex", textAlign: "left", padding: "1em 2em", alignItems: "center" }}>
+                                    <Grid item xs={5} >
+                                        <MailIcon sx={{ margin: "0 1em -0.2em 0" }} /> <strong  >Email</strong>
+                                    </Grid>
+                                    <Grid item xs={7} >
+                                        <Input sx={{ width: "90%" }} defaultValue={currentUser.email} />
+                                    </Grid>
+                                </Grid>
+                                <Grid sx={{ display: "flex", textAlign: "left", padding: "1em 2em", alignItems: "center" }}>
+                                    <Grid item xs={5} >
+                                        <LeaderboardIcon sx={{ margin: "0 1em -0.2em 0" }} /> <strong  >Vai trò</strong>
+                                    </Grid>
+                                    <RadioGroup
+                                        aria-label="gender"
+                                        defaultValue={currentUser.roles[0].name}
+                                        name="radio-buttons-group"
+                                        sx={{ marginLeft: "4em", display: "inline-block", alignItems: "center" }}
+                                    >
+                                        <FormControlLabel value="STORAGE_KEEPER" control={<Radio />} label="Nhân viên nhập kho" />
+                                        <FormControlLabel value="ACCOUNTANT" control={<Radio />} label="Kế toán" />
+                                    </RadioGroup>
+                                </Grid>
+                                <Grid sx={{ textAlign: "end", paddingTop: "2.4em" }}>
+                                    <Button variant="outlined" color="success" sx={{ fontSize: "0.8em", textTransform: 'capitalize', margin: "0.5em 0 2em 0" }}>Lưu thay đổi</Button>
+                                    <Button onClick={() => setOpenModal(false)} variant="outlined" color="error" sx={{ fontSize: "0.8em", textTransform: 'capitalize', margin: "0.5em 2em 2em 2em" }}>Quay lại</Button>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    </Modal>
+                    :
+                    <Modal
+                        open={openModal}
+                        onClose={handleCloseModal}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                        sx={{ margin: 0, padding: "6em", textAlign: "center" }}
+                    >
+                        <Box sx={{ margin: "auto", background: "white", width: "50%", padding: "2em 3em" }}>
+                            <h3><strong style={{ fontSize: "1.5em" }} >Tạo mới nhân viên</strong></h3>
+                            <TextField
+                                onChange={(e) => setNewUsername(e.target.value)}
+                                required
+                                id="outlined-required"
+                                label="Tên đăng nhập nhân viên"
+                                sx={{ margin: "1em 0", width: "100%" }}
+                            />
+                            <TextField
+                                onChange={(e) => setNewUserEmail(e.target.value)}
+                                required
+                                id="outlined-required"
+                                label="Email nhân viên"
+                                sx={{ margin: "1em 0", width: "100%" }}
+                            />
+                            <TextField
+                                onChange={(e) => setNewUserPassword(e.target.value)}
+                                required
+                                id="outlined-required"
+                                label="Mật khẩu"
+                                sx={{ margin: "1em 0", width: "100%" }}
+                            />
+                            <TextField
+                                onChange={(e) => setNewUserPasswordAgain(e.target.value)}
+                                required
+                                id="outlined-required"
+                                label="Nhập lại mật khẩu"
+                                sx={{ margin: "1em 0", width: "100%" }}
+                            />
+                            <Grid sx={{ display: "flex", alignItems: "center" }}>
+                                <h3><strong>Chọn vai trò của nhân viên</strong></h3>
+                                <RadioGroup
+                                    onChange={(e) => setNewUserRole(e.target.value)}
+                                    aria-label="gender"
+                                    name="radio-buttons-group"
+                                    sx={{ marginLeft: "4em", display: "inline-block", alignItems: "center" }}
+                                >
+                                    <FormControlLabel value="STORAGE_KEEPER" control={<Radio />} label="Nhân viên nhập kho" />
+                                    <FormControlLabel value="ACCOUNTANT" control={<Radio />} label="Kế toán" />
+                                </RadioGroup>
+                            </Grid>
+                            <Grid sx={{ textAlign: "end", paddingTop: "2.4em" }}>
+                                <Button onClick={createNewUserHandle} variant="outlined" sx={{ fontSize: "0.8em", textTransform: 'capitalize', margin: "0.5em 0 2em 0" }}>Xac nhan</Button>
+                                <Button onClick={() => setOpenModal(false)} variant="outlined" color="error" sx={{ fontSize: "0.8em", textTransform: 'capitalize', margin: "0.5em 2em 2em 2em" }}>Quay lại</Button>
+                            </Grid>
+                        </Box>
+                    </Modal>
+            }
+            <Snackbar
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                open={stateAlert.open}
+                autoHideDuration={2000}
+                onClose={() => setStateAlert({ ...stateAlert, open: false })}
             >
-                <Box sx={{ flexGrow: 1, margin: "auto", background: "white", width: "90vw" }}>
-                    <Grid sx={{ margin: 0, display: "grid", padding: "3em", textAlign: "center " }} container spacing={2}>
-                        <h3><strong style={{ fontSize: "1.5em" }} >Thay đổi thông tin nhân viên</strong></h3>
-                        <Grid sx={{ display: "flex", textAlign: "left", padding: "1em 2em", alignItems: "center" }}>
-                            <Grid item xs={5} >
-                                <PersonIcon sx={{ margin: "0 1em -0.2em 0" }} /> <strong  >Họ và tên</strong>
-                            </Grid>
-                            <Grid item xs={7} >
-                                <Input sx={{ width: "90%" }} defaultValue="Hello world" />
-                            </Grid>
-                        </Grid>
-                        <Grid sx={{ display: "flex", textAlign: "left", padding: "1em 2em", alignItems: "center" }}>
-                            <Grid item xs={5} >
-                                <InfoIcon sx={{ margin: "0 1em -0.2em 0" }} /> <strong  >Id nhân viên</strong>
-                            </Grid>
-                            <Grid item xs={7} >
-                                <Input sx={{ width: "90%" }} defaultValue="Hello world" />
-                            </Grid>
-                        </Grid>
-                        <Grid sx={{ display: "flex", textAlign: "left", padding: "1em 2em", alignItems: "center" }}>
-                            <Grid item xs={5} >
-                                <MailIcon sx={{ margin: "0 1em -0.2em 0" }} /> <strong  >Email</strong>
-                            </Grid>
-                            <Grid item xs={7} >
-                                <Input sx={{ width: "90%" }} defaultValue="Hello world" />
-                            </Grid>
-                        </Grid>
-                        <Grid sx={{ display: "flex", textAlign: "left", padding: "1em 2em", alignItems: "center" }}>
-                            <Grid item xs={5} >
-                                <LeaderboardIcon sx={{ margin: "0 1em -0.2em 0" }} /> <strong  >Vai trò</strong>
-                            </Grid>
-                            <Grid item xs={7} >
-                                <Input sx={{ width: "90%" }} defaultValue="Hello world" />
-                            </Grid>
-                        </Grid>
-                        <Grid sx={{ textAlign: "end", paddingTop: "2.4em" }}>
-                            <Button variant="outlined" color="success" sx={{ fontSize: "0.8em", textTransform: 'capitalize', margin: "0.5em 0 2em 0" }}>Lưu thay đổi</Button>
-                            <Button variant="outlined" color="error" sx={{ fontSize: "0.8em", textTransform: 'capitalize', margin: "0.5em 2em 2em 2em" }}>Quay lại</Button>
-                        </Grid>
-                    </Grid>
-                </Box>
-            </Modal>
+                <Alert
+                    onClose={() => setStateAlert({ ...stateAlert, open: false })}
+                    severity={stateAlert.severity}
+                    variant={stateAlert.variant}
+                    sx={{ width: '100%' }}
+                >
+                    {stateAlert.content}
+                </Alert>
+            </Snackbar>
         </div >
     )
 }

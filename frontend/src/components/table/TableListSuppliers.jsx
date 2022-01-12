@@ -313,9 +313,9 @@ export default function TableSupply() {
         setPage(0);
     };
 
-    const handleChangeDense = (event) => {
-        setDense(event.target.checked);
-    };
+    // const handleChangeDense = (event) => {
+    //     setDense(event.target.checked);
+    // };
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -422,10 +422,10 @@ export default function TableSupply() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-            <FormControlLabel
+            {/* <FormControlLabel
                 control={<Switch checked={dense} onChange={handleChangeDense} />}
                 label="Xóa padding"
-            />
+            /> */}
             <Modal
                 open={openModal}
                 onClose={() => setOpenModal(false)}

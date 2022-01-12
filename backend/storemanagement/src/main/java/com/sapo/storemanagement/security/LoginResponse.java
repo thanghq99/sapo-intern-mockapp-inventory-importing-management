@@ -8,11 +8,13 @@ import java.util.Set;
 public class LoginResponse implements Serializable {
     private String jwt;
     private Set<Role> role;
+    private Long id;
     private String tokenType = "Bearer";
 
-    public LoginResponse(String jwt, Set<Role> role) {
+    public LoginResponse(String jwt, Set<Role> role, Long id) {
         this.jwt = jwt;
         this.role = role;
+        this.id = id;
     }
 
     public Set<Role> getRole() {
@@ -26,5 +28,7 @@ public class LoginResponse implements Serializable {
     public String getTokenType() {
         return tokenType;
     }
+
+    public Long getId(){return  id;}
 }
 

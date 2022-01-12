@@ -22,7 +22,9 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    public UserController(UserStaffService userStaffService) { this.userStaffService = userStaffService;}
+    public UserController(UserStaffService userStaffService) {
+        this.userStaffService = userStaffService;
+    }
 
     @GetMapping("/{id}")
     public User findUserById(@PathVariable long id) {
@@ -35,7 +37,17 @@ public class UserController {
     }
 
     @PostMapping
-    public void createUserStaff(@RequestBody @Valid RegisterRequest registerRequest){
+    public void createUserStaff(@RequestBody @Valid RegisterRequest registerRequest) {
         userService.createUserStaffAccount(registerRequest);
+    }
+
+    @PutMapping("/{id}")
+    public User updateUserStaff(@PathVariable long id, @RequestBody @Valid User user) {
+        return userStaffService.updateUser(id, user);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteUserStaff(@PathVariable long id) {
+        return userStaffService.deleteUser(id);
     }
 }

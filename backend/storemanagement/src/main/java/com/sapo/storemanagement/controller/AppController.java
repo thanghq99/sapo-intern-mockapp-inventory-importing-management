@@ -51,7 +51,8 @@ public class AppController {
         String jwt = tokenProvider.generateToken((AppUserDetails) authentication.getPrincipal());
         User user = userStaffService.getUserByUsername(loginRequest.getUsername());
         Set<Role> role = user.getRoles();
-        return new LoginResponse(jwt, role);
+        Long id = user.getId();
+        return new LoginResponse(jwt, role, id);
     }
 
     @PostMapping("/register")
