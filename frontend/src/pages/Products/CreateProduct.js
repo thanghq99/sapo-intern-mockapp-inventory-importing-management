@@ -1,9 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Typography, Button, Divider, Grid, TextField, Switch, Chip } from "@mui/material";
-import { ArrowBackIosNew, Add } from "@mui/icons-material";
+import {
+  Box,
+  Typography,
+  Button,
+  Divider,
+  Grid,
+  TextField,
+  Switch,
+  Chip,
+  IconButton,
+} from "@mui/material";
+import { ArrowBackIosNew, Add, SwapHoriz } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 import "./createProduct.scss";
-import CategoryAPI from "../../api/CategoryAPI";
 import ProductAPI from "../../api/ProductAPI";
 import CategorySelect from "../../components/product/category/CategorySelect";
 
@@ -13,10 +22,13 @@ function CreateProduct({ setStateAlert }) {
   const materialRef = useRef(null);
   const sizeRef = useRef(null);
 
-  const [categories, setCategories] = useState([]);
-  const [colors, setColors] = useState(['vang', 'do', 'xanh']);
-  const [materials, setMaterials] = useState(['vai', 'giay']);
-  const [sizes, setSizes] = useState(['L', 'XL']);
+  const [colors, setColors] = useState([]);
+  const [materials, setMaterials] = useState([]);
+  const [sizes, setSizes] = useState([]);
+
+  const [weightUnit, setWeightUnit] = useState(false); //false: gram, true: kilogram
+  const [weightValue, setWeightValue] =useState(0);
+
   const [product, setProduct] = useState({
     variantCode: "",
     inventoryQuantity: 0,
@@ -33,6 +45,7 @@ function CreateProduct({ setStateAlert }) {
     sellableStatus: true,
     productName: "",
     categoryId: "",
+    //mặc định lưu bằng gram
     weight: 0,
     brand: "",
     description: "",
@@ -40,11 +53,17 @@ function CreateProduct({ setStateAlert }) {
   });
 
   useEffect(() => {
-    CategoryAPI.CategoryList().then((res) => {
-      setCategories(res.data);
+    let weight = weightUnit ? (weightValue*1000) : (weightValue);
+    setProduct({
+      ...product,
+      weight: weight,
+      color: [...colors],
+      material: [...materials],
+      size: [...sizes],
     });
-  }, []);
+  }, [colors, sizes, materials, weightValue]);
 
+  //handle product attributes
   function handleChange(evt) {
     const value = evt.target.value;
     setProduct({
@@ -53,9 +72,18 @@ function CreateProduct({ setStateAlert }) {
     });
   }
 
+  //handle weight
+  const handleChangeWeight = (evt) => {
+    setWeightValue(evt.target.valueAsNumber);
+  }
+
+  function changeWeightUnit() {
+    setWeightUnit(!weightUnit);
+  }
+
   //PROPERTIES
   const handleKeyDown = (evt, array, setArray, ref) => {
-    if(evt.keyCode == 13 && evt.target.value) {
+    if (evt.keyCode == 13 && evt.target.value) {
       let newArray = array;
       if (newArray.includes(evt.target.value)) {
         setStateAlert({
@@ -68,23 +96,14 @@ function CreateProduct({ setStateAlert }) {
         newArray.push(evt.target.value);
       }
       setArray([...newArray]);
-      ref.current.value = ""
+      ref.current.value = "";
     }
-   };
+  };
 
-   function handleDeleteChip(item, array, setArray) {
-      let newArray = array;
-      newArray = newArray.filter(chip => chip !== item);
-      setArray([...newArray]);
-   }
-
-  function updateProductProperties() {
-    setProduct({
-      ...product,
-      color: [...colors],
-      material: [...materials],
-      size: [...sizes]
-    });
+  function handleDeleteChip(item, array, setArray) {
+    let newArray = array;
+    newArray = newArray.filter((chip) => chip !== item);
+    setArray([...newArray]);
   }
 
   //category
@@ -113,7 +132,6 @@ function CreateProduct({ setStateAlert }) {
   };
 
   const handleCreateProduct = () => {
-    updateProductProperties();
     console.log(product);
     ProductAPI.createProduct(product)
       .then((res) => {
@@ -130,7 +148,7 @@ function CreateProduct({ setStateAlert }) {
           severity: "error",
           variant: "filled",
           open: true,
-          content: "Có lỗi xảy ra khi tạo thêm sản phẩm",
+          content: err.response.data,
         });
       });
   };
@@ -219,7 +237,23 @@ function CreateProduct({ setStateAlert }) {
                     fullWidth
                     name="weight"
                     placeholder="Nhập khối lượng"
-                    onChange={handleChange}
+                    type="number"
+                    onChange={(e) => handleChangeWeight(e)}
+                    InputProps={{
+                      endAdornment: (
+                        <React.Fragment>
+                          <Typography
+                            aria-label="Thay đổi đơn vị khối lượng"
+                            edge="end"
+                          >
+                            {!weightUnit ? "g" : "kg"}
+                          </Typography>
+                          <IconButton onClick={() => changeWeightUnit()}>
+                            <SwapHoriz />
+                          </IconButton>
+                        </React.Fragment>
+                      ),
+                    }}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -260,6 +294,7 @@ function CreateProduct({ setStateAlert }) {
                   </Box>
                   <TextField
                     fullWidth
+                    type="number"
                     name="retailPrice"
                     placeholder="Nhập giá bán buôn"
                     onChange={handleChange}
@@ -273,6 +308,7 @@ function CreateProduct({ setStateAlert }) {
                   </Box>
                   <TextField
                     fullWidth
+                    type="number"
                     name="wholeSalePrice"
                     placeholder="Nhập giá bán buôn"
                     onChange={handleChange}
@@ -289,6 +325,7 @@ function CreateProduct({ setStateAlert }) {
                   </Box>
                   <TextField
                     fullWidth
+                    type="number"
                     name="originalPrice"
                     placeholder="Nhập giá nhập"
                     onChange={handleChange}
@@ -323,13 +360,17 @@ function CreateProduct({ setStateAlert }) {
                     placeholder="Nhập màu sắc"
                     inputRef={colorRef}
                     // onChange={handleChange}
-                    onKeyDown={(evt) => handleKeyDown(evt, colors, setColors, colorRef)}
+                    onKeyDown={(evt) =>
+                      handleKeyDown(evt, colors, setColors, colorRef)
+                    }
                     InputProps={{
                       startAdornment: colors.map((item, index) => (
                         <Chip
                           key={index}
                           label={item}
-                          onDelete={() => handleDeleteChip(item, colors, setColors)}
+                          onDelete={() =>
+                            handleDeleteChip(item, colors, setColors)
+                          }
                         />
                       )),
                     }}
@@ -347,13 +388,17 @@ function CreateProduct({ setStateAlert }) {
                     placeholder="Nhập chất liệu"
                     inputRef={materialRef}
                     // onChange={handleChange}
-                    onKeyDown={(evt) => handleKeyDown(evt, materials, setMaterials, materialRef)}
+                    onKeyDown={(evt) =>
+                      handleKeyDown(evt, materials, setMaterials, materialRef)
+                    }
                     InputProps={{
                       startAdornment: materials.map((item, index) => (
                         <Chip
                           key={index}
                           label={item}
-                          onDelete={() => handleDeleteChip(item, materials, setMaterials)}
+                          onDelete={() =>
+                            handleDeleteChip(item, materials, setMaterials)
+                          }
                         />
                       )),
                     }}
@@ -367,17 +412,21 @@ function CreateProduct({ setStateAlert }) {
                   </Box>
                   <TextField
                     fullWidth
-                    name="materials"
+                    name="sizes"
                     placeholder="Nhập kích thước"
                     inputRef={sizeRef}
                     // onChange={handleChange}
-                    onKeyDown={(evt) => handleKeyDown(evt, sizes, setSizes, sizeRef)}
+                    onKeyDown={(evt) =>
+                      handleKeyDown(evt, sizes, setSizes, sizeRef)
+                    }
                     InputProps={{
                       startAdornment: sizes.map((item, index) => (
                         <Chip
                           key={index}
                           label={item}
-                          onDelete={() => handleDeleteChip(item, sizes, setSizes)}
+                          onDelete={() =>
+                            handleDeleteChip(item, sizes, setSizes)
+                          }
                         />
                       )),
                     }}
@@ -446,6 +495,7 @@ function CreateProduct({ setStateAlert }) {
                   </Box>
                   <TextField
                     fullWidth
+                    type="number"
                     name="inventoryQuantity"
                     placeholder="Nhập số lượng trong kho"
                     onChange={handleChange}
@@ -459,6 +509,7 @@ function CreateProduct({ setStateAlert }) {
                   </Box>
                   <TextField
                     fullWidth
+                    type="number"
                     name="sellableQuantity"
                     placeholder="Nhập số lượng có thể bán"
                     onChange={handleChange}

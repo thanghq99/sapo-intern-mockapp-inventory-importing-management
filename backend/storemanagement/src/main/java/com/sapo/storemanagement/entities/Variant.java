@@ -76,8 +76,7 @@ public class Variant {
     @Column(name = "sell_status", columnDefinition = "varchar(32) DEFAULT 'Có thể bán'")
     private SellableStatus sellableStatus = SellableStatus.SELLABLE;
 
-    public Variant() {
-    }
+    public Variant() {}
 
     public Variant(Product product, String code, Long inventoryQuantity,
                    Long sellableQuantity, Double originalPrice,
@@ -106,6 +105,24 @@ public class Variant {
         this.originalPrice = originalPrice;
         this.wholeSalePrice = wholeSalePrice;
         this.retailPrice = retailPrice;
+    }
+
+    public Variant(Product product, String code, Long inventoryQuantity,
+                   Long sellableQuantity, String size, String color,
+                   String material, String unit, Double originalPrice,
+                   Double wholeSalePrice, Double retailPrice, SellableStatus sellableStatus) {
+        this.product = product;
+        this.code = code;
+        this.inventoryQuantity = inventoryQuantity;
+        this.sellableQuantity = sellableQuantity;
+        this.size = size;
+        this.color = color;
+        this.material = material;
+        this.unit = unit;
+        this.originalPrice = originalPrice;
+        this.wholeSalePrice = wholeSalePrice;
+        this.retailPrice = retailPrice;
+        this.sellableStatus = sellableStatus;
     }
 
     public Long getId() {

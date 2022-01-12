@@ -1,86 +1,59 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Button, Divider, Grid, TextField, Tooltip, Select, MenuItem } from "@mui/material";
-import { ArrowBackIosNew, Info, Add} from "@mui/icons-material";
+import {
+  Box,
+  Typography,
+  Button,
+  Divider,
+  Grid,
+  TextField,
+  IconButton,
+} from "@mui/material";
+import { ArrowBackIosNew, Add, SwapHoriz } from "@mui/icons-material";
 import { useHistory, useParams } from "react-router-dom";
 import "./createProduct.scss";
-import CategoryAPI from "../../api/CategoryAPI";
 import ProductAPI from "../../api/ProductAPI";
+import CategorySelect from "../../components/product/category/CategorySelect";
 
-function EditProduct({setStateAlert}) {
+function EditProduct({ setStateAlert }) {
   const history = useHistory();
   const params = useParams();
-  const longText =
-    "Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus. Praesent non nunc mollis, fermentum neque at, semper arcu.";
   const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState([]);
-  const [categoryId, setCategoryId] = useState("");
-  const [brands, setBrands] = useState([
-    { label: "Adidas", id: 1 },
-    { label: "Nike", id: 2 },
-    { label: "Puma", id: 3 },
-  ]);
+
+  const [weightUnit, setWeightUnit] = useState(false); //false: gram, true: kilogram
+  const [weightValue, setWeightValue] = useState(0);
+  const [categoryName, setCategoryName] = useState("");
+
   const [product, setProduct] = useState({});
 
   async function getData() {
     const result = await ProductAPI.product(params.id);
-    setProduct(result.data);
-    console.log(result.data);
-    setCategoryId(result.data.category.id);
-    const categoriesData = await CategoryAPI.CategoryList();
-    setCategories(categoriesData.data);
+    setProduct({
+      ...result.data,
+      categoryId: result.data.category.id
+    });
+    setCategoryName(result.data.category.name);
+    setWeightValue(result.data.weight);
     setLoading(false);
   }
 
   useEffect(() => {
     getData();
-    
+
     return () => {
       setLoading(true);
     };
   }, []);
 
-  const cancelAction = () => {
-    setStateAlert({ severity: "warning", variant: "filled", open: true, content: "Đã hủy tạo thêm phiên bản sản phẩm" });
-    history.push("/san-pham");
-  }
-
-  const handleEditProduct = () => {
-    let updateProduct = {
-        //nhung gia tri nay khong can update
-        variantCode: "",
-        inventoryQuantity: "",
-        sellableQuantity: "",
-        size: "",
-        color: "",
-        material: "",
-        unit: "",
-        originalPrice: "",
-        wholeSalePrice: "",
-        retailPrice: "",
-        //khi khởi tạo măc định true?
-        recordStatus: true,
-        sellableStatus: "",
-        //update duy nhat 6 gia tri ben duoi
-        productName: product.name,
-        categoryId: categoryId,
-        weight: product.weight,
-        brand: product.brand,
-        description: product.description,
-        imageUrl: product.imageUrl,
-      }
-    console.log("it will update these data: ");
-    console.log(updateProduct);
-    ProductAPI.updateProduct(params.id, updateProduct)
-    .then((res) => {
-      setStateAlert({ severity: "success", variant: "filled", open: true, content: "Đã chỉnh sửa sản phẩm" });
-      history.go(-1);
-    })
-    .catch(err => {
-      setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra khi chỉnh sửa sản phẩm" });
-      history.go(-1);
+  useEffect(() => {
+    let weight = weightUnit ? weightValue * 1000 : weightValue;
+    setProduct({
+      ...product,
+      weight: weight,
+      categoryId: product.categoryId
     });
-  };
+  }, [weightValue, weightUnit, product.categoryId]);
 
+  //product properties
   function handleChange(evt) {
     const value = evt.target.value;
     setProduct({
@@ -89,16 +62,54 @@ function EditProduct({setStateAlert}) {
     });
   }
 
-  const handleChangeCategory = (evt) => {
-    const value = evt.target.value;
-    setCategoryId(value);
-  };
-
-  const handleChangeBrand = (evt) => {
-    const value = evt.target.value;
+  //category
+  const handleSelectCategory = (categoryId) => {
     setProduct({
       ...product,
-      ["brand"]: value,
+      categoryId: categoryId
+    })
+  };
+
+  //handle weight
+  const handleChangeWeight = (evt) => {
+    if(evt.target.valueAsNumber) setWeightValue(evt.target.valueAsNumber)
+    else setWeightValue(0);
+  };
+
+  function changeWeightUnit() {
+    setWeightUnit(!weightUnit);
+  }
+
+  //actions
+  const cancelAction = () => {
+    setStateAlert({
+      severity: "warning",
+      variant: "filled",
+      open: true,
+      content: "Đã hủy tạo thêm phiên bản sản phẩm",
+    });
+    history.go(-1);
+  };
+
+  const handleEditProduct = () => {
+    console.log(
+      product
+    );
+    ProductAPI.updateProduct(params.id, {
+      productName: product.name,
+      categoryId: product.categoryId,
+      weight: product.weight,
+      brand: product.brand,
+      description: product.description,
+      imageUrl: product.imageUrl,
+    })
+    .then((res) => {
+      setStateAlert({ severity: "success", variant: "filled", open: true, content: "Đã chỉnh sửa sản phẩm" });
+      history.go(-1);
+    })
+    .catch(err => {
+      setStateAlert({ severity: "error", variant: "filled", open: true, content: err.response.data });
+      // history.go(-1);
     });
   };
 
@@ -121,7 +132,7 @@ function EditProduct({setStateAlert}) {
             },
           }}
         >
-          <ArrowBackIosNew sx={{ mr: 2 }}  onClick={cancelAction}/>
+          <ArrowBackIosNew sx={{ mr: 2 }} onClick={cancelAction} />
           Quay lại Danh sách sản phẩm
         </Typography>
       </Box>
@@ -140,7 +151,9 @@ function EditProduct({setStateAlert}) {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => {handleEditProduct()}}
+            onClick={() => {
+              handleEditProduct();
+            }}
           >
             Lưu thông tin
           </Button>
@@ -166,16 +179,13 @@ function EditProduct({setStateAlert}) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Tên sản phẩm
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
                     name="name"
                     placeholder="Nhập tên sản phẩm"
                     onChange={handleChange}
-                    value={product.name}
+                    value={product.name || ""}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -183,16 +193,29 @@ function EditProduct({setStateAlert}) {
                     <Typography variant="subtitle1" id="tableTitle">
                       Khối lượng
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
                     name="weight"
                     placeholder="Nhập khối lượng"
-                    onChange={handleChange}
-                    value={product.weight}
+                    type="number"
+                    defaultValue={weightValue || 0}
+                    onChange={(e) => handleChangeWeight(e)}
+                    InputProps={{
+                      endAdornment: (
+                        <React.Fragment>
+                          <Typography
+                            aria-label="Thay đổi đơn vị khối lượng"
+                            edge="end"
+                          >
+                            {!weightUnit ? "g" : "kg"}
+                          </Typography>
+                          <IconButton onClick={() => changeWeightUnit()}>
+                            <SwapHoriz />
+                          </IconButton>
+                        </React.Fragment>
+                      ),
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -260,28 +283,11 @@ function EditProduct({setStateAlert}) {
                     >
                       Loại sản phẩm
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
-                  <Select
-                    id="category-select"
-                    onChange={handleChangeCategory}
-                    fullWidth
-                    value={categoryId}
-                    displayEmpty={true}
-                    renderValue={
-                      product.brand !== "" ? undefined : () => "Chọn nhãn hiệu"
-                    }
-                  >
-                    {categories.map((category, index) => {
-                      return (
-                        <MenuItem key={index} value={category.id}>
-                          {category.name}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
+                  <CategorySelect
+                    handleSelectCategory={handleSelectCategory}
+                    categoryName={categoryName}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <Box display="flex">
@@ -293,28 +299,14 @@ function EditProduct({setStateAlert}) {
                     >
                       Nhãn hiệu
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
-                  <Select
-                    id="brand-select"
-                    value={product.brand}
-                    onChange={handleChangeBrand}
+                  <TextField
                     fullWidth
-                    displayEmpty={true}
-                    renderValue={
-                      product.brand !== "" ? undefined : () => "Chọn nhãn hiệu"
-                    }
-                  >
-                    {brands.map((brand, index) => {
-                      return (
-                        <MenuItem key={index} value={brand.label}>
-                          {brand.label}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
+                    name="brand"
+                    placeholder="Nhập nhãn hiệu"
+                    onChange={handleChange}
+                    value={product.brand || ""}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <Box display="flex">
@@ -325,9 +317,6 @@ function EditProduct({setStateAlert}) {
                     >
                       Mô tả sản phẩm
                     </Typography>
-                    <Tooltip arrow title={longText}>
-                      <Info fontSize="small" color="primary" />
-                    </Tooltip>
                   </Box>
                   <TextField
                     fullWidth
@@ -335,7 +324,7 @@ function EditProduct({setStateAlert}) {
                     multiline
                     rows={3}
                     onChange={handleChange}
-                    value={product.description}
+                    value={product.description || ""}
                   />
                 </Grid>
               </Grid>
