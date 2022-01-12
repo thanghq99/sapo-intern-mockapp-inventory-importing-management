@@ -84,8 +84,7 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
         setViewState(1);
       })
       .catch(err => {
-        // setStateAlert({ severity: "error", variant: "filled", open: true, content: err.respond.data })
-        // console.log(err.respond.data || '');
+        setStateAlert({ severity: "error", variant: "filled", open: true, content: err.response.data });
       });
   }
   return (
