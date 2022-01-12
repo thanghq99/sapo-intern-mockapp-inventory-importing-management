@@ -1,6 +1,8 @@
 package com.sapo.storemanagement.service.impl;
 
 import com.sapo.storemanagement.dto.ImportReceiptDto;
+import com.sapo.storemanagement.dto.ImportReceiptResponseDto;
+import com.sapo.storemanagement.dto.LineItemDto;
 import com.sapo.storemanagement.entities.*;
 import com.sapo.storemanagement.exception.BadNumberException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -135,7 +138,66 @@ public class ImportReceiptServiceImpl implements ImportReceiptService {
     }
 
     @Override
-    public List<ImportReceipt> listAllImportReceiptsByOrder(long orderId) {
-        return importReceiptRepository.findAllByOrder_Id(orderId);
+    public List<ImportReceiptResponseDto> listAllImportReceiptsByOrder(long orderId) {
+        List<ImportReceiptResponseDto> response = new ArrayList<>();
+        /*
+        Step 1: Find all import receipts
+         */
+        List<ImportReceipt> importReceipts = importReceiptRepository.findAllByOrder_Id(orderId);
+
+        /*
+        Step 2: For each import receipt, find all line items,
+        and build response based on those line items
+         */
+        importReceipts.forEach(importReceipt -> {
+            List<LineItemDto> lineItems = new ArrayList<>();
+
+            /*
+            Step 2.1: Find all variants in this importReceipt
+             */
+            List<VariantsImportReceipt> variantsImportReceipts = variantsImportReceiptRepository
+                .findAllByImportReceipt_Id(importReceipt.getId());
+
+            /*
+            Step 2.2: For each variant, find the supplied price,
+            build lineItem, and add to list of line items
+             */
+            variantsImportReceipts.forEach(variantsImportReceipt -> {
+                long variantId = variantsImportReceipt.getVariant().getId();
+
+                /*
+                Find supplied price of this variant based on variantId and orderId
+                 */
+                double suppliedPrice = variantsOrderRepository
+                    .findByVariant_IdAndOrder_Id(variantId, orderId)
+                    .orElseThrow(() -> new RecordNotFoundException("Đơn hàng " + orderId + " không có sản phẩm " + variantId))
+                    .getPrice();
+
+                /*
+                Build a lineItem
+                 */
+                LineItemDto lineItem = new LineItemDto(
+                    variantsImportReceipt.getId().getVariantId(),
+                    suppliedPrice,
+                    variantsImportReceipt.getQuantity()
+                );
+                lineItems.add(lineItem);
+            });
+
+            /*
+            Build an object of ImportReceiptResponseDto
+             */
+            ImportReceiptResponseDto responseDto = new ImportReceiptResponseDto(
+                importReceipt.getCode(), importReceipt.getCreatedAt(),
+                importReceipt.getCreatedBy().getUsername(), lineItems
+            );
+
+            /*
+            Build the response
+             */
+            response.add(responseDto);
+        });
+
+        return response;
     }
 }

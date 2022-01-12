@@ -5,6 +5,12 @@ public class LineItemDto {
     private Double price;
     private Long quantity;
 
+    public LineItemDto(Long variantId, Double price, Long quantity) {
+        this.variantId = variantId;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
     public Long getVariantId() {
         return variantId;
     }

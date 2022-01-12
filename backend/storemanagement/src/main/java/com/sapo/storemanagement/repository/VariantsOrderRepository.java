@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface VariantsOrderRepository extends JpaRepository<VariantsOrder, VariantsOrderId> {
@@ -32,4 +33,6 @@ public interface VariantsOrderRepository extends JpaRepository<VariantsOrder, Va
         nativeQuery = true
     )
     long totalSuppliedQuantityOfVariantInOrder(@Param("variantId") long variantId, @Param("orderId") long orderId);
+
+    Optional<VariantsOrder> findByVariant_IdAndOrder_Id(long variantId, long orderId);
 }

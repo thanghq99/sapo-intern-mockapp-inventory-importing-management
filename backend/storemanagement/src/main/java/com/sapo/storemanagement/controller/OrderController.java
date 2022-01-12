@@ -1,6 +1,7 @@
 package com.sapo.storemanagement.controller;
 
 import com.sapo.storemanagement.dto.ImportReceiptDto;
+import com.sapo.storemanagement.dto.ImportReceiptResponseDto;
 import com.sapo.storemanagement.dto.OrderDto;
 import com.sapo.storemanagement.dto.PayOrderDto;
 import com.sapo.storemanagement.entities.ImportReceipt;
@@ -89,7 +90,7 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}/import-receipts")
-    public List<ImportReceipt> findAllImportReceiptsOfOrder(@PathVariable long orderId) {
+    public List<ImportReceiptResponseDto> findAllImportReceiptsOfOrder(@PathVariable long orderId) {
         return importReceiptService.listAllImportReceiptsByOrder(orderId);
     }
 }
