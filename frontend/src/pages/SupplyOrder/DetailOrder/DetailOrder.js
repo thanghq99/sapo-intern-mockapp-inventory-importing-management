@@ -73,6 +73,9 @@ export default function DetailOrder() {
 
     const [num, setNum] = React.useState([]);
 
+    const [openImportHistory, setOpenImportHistory] = React.useState([]);
+    const [openPaymentHistory, setOpenPaymentHistory] = React.useState([]);
+
     const handleMenu = () => {
         setOpenMenu(!openMenu);
     }
@@ -92,6 +95,25 @@ export default function DetailOrder() {
     const handlePayment = (event) => {
         setPayment(event.target.value);
     };
+
+    const handOpenHistoryPayment = (items) => {
+        setHistoryPaid(items);
+        setOpenPaymentHistory(
+            items.reduce(
+                (obj, product) => ({ ...obj, [product.id]: false }), {}
+            )
+        )
+    }
+    const handOpenHistoryImport = (items) => {
+        setHistoryImport(items)
+        setOpenImportHistory(
+            items.reduce(
+                (obj, product) => ({ ...obj, [product.code]: false }), {}
+            )
+        )
+    }
+
+    // Thanh toan
     const SubmitPayment = async () => {
         // handleOpenPayment();
         const res = await PaymentAPI.Paid(searchParam, { amount: payment });
@@ -102,6 +124,8 @@ export default function DetailOrder() {
 
 
     }
+
+    // Nhap kho
     const SubmitImport = async () => {
 
         let data = [];
@@ -113,7 +137,7 @@ export default function DetailOrder() {
         })
         try {
 
-            await ImportReceiptsAPI.Import(searchParam, { lineItems :data});
+            await ImportReceiptsAPI.Import(searchParam, { lineItems: data });
             handleOpenImport();
 
         } catch (error) {
@@ -159,10 +183,13 @@ export default function DetailOrder() {
         'Nhập Kho',
         'Hoàn Thành',
     ];
+
+    // paymentType
     const paymentType = [
         { label: 'Tiền mặt' },
         { label: 'Chuyển khoản' }
     ]
+
 
     async function getData() {
         try {
@@ -184,9 +211,13 @@ export default function DetailOrder() {
             setTotalAmount(orderRes.data.totalAmount);
             setDescription(orderRes.data.description);
 
-            setHistoryPaid(HistoryPaidRes.data);
+            // setHistoryPaid(HistoryPaidRes.data);
+            handOpenHistoryPayment(HistoryPaidRes.data);
 
-            setHistoryImport(HistoryImportRes.data);
+            // setHistoryImport(HistoryImportRes.data);
+            handOpenHistoryImport(HistoryImportRes.data);
+
+
 
             let tmp = 0;
             ProductRes.data.map((item) => {
@@ -203,9 +234,11 @@ export default function DetailOrder() {
     }
     React.useEffect(() => {
         getData();
-    }, [openPaymented])
+    }, [openPaymented, openImport])
     console.log(order);
     console.log(payment);
+
+    // css nhap kho
     const style = {
         position: 'absolute',
         top: '50%',
@@ -216,7 +249,9 @@ export default function DetailOrder() {
         border: '1px solid #000',
         boxShadow: 5,
         p: 4,
-      };
+    };
+
+    console.log(openPaymentHistory);
     return (
 
         <div>
@@ -374,15 +409,38 @@ export default function DetailOrder() {
                                     <Timeline>
                                         {
                                             historyPaid ? historyPaid.map((item, index) => {
+                                                // let opend = false;
+                                                // const opendItem = () => {
+                                                //     opend = true;
+                                                // }
                                                 return (
-                                                    <TimelineItem>
+                                                    <TimelineItem key={index}>
                                                         <TimelineSeparator>
                                                             <TimelineDot color="primary" />
                                                             <TimelineConnector />
                                                         </TimelineSeparator>
                                                         <TimelineContent>
-                                                            <Typography ml={2}>Xác nhận thanh toán <span style={{ fontWeight: 600 }}>{item.amount} vnd</span> thành công</Typography>
-                                                            <Typography ml={2}>Thời gian: {item.createdAt}</Typography>
+                                                            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                                                <Typography ml={2} onClick={() => setOpenPaymentHistory({ ...openPaymentHistory, [item.id]: !openPaymentHistory[item.id] })} >Xác nhận thanh toán <span style={{ fontWeight: 600 }}>{item.amount} vnd</span> thành công</Typography>
+                                                                <Typography ml={2}>{item.createdAt}</Typography>
+                                                            </Box>
+
+                                                            {
+                                                                openPaymentHistory ?
+                                                                    openPaymentHistory[item.id] ?
+                                                                        <Box sx={{ display: "flex", justifyContent: "space-between" }} mt={2}>
+                                                                            <Box sx={{ width: "50%" }} ml={2}>
+                                                                                <Typography sx={{ color: "#6f6f6f" }} >Số tiền thanh toán</Typography>
+                                                                                <Typography >{item.amount} vnd</Typography>
+                                                                            </Box>
+                                                                            <Box sx={{ width: "50%" }}>
+                                                                                <Typography sx={{ color: "#6f6f6f" }}>Người thanh toán</Typography>
+                                                                                <Typography>{item.createdBy.username}</Typography>
+                                                                            </Box>
+
+                                                                        </Box> : null
+                                                                    : null
+                                                            }
                                                         </TimelineContent>
                                                     </TimelineItem>
                                                 )
@@ -441,28 +499,63 @@ export default function DetailOrder() {
                             </Box>
 
                         </Box>
-                        <Box className="history-import" sx={{ display: "flex" }} mt={2} mb={2}>
-                            <Divider />
-                            <Timeline className="body-history-import">
-                                {
-                                    historyImport ? historyImport.map((item, index) => {
-                                        return (
-                                            <TimelineItem>
-                                                <TimelineSeparator>
-                                                    <TimelineDot color="primary" />
-                                                    <TimelineConnector />
-                                                </TimelineSeparator>
-                                                <TimelineContent>
-                                                    <Typography ml={2}>{item.createdBy.username} đã nhập kho</Typography>
-                                                    <Typography ml={2}>Thời gian: {item.createdAt}</Typography>
-                                                </TimelineContent>
-                                            </TimelineItem>
-                                        )
-                                    }) : null
-                                }
+                        {
+                            historyImport ?
+                                <Box className="history-import" sx={{ display: "flex" }} mt={2} mb={2}>
+                                    <Divider />
+                                    <Timeline className="body-history-import">
+                                        {
+                                            historyImport ? historyImport.map((item) => {
+                                                return (
+                                                    <TimelineItem>
+                                                        <TimelineSeparator>
+                                                            <TimelineDot color="primary" />
+                                                            <TimelineConnector />
+                                                        </TimelineSeparator>
+                                                        <TimelineContent>
+                                                            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                                                <Typography ml={2} onClick={() => setOpenImportHistory({ ...openImportHistory, [item.code]: !openImportHistory[item.code] })}>{item.code} Đã nhập kho</Typography>
+                                                                <Typography ml={2}>Thời gian: {item.createdAt}</Typography>
+                                                            </Box>
+                                                            {
+                                                                openImportHistory ?
+                                                                    openImportHistory[item.code] ?
+                                                                        <Box>
+                                                                            <Box sx={{ display: "flex", justifyContent: "space-between" }} mt={2}>
+                                                                                <Box sx={{ width: "50%" }} ml={2}>
+                                                                                    <Typography sx={{ color: "#6f6f6f" }}>Mã phiếu nhập kho</Typography>
+                                                                                    <Typography>{item.code}</Typography>
+                                                                                </Box>
+                                                                                <Box sx={{ width: "50%" }} >
+                                                                                    <Typography sx={{ color: "#6f6f6f" }}>Người nhập kho</Typography>
+                                                                                    <Typography>{item.creatorName}</Typography>
+                                                                                </Box>
+                                                                            </Box>
+                                                                            <Box>
+                                                                                <Typography>Sản phẩm</Typography>
+                                                                                {
+                                                                                    item.lineItems.map((variantImport) => {
+                                                                                        return (
+                                                                                            <Box>{variantImport.quantity} x {variantImport.variantId}</Box>
+                                                                                        )
+                                                                                    })
+                                                                                }
+                                                                            </Box>
+                                                                        </Box> : null
+                                                                        : null
+                                                            }
 
-                            </Timeline>
-                        </Box>
+
+                                                        </TimelineContent>
+                                                    </TimelineItem>
+                                                )
+                                            }) : null
+                                        }
+
+                                    </Timeline>
+                                </Box> : null
+                        }
+
                         <Modal
                             open={!openImport}
                             onClose={handleOpenImport}
@@ -475,9 +568,9 @@ export default function DetailOrder() {
                                 </Typography>
                                 <Divider />
                                 <Box id="modal-modal-description" sx={{ mt: 2 }}>
-                                    <Box className="header-Product" sx={{display: "flex"}}>
+                                    <Box className="header-Product" sx={{ display: "flex" }}>
                                         <Box sx={{ width: "75%", float: "left", paddingLeft: "15px", fontWeight: 600, fontSize: 16 }}>Tên sản phẩm</Box>
-                                        <Box sx={{ width: "25%", textAlign: "center", fontWeight: 600, fontSize: 16  }}>Số lượng Nhập</Box>
+                                        <Box sx={{ width: "25%", textAlign: "center", fontWeight: 600, fontSize: 16 }}>Số lượng Nhập</Box>
                                     </Box>
                                     <List sx={{ width: "100%" }}>
                                         {
@@ -499,8 +592,8 @@ export default function DetailOrder() {
                                     </List>
                                     <Divider />
                                     <Box ml={40} mt={2}>
-                                        <Button variant="outlined" color="error" sx={{width: "50px", marginRight: "16px"}} onClick={handleOpenImport}> Thoát </Button>
-                                        <Button variant="contained" onClick={SubmitImport} sx={{width: "100px"}}> Nhập Kho</Button>
+                                        <Button variant="outlined" color="error" sx={{ width: "50px", marginRight: "16px" }} onClick={handleOpenImport}> Thoát </Button>
+                                        <Button variant="contained" onClick={SubmitImport} sx={{ width: "100px" }}> Nhập Kho</Button>
                                     </Box>
                                 </Box>
                             </Box>
