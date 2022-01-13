@@ -161,7 +161,7 @@ function ProductDetails({setStateAlert}) {
               justifyContent="space-evenly"
               height="100%"
             >
-              <Typography>: {product.category.name}</Typography>
+              <Typography>: {product.category}</Typography>
               <Typography>: {product.brand}</Typography>
               <Typography>: {variants.length}</Typography>
             </Box>

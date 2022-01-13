@@ -335,7 +335,7 @@ export default function ProductsTable({products}) {
                           <Typography>{row.name}</Typography>
                         </Link>
                       </TableCell>
-                      <TableCell align="left">{row.category.name}</TableCell>
+                      <TableCell align="left">{row.category}</TableCell>
                       <TableCell align="left">{row.brand}</TableCell>
                       <TableCell align="center">{row.stock}</TableCell>
                     </TableRow>

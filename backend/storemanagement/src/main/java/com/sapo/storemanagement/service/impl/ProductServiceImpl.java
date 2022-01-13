@@ -1,6 +1,7 @@
 package com.sapo.storemanagement.service.impl;
 
 import com.sapo.storemanagement.dto.ProductDto;
+import com.sapo.storemanagement.dto.ProductResponseDto;
 import com.sapo.storemanagement.dto.ProductVariantDto;
 import com.sapo.storemanagement.dto.VariantDto;
 import com.sapo.storemanagement.entities.*;
@@ -42,18 +43,27 @@ public class ProductServiceImpl implements ProductService {
     private ItemCodeGenerator itemCodeGenerator;
 
     @Override
-    public List<Product> listAllProducts() {
-        return productRepository.findAllByRecordStatus(RecordStatus.ACTIVE.getStatus());
+    public Iterable<ProductResponseDto> listAllProducts() {
+        List<ProductResponseDto> response = new ArrayList<>();
+
+        List<Product> products = productRepository.findAllByRecordStatus(RecordStatus.ACTIVE.getStatus());
+        products.forEach(product -> {
+            response.add(this.getProductById(product.getId()));
+        });
+
+        return response;
     }
 
     @Override
-    public Product getProductById(Long id) {
+    public ProductResponseDto getProductById(Long id) {
         if (id <= 0) {
             throw new BadNumberException("id must be greater than 0");
         }
-        return productRepository
-                .findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("product not found"));
+
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new RecordNotFoundException("product not found"));
+        long totalInventoryQuantity = productRepository.totalInventoryQuantityOfProduct(id);
+        return new ProductResponseDto(product, totalInventoryQuantity);
     }
 
     @Override

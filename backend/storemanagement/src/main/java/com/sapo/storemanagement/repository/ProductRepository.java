@@ -25,4 +25,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         nativeQuery = true
     )
     void deleteProductIfNoVariantAvailable(@Param("productId") Long productId);
+
+    @Query(
+        value = "select coalesce(sum(inventory_quantity), 0) " +
+            "from products left join variants on (products.id = variants.product_id) " +
+            "where products.id = :productId",
+        nativeQuery = true
+    )
+    long totalInventoryQuantityOfProduct(@Param("productId") long productId);
 }

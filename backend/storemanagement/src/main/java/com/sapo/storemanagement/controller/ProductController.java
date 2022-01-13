@@ -1,6 +1,7 @@
 package com.sapo.storemanagement.controller;
 
 import com.sapo.storemanagement.dto.ProductDto;
+import com.sapo.storemanagement.dto.ProductResponseDto;
 import com.sapo.storemanagement.dto.ProductVariantDto;
 import com.sapo.storemanagement.dto.VariantDto;
 import com.sapo.storemanagement.entities.Product;
@@ -27,7 +28,7 @@ public class ProductController {
     private VariantService variantService;
 
     @GetMapping("")
-    public Iterable<Product> listAllProducts() { return productService.listAllProducts(); }
+    public Iterable<ProductResponseDto> listAllProducts() { return productService.listAllProducts(); }
 
     @GetMapping("/{id}/variants")
     public List<Variant> listAllVariantsByProductId(@PathVariable long id){
@@ -35,7 +36,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    Product getProductById(@PathVariable(name = "id") long id) { return productService.getProductById(id); }
+    ProductResponseDto getProductById(@PathVariable(name = "id") long id) { return productService.getProductById(id); }
 
     @PostMapping
     Product saveProduct(@RequestBody @Valid ProductVariantDto newProduct) {
