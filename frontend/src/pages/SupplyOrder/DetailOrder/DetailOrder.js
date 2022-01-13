@@ -256,34 +256,23 @@ export default function DetailOrder() {
 
         <div>
             <Box py={2} px={5} sx={{ flexGrow: 1 }} className="body">
-                <Box >
+                <Box className="header-page-detail">
                     <Box className="back" onClick={history.goBack}>
                         <ArrowBackIosIcon />
                         <Box>Đơn nhập hàng</Box>
                     </Box>
-                    <Box sx={{ display: "flex" }} ml={2}>
+                    <Box sx={{ display: "flex", justifyContent: "space-between" }} ml={2}>
                         <Typography sx={{ fontSize: 36, fontWeight: 450 }}>{codeOrder}</Typography>
-                        <Box onClick={handleMenu} sx={{ display: "flex", alignItems: "center" }} ml={2} >
-                            <Typography>Thêm thao tác</Typography>
-                            {openMenu ? <ExpandLess /> : <ExpandMore />}
+                        <Box sx={{ display: "flex", alignItems: "center" }} >
+                            <Button variant="outlined" color="error" sx={{ width: "50px", marginRight: "16px" }} onClick={handleOpenImport}> Huỷ </Button>
+                            <Link to={`/nhap-hang/sua-don-hang?code=${searchParam}`} className="link-update">
+                                <Button variant="contained" sx={{ width: "200px" }}> Chỉnh sửa đơn hàng</Button>
+                            </Link>
+                           
 
                         </Box>
                     </Box>
-                    <Collapse in={openMenu} timeout="auto" unmountOnExit
-                        sx={{
-                            display: "block", zIndex: 101, width: "100px", position: "absolute",
-                            backgroundColor: "#FFFFFF", border: "1px solid #cfcfcf", marginLeft: "100px", marginTop: "-10px"
-                        }}>
-                        <List component="div" disablePadding>
-                            <ListItem>
-                                <Link to={`/nhap-hang/sua-don-hang?code=${searchParam}`} className="link-update">Sửa</Link>
-                            </ListItem>
-                            <Divider />
-                            <ListItem>
-                                Huỷ
-                            </ListItem>
-                        </List>
-                    </Collapse>
+                    
                 </Box>
                 <Box className="test"  >
                     <Box className="supplier">
@@ -297,7 +286,7 @@ export default function DetailOrder() {
                                     <Typography sx={{ marginRight: "5px", fontWeight: 600 }}>{nameSupplier}</Typography>
 
                                 </Box>
-                                <Typography className="debt" sx={{ fontWeight: 600 }}>Công nợ: {debt} vnd</Typography>
+                                <Typography className="debt" sx={{ fontWeight: 600 }}>Công nợ: {debt?.toLocaleString()} vnd</Typography>
                             </Box>
                         </Box>
                         <Divider />
@@ -344,10 +333,10 @@ export default function DetailOrder() {
                                                 <Typography sx={{ width: '10%', alignItems: "center" }}>{item.variant.code}</Typography>
                                                 <Typography sx={{ width: '48%', paddingLeft: "5px" }} >{item.variant.product.name}</Typography>
                                                 <Typography sx={{ width: '10%', textAlign: "center" }}>{item.variant.unit}</Typography>
-                                                <Box sx={{ width: '10%', textAlign: "center" }}>{item.suppliedQuantity}</Box>
-                                                <Box sx={{ width: '10%', textAlign: "center" }}>{item.price}</Box>
+                                                <Box sx={{ width: '10%', textAlign: "center" }}>{item.suppliedQuantity.toLocaleString()}</Box>
+                                                <Box sx={{ width: '10%', textAlign: "center" }}>{item.price.toLocaleString()}</Box>
 
-                                                <Typography sx={{ width: '10%', textAlign: "center" }}>{item.suppliedQuantity * item.price}</Typography>
+                                                <Typography sx={{ width: '10%', textAlign: "center" }}>{(item.suppliedQuantity * item.price).toLocaleString()}</Typography>
 
                                             </ListItem>)
                                     })
@@ -365,7 +354,7 @@ export default function DetailOrder() {
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography>Tổng tiền</Typography>
-                                    <Typography>{totalAmount * 100 / 94} vnd</Typography>
+                                    <Typography>{(totalAmount * 100 / 94).toLocaleString()} vnd</Typography>
                                 </Box>
                                 <Box className="pay-info-item" sx={{ color: "#007BFF" }}>
                                     <Typography >Tổng chiết khấu</Typography>
@@ -373,7 +362,7 @@ export default function DetailOrder() {
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography sx={{ fontWeight: 700 }}>Phải trả</Typography>
-                                    <Typography>{totalAmount} vnd</Typography>
+                                    <Typography>{totalAmount?.toLocaleString()} vnd</Typography>
                                 </Box>
 
                             </Box>
@@ -388,8 +377,8 @@ export default function DetailOrder() {
                                     <Typography sx={{ fontWeight: 600 }} ml={2} >Thanh Toán</Typography>
                                 </Box>
                                 <Box sx={{ display: "flex", justifyContent: "space-between" }} mt={2}>
-                                    <Typography>Đã thanh toán: {order?.paidAmount} vnd </Typography>
-                                    <Typography>Còn phải trả: {order?.totalAmount - order?.paidAmount} vnd </Typography>
+                                    <Typography>Đã thanh toán: {(order?.paidAmount)?.toLocaleString()} vnd </Typography>
+                                    <Typography>Còn phải trả: {(order?.totalAmount - order?.paidAmount)?.toLocaleString()} vnd </Typography>
                                 </Box>
                             </Box>
                             {
@@ -414,14 +403,14 @@ export default function DetailOrder() {
                                                 //     opend = true;
                                                 // }
                                                 return (
-                                                    <TimelineItem key={index}>
+                                                    <TimelineItem key={index} >
                                                         <TimelineSeparator>
                                                             <TimelineDot color="primary" />
                                                             <TimelineConnector />
                                                         </TimelineSeparator>
                                                         <TimelineContent>
                                                             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                                                                <Typography ml={2} onClick={() => setOpenPaymentHistory({ ...openPaymentHistory, [item.id]: !openPaymentHistory[item.id] })} >Xác nhận thanh toán <span style={{ fontWeight: 600 }}>{item.amount} vnd</span> thành công</Typography>
+                                                                <Typography ml={2} sx={{ cursor: "pointer" }} onClick={() => setOpenPaymentHistory({ ...openPaymentHistory, [item.id]: !openPaymentHistory[item.id] })} >Xác nhận thanh toán <span style={{ fontWeight: 600 }}>{item.amount} vnd</span> thành công</Typography>
                                                                 <Typography ml={2}>{item.createdAt}</Typography>
                                                             </Box>
 
@@ -431,7 +420,7 @@ export default function DetailOrder() {
                                                                         <Box sx={{ display: "flex", justifyContent: "space-between" }} mt={2}>
                                                                             <Box sx={{ width: "50%" }} ml={2}>
                                                                                 <Typography sx={{ color: "#6f6f6f" }} >Số tiền thanh toán</Typography>
-                                                                                <Typography >{item.amount} vnd</Typography>
+                                                                                <Typography >{(item.amount).toLocaleString()} vnd</Typography>
                                                                             </Box>
                                                                             <Box sx={{ width: "50%" }}>
                                                                                 <Typography sx={{ color: "#6f6f6f" }}>Người thanh toán</Typography>
@@ -469,7 +458,7 @@ export default function DetailOrder() {
                                             <Typography sx={{ fontWeight: 600 }} mb={2}>Số tiền thanh toán</Typography>
                                             <TextField id="outlined-basic" variant="outlined"
                                                 sx={{ width: 200, height: 40 }}
-                                                value={payment}
+                                                value={(payment).toLocaleString()}
                                                 onChange={handlePayment} />
                                         </Box>
                                     </Box>
@@ -514,7 +503,7 @@ export default function DetailOrder() {
                                                         </TimelineSeparator>
                                                         <TimelineContent>
                                                             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                                                                <Typography ml={2} onClick={() => setOpenImportHistory({ ...openImportHistory, [item.code]: !openImportHistory[item.code] })}>{item.code} Đã nhập kho</Typography>
+                                                                <Typography ml={2} sx={{ cursor: "pointer" }} onClick={() => setOpenImportHistory({ ...openImportHistory, [item.code]: !openImportHistory[item.code] })}><span style={{ fontWeight: 550 }}>{item.code}</span> Đã nhập kho</Typography>
                                                                 <Typography ml={2}>Thời gian: {item.createdAt}</Typography>
                                                             </Box>
                                                             {
@@ -531,18 +520,18 @@ export default function DetailOrder() {
                                                                                     <Typography>{item.creatorName}</Typography>
                                                                                 </Box>
                                                                             </Box>
-                                                                            <Box>
-                                                                                <Typography>Sản phẩm</Typography>
+                                                                            <Box mt={2} ml={2} >
+                                                                                <Typography sx={{ color: "#6f6f6f" }}>Sản phẩm</Typography>
                                                                                 {
                                                                                     item.lineItems.map((variantImport) => {
                                                                                         return (
-                                                                                            <Box>{variantImport.quantity} x {variantImport.variantId}</Box>
+                                                                                            <Box>{variantImport.quantity} x {variantImport.name}</Box>
                                                                                         )
                                                                                     })
                                                                                 }
                                                                             </Box>
                                                                         </Box> : null
-                                                                        : null
+                                                                    : null
                                                             }
 
 
