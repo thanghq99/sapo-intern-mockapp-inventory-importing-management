@@ -1,6 +1,11 @@
 import React from "react";
 import { Box, Typography, Button, Divider, Grid } from "@mui/material";
 
+Number.prototype.format = function(n, x) {
+  var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+  return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+};
+
 function VariantDetails({ variantInfo, setViewState }) {
   const showEditForm = () => {
     setViewState(3);
@@ -80,7 +85,7 @@ function VariantDetails({ variantInfo, setViewState }) {
             </Grid>
             <Grid item xs={4}>
               <Typography variant="body2">
-                : {variantInfo.wholeSalePrice.toLocaleString()}
+                : {variantInfo.wholeSalePrice.format()}
               </Typography>
             </Grid>
             <Grid item xs={2}>
@@ -88,7 +93,7 @@ function VariantDetails({ variantInfo, setViewState }) {
             </Grid>
             <Grid item xs={4}>
               <Typography variant="body2">
-                : {variantInfo.retailPrice.toLocaleString()}
+                : {variantInfo.retailPrice.format()}
               </Typography>
             </Grid>
           </Grid>
@@ -99,7 +104,7 @@ function VariantDetails({ variantInfo, setViewState }) {
             </Grid>
             <Grid item xs={4}>
               <Typography variant="body2">
-                : {variantInfo.originalPrice.toLocaleString()}
+                : {variantInfo.originalPrice.format()}
               </Typography>
             </Grid>
           </Grid>
