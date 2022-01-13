@@ -235,8 +235,8 @@ export default function DetailOrder() {
     React.useEffect(() => {
         getData();
     }, [openPaymented, openImport])
-    console.log(order);
-    console.log(payment);
+
+
 
     // css nhap kho
     const style = {
@@ -251,7 +251,7 @@ export default function DetailOrder() {
         p: 4,
     };
 
-    console.log(openPaymentHistory);
+    console.log(order);
     return (
 
         <div>
@@ -263,16 +263,20 @@ export default function DetailOrder() {
                     </Box>
                     <Box sx={{ display: "flex", justifyContent: "space-between" }} ml={2}>
                         <Typography sx={{ fontSize: 36, fontWeight: 450 }}>{codeOrder}</Typography>
-                        <Box sx={{ display: "flex", alignItems: "center" }} >
-                            <Button variant="outlined" color="error" sx={{ width: "50px", marginRight: "16px" }} onClick={handleOpenImport}> Huỷ </Button>
-                            <Link to={`/nhap-hang/sua-don-hang?code=${searchParam}`} className="link-update">
-                                <Button variant="contained" sx={{ width: "200px" }}> Chỉnh sửa đơn hàng</Button>
-                            </Link>
-                           
+                        {
+                            (order?.status == "Đã hoàn thành") ? null :
+                                <Box sx={{ display: "flex", alignItems: "center" }} >
+                                    <Button variant="outlined" color="error" sx={{ width: "50px", marginRight: "16px" }} onClick={handleOpenImport}> Huỷ </Button>
+                                    <Link to={`/nhap-hang/sua-don-hang?code=${searchParam}`} className="link-update">
+                                        <Button variant="contained" sx={{ width: "200px" }}> Chỉnh sửa đơn hàng</Button>
+                                    </Link>
 
-                        </Box>
+
+                                </Box>
+                        }
+
                     </Box>
-                    
+
                 </Box>
                 <Box className="test"  >
                     <Box className="supplier">
@@ -382,13 +386,19 @@ export default function DetailOrder() {
                                 </Box>
                             </Box>
                             {
-                                openPaymented ?
-                                    <Box className="btn-payment">
-                                        <Button variant="contained"
-                                            onClick={handleOpenPayment}
-                                        >Xác nhận thanh toán</Button>
-                                    </Box> : null
+                                (order?.transactionStatus == "Đã thanh toán") ? null :
+
+
+                                    openPaymented ?
+                                        <Box className="btn-payment">
+                                            <Button variant="contained"
+                                                onClick={handleOpenPayment}
+                                            >Xác nhận thanh toán</Button>
+                                        </Box> : null
+
+
                             }
+
                         </Box>
                         {
                             openPaymented ?
@@ -481,11 +491,14 @@ export default function DetailOrder() {
                                 <LocalShippingIcon />
                                 <Typography sx={{ fontWeight: 600 }} ml={2}>Nhập Kho</Typography>
                             </Box>
+                            {
+                                (order?.importedStatus == "Đã nhập kho") ? null :
+                                    <Box className="btn-import">
+                                        <Button variant="contained"
+                                            onClick={handleOpenImport}>  Xác nhận nhập kho  </Button>
+                                    </Box>
+                            }
 
-                            <Box className="btn-import">
-                                <Button variant="contained"
-                                    onClick={handleOpenImport}>  Xác nhận nhập kho  </Button>
-                            </Box>
 
                         </Box>
                         {

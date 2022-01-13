@@ -291,7 +291,7 @@ export default function TableSupply({searchedProducts}) {
 
 
     const handleColor = (key) => {
-        if(key == "Đã nhập kho" || key == "Đã thanh toán" || key == "Đã nhập hàng"){
+        if(key == "Đã nhập kho" || key == "Đã thanh toán" || key == "Đã nhập hàng" || key == "Đã hoàn thành"){
             return "#20a917";
         } else if(key == "Đang giao dịch" || key == "Thanh toán một phần" || key == "Nhập kho một phần") {
             return "#f19403";
