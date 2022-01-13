@@ -216,17 +216,18 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function TableSupply() {
+export default function TableSupply({searchedProducts}) {
 
-    const [listOrder, setListOrder] = React.useState([]);
-    React.useEffect(() => {
-        const fetchOrders = async () => {
-            const res = await OrderAPI.OrderList();
-            // console.log(res.data);
-            setListOrder(res.data);
-        }
-        fetchOrders();
-    }, [])
+    // const [listOrder, setListOrder] = React.useState(searchedProducts);
+
+    // React.useEffect(() => {
+    //     const fetchOrders = async () => {
+    //         const res = await OrderAPI.OrderList();
+    //         // console.log(res.data);
+    //         setListOrder(res.data);
+    //     }
+    //     fetchOrders();
+    // }, [])
 
 
     const [order, setOrder] = React.useState('asc');
@@ -244,7 +245,7 @@ export default function TableSupply() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = listOrder.map((n) => n.code);
+            const newSelecteds = searchedProducts.map((n) => n.code);
             setSelected(newSelecteds);
             return;
         }
@@ -286,11 +287,11 @@ export default function TableSupply() {
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - listOrder.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - searchedProducts.length) : 0;
 
 
     const handleColor = (key) => {
-        if(key == "Đã nhập kho" || key == "Đã thanh toán" || key == "Đã nhập hàng"){
+        if(key == "Đã nhập kho" || key == "Đã thanh toán" || key == "Đã nhập hàng" || key == "Đã hoàn thành"){
             return "#20a917";
         } else if(key == "Đang giao dịch" || key == "Thanh toán một phần" || key == "Nhập kho một phần") {
             return "#f19403";
@@ -317,12 +318,12 @@ export default function TableSupply() {
                             orderBy={orderBy}
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
-                            rowCount={listOrder.length}
+                            rowCount={searchedProducts.length}
                         />
                         <TableBody>
                             {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-                            {stableSort(listOrder, getComparator(order, orderBy))
+                            {stableSort(searchedProducts, getComparator(order, orderBy))
                                 .reverse()
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
@@ -387,7 +388,7 @@ export default function TableSupply() {
                     labelRowsPerPage="Số hàng một trang"
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
-                    count={listOrder.length}
+                    count={searchedProducts.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
