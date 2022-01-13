@@ -17,6 +17,11 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 
+Number.prototype.format = function(n, x) {
+  var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+  return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+};
+
 function createData(name, calories, fat, carbs, protein) {
   return {
     name,
@@ -260,14 +265,15 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ setVariantInfo, variants, setViewState, handleDeleteVariant }) {
+export default function EnhancedTable({ setVariantInfo, variants, setViewState, handleDeleteVariant, chosenOneVariant }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(500); //list all variants
-  const [chosenVariant, setChosenVariant] = React.useState(variants[0].code);
+  const [chosenVariant, setChosenVariant] = React.useState(chosenOneVariant);
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -420,6 +426,7 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
                           ></Box>
                           <Box
                             py={1}
+                            flex="1"
                             display="flex"
                             flexDirection="column"
                             sx={{
@@ -439,8 +446,8 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
                               {row.code}
                             </Typography>
                             <Box display="flex">
-                              <Typography sx={{ pr: 4 }}>Tồn kho: {row.inventoryQuantity}</Typography>
-                              <Typography>Có thể bán: {row.sellableQuantity}</Typography>
+                              <Typography sx={{ flex: 1}}>Tồn kho: {row.inventoryQuantity.format()}</Typography>
+                              <Typography sx={{ flex: 1}}>Có thể bán: {row.sellableQuantity.format()}</Typography>
                             </Box>
                           </Box>
                         </Box>
