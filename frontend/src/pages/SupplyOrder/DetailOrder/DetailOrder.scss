@@ -6,6 +6,12 @@
     display: flex;
     // justify-content: space-between;
 }
+.header-page-detail {
+    width: calc(100% - 300px);
+    .link-update {
+        text-decoration: none;
+    }
+}
 .test {
     width: calc(100% - 300px);
     display: inline-block;
@@ -137,6 +143,9 @@
     .history-paid {
         display: inline;
         width: 100%;
+        .css-ha3bif-MuiTimelineItem-root {
+            min-height: 45px;
+        }
         .css-ha3bif-MuiTimelineItem-root::before {
             content: none;
         }
@@ -155,6 +164,9 @@
     }
     .history-import {
         .body-history-import {
+            .css-ha3bif-MuiTimelineItem-root {
+                min-height: 45px;
+            }
             .css-ha3bif-MuiTimelineItem-root::before {
                 content: none;
             }
@@ -224,7 +236,7 @@
             height: 70px;
             .title{
                
-                font-weight: 400;
+                font-weight: 450;
                 padding-left: 0px;
                 // margin: 15px 15px;
             }
@@ -237,7 +249,7 @@
         .time-supply-order{
             .title{
                
-                font-weight: 400;
+                font-weight: 450;
                 padding-left: 20px;
                 margin-bottom: 10px;
                 

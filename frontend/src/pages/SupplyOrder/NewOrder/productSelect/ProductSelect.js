@@ -250,11 +250,11 @@ export default function ProductSelect({setProduct}) {
                                     onChange={e =>
                                         setNum({ ...num, [item.id]: e.target.value })} 
                                     /></Box>
-                                    <Box sx={{ width: '10%', textAlign: "center" }}><input  type="text" style={{ width: '80%', height: 35 }} name="originalPrice" value={originalPrice[item.id]} 
+                                    <Box sx={{ width: '10%', textAlign: "center" }}><input  type="text" style={{ width: '80%', height: 35 }} name="originalPrice" value={(originalPrice[item.id]).toLocaleString()} 
                                     onChange={e =>  setOriginalPrice({ ...originalPrice, [item.id]: e.target.value })} 
                                     /></Box>
         
-                                    <Typography sx={{ width: '10%', textAlign: "center" }}>{num[item.id]*originalPrice[item.id]}</Typography>
+                                    <Typography sx={{ width: '10%', textAlign: "center" }}>{(num[item.id]*originalPrice[item.id]).toLocaleString()}</Typography>
                                     <CancelIcon sx={{ width: '2%', textAlign: "center" }} onClick={() => handDeleteProduct(item.id)} />
                                 
                                 </ListItem>)
@@ -265,7 +265,7 @@ export default function ProductSelect({setProduct}) {
                     <Box className="pay-info">
                         <Box className="pay-info-item">
                             <Typography>Tổng sản phẩm</Typography>
-                            <Typography>{numProduct}</Typography>
+                            <Typography>{numProduct?.toLocaleString()}</Typography>
                         </Box>
                         <Box className="pay-info-item">
                             <Typography>Tổng loại sản phẩm</Typography>
@@ -273,7 +273,7 @@ export default function ProductSelect({setProduct}) {
                         </Box>
                         <Box className="pay-info-item">
                             <Typography>Tổng tiền</Typography>
-                            <Typography>{total} vnd</Typography>
+                            <Typography>{total?.toLocaleString()} vnd</Typography>
                         </Box>
                         <Box className="pay-info-item" sx={{ color: "#007BFF" }}>
                             <Typography >Tổng chiết khấu</Typography>
@@ -281,7 +281,7 @@ export default function ProductSelect({setProduct}) {
                         </Box>
                         <Box className="pay-info-item">
                             <Typography sx={{ fontWeight: 700 }}>Phải trả</Typography>
-                            <Typography>{(total*0.94).toFixed(2)} vnd</Typography>
+                            <Typography>{((total*0.94).toFixed(2)).toLocaleString()} vnd</Typography>
                         </Box>
 
                     </Box>

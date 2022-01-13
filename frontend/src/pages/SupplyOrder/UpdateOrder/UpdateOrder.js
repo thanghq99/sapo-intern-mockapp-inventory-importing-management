@@ -286,11 +286,11 @@ export default function DetailOrder() {
 
                             <Box className="headerSupply">
                                 <Box className="nameSupply">
-                                    <PersonRoundedIcon sx={{ marginRight: "10px" }} />
+                                    <PersonRoundedIcon sx={{ marginRight: "20px" }} />
                                     <Typography sx={{ marginRight: "5px", fontWeight: 600 }}>{nameSupplier}</Typography>
 
                                 </Box>
-                                <Typography className="debt" sx={{fontWeight: 600}} >Công nợ: {debt} vnd</Typography>
+                                <Typography className="debt" sx={{fontWeight: 600}} >Công nợ: {debt?.toLocaleString()} vnd</Typography>
                             </Box>
                         </Box>
                         <Divider />
@@ -374,11 +374,11 @@ export default function DetailOrder() {
                                                     onChange={e =>
                                                         setNum({ ...num, [item.id]: e.target.value })}
                                                 /></Box>
-                                                <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="originalPrice" value={originalPrice[item.id]}
+                                                <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="originalPrice" value={(originalPrice[item.id])?.toLocaleString()}
                                                     onChange={e => setOriginalPrice({ ...originalPrice, [item.id]: e.target.value })}
                                                 /></Box>
 
-                                                <Typography sx={{ width: '10%', textAlign: "center" }}>{Number(num[item.id]) * Number(originalPrice[item.id])}</Typography>
+                                                <Typography sx={{ width: '10%', textAlign: "center" }}>{(Number(num[item.id]) * Number(originalPrice[item.id]))?.toLocaleString()}</Typography>
                                                 <CancelIcon sx={{ width: '2%', textAlign: "center" }} onClick={() => handDeleteProduct(item.id)} />
                                             </ListItem>)
                                     })
@@ -388,7 +388,7 @@ export default function DetailOrder() {
                             <Box className="pay-info">
                                 <Box className="pay-info-item">
                                     <Typography>Tổng sản phẩm</Typography>
-                                    <Typography>{numProduct}</Typography>
+                                    <Typography>{numProduct?.toLocaleString()}</Typography>
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography>Tổng loại sản phẩm</Typography>
@@ -396,7 +396,7 @@ export default function DetailOrder() {
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography>Tổng tiền</Typography>
-                                    <Typography>{total} vnd</Typography>
+                                    <Typography>{total?.toLocaleString()} vnd</Typography>
                                 </Box>
                                 <Box className="pay-info-item" sx={{ color: "#007BFF" }}>
                                     <Typography >Tổng chiết khấu</Typography>
@@ -404,7 +404,8 @@ export default function DetailOrder() {
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography sx={{ fontWeight: 700 }}>Phải trả</Typography>
-                                    <Typography>{(total*0.94).toFixed(2)} vnd</Typography>
+                                    <Typography>{((total*0.94).toFixed(2)).toLocaleString()} vnd</Typography>
+                                    
                                 </Box>
 
                             </Box>

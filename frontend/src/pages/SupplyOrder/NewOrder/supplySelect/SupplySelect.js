@@ -140,7 +140,7 @@ export default function SupplySelect({setSupplier}) {
                                     <Typography sx={{marginRight: "5px"}}>{value.name}</Typography>
                                     <CancelOutlinedIcon sx={{cursor: "pointer"}} onClick={closeDetail} />
                                 </Box>
-                                <Typography className="debt">Công nợ: {value.debt}vnd</Typography>
+                                <Typography className="debt">Công nợ: {(value.debt.toLocaleString())}vnd</Typography>
                             </Box>
                             <Divider />
                             <Box className="detail-supplier">
@@ -149,7 +149,7 @@ export default function SupplySelect({setSupplier}) {
                                     <Typography>Giao hàng</Typography>
                                     <Typography>----</Typography>
                                     <Typography>{value.address}</Typography>
-                                    <Typography>Quận Ba Đình - Hà Nội</Typography>
+                                   
                                     <Typography>Email: {value.email}</Typography>
                                 </Box>
                                 <Box className="billing-ex-add">
@@ -157,7 +157,7 @@ export default function SupplySelect({setSupplier}) {
                                     <Typography>Giao hàng</Typography>
                                     <Typography>----</Typography>
                                     <Typography>{value.address}</Typography>
-                                    <Typography>Quận Ba Đình - Hà Nội</Typography>
+                                  
                                     <Typography>Email: {value.email}</Typography>
                                 </Box>
                             </Box>

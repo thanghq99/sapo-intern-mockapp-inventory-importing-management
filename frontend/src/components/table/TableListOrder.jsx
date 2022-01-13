@@ -290,31 +290,15 @@ export default function TableSupply() {
 
 
     const handleColor = (key) => {
-        switch (key) {
-            case "Đang giao dịch":
-                return "#f19403";
-
-            case "Thanh toán một phần":
-                return "#f19403";
-
-            case "Nhập kho một phần":
-                return "#f19403";
-
-            case "Đã thanh toán":
-                return "#20a917";
-
-            case "Đã nhập hàng":
-                return "#20a917";
-        
-            case "Chờ nhập kho":
-                return "#0a77bb";
-
-            case "Chưa thanh toán":
-                return "#0a77bb"
-    
-            default:
-                return "black";
-        }
+        if(key == "Đã nhập kho" || key == "Đã thanh toán" || key == "Đã nhập hàng"){
+            return "#20a917";
+        } else if(key == "Đang giao dịch" || key == "Thanh toán một phần" || key == "Nhập kho một phần") {
+            return "#f19403";
+                } else if(key == "Chờ nhập kho" || key == "Chưa thanh toán") {
+                    return "#0a77bb";
+                         } else {
+                             return "black";
+                                 }
     }
 
     return (
@@ -339,6 +323,7 @@ export default function TableSupply() {
                             {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
                             {stableSort(listOrder, getComparator(order, orderBy))
+                                .reverse()
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.code);
@@ -380,7 +365,7 @@ export default function TableSupply() {
                                              align="center">{row.transactionStatus}</TableCell>
                                             <TableCell style={{ color: handleColor(row.importedStatus) }}
                                              align="center">{row.importedStatus}</TableCell>
-                                            <TableCell align="center">{row.totalAmount}</TableCell>
+                                            <TableCell align="center">{(row.totalAmount).toLocaleString()}</TableCell>
                                             <TableCell align="center">{row.createdBy.username}</TableCell>
                                             <TableCell align="center">{row.expectedTime}</TableCell>
                                         </TableRow>
@@ -409,10 +394,7 @@ export default function TableSupply() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-            <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense} />}
-                label="Xóa padding"
-            />
+            
         </Box>
     );
 }
