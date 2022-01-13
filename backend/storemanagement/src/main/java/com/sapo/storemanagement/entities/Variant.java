@@ -129,6 +129,20 @@ public class Variant {
         return id;
     }
 
+    public String getVariantName() {
+        StringBuilder stringBuilder = new StringBuilder(this.product.getName());
+        if(this.color != null && !this.color.isBlank()) {
+            stringBuilder.append('-').append(this.color);
+        }
+        if(this.material != null && !this.material.isBlank()) {
+            stringBuilder.append('-').append(this.material);
+        }
+        if(this.size != null && !this.size.isBlank()) {
+            stringBuilder.append('-').append(this.size);
+        }
+        return stringBuilder.toString();
+    }
+
     public Product getProduct() {
         return product;
     }

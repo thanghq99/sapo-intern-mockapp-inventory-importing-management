@@ -163,7 +163,9 @@ public class ImportReceiptServiceImpl implements ImportReceiptService {
             build lineItem, and add to list of line items
              */
             variantsImportReceipts.forEach(variantsImportReceipt -> {
-                long variantId = variantsImportReceipt.getVariant().getId();
+                Variant variant = variantsImportReceipt.getVariant();
+                long variantId = variant.getId();
+                String variantName = variant.getVariantName();
 
                 /*
                 Find supplied price of this variant based on variantId and orderId
@@ -178,6 +180,7 @@ public class ImportReceiptServiceImpl implements ImportReceiptService {
                  */
                 LineItemDto lineItem = new LineItemDto(
                     variantsImportReceipt.getId().getVariantId(),
+                    variantName,
                     suppliedPrice,
                     variantsImportReceipt.getQuantity()
                 );
