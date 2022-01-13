@@ -80,7 +80,7 @@ function VariantDetails({ variantInfo, setViewState }) {
             </Grid>
             <Grid item xs={4}>
               <Typography variant="body2">
-                : {variantInfo.wholeSalePrice.toLocaleString("de-DE")}
+                : {variantInfo.wholeSalePrice.toLocaleString()}
               </Typography>
             </Grid>
             <Grid item xs={2}>
@@ -88,7 +88,7 @@ function VariantDetails({ variantInfo, setViewState }) {
             </Grid>
             <Grid item xs={4}>
               <Typography variant="body2">
-                : {variantInfo.retailPrice.toLocaleString("de-DE")}
+                : {variantInfo.retailPrice.toLocaleString()}
               </Typography>
             </Grid>
           </Grid>
@@ -99,7 +99,7 @@ function VariantDetails({ variantInfo, setViewState }) {
             </Grid>
             <Grid item xs={4}>
               <Typography variant="body2">
-                : {variantInfo.originalPrice.toLocaleString("de-DE")}
+                : {variantInfo.originalPrice.toLocaleString()}
               </Typography>
             </Grid>
           </Grid>
