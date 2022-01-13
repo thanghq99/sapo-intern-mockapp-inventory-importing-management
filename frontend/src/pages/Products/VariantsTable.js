@@ -439,8 +439,8 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
                               {row.code}
                             </Typography>
                             <Box display="flex">
-                              <Typography sx={{ pr: 4 }}>Tồn kho: 3</Typography>
-                              <Typography>Có thể bán: 3</Typography>
+                              <Typography sx={{ pr: 4 }}>Tồn kho: {row.inventoryQuantity}</Typography>
+                              <Typography>Có thể bán: {row.sellableQuantity}</Typography>
                             </Box>
                           </Box>
                         </Box>
