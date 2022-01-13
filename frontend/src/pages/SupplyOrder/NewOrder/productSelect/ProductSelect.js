@@ -203,13 +203,13 @@ export default function ProductSelect({setProduct}) {
                             id="combo-box-demo"
                             options={productList}
                             // open="true"
-                            getOptionLabel={(option) => option.product.name}
+                            getOptionLabel={(option) => option.variantName}
                             renderOption={(props ,option) => (
                                 <Box {...props}>
                                     <Box>Img</Box>
                                     <Box className="info">
                                         <Box  sx={{display: "flex" }} className="info-prod" >
-                                            <Box>{option.product.name}</Box>
+                                            <Box sx={{fontWeight: 550}}>{option.variantName}</Box>
                                             <Box>{option.originalPrice}</Box>
                                         </Box>
                                         <Box sx={{display: "flex"}} className="info-prod">
@@ -243,8 +243,8 @@ export default function ProductSelect({setProduct}) {
                                 return (
                                 <ListItem className="product-item" key={item.id}
                                 >
-                                    <Typography sx={{ width: '10%' }}>{item.code}</Typography>
-                                    <Typography sx={{ width: '48%', paddingLeft: "5px" }} >{item.product.name}</Typography>
+                                    <Typography sx={{ width: '10%', textAlign: "center" }}>{item.code}</Typography>
+                                    <Typography sx={{ width: '48%', paddingLeft: "5px", fontWeight: 550 }} >{item.variantName}</Typography>
                                     <Typography sx={{ width: '10%', textAlign: "center" }}>{item.unit}</Typography>
                                     <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="num" value={num[item.id]} 
                                     onChange={e =>

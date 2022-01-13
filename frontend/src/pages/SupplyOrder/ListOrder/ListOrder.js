@@ -5,6 +5,7 @@ import { Box, Autocomplete, Button, TextField, Divider, InputAdornment } from '@
 import { Download, Upload, AddCircle, Search, FilterAltOutlined, FilterAlt } from '@mui/icons-material';
 import { Link } from 'react-router-dom'
 import TableOrder from '../../../components/table/TableListOrder';
+import OrderAPI from '../../../api/OrderAPI';
 
 export default function ListOrder() {
     const topFilter = [
@@ -18,6 +19,28 @@ export default function ListOrder() {
         { title: 'lua chon so 8 ' },
         { title: 'lua chon so 9 ' }
     ]
+    const [searchInput, setSearchInput] = React.useState('');
+    const [searchedProducts, setSearchedProducts] = React.useState([]);
+    const [listOrder, setListOrder] = React.useState([]);
+
+    //inputs
+    const handleChange = (e) => {
+        let value = e.target.value.toLowerCase();
+        setSearchInput(value);
+        let input = value.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
+        let result = listOrder.filter(product => product.code.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
+        setSearchedProducts([...result]);
+    }
+
+    React.useEffect(() => {
+        const fetchOrders = async () => {
+            const res = await OrderAPI.OrderList();
+            setListOrder(res.data);
+            setSearchedProducts(res.data);
+        }
+        fetchOrders();
+    }, [])
+    console.log(searchedProducts);
     return (
         <Box px={4} pt={2} backgroundColor="#F4F6F8" minHeight='90vh'>
             <Box display='flex' flexDirection='column'>
@@ -25,13 +48,14 @@ export default function ListOrder() {
 
                 {/* <Divider /> */}
                 <Box py={2} px={2} display='flex' justifyContent='space-between' backgroundColor='white'>
-                    <Box display='flex' alignItems='center' sx={{width: "60%"}}>
+                    <Box display='flex' alignItems='center' sx={{ width: "60%" }}>
                         <TextField
                             placeholder="Tìm kiếm"
                             sx={{
                                 width: '100%'
                             }}
-
+                            value={searchInput}
+                            onChange={(e) => handleChange(e)}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
@@ -81,7 +105,7 @@ export default function ListOrder() {
                         </Box>
                     </Box>
                 </Box>
-                <TableOrder />
+                <TableOrder searchedProducts={searchedProducts} />
             </Box>
         </Box>
     );
