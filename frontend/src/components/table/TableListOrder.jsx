@@ -288,6 +288,35 @@ export default function TableSupply() {
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - listOrder.length) : 0;
 
+
+    const handleColor = (key) => {
+        switch (key) {
+            case "Đang giao dịch":
+                return "#f19403";
+
+            case "Thanh toán một phần":
+                return "#f19403";
+
+            case "Nhập kho một phần":
+                return "#f19403";
+
+            case "Đã thanh toán":
+                return "#20a917";
+
+            case "Đã nhập hàng":
+                return "#20a917";
+        
+            case "Chờ nhập kho":
+                return "#0a77bb";
+
+            case "Chưa thanh toán":
+                return "#0a77bb"
+    
+            default:
+                return "black";
+        }
+    }
+
     return (
         <Box className='table_box' sx={{ width: '100%', marginTop: "1em" }}>
             <Paper sx={{ width: '100%', mb: 2}}>
@@ -345,9 +374,12 @@ export default function TableSupply() {
                                         
                                             </TableCell>
                                             <TableCell align="center">{row.supplier.name}</TableCell>
-                                            <TableCell align="center">{row.status}</TableCell>
-                                            <TableCell align="center">{row.transactionStatus}</TableCell>
-                                            <TableCell align="center">{row.importedStatus}</TableCell>
+                                            <TableCell  style={{ color: handleColor(row.status) }}
+                                             align="center">{row.status}</TableCell>
+                                            <TableCell style={{ color: handleColor(row.transactionStatus) }}
+                                             align="center">{row.transactionStatus}</TableCell>
+                                            <TableCell style={{ color: handleColor(row.importedStatus) }}
+                                             align="center">{row.importedStatus}</TableCell>
                                             <TableCell align="center">{row.totalAmount}</TableCell>
                                             <TableCell align="center">{row.createdBy.username}</TableCell>
                                             <TableCell align="center">{row.expectedTime}</TableCell>

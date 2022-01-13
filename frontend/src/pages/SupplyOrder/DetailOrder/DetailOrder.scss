@@ -75,7 +75,7 @@
         .product-item {
             width: 100%;
             min-height: 50px;
-            border: 1px solid rgb(192, 192, 192);
+            border: 1px solid rgb(187, 187, 187);
            
             display: flex;
             justify-content: space-between;
@@ -140,6 +140,35 @@
         .css-ha3bif-MuiTimelineItem-root::before {
             content: none;
         }
+    }
+}
+.import {
+    margin-top: 20px;
+    width: 100%;
+    .header-import {
+        display: flex;
+        justify-content: space-between;
+        .btn-import {
+            width: 30%;
+            text-align: center;
+        }
+    }
+    .history-import {
+        .body-history-import {
+            .css-ha3bif-MuiTimelineItem-root::before {
+                content: none;
+            }
+        }
+    }
+    .modal-import {
+        #modal-modal-description {
+            .header-Product {
+                display: flex;
+                width: 100%;
+                // background-color: #9b9999;
+            }
+        }
+       
     }
 }
 
