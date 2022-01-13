@@ -133,6 +133,10 @@ public class ImportReceiptServiceImpl implements ImportReceiptService {
         Step 5: Update imported status of order: Order.importedStatus
          */
         order.setImportedStatus(importedStatus.get());
+        if(order.getTransactionStatus().equals(TransactionStatus.PAID.getStatus()) &&
+            order.getImportedStatus().equals(ImportedStatus.IMPORTED.getStatus())) {
+            order.setStatus(OrderStatus.COMPLETE);
+        }
 
         return importReceipt;
     }

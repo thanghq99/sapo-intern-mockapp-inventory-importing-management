@@ -186,6 +186,10 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.setPaidAmount(order.getPaidAmount() + offset);
+        if(order.getTransactionStatus().equals(TransactionStatus.PAID.getStatus()) &&
+            order.getImportedStatus().equals(ImportedStatus.IMPORTED.getStatus())) {
+            order.setStatus(OrderStatus.COMPLETE);
+        }
         return order;
     }
 
