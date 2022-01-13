@@ -65,39 +65,6 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
-  {
-    id: "name",
-    numeric: false,
-    disablePadding: true,
-    label: "Dessert (100g serving)",
-  },
-  {
-    id: "calories",
-    numeric: true,
-    disablePadding: false,
-    label: "Calories",
-  },
-  {
-    id: "fat",
-    numeric: true,
-    disablePadding: false,
-    label: "Fat (g)",
-  },
-  {
-    id: "carbs",
-    numeric: true,
-    disablePadding: false,
-    label: "Carbs (g)",
-  },
-  {
-    id: "protein",
-    numeric: true,
-    disablePadding: false,
-    label: "Protein (g)",
-  },
-];
-
 function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
@@ -143,16 +110,16 @@ function EnhancedTableHead(props) {
           >
             {numSelected === 0 && (
               <React.Fragment>
-              <Typography
-                // sx={{ flex: "1 1 100%" }}
-                variant="subtitle2"
-                id="tableTitle"
-                sx={{ fontSize: "1rem", fontWeight: "normal" }}
+                <Typography
+                  // sx={{ flex: "1 1 100%" }}
+                  variant="subtitle2"
+                  id="tableTitle"
+                  sx={{ fontSize: "1rem", fontWeight: "normal" }}
                 // component="div"
-              >
-                Phiên bản ({variants.length})
-              </Typography>
-              <Button variant="contained" color="primary" onClick={() => {showCreateForm()}}>Thêm phiên bản</Button>
+                >
+                  Phiên bản ({variants.length})
+                </Typography>
+                <Button variant="contained" color="primary" onClick={() => { showCreateForm() }}>Thêm phiên bản</Button>
               </React.Fragment>
             )}
             {numSelected !== variants.length && numSelected > 0 && (
@@ -205,8 +172,7 @@ EnhancedTableHead.propTypes = {
 
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
-  const { openVariantSelectActions, setOpenVariantSelectActions } =
-    useState(false);
+  const { openVariantSelectActions, setOpenVariantSelectActions } = useState(false);
 
   return (
     <Toolbar
@@ -220,7 +186,7 @@ const EnhancedTableToolbar = (props) => {
           //sx={{ flex: "1 1 100%" }}
           variant="subtitle2"
           id="tableTitle"
-          //component="div"
+        //component="div"
         >
           Phiên bản ({rows.length})
         </Typography>
@@ -231,7 +197,7 @@ const EnhancedTableToolbar = (props) => {
           //sx={{ flex: "1 1 100%" }}
           variant="subtitle2"
           id="tableTitle"
-          //component="div"
+        //component="div"
         >
           Đã chọn {numSelected} phiên bản
         </Typography>
@@ -241,7 +207,7 @@ const EnhancedTableToolbar = (props) => {
           //sx={{ flex: "1 1 100%" }}
           variant="subtitle2"
           id="tableTitle"
-          //component="div"
+        //component="div"
         >
           Đã chọn tất cả phiên bản
         </Typography>
@@ -286,12 +252,12 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
 
   const handleDelete = () => {
     const IDs = [];
-    for(let i=0; i<selected.length; i++) {
+    for (let i = 0; i < selected.length; i++) {
       let result = variants.filter(v => v.code === selected[i]);
       IDs.push(result[0].id);
       handleDeleteVariant(result[0].id);
     }
-    
+
   }
 
   const handleClick = (event, code) => {
@@ -374,7 +340,7 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
                       sx={{
                         backgroundColor:
                           row.code === chosenVariant
-                            ? "rgb(0, 136, 255)"
+                            ? "#afafaf"
                             : "none",
                         "&:hover": {
                           cursor: "pointer",
@@ -434,7 +400,7 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
                           >
                             <Typography
                               variant="subtitle2"
-                              sx={{ fontSize: "1rem", fontWeight: "normal"}}
+                              sx={{ fontSize: "1rem", fontWeight: "normal" }}
                             >
                               {row.code}
                             </Typography>

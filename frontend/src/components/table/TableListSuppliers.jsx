@@ -433,7 +433,6 @@ export default function TableSupply() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <h2 style={{ color: "red", fontSize: "3em" }}>Cảnh báo</h2>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Bạn xác nhận xóa nhà cung cấp đã chọn
                     </Typography><br />

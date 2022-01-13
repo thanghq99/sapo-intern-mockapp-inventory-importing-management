@@ -199,8 +199,9 @@ export default function DetailSupplier() {
                     </Typography>
                 </div>
                 <div className="activity">
-                    <Button className="button_activity" variant="outlined"><i className="far fa-question-circle"></i> <span>Trợ giúp</span> </Button>                </div>
-                <hr />
+                    <Button className="button_activity" variant="outlined"><i className="far fa-question-circle"></i> <span>Trợ giúp</span> </Button>
+                </div>
+                {/* <hr /> */}
                 <div className="tagname_supplier">
                     <h2 style={{ fontSize: "2em" }}>{supplier.name}</h2>
                 </div>
@@ -215,21 +216,21 @@ export default function DetailSupplier() {
                                     <p style={{ color: handleColor(supplier.activityStatus) }}>{supplier.activityStatus}</p>
                                 </Grid>
                                 <Grid className="upper_item" item xs={4}>
-                                    <Button onClick={() => handleOpenModal("edit")} variant="outlined" startIcon={<BrowserUpdatedIcon />}>
-                                        Chỉnh sửa
-                                    </Button>&emsp;
-                                    <Button color="error" onClick={() => handleOpenModal("delete")} variant="outlined" startIcon={<DeleteIcon />}>
+                                    <Button color="error" onClick={() => handleOpenModal("delete")} variant="outlined">
                                         Xóa
+                                    </Button>&emsp;
+                                    <Button onClick={() => handleOpenModal("edit")} variant="contained">
+                                        Chỉnh sửa
                                     </Button>
                                 </Grid>
                             </Grid>
 
                         </div>
-                        <hr />
+                        <hr style={{ opacity: "0.3" }} />
                         <div className="first_info_under">
                             <Grid container spacing={2}>
                                 <Grid item xs={6}>
-                                    <ul>
+                                    <ul style={{ listStyle: "none" }}>
                                         <li><strong>Tên nhà cung cấp: </strong>{supplier.name}
                                         </li>
                                         <li><strong>Mã nhà cung cấp: </strong>{supplier.code}
@@ -239,7 +240,7 @@ export default function DetailSupplier() {
                                     </ul>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <ul>
+                                    <ul style={{ listStyle: "none" }}>
                                         <li><strong>Email: </strong>{supplier.email}
                                         </li>
                                         <li><strong>Số Fax: </strong>{supplier.fax}
@@ -271,10 +272,10 @@ export default function DetailSupplier() {
                                 <Tab label="Ghi chú" {...a11yProps(2)} />
                             </Tabs>
                             <TabPanel style={{ width: "100%" }} value={value} index={0}>
-                                <HistoryOrderTable ordersBySupplier={historyOrders} />
+                                {(historyOrders.length == 0) ? <h3 className='empty_content'>Chưa có thông tin</h3> : <HistoryOrderTable ordersBySupplier={historyOrders} />}
                             </TabPanel>
                             <TabPanel style={{ width: "100%" }} value={value} index={1}>
-                                <DebtTable ordersBySupplier={historyOrders} />
+                                {(historyOrders.length == 0) ? <h3 className='empty_content'>Chưa có thông tin</h3> : <DebtTable ordersBySupplier={historyOrders} />}
                             </TabPanel>
                             <TabPanel value={value} index={2}>
                                 <TextareaAutosize

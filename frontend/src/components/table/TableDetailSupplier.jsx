@@ -104,7 +104,7 @@ function Row(props) {
                                 </TableHead>
                                 <TableBody>
                                     <TableRow>
-                                        <TableCell component="th" scope="row">{row.createdBy.username}</TableCell>
+                                        <TableCell sx={{ padding: "1.2em" }} component="th" scope="row">{row.createdBy.username}</TableCell>
                                         <TableCell>{row.createdAt}</TableCell>
                                         <TableCell>{row.updatedAt}</TableCell>
                                         <TableCell>{(row.totalAmount).toLocaleString()}</TableCell>

@@ -29,18 +29,8 @@
             justify-content: flex-end;
 
             .button_activity {
-                font-size: 0.7em;
                 margin: 0 1em;
-                font-weight: 400;
-                span {
-                    text-transform: capitalize;
-                    font-style: 1.4em;
-                }
-                i {
-                    margin-right: 1em;
-                    font-weight: 600;
-                    font-size: 2em;
-                }
+                text-transform: capitalize;
             }
         }
 
