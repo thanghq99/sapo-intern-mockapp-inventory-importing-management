@@ -14,43 +14,43 @@ public class Supplier {
     private Long id;
 
     @Column(name = "code", nullable = false, unique = true, length = 16)
-    @NotNull(message = "Supplier code cannot be null")
-    @Size(max = 16, message = "Supplier code length cannot exceed {max}")
+    @NotNull(message = "Mã nhà cung cấp không được null")
+    @Size(max = 16, message = "Độ dài mã nhà cung cấp không được vượt quá {max} kí tự")
     private String code;
 
     @Column(name = "name", nullable = false, length = 64)
-    @NotBlank(message = "Supplier name cannot be blank")
-    @Size(max = 64, message = "Supplier code length cannot exceed {max}")
+    @NotBlank(message = "Không được bỏ trống tên nhà cung cấp")
+    @Size(max = 64, message = "Độ dài tên nhà cung cấp không được vượt qúa {max} kí tự")
     private String name;
 
     @Column(name = "address", nullable = false, length = 128)
-    @NotBlank(message = "Supplier address cannot be blank")
-    @Size(max = 128, message = "Supplier code length cannot exceed {max}")
+    @NotBlank(message = "Không được bỏ trống địa chỉ nhà cung cấp")
+    @Size(max = 128, message = "Độ dài địa chỉ nhà cung cấp không được vượt quá {max} kí tự")
     private String address;
 
     @Column(name = "phone", length = 11)
-    @NotNull(message = "Supplier phone cannot be null")
-    @Size(max = 11, message = "Supplier phone length cannot exceed {max}")
+    @NotNull(message = "Điện thoại nhà cung cấp không được null")
+    @Size(max = 11, message = "Độ dài điện thọai nhà cung cấp không được vượt quá {max} kí tự")
     private String phone = "";
 
     @Column(name = "email", length = 128)
-    @NotNull(message = "Supplier phone cannot be null")
-    @Size(max = 128, message = "Supplier email length cannot exceed {max}")
+    @NotNull(message = "Email của nhà cung cấp không được null")
+    @Size(max = 128, message = "Độ dài email nhà cung cấp không được vượt quá {max} kí tự")
     private String email = "";
 
     @Column(name = "website", length = 128)
-    @NotNull(message = "Supplier website cannot be null")
-    @Size(max = 128, message = "Supplier website length cannot exceed {max}")
+    @NotNull(message = "Website nhà cung cấp không được null")
+    @Size(max = 128, message = "Độ dài website không được vượt quá {max} kí tự")
     private String website = "";
 
     @Column(name = "description")
-    @NotNull(message = "Supplier description cannot be null")
-    @Size(max = 255, message = "Supplier description length cannot exceed {max}")
+    @NotNull(message = "Mô tả nhà cung cấp không được null")
+    @Size(max = 255, message = "Độ dài của mô tả nhà cung cấp không được vượt quá {max} kí tự")
     private String description = "";
 
     @Column(name = "fax", length = 32)
-    @NotNull(message = "Supplier fax cannot be null")
-    @Size(max = 32, message = "Supplier fax length cannot exceed {max}")
+    @NotNull(message = "Fax của nhà cung cấp không được null")
+    @Size(max = 32, message = "Độ dài fax của nhà cung cấp không được vượt quá {max} kí tự")
     private String fax = "";
 
     @Column(name = "debt")

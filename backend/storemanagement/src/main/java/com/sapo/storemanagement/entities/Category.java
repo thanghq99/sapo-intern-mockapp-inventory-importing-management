@@ -14,13 +14,13 @@ public class Category {
     private Long id;
 
     @Column(name = "name", nullable = false, length = 32)
-    @NotBlank(message = "Please input category name")
-    @Size(max = 32, message = "Category name cannot exceed {max}")
+    @NotBlank(message = "Không được để trống tên danh mục")
+    @Size(max = 32, message = "Độ dài tên danh mục không được vượt quá {max} kí tự")
     private String name;
 
     @Column(name = "description")
-    @NotNull(message = "Description cannot be null")
-    @Size(max = 255, message = "Category description cannot exceed {max}")
+    @NotNull(message = "Mô tả sản phẩm không được null")
+    @Size(max = 255, message = "Độ dài mô tả sản phẩm không được vượt quá {max} kí tự")
     private String description = "";
 
     public Category() {
