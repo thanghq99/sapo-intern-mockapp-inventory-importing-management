@@ -1,4 +1,13 @@
 import React, { useState, useEffect } from "react";
+
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react'
+import 'swiper/swiper.min.css'
+import 'swiper/modules/pagination/pagination.min.css'
+import 'swiper/modules/navigation/navigation.min.css'
+import SwiperCore, { Pagination, Navigation } from "swiper";
+// install Swiper modules
+
+
 import ProductAPI from "../../api/ProductAPI";
 import {
   Box,
@@ -12,18 +21,24 @@ import VariantsTable from "./VariantsTable";
 import VariantDetails from "./VariantDetails";
 import CreateVariant from "./CreateVariant";
 import EditVariant from "./EditVariant";
-import ProductDetailsInfo from "../../components/product/productDetails/productDetailsInfo"
+//import DescriptionDialog from "./DescriptionDialog";
+import "./products.scss"
+// import ProductDetailsInfo from "../../components/product/productDetails/productDetailsInfo"
 
 
-Number.prototype.format = function(n, x) {
+Number.prototype.format = function (n, x) {
   var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
   return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
 };
 
-function ProductDetails({setStateAlert}) {
+
+
+SwiperCore.use([Pagination, Navigation]);
+function ProductDetails({ setStateAlert }) {
+
   const history = useHistory();
   const params = useParams();
-  const {chosenVariant} = useLocation();
+  const { chosenVariant } = useLocation();
   const [loading, setLoading] = useState(true);
   const [trigger, setTrigger] = useState(false);
   const [viewState, setViewState] = useState(1); // 1: view details, 2: create, 3: edit
@@ -134,7 +149,78 @@ function ProductDetails({setStateAlert}) {
           Chi tiết sản phẩm
         </Typography>
         <Divider sx={{ my: 1 }} />
-        <ProductDetailsInfo product={product} variantNumber={variants.length}/>
+        {/* <ProductDetailsInfo product={product} variantNumber={variants.length}/> */}
+        <Box display="flex">
+          <Box
+            width="25%"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            px={2}
+            py={2}
+          >
+            <Swiper
+              navigation={true}
+              pagination={{
+                dynamicBullets: true
+              }}
+              className="mySwiper"
+            >
+              {
+                variants.map((variant) => (
+                  <SwiperSlide><img src={variant.imageUrl} /></SwiperSlide>
+                ))
+              }
+            </Swiper>
+          </Box>
+          <Box width="70%" display="flex" px={2} py={2}>
+            <Box
+              width="25%"
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-evenly"
+              height="100%"
+            >
+              <Typography>Loại sản phẩm</Typography>
+              <Typography>Nhãn hiệu</Typography>
+              <Typography>Số phiên bản</Typography>
+            </Box>
+            <Box
+              width="25%"
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-evenly"
+              height="100%"
+            >
+              <Typography>: {product.category}</Typography>
+              <Typography>: {product.brand}</Typography>
+              <Typography>: {variants.length}</Typography>
+            </Box>
+            <Box
+              width="25%"
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-evenly"
+              height="100%"
+            >
+              <Typography>Ngày tạo</Typography>
+              <Typography>Ngày cập nhật cuối</Typography>
+              {/* <DescriptionDialog description={product.description} /> */}
+            </Box>
+            <Box
+              width="25%"
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-evenly"
+              height="100%"
+            >
+              <Typography>: {product.createdAt}</Typography>
+              <Typography>: {product.updatedAt}</Typography>
+              {/* placeholder */}
+              <Typography sx={{ opacity: "0" }}>.</Typography>
+            </Box>
+          </Box>
+        </Box>
       </Box>
       <Typography variant="h4" sx={{ pt: 2 }}>
         Phiên bản sản phẩm

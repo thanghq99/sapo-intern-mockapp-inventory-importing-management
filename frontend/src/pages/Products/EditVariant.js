@@ -9,13 +9,14 @@ import {
   Switch,
 } from "@mui/material";
 import ProductAPI from "../../api/ProductAPI";
+import UploadImage from "../../components/uploadImage/UploadImage";
 
 function EditVariant({ productId, triggerReload, setViewState, variantData, setStateAlert }) {
   const [variantInfo, setVariantInfo] = useState(variantData);
 
   function handleChange(evt) {
     const value = evt.target.value;
-    console.log(typeof(evt.target.value))
+    console.log(typeof (evt.target.value))
     setVariantInfo({
       ...variantInfo,
       [evt.target.name]: value,
@@ -24,7 +25,7 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
 
   function handleChangeNumber(evt) {
     console.log("edit as number")
-    if(evt.target.valueAsNumber) {
+    if (evt.target.valueAsNumber) {
       setVariantInfo({
         ...variantInfo,
         [evt.target.name]: evt.target.valueAsNumber,
@@ -51,6 +52,10 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
     setViewState(1);
   }
 
+  const [receivedImg, setReceivedImg] = useState("")
+  const handleImageUrl = (url) => {
+    setReceivedImg(url)
+  }
   function handleUpdateVariant() {
     console.log({
       variantCode: variantInfo.code,
@@ -58,6 +63,7 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
       sellableQuantity: variantInfo.sellableQuantity,
       size: variantInfo.size,
       color: variantInfo.color,
+      imageUrl: receivedImg,
       material: variantInfo.material,
       unit: variantInfo.unit,
       originalPrice: variantInfo.originalPrice,
@@ -65,12 +71,13 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
       retailPrice: variantInfo.retailPrice,
       sellableStatus: variantInfo.sellableStatus,
     })
-    ProductAPI.updateVariant(variantInfo.id,{
+    ProductAPI.updateVariant(variantInfo.id, {
       variantCode: variantInfo.code,
       inventoryQuantity: variantInfo.inventoryQuantity,
       sellableQuantity: variantInfo.sellableQuantity,
       size: variantInfo.size,
       color: variantInfo.color,
+      imageUrl: receivedImg,
       material: variantInfo.material,
       unit: variantInfo.unit,
       originalPrice: variantInfo.originalPrice,
@@ -169,7 +176,7 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
               heigh="273px"
               sx={{ border: 1, display: "inline-block" }}
             ></Box>
-            <Button>Thêm ảnh</Button>
+            <UploadImage changeImageUrl={handleImageUrl} />
           </Box>
         </Box>
       </Box>
@@ -196,18 +203,18 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
           px={1}
           py={2}
         >
-        <Box>
-          <Typography variant="body2">Giá bán lẻ</Typography>
-          <TextField
-            fullWidth
-            size="small"
-            type="number"
-            name="retailPrice"
-            placeholder="Nhập giá bán lẻ"
-            onChange={handleChangeNumber}
-            value={variantInfo.retailPrice}
-          />
-        </Box>
+          <Box>
+            <Typography variant="body2">Giá bán lẻ</Typography>
+            <TextField
+              fullWidth
+              size="small"
+              type="number"
+              name="retailPrice"
+              placeholder="Nhập giá bán lẻ"
+              onChange={handleChangeNumber}
+              value={variantInfo.retailPrice}
+            />
+          </Box>
           <Box>
             <Typography variant="body2">Giá bán buôn</Typography>
             <TextField

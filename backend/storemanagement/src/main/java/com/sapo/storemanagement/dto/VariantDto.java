@@ -8,7 +8,9 @@ public class VariantDto {
     private String unit;
     private String size;
     private String color;
+    private String imageUrl;
     private String material;
+
 
     private Double retailPrice;
     private Double wholeSalePrice;
@@ -24,6 +26,8 @@ public class VariantDto {
     public String getUnit() { return unit; }
 
     public String getColor() { return color; }
+
+    public String getImageUrl() { return imageUrl; }
 
     public String getMaterial() { return material; }
 

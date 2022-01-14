@@ -38,7 +38,7 @@ export default function Login() {
     }
 
     return (
-        <div className="login">
+        <div className="login_page">
             <div className="background">
                 <img className='logo_image' src="https://www.sapo.vn/Themes/Portal/Default/StylesV2/images/home/bg-banner-mobile.png?v=5" alt="" />
             </div>
@@ -46,35 +46,36 @@ export default function Login() {
                 <div className="img">
                     <img className='logo_image' src="https://www.sapo.vn/Themes/Portal/Default/StylesV2/images/logo/Sapo-logo.svg" alt="" />
                 </div>
-                <div className="login-content">
-                    <form onSubmit={LoginCall}>
-                        <h2 className="title">Đăng nhập</h2>
-                        <div className="input-div one">
-                            <div className="i">
-                                <i className="fas fa-user" />
+                <div className="screen">
+                    <div className="screen__content">
+                        <form onSubmit={LoginCall} className="login">
+                            <div className="login__field">
+                                <i className="login__icon fas fa-user" />
+                                <input ref={username} type="text" className="login__input" placeholder="Tên đăng nhập" />
                             </div>
-                            <div className="div">
-                                <input ref={username} type="text" placeholder='Tên người dùng' className="input" />
+                            <div className="login__field">
+                                <i className="login__icon fas fa-lock" />
+                                <input ref={password} type="password" className="login__input" placeholder="Mật khẩu" />
                             </div>
-                        </div>
-                        <div className="input-div pass">
-                            <div className="i">
-                                <i className="fas fa-lock" />
-                            </div>
-                            <div className="div">
-                                <input ref={password} type="password" placeholder='Mật khẩu' className="input" />
-                            </div>
-                        </div>
-                        <a href="#">Quên mật khẩu?</a>
-                        <div className="submit">
-                            <button type='submit'>Đăng nhập</button>
-                            <Link className='toRegister' to={"/register"}>
-                                <button>Đăng ký</button>
+                            <button type='submit' className="button login__submit">
+                                <span className="button__text">Đăng nhập</span>
+                                <i className="button__icon fas fa-chevron-right" />
+                            </button>
+                            <Link to={"/register"} className="button login__submit">
+                                <span className="button__text">Đăng ký tài khoản Admin</span>
+                                <i className="button__icon fas fa-chevron-right" />
                             </Link>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
+                    <div className="screen__background">
+                        <span className="screen__background__shape screen__background__shape4" />
+                        <span className="screen__background__shape screen__background__shape3" />
+                        <span className="screen__background__shape screen__background__shape2" />
+                        <span className="screen__background__shape screen__background__shape1" />
+                    </div>
                 </div>
             </div>
+
             <Snackbar
                 anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 open={stateAlert.open}

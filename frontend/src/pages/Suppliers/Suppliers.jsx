@@ -32,7 +32,7 @@ export default function Supplier() {
                     </Box>
                     <Box>
                         <Link style={{ textDecoration: "none" }} to="/nha-cung-cap/tao-moi-nha-cung-cap">
-                            <Button variant="outlined" sx={{ width: 200 }} startIcon={<AddCircle />}>Thêm nhà cung cấp</Button>
+                            <Button variant="contained" sx={{ width: 200 }} startIcon={<AddCircle />}>Thêm nhà cung cấp</Button>
                         </Link>
                     </Box>
                 </Box>
