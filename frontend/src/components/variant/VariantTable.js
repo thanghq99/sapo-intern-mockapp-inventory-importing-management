@@ -21,11 +21,11 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 
 import { Link } from "react-router-dom";
-
+  
 Number.prototype.format = function(n, x) {
-  var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
-  return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
-};
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+    return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+  };
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -60,7 +60,7 @@ function stableSort(array, comparator) {
 const headCells = [
   {
     id: "img",
-    numeric: false,
+    numeric: true,
     disablePadding: true,
     label: "Ảnh",
     width: "5%",
@@ -69,29 +69,50 @@ const headCells = [
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: "Tên sản phẩm",
-    width: "35%",
+    label: "Tên phiên bản sản phẩm",
+    width: "25%",
   },
   {
-    id: "category",
-    numeric: false,
-    disablePadding: true,
-    label: "Loại hàng",
-    width: "20%",
-  },
-  {
-    id: "brand",
-    numeric: false,
-    disablePadding: true,
-    label: "Thương hiệu",
-    width: "20%",
-  },
-  {
-    id: "stock",
+    id: "sellableQuantity",
     numeric: true,
     disablePadding: true,
-    label: "Lượng tồn kho",
-    width: "20%",
+    label: "Có thể bán",
+    width: "10%",
+  },
+  {
+    id: "inventoryQuantity",
+    numeric: true,
+    disablePadding: true,
+    label: "Tồn kho",
+    width: "10%",
+  },
+  {
+    id: "createdAt",
+    numeric: true,
+    disablePadding: true,
+    label: "Ngày khởi tạo",
+    width: "10%",
+  },
+  {
+    id: "retailPrice",
+    numeric: true,
+    disablePadding: true,
+    label: "Giá bán lẻ",
+    width: `${40/3}%`,
+  },
+  {
+    id: "originalPrice",
+    numeric: true,
+    disablePadding: true,
+    label: "Giá nhập",
+    width: `${40/3}%`,
+  },
+  {
+    id: "wholeSalePrice",
+    numeric: true,
+    disablePadding: true,
+    label: "Giá bán buôn",
+    width: `${40/3}%`,
   },
 ];
 
@@ -191,7 +212,7 @@ const EnhancedTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          Danh sách sản phẩm
+          Danh sách phiên bản sản phẩm
         </Typography>
       )}
 
@@ -216,7 +237,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function ProductsTable({ products }) {
+export default function VariantsTable({variants}) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
@@ -272,7 +293,7 @@ export default function ProductsTable({ products }) {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - products.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - variants.length) : 0;
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -287,14 +308,14 @@ export default function ProductsTable({ products }) {
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={(event) => handleSelectAllClick(event, products)}
+              onSelectAllClick={(event) => handleSelectAllClick(event, variants)}
               onRequestSort={handleRequestSort}
-              rowCount={products.length}
+              rowCount={variants.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(products, getComparator(order, orderBy))
+              {stableSort(variants, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -322,13 +343,11 @@ export default function ProductsTable({ products }) {
                       <TableCell component="th" scope="row" padding="none">
                         {/* {row.img} */}
                         <Box
-                          width="40px"
-                          height="40px"
-                          backgroundColor="white"
-                          mr={2}
-                        >
-                          <img style={{ width: "40px", height: "40px" }} src={row.imageUrl ? row.imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"} />
-                        </Box>
+                            width="40px"
+                            height="40px"
+                            backgroundColor="green"
+                            mr={2}
+                          ></Box>
                       </TableCell>
                       <TableCell
                         component="th"
@@ -336,13 +355,16 @@ export default function ProductsTable({ products }) {
                         scope="row"
                         padding="none"
                       >
-                        <Link to={`/san-pham/${row.id}`} style={{ textDecoration: 'none', color: '#000' }}>
-                          <Typography>{row.name}</Typography>
+                        <Link to={{pathname: `/san-pham/${row.product.id}`, chosenVariant: row}} style={{ textDecoration: 'none', color: '#000'}}>
+                          <Typography>{row.variantName}</Typography>
                         </Link>
                       </TableCell>
-                      <TableCell align="left">{row.category}</TableCell>
-                      <TableCell align="left">{row.brand}</TableCell>
-                      <TableCell align="center">{row.stock.format()}</TableCell>
+                      <TableCell align="center">{row.sellableQuantity}</TableCell>
+                      <TableCell align="center">{row.inventoryQuantity}</TableCell>
+                      <TableCell align="center">{row.createdAt}</TableCell>
+                      <TableCell align="right">{row.retailPrice.format()}</TableCell>
+                      <TableCell align="right">{row.originalPrice.format()}</TableCell>
+                      <TableCell align="right">{row.wholeSalePrice.format()}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -362,7 +384,7 @@ export default function ProductsTable({ products }) {
           labelRowsPerPage="Số hàng một trang"
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={products.length}
+          count={variants.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

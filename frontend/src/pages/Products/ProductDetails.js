@@ -16,7 +16,7 @@ import {
   Divider,
 } from "@mui/material";
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, useLocation } from "react-router-dom";
 import VariantsTable from "./VariantsTable";
 import VariantDetails from "./VariantDetails";
 import CreateVariant from "./CreateVariant";
@@ -29,6 +29,7 @@ function ProductDetails({ setStateAlert }) {
 
   const history = useHistory();
   const params = useParams();
+  const {chosenVariant} = useLocation();
   const [loading, setLoading] = useState(true);
   const [trigger, setTrigger] = useState(false);
   const [viewState, setViewState] = useState(1); // 1: view details, 2: create, 3: edit
@@ -54,7 +55,12 @@ function ProductDetails({ setStateAlert }) {
     setProduct(productData.data);
     const variantsData = await ProductAPI.variantList(params.id);
     setVariants(variantsData.data);
-    setVariantInfo(variantsData.data[0]);
+    if (chosenVariant) {
+      setVariantInfo(chosenVariant);
+    } else {
+      setVariantInfo(variantsData.data[0]);
+    }
+    // setVariantInfo(variantsData.data[0]);
     setLoading(false);
   }
 
@@ -212,6 +218,7 @@ function ProductDetails({ setStateAlert }) {
       <Box pt={1} pb={2} display="flex">
         <Box width="33.3333%" mr={3}>
           <VariantsTable
+            chosenOneVariant={variantInfo.code}
             setVariantInfo={setVariantInfo}
             variants={variants}
             setViewState={setViewState}
