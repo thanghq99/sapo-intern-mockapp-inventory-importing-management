@@ -71,13 +71,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product saveProduct(ProductVariantDto productVariantDto) {
-        if(productVariantDto.getProductName() == null || productVariantDto.getProductName().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Không được bỏ trống tên sản phẩm");
-        }
-        if(productVariantDto.getCategoryId() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Không được bỏ trống loại sản phẩm");
-        }
-
         Category category = categoryService.getCategoryById(productVariantDto.getCategoryId());
 
         String productName = productVariantDto.getProductName();
@@ -147,10 +140,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product updateProduct(long id, ProductDto productDto) {
-        if(productDto.getProductName() == null || productDto.getProductName().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Không được bỏ trống tên sản phẩm");
-        }
-
         Category category = categoryService.getCategoryById(productDto.getCategoryId());
 
         Product productToUpdate = productRepository
@@ -186,17 +175,17 @@ public class ProductServiceImpl implements ProductService {
         if (variantRepository.existsByCode(variantDto.getVariantCode())) {
             throw new UniqueKeyConstraintException("Mã phiên bản sản phẩm bị trùng với phiên bản khác");
         }
-        if(variantDto.getVariantCode().equals("")) throw new BadNumberException("Không được bỏ trống mã phiên bản");
-        if(variantDto.getRetailPrice() == null) throw new BadNumberException("Không được bỏ trống giá bán lẻ");
-        if(variantDto.getWholeSalePrice() == null) throw new BadNumberException("Không được bỏ trống giá bán buôn");
-        if(variantDto.getOriginalPrice() == null) throw new BadNumberException("Không được bỏ trống giá nhập");
-        if(variantDto.getInventoryQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng trong kho");
-        if(variantDto.getSellableQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng có thể bán");
+
+        String variantCode = variantDto.getVariantCode();
+        if(variantDto.getVariantCode().isBlank()) {
+            variantCode = itemCodeGenerator.generate();
+        }
+
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new RecordNotFoundException("Không tìm thấy sản phẩm có id " + id));
         Variant newVariant = new Variant(
                 product,
-                variantDto.getVariantCode(),
+                variantCode,
                 variantDto.getInventoryQuantity(),
                 variantDto.getSellableQuantity(),
                 variantDto.getSize(),

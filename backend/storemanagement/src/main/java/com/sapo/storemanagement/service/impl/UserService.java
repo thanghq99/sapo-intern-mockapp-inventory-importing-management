@@ -7,7 +7,7 @@ import com.sapo.storemanagement.exception.RecordNotFoundException;
 import com.sapo.storemanagement.exception.UniqueKeyConstraintException;
 import com.sapo.storemanagement.repository.RoleRepository;
 import com.sapo.storemanagement.repository.UserRepository;
-import com.sapo.storemanagement.security.RegisterRequest;
+import com.sapo.storemanagement.dto.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -2,11 +2,10 @@ package com.sapo.storemanagement.controller;
 
 
 import com.sapo.storemanagement.entities.User;
-import com.sapo.storemanagement.security.RegisterRequest;
+import com.sapo.storemanagement.dto.RegisterRequest;
 import com.sapo.storemanagement.service.UserStaffService;
 import com.sapo.storemanagement.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
