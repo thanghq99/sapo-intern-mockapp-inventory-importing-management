@@ -17,8 +17,8 @@ public class Product {
     private Long id;
 
     @Column(name = "name", nullable = false, length = 64)
-    @NotBlank(message = "Product name cannot be blank")
-    @Size(max = 64, message = "Product name length cannot exceed {max}")
+    @NotBlank(message = "Không được bỏ trống tên sản phẩm")
+    @Size(max = 64, message = "Độ dài tên sản phẩm không được vượt quá {max} kí tự")
     private String name;
 
     @ManyToOne(optional = false)
@@ -26,23 +26,22 @@ public class Product {
     private Category category;
 
     @Column(name = "weight", columnDefinition = "DECIMAL(10,2) DEFAULT 0")
-    @NotNull(message = "Product weight cannot be null")
-    @Min(value = 0, message = "Product weight cannot exceed {value}")
+    @NotNull(message = "Khối lượng sản phẩm không được null")
+    @Min(value = 0, message = "Khối lượng sản phẩm không được nhở hơn {value}")
     private Double weight = 0.0;
 
     @Column(name = "brand", length = 32)
-    @NotNull(message = "Brand name cannot be null")
-    @Size(max = 32, message = "Brand name length cannot exceed {max}")
+    @NotNull(message = "Nhãn hiệu sản phẩm không được null")
+    @Size(max = 32, message = "Độ dài nhãn hiệu sản phẩm không được vượt quá {max} kí tự")
     private String brand = "";
 
     @Column(name = "description")
-    @NotNull(message = "Product description cannot be null")
-    @Size(max = 255, message = "Product description length cannot exceed {max}")
+    @NotNull(message = "Mô tả sản phẩm không được null")
+    @Size(max = 255, message = "Độ dài mô tả sản phẩm không được vượt quá {max} kí tự")
     private String description = "";
 
     @Column(name = "image_url", nullable = false)
-    @NotBlank(message = "Image URL cannot be blank")
-    @Size(max = 255, message = "Image URL length cannot exceed {max}")
+    @Size(max = 255, message = "Độ dài đường dẫn ảnh không được vượt quá {max} kí tự")
     private String imageUrl;
 
     @Column(name = "record_status", columnDefinition = "varchar(32) DEFAULT 'Đang hoạt động'")

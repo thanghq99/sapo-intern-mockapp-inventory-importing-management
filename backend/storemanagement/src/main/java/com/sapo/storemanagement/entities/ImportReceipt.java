@@ -14,8 +14,8 @@ public class ImportReceipt {
     private Long id;
 
     @Column(name = "code", nullable = false, unique = true, length = 8)
-    @NotBlank(message = "Import receipt code cannot be blank")
-    @Size(max = 8, message = "Import receipt code length cannot exceed {max}")
+    @NotBlank(message = "Không được để trống mã đơn nhập kho")
+    @Size(max = 8, message = "Độ dài mã đơn nhập kho không được vượt quá {max} kí tự")
     private String code;
 
     @ManyToOne(optional = false)

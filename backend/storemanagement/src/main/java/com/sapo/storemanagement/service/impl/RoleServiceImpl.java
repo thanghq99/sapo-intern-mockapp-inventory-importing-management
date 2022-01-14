@@ -20,14 +20,14 @@ public class RoleServiceImpl implements RoleService {
     public Role getRoleById(Long id) {
         return roleRepository
             .findById(id)
-            .orElseThrow(() -> new RecordNotFoundException("Role not found"));
+            .orElseThrow(() -> new RecordNotFoundException("Không tìm thấy vai trò tương ứng"));
     }
 
     @Override
     public Role getRoleByName(String name) {
         return roleRepository
             .findByName(name)
-            .orElseThrow(() -> new RecordNotFoundException("Supplier not found"));
+            .orElseThrow(() -> new RecordNotFoundException("Không tìm thấy vai trò"));
     }
 
     @Override

@@ -56,16 +56,16 @@ public class UserService implements UserDetailsService {
         String email = loginRequest.getEmail();
 
         if(userRepository.existsByUsername(username)) {
-            throw new UniqueKeyConstraintException("Username already exists");
+            throw new UniqueKeyConstraintException("Tên tài khoản bị trùng");
         }
 
         if(userRepository.existsByEmail(email)) {
-            throw new UniqueKeyConstraintException("Email already exists");
+            throw new UniqueKeyConstraintException("Email đã tồn tại");
         }
 
         String encodedPassword = passwordEncoder.encode(loginRequest.getPassword());
         User user = new User(username, encodedPassword, email);
-        Role role = roleRepository.findByName("ADMIN").orElseThrow(() -> new RecordNotFoundException("Role not found"));
+        Role role = roleRepository.findByName("ADMIN").orElseThrow(() -> new RecordNotFoundException("Không tìm thấy vai trò"));
         user.addRole(role);
 
         userRepository.save(user);
@@ -76,16 +76,16 @@ public class UserService implements UserDetailsService {
         String email = loginRequest.getEmail();
 
         if(userRepository.existsByUsername(username)) {
-            throw new UniqueKeyConstraintException("Username already exists");
+            throw new UniqueKeyConstraintException("Tên tài khoản bị trùng");
         }
 
         if(userRepository.existsByEmail(email)) {
-            throw new UniqueKeyConstraintException("Email already exists");
+            throw new UniqueKeyConstraintException("Email đã tồn tại");
         }
 
         String encodedPassword = passwordEncoder.encode(loginRequest.getPassword());
         User user = new User(username, encodedPassword, email);
-        Role role = roleRepository.findByName(loginRequest.getRole()).orElseThrow(() -> new RecordNotFoundException("Role not found"));
+        Role role = roleRepository.findByName(loginRequest.getRole()).orElseThrow(() -> new RecordNotFoundException("Không tìm thấy vai trò"));
         user.addRole(role);
 
         userRepository.save(user);
@@ -93,6 +93,6 @@ public class UserService implements UserDetailsService {
 
     public User getUserById(long id) {
         return userRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Khôngg tìm thấy người dùng"));
     }
 }

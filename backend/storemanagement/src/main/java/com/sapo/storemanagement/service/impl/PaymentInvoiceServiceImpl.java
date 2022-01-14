@@ -44,12 +44,12 @@ public class PaymentInvoiceServiceImpl implements PaymentInvoiceService {
     @Override
     public PaymentInvoice getPaymentInvoiceById(long id) {
         if(id <= 0) {
-            throw new BadNumberException("id must be greater than 0");
+            throw new BadNumberException("Id phải lớn hơn 0");
         }
 
         return paymentInvoiceRepository
             .findById(id)
-            .orElseThrow(() -> new RecordNotFoundException("Payment Invoice not found"));
+            .orElseThrow(() -> new RecordNotFoundException("Không tìm thấy hóa đơn có id " + id));
     }
 
     @Override
