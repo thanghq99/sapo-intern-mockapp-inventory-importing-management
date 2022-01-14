@@ -381,9 +381,11 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
                           <Box
                             width="40px"
                             height="40px"
-                            backgroundColor="green"
+                            backgroundColor="white"
                             mr={2}
-                          ></Box>
+                          >
+                            <img style={{ width: "40px", height: "40px" }} src={row.imageUrl ? row.imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"} />
+                          </Box>
                           <Box
                             py={1}
                             display="flex"

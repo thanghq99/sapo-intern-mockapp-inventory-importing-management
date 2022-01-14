@@ -98,6 +98,7 @@ public class VariantServiceImpl implements VariantService {
         existingVariant.setInventoryQuantity(variantDto.getInventoryQuantity());
         existingVariant.setSellableQuantity(variantDto.getSellableQuantity());
         existingVariant.setColor(variantDto.getColor());
+        existingVariant.setImageUrl(variantDto.getImageUrl());
         existingVariant.setMaterial(variantDto.getMaterial());
         existingVariant.setSize(variantDto.getSize());
         existingVariant.setUnit(variantDto.getUnit());

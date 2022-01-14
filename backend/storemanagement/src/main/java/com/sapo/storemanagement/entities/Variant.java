@@ -8,8 +8,8 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "variants", indexes = {
-    @Index(name = "variants_code_unique", columnList = "code", unique = true),
-    @Index(name = "variants_product_id_foreign", columnList = "product_id")
+        @Index(name = "variants_code_unique", columnList = "code", unique = true),
+        @Index(name = "variants_product_id_foreign", columnList = "product_id")
 })
 public class Variant {
     @Id
@@ -55,6 +55,9 @@ public class Variant {
     @Size(max = 16, message = "Variant unit length cannot exceed {max}")
     private String unit = "";
 
+    @Column(name = "imageUrl")
+    private String imageUrl = "";
+
     @Column(name = "original_price", nullable = false)
     @NotNull(message = "Please input original price")
     @Min(value = 0, message = "Invalid original price, must be positive")
@@ -76,7 +79,8 @@ public class Variant {
     @Column(name = "sell_status", columnDefinition = "varchar(32) DEFAULT 'Có thể bán'")
     private SellableStatus sellableStatus = SellableStatus.SELLABLE;
 
-    public Variant() {}
+    public Variant() {
+    }
 
     public Variant(Product product, String code, Long inventoryQuantity,
                    Long sellableQuantity, Double originalPrice,
@@ -91,7 +95,7 @@ public class Variant {
     }
 
     public Variant(Product product, String code, Long inventoryQuantity,
-                   Long sellableQuantity, String size, String color,
+                   Long sellableQuantity, String size, String color, String imageUrl,
                    String material, String unit, Double originalPrice,
                    Double wholeSalePrice, Double retailPrice) {
         this.product = product;
@@ -100,6 +104,7 @@ public class Variant {
         this.sellableQuantity = sellableQuantity;
         this.size = size;
         this.color = color;
+        this.imageUrl= imageUrl;
         this.material = material;
         this.unit = unit;
         this.originalPrice = originalPrice;
@@ -108,7 +113,7 @@ public class Variant {
     }
 
     public Variant(Product product, String code, Long inventoryQuantity,
-                   Long sellableQuantity, String size, String color,
+                   Long sellableQuantity, String size, String color, String imageUrl,
                    String material, String unit, Double originalPrice,
                    Double wholeSalePrice, Double retailPrice, SellableStatus sellableStatus) {
         this.product = product;
@@ -117,6 +122,7 @@ public class Variant {
         this.sellableQuantity = sellableQuantity;
         this.size = size;
         this.color = color;
+        this.imageUrl = imageUrl;
         this.material = material;
         this.unit = unit;
         this.originalPrice = originalPrice;
@@ -131,13 +137,13 @@ public class Variant {
 
     public String getVariantName() {
         StringBuilder stringBuilder = new StringBuilder(this.product.getName());
-        if(this.color != null && !this.color.isBlank()) {
+        if (this.color != null && !this.color.isBlank()) {
             stringBuilder.append('-').append(this.color);
         }
-        if(this.material != null && !this.material.isBlank()) {
+        if (this.material != null && !this.material.isBlank()) {
             stringBuilder.append('-').append(this.material);
         }
-        if(this.size != null && !this.size.isBlank()) {
+        if (this.size != null && !this.size.isBlank()) {
             stringBuilder.append('-').append(this.size);
         }
         return stringBuilder.toString();
@@ -177,6 +183,14 @@ public class Variant {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getColor() {

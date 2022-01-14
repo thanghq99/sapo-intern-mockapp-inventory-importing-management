@@ -52,6 +52,10 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
     setViewState(1);
   }
 
+  const [receivedImg, setReceivedImg] = useState("")
+  const handleImageUrl = (url) => {
+    setReceivedImg(url)
+  }
   function handleUpdateVariant() {
     console.log({
       variantCode: variantInfo.code,
@@ -59,6 +63,7 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
       sellableQuantity: variantInfo.sellableQuantity,
       size: variantInfo.size,
       color: variantInfo.color,
+      imageUrl: receivedImg,
       material: variantInfo.material,
       unit: variantInfo.unit,
       originalPrice: variantInfo.originalPrice,
@@ -72,6 +77,7 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
       sellableQuantity: variantInfo.sellableQuantity,
       size: variantInfo.size,
       color: variantInfo.color,
+      imageUrl: receivedImg,
       material: variantInfo.material,
       unit: variantInfo.unit,
       originalPrice: variantInfo.originalPrice,
@@ -170,7 +176,7 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
               heigh="273px"
               sx={{ border: 1, display: "inline-block" }}
             ></Box>
-            <UploadImage/>
+            <UploadImage changeImageUrl={handleImageUrl} />
           </Box>
         </Box>
       </Box>

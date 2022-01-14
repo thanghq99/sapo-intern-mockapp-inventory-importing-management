@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import ProductAPI from "../../api/ProductAPI";
 import VariantAPI from "../../api/VariantAPI";
+import UploadImage from "../../components/uploadImage/UploadImage";
 
 function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }) {
   const [lastestCode, setLastestCode] = useState('');
@@ -19,6 +20,7 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
     sellableQuantity: 0,
     size: "",
     color: "",
+    imageUrl: "",
     material: "",
     unit: "",
     originalPrice: 0,
@@ -27,19 +29,25 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
     sellableStatus: 0,
   });
 
+
+  const [receivedImg, setReceivedImg] = useState("")
+  const handleImageUrl = (url) => {
+    setReceivedImg(url)
+  }
+
   useEffect(() => {
     VariantAPI.getLatestVariantCode()
-    .then((res) => {
-      setLastestCode(res.data);
-      setVariantInfo({
-        ...variantInfo,
-        variantCode: res.data
-      });
-    })
-    .catch(err => {
-      setStateAlert({ severity: "warning", variant: "filled", open: true, content: "Đã hủy chỉnh sửa phiên bản sản phẩm" });
-      setViewState(1);
-    })
+      .then((res) => {
+        setLastestCode(res.data);
+        setVariantInfo({
+          ...variantInfo,
+          variantCode: res.data
+        });
+      })
+      .catch(err => {
+        setStateAlert({ severity: "warning", variant: "filled", open: true, content: "Đã hủy chỉnh sửa phiên bản sản phẩm" });
+        setViewState(1);
+      })
   }, [])
 
   function handleChange(evt) {
@@ -52,7 +60,7 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
 
   function handleChangeNumber(evt) {
     console.log("edit as number")
-    if(evt.target.valueAsNumber) {
+    if (evt.target.valueAsNumber) {
       setVariantInfo({
         ...variantInfo,
         [evt.target.name]: evt.target.valueAsNumber,
@@ -80,12 +88,13 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
   }
 
   function handleCreateVariant() {
+    variantInfo.imageUrl = receivedImg;
     console.log(variantInfo);
     ProductAPI.createVariant(productId, variantInfo).then((res) => {
-        setStateAlert({ severity: "success", variant: "filled", open: true, content: "Đã tạo thêm phiên bản sản phẩm" });
-        triggerReload();
-        setViewState(1);
-      })
+      setStateAlert({ severity: "success", variant: "filled", open: true, content: "Đã tạo thêm phiên bản sản phẩm" });
+      triggerReload();
+      setViewState(1);
+    })
       .catch(err => {
         setStateAlert({ severity: "error", variant: "filled", open: true, content: err.response.data });
       });
@@ -172,7 +181,7 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
               heigh="273px"
               sx={{ border: 1, display: "inline-block" }}
             ></Box>
-            <Button>Thêm ảnh</Button>
+            <UploadImage changeImageUrl={handleImageUrl} />
           </Box>
         </Box>
       </Box>
@@ -328,7 +337,7 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
         display="flex"
         justifyContent="flex-end"
       >
-        <Button variant="outlined" color="error" sx={{mr: 2}} onClick={cancelAction}>Hủy</Button>
+        <Button variant="outlined" color="error" sx={{ mr: 2 }} onClick={cancelAction}>Hủy</Button>
         <Button variant="contained" color="primary" onClick={() => handleCreateVariant()}>Thêm phiên bản</Button>
       </Box>
     </React.Fragment>

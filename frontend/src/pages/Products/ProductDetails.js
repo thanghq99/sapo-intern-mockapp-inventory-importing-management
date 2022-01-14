@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
+
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react'
+import 'swiper/swiper.min.css'
+import 'swiper/modules/pagination/pagination.min.css'
+import 'swiper/modules/navigation/navigation.min.css'
+import SwiperCore, { Pagination, Navigation } from "swiper";
+// install Swiper modules
+
+
 import ProductAPI from "../../api/ProductAPI";
 import {
   Box,
   Typography,
   Button,
   Divider,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import { ArrowBackIosNew } from "@mui/icons-material";
 import { useHistory, useParams } from "react-router-dom";
@@ -15,8 +22,11 @@ import VariantDetails from "./VariantDetails";
 import CreateVariant from "./CreateVariant";
 import EditVariant from "./EditVariant";
 import DescriptionDialog from "./DescriptionDialog";
+import "./products.scss"
 
-function ProductDetails({setStateAlert}) {
+SwiperCore.use([Pagination, Navigation]);
+function ProductDetails({ setStateAlert }) {
+
   const history = useHistory();
   const params = useParams();
   const [loading, setLoading] = useState(true);
@@ -126,21 +136,26 @@ function ProductDetails({setStateAlert}) {
         <Divider sx={{ my: 1 }} />
         <Box display="flex">
           <Box
-            width="30%"
+            width="25%"
             display="flex"
             justifyContent="center"
             alignItems="center"
             px={2}
             py={2}
           >
-            <img
-              src={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=164&h=164&fit=crop&auto=format`}
-              srcSet={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-              alt="anh"
-              loading="lazy"
-              px={2}
-              py={2}
-            />
+            <Swiper
+              navigation={true}
+              pagination={{
+                dynamicBullets: true
+              }}
+              className="mySwiper"
+            >
+              {
+                variants.map((variant) => (
+                  <SwiperSlide><img src={variant.imageUrl} /></SwiperSlide>
+                ))
+              }
+            </Swiper>
           </Box>
           <Box width="70%" display="flex" px={2} py={2}>
             <Box

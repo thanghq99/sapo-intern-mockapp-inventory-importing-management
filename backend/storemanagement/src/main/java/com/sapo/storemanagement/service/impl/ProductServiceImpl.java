@@ -61,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         Product product = productRepository.findById(id)
-            .orElseThrow(() -> new RecordNotFoundException("product not found"));
+                .orElseThrow(() -> new RecordNotFoundException("product not found"));
         long totalInventoryQuantity = productRepository.totalInventoryQuantityOfProduct(id);
         return new ProductResponseDto(product, totalInventoryQuantity);
     }
@@ -69,20 +69,22 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product saveProduct(ProductVariantDto productVariantDto) {
-        if(productVariantDto.getProductName().equals("")) throw new BadNumberException("Không được bỏ trống tên sản phẩm");
-        if(productVariantDto.getCategoryId() == null) throw new BadNumberException("Không được bỏ trống loại sản phẩm");
+        if (productVariantDto.getProductName().equals(""))
+            throw new BadNumberException("Không được bỏ trống tên sản phẩm");
+        if (productVariantDto.getCategoryId() == null)
+            throw new BadNumberException("Không được bỏ trống loại sản phẩm");
 
         Category category = categoryService.getCategoryById(productVariantDto.getCategoryId());
 
         String productName = productVariantDto.getProductName();
         Product newProduct = productRepository.save(new Product(
-            InputStringModifier.capitalizeFirstWord(productName),
-            category,
+                InputStringModifier.capitalizeFirstWord(productName),
+                category,
                 productVariantDto.getBrand(),
                 productVariantDto.getDescription(),
-            productVariantDto.getWeight(),
-            productVariantDto.getImageUrl(),
-            SellableStatus.SELLABLE
+                productVariantDto.getWeight(),
+                productVariantDto.getImageUrl(),
+                SellableStatus.SELLABLE
         ));
 
         List<Variant> newVariantsList = new ArrayList<Variant>();
@@ -102,6 +104,7 @@ public class ProductServiceImpl implements ProductService {
                     productVariantDto.getSellableQuantity(),
                     "",
                     "",
+                    productVariantDto.getImageUrl(),
                     "",
                     productVariantDto.getUnit(),
                     productVariantDto.getOriginalPrice(),
@@ -109,9 +112,9 @@ public class ProductServiceImpl implements ProductService {
                     productVariantDto.getRetailPrice());
             variantRepository.save(newVariant);
         } else {
-            if(colorNumbers == 0) colors.add(0, "");
-            if(sizeNumbers == 0) sizes.add(0, "");
-            if(materialNumbers == 0) materials.add(0, "");
+            if (colorNumbers == 0) colors.add(0, "");
+            if (sizeNumbers == 0) sizes.add(0, "");
+            if (materialNumbers == 0) materials.add(0, "");
             for (String color : colors) {
                 for (String material : materials) {
                     for (String size : sizes) {
@@ -122,6 +125,7 @@ public class ProductServiceImpl implements ProductService {
                                 productVariantDto.getSellableQuantity(),
                                 size,
                                 color,
+                                productVariantDto.getImageUrl(),
                                 material,
                                 productVariantDto.getUnit(),
                                 productVariantDto.getOriginalPrice(),
@@ -139,7 +143,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product updateProduct(long id, ProductDto productDto) {
-        if(productDto.getProductName().equals("")) throw new BadNumberException("Không được bỏ trống tên sản phẩm");
+        if (productDto.getProductName().equals("")) throw new BadNumberException("Không được bỏ trống tên sản phẩm");
 
         Category category = categoryService.getCategoryById(productDto.getCategoryId());
 
@@ -173,15 +177,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Variant saveVariant(long id, VariantDto variantDto) {
-        if(variantRepository.existsByCode(variantDto.getVariantCode())) {
+        if (variantRepository.existsByCode(variantDto.getVariantCode())) {
             throw new UniqueKeyConstraintException("Mã phiên bản sản phẩm bị trùng với phiên bản khác");
         }
-        if(variantDto.getVariantCode().equals("")) throw new BadNumberException("Không được bỏ trống mã phiên bản");
-        if(variantDto.getRetailPrice() == null) throw new BadNumberException("Không được bỏ trống giá bán lẻ");
-        if(variantDto.getWholeSalePrice() == null) throw new BadNumberException("Không được bỏ trống giá bán buôn");
-        if(variantDto.getOriginalPrice() == null) throw new BadNumberException("Không được bỏ trống giá nhập");
-        if(variantDto.getInventoryQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng trong kho");
-        if(variantDto.getSellableQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng có thể bán");
+        if (variantDto.getVariantCode().equals("")) throw new BadNumberException("Không được bỏ trống mã phiên bản");
+        if (variantDto.getRetailPrice() == null) throw new BadNumberException("Không được bỏ trống giá bán lẻ");
+        if (variantDto.getWholeSalePrice() == null) throw new BadNumberException("Không được bỏ trống giá bán buôn");
+        if (variantDto.getOriginalPrice() == null) throw new BadNumberException("Không được bỏ trống giá nhập");
+        if (variantDto.getInventoryQuantity() == null)
+            throw new BadNumberException("Không được bỏ trống số lượng trong kho");
+        if (variantDto.getSellableQuantity() == null)
+            throw new BadNumberException("Không được bỏ trống số lượng có thể bán");
         Product product = productRepository.findById(id).get();
         Variant newVariant = new Variant(
                 product,
@@ -190,6 +196,7 @@ public class ProductServiceImpl implements ProductService {
                 variantDto.getSellableQuantity(),
                 variantDto.getSize(),
                 variantDto.getColor(),
+                variantDto.getImageUrl(),
                 variantDto.getMaterial(),
                 variantDto.getUnit(),
                 variantDto.getOriginalPrice(),
