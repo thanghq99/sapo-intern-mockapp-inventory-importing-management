@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 export default function Topbar({ headerTitle, setHeaderTitle }) {
 
     return (
-        <Box sx={{ flexGrow: 1, background: "white" }}>
+        <Box sx={{ flexGrow: 1, background: "white", height: "10vh" }}>
             <AppBar sx={{ background: "white" }} position="static">
                 <Toolbar>
                     <Typography className="title_topbar" >

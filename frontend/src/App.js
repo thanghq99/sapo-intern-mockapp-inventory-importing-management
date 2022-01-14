@@ -73,9 +73,15 @@ function App() {
                   <Route path="/nha-cung-cap/tao-moi-nha-cung-cap" component={CreateSupplier}></Route>
                   <Route path="/thong-tin-nha-cung-cap" component={DetailSupplier}></Route>
                   <Route exact path="/nhap-hang" component={ListOrder} />
-                  <Route path="/nhap-hang/tao-don-nhap-hang" component={SupplyOrder}></Route>
-                  <Route path="/nhap-hang/don-hang" component={DetailOrder}></Route>
-                  <Route path="/nhap-hang/sua-don-hang" component={UpdateOrder} ></Route>
+                  <Route path="/nhap-hang/tao-don-nhap-hang">
+                    <SupplyOrder setStateAlert={setStateAlert} />
+                  </Route>
+                  <Route path="/nhap-hang/don-hang" >
+                    <DetailOrder setStateAlert={setStateAlert} />
+                  </Route>
+                  <Route path="/nhap-hang/sua-don-hang" >
+                    <UpdateOrder setStateAlert={setStateAlert} />
+                  </Route>
                   <Route path="/nguoi-dung" component={User}></Route>
                   <Route path="/cai-dat"></Route>
                   {stateAlert.severity && (
