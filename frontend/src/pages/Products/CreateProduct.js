@@ -15,6 +15,7 @@ import { useHistory } from "react-router-dom";
 import "./createProduct.scss";
 import ProductAPI from "../../api/ProductAPI";
 import CategorySelect from "../../components/product/category/CategorySelect";
+import VariantsPreview from "../../components/product/createProduct/VariantsPreview";
 
 function CreateProduct({ setStateAlert }) {
   const history = useHistory();
@@ -29,13 +30,13 @@ function CreateProduct({ setStateAlert }) {
   const [weightUnit, setWeightUnit] = useState(false); //false: gram, true: kilogram
   const [weightValue, setWeightValue] =useState(0);
 
+  const [variants, setVariants] = useState([]);
   const [product, setProduct] = useState({
-    variantCode: "",
     inventoryQuantity: 0,
     sellableQuantity: 0,
-    size: [],
-    color: [],
-    material: [],
+    size: [""],
+    color: [""],
+    material: [""],
     unit: "",
     originalPrice: 0,
     wholeSalePrice: 0,
@@ -49,7 +50,7 @@ function CreateProduct({ setStateAlert }) {
     weight: 0,
     brand: "",
     description: "",
-    imageUrl: "fake url",
+    imageUrl: null,
   });
 
   useEffect(() => {
@@ -61,7 +62,8 @@ function CreateProduct({ setStateAlert }) {
       material: [...materials],
       size: [...sizes],
     });
-  }, [colors, sizes, materials, weightValue, weightUnit]);
+    handleGenerateVariants();
+  }, [colors, sizes, materials, weightValue, weightUnit, product.originalPrice, product.retailPrice, product.wholeSalePrice, product.inventoryQuantity, product.sellableQuantity]);
 
   //handle product attributes
   function handleChange(evt) {
@@ -147,26 +149,70 @@ function CreateProduct({ setStateAlert }) {
     history.push("/san-pham");
   };
 
-  const handleCreateProduct = () => {
-    console.log(product);
-    ProductAPI.createProduct(product)
-      .then((res) => {
-        setStateAlert({
-          severity: "success",
-          variant: "filled",
-          open: true,
-          content: "Đã tạo thêm sản phẩm",
-        });
-        history.push("/san-pham");
+  const handleGenerateVariants = () => {
+    let variantsArray = [];
+    let colorsArray = [""];
+    let materialsAray = [""];
+    let sizesArray = [""];
+    let inventoryQuantity1 = product.inventoryQuantity;
+    let sellableQuantity = product.sellableQuantity;
+    let originalPrice = product.originalPrice;
+    let wholeSalePrice = product.wholeSalePrice;
+    let retailPrice = product.retailPrice;
+
+    if(colors.length != 0) colorsArray = colors;
+    if(materials.length != 0) materialsAray = materials;
+    if(sizes.length != 0) sizesArray = sizes;
+    colorsArray.forEach(color => {
+      materialsAray.forEach(material => {
+        sizesArray.forEach(size => {
+          variantsArray.push({
+            variantCode: "",
+            inventoryQuantity: inventoryQuantity1,
+            sellableQuantity: sellableQuantity,
+            size: size,
+            color: color,
+            material: material,
+            unit: product.unit,
+            imageUrl: null,
+            originalPrice: originalPrice,
+            wholeSalePrice: wholeSalePrice,
+            retailPrice: retailPrice,
+            sellableStatus: product.sellableStatus,
+          });
+        })
       })
-      .catch((err) => {
-        setStateAlert({
-          severity: "error",
-          variant: "filled",
-          open: true,
-          content: err.response.data,
-        });
-      });
+    })
+    setVariants([...variantsArray]);
+  } 
+
+  const handleCreateProduct = () => {
+    console.log({
+      ...product,
+      variants: variants
+    })
+    // ProductAPI.createProduct({
+    //   ...product,
+    //   variants: variants
+    // })
+    // ProductAPI.createProduct(product)
+    //   .then((res) => {
+    //     setStateAlert({
+    //       severity: "success",
+    //       variant: "filled",
+    //       open: true,
+    //       content: "Đã tạo thêm sản phẩm",
+    //     });
+    //     history.push("/san-pham");
+    //   })
+    //   .catch((err) => {
+    //     setStateAlert({
+    //       severity: "error",
+    //       variant: "filled",
+    //       open: true,
+    //       content: err.response.data,
+    //     });
+    //   });
   };
 
   return (
@@ -621,6 +667,26 @@ function CreateProduct({ setStateAlert }) {
             </Box>
           </Box>
         </Grid>
+        {variants.length  > 0 ? 
+        <Grid item xs={12}>
+          <Box
+              py={2}
+              px={1}
+              display="flex"
+              flexDirection="column"
+              backgroundColor="white"
+            >
+              <Typography variant="h6" id="tableTitle" px={1}>
+                Phiên bản ({variants.length})
+              </Typography>
+              <Divider sx={{ my: 1 }} />
+              <Box display="flex" flexDirection="column" px={1} py={2}>
+                <VariantsPreview setVariants={setVariants} productName={product.productName} variants={variants}/>
+            </Box>
+          </Box>
+        </Grid>
+        :
+        null}
       </Grid>
     </Box>
   );
