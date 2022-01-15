@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Box, CssBaseline, Snackbar, Alert } from "@mui/material";
 import Sidebar from "./components/sidebar/Sidebar";
 import Products from "./pages/Products/Products";
+import Variants from "./pages/Products/Variants"
 import SupplyOrder from "./pages/SupplyOrder/NewOrder/SupplyOrder";
 import CreateProduct from "./pages/Products/CreateProduct";
 import ProductDetails from "./pages/Products/ProductDetails";
@@ -67,6 +68,7 @@ function App() {
                   <Route path="/san-pham/:id/chinh-sua" >
                     <EditProduct setStateAlert={setStateAlert} />
                   </Route>
+                  <Route exact path="/kho-hang" component={Variants}></Route>
                   <Route path="/kho-hang"></Route>
                   <Route path="/kiem-hang"></Route>
                   <Route exact path="/nha-cung-cap" component={Supplier} />

@@ -1,24 +1,44 @@
 import React, { useState, useEffect } from "react";
+
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react'
+import 'swiper/swiper.min.css'
+import 'swiper/modules/pagination/pagination.min.css'
+import 'swiper/modules/navigation/navigation.min.css'
+import SwiperCore, { Pagination, Navigation } from "swiper";
+// install Swiper modules
+
+
 import ProductAPI from "../../api/ProductAPI";
 import {
   Box,
   Typography,
   Button,
-  Divider,
-  Snackbar,
-  Alert,
+  Divider
 } from "@mui/material";
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, useLocation } from "react-router-dom";
 import VariantsTable from "./VariantsTable";
 import VariantDetails from "./VariantDetails";
 import CreateVariant from "./CreateVariant";
 import EditVariant from "./EditVariant";
-import DescriptionDialog from "./DescriptionDialog";
+//import DescriptionDialog from "./DescriptionDialog";
+import "./products.scss"
+// import ProductDetailsInfo from "../../components/product/productDetails/productDetailsInfo"
 
-function ProductDetails({setStateAlert}) {
+
+Number.prototype.format = function (n, x) {
+  var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+  return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+};
+
+
+
+SwiperCore.use([Pagination, Navigation]);
+function ProductDetails({ setStateAlert }) {
+
   const history = useHistory();
   const params = useParams();
+  const { chosenVariant } = useLocation();
   const [loading, setLoading] = useState(true);
   const [trigger, setTrigger] = useState(false);
   const [viewState, setViewState] = useState(1); // 1: view details, 2: create, 3: edit
@@ -44,7 +64,12 @@ function ProductDetails({setStateAlert}) {
     setProduct(productData.data);
     const variantsData = await ProductAPI.variantList(params.id);
     setVariants(variantsData.data);
-    setVariantInfo(variantsData.data[0]);
+    if (chosenVariant) {
+      setVariantInfo(chosenVariant);
+    } else {
+      setVariantInfo(variantsData.data[0]);
+    }
+    // setVariantInfo(variantsData.data[0]);
     setLoading(false);
   }
 
@@ -124,23 +149,29 @@ function ProductDetails({setStateAlert}) {
           Chi tiết sản phẩm
         </Typography>
         <Divider sx={{ my: 1 }} />
+        {/* <ProductDetailsInfo product={product} variantNumber={variants.length}/> */}
         <Box display="flex">
           <Box
-            width="30%"
+            width="25%"
             display="flex"
             justifyContent="center"
             alignItems="center"
             px={2}
             py={2}
           >
-            <img
-              src={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=164&h=164&fit=crop&auto=format`}
-              srcSet={`https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-              alt="anh"
-              loading="lazy"
-              px={2}
-              py={2}
-            />
+            <Swiper
+              navigation={true}
+              pagination={{
+                dynamicBullets: true
+              }}
+              className="mySwiper"
+            >
+              {
+                variants.map((variant) => (
+                  <SwiperSlide><img src={variant.imageUrl} /></SwiperSlide>
+                ))
+              }
+            </Swiper>
           </Box>
           <Box width="70%" display="flex" px={2} py={2}>
             <Box
@@ -174,7 +205,7 @@ function ProductDetails({setStateAlert}) {
             >
               <Typography>Ngày tạo</Typography>
               <Typography>Ngày cập nhật cuối</Typography>
-              <DescriptionDialog description={product.description} />
+              {/* <DescriptionDialog description={product.description} /> */}
             </Box>
             <Box
               width="25%"
@@ -197,6 +228,7 @@ function ProductDetails({setStateAlert}) {
       <Box pt={1} pb={2} display="flex">
         <Box width="33.3333%" mr={3}>
           <VariantsTable
+            chosenOneVariant={variantInfo.code}
             setVariantInfo={setVariantInfo}
             variants={variants}
             setViewState={setViewState}

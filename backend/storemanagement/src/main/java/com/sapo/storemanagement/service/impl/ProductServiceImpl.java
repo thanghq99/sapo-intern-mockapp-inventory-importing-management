@@ -17,8 +17,10 @@ import com.sapo.storemanagement.utils.InputStringModifier;
 import com.sapo.storemanagement.utils.itemcodegenerator.ItemCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,11 +59,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDto getProductById(Long id) {
         if (id <= 0) {
-            throw new BadNumberException("id must be greater than 0");
+            throw new BadNumberException("Id phải lớn hơn 0");
         }
 
         Product product = productRepository.findById(id)
-            .orElseThrow(() -> new RecordNotFoundException("product not found"));
+            .orElseThrow(() -> new RecordNotFoundException("Không tìm thấy sản phẩm có id " + id));
         long totalInventoryQuantity = productRepository.totalInventoryQuantityOfProduct(id);
         return new ProductResponseDto(product, totalInventoryQuantity);
     }
@@ -69,17 +71,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product saveProduct(ProductVariantDto productVariantDto) {
-        if(productVariantDto.getProductName().equals("")) throw new BadNumberException("Không được bỏ trống tên sản phẩm");
-        if(productVariantDto.getCategoryId() == null) throw new BadNumberException("Không được bỏ trống loại sản phẩm");
-
         Category category = categoryService.getCategoryById(productVariantDto.getCategoryId());
 
         String productName = productVariantDto.getProductName();
         Product newProduct = productRepository.save(new Product(
             InputStringModifier.capitalizeFirstWord(productName),
             category,
-                productVariantDto.getBrand(),
-                productVariantDto.getDescription(),
+            productVariantDto.getBrand(),
+            productVariantDto.getDescription(),
             productVariantDto.getWeight(),
             productVariantDto.getImageUrl(),
             SellableStatus.SELLABLE
@@ -102,6 +101,7 @@ public class ProductServiceImpl implements ProductService {
                     productVariantDto.getSellableQuantity(),
                     "",
                     "",
+                    productVariantDto.getImageUrl(),
                     "",
                     productVariantDto.getUnit(),
                     productVariantDto.getOriginalPrice(),
@@ -109,9 +109,9 @@ public class ProductServiceImpl implements ProductService {
                     productVariantDto.getRetailPrice());
             variantRepository.save(newVariant);
         } else {
-            if(colorNumbers == 0) colors.add(0, "");
-            if(sizeNumbers == 0) sizes.add(0, "");
-            if(materialNumbers == 0) materials.add(0, "");
+            if (colorNumbers == 0) colors.add(0, "");
+            if (sizeNumbers == 0) sizes.add(0, "");
+            if (materialNumbers == 0) materials.add(0, "");
             for (String color : colors) {
                 for (String material : materials) {
                     for (String size : sizes) {
@@ -122,6 +122,7 @@ public class ProductServiceImpl implements ProductService {
                                 productVariantDto.getSellableQuantity(),
                                 size,
                                 color,
+                                productVariantDto.getImageUrl(),
                                 material,
                                 productVariantDto.getUnit(),
                                 productVariantDto.getOriginalPrice(),
@@ -139,13 +140,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product updateProduct(long id, ProductDto productDto) {
-        if(productDto.getProductName().equals("")) throw new BadNumberException("Không được bỏ trống tên sản phẩm");
-
         Category category = categoryService.getCategoryById(productDto.getCategoryId());
 
         Product productToUpdate = productRepository
                 .findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("product not found"));
+                .orElseThrow(() -> new RecordNotFoundException("Không tìm thấy sản phẩm"));
         productToUpdate.setName(productDto.getProductName());
         productToUpdate.setCategory(category);
         productToUpdate.setDescription(productDto.getDescription());
@@ -159,37 +158,39 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public String deleteProduct(Long id) {
         if (id <= 0) {
-            throw new BadNumberException("id must be greater than 0");
+            throw new BadNumberException("Hãy nhập id lớn hơn 0");
         }
         Product productToDelete = productRepository
                 .findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("product not found"));
+                .orElseThrow(() -> new RecordNotFoundException("Sản phẩm không tồn tại"));
         productToDelete.setRecordStatus(RecordStatus.DELETED);
 
         variantService.listAllVariantsByProductId(productToDelete.getId())
                 .forEach(variant -> variant.setRecordStatus(RecordStatus.DELETED));
-        return productToDelete.getName() + "was deleted!";
+        return productToDelete.getName() + "đã được xóa";
     }
 
     @Override
     public Variant saveVariant(long id, VariantDto variantDto) {
-        if(variantRepository.existsByCode(variantDto.getVariantCode())) {
+        if (variantRepository.existsByCode(variantDto.getVariantCode())) {
             throw new UniqueKeyConstraintException("Mã phiên bản sản phẩm bị trùng với phiên bản khác");
         }
-        if(variantDto.getVariantCode().equals("")) throw new BadNumberException("Không được bỏ trống mã phiên bản");
-        if(variantDto.getRetailPrice() == null) throw new BadNumberException("Không được bỏ trống giá bán lẻ");
-        if(variantDto.getWholeSalePrice() == null) throw new BadNumberException("Không được bỏ trống giá bán buôn");
-        if(variantDto.getOriginalPrice() == null) throw new BadNumberException("Không được bỏ trống giá nhập");
-        if(variantDto.getInventoryQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng trong kho");
-        if(variantDto.getSellableQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng có thể bán");
-        Product product = productRepository.findById(id).get();
+
+        String variantCode = variantDto.getVariantCode();
+        if(variantDto.getVariantCode().isBlank()) {
+            variantCode = itemCodeGenerator.generate();
+        }
+
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new RecordNotFoundException("Không tìm thấy sản phẩm có id " + id));
         Variant newVariant = new Variant(
                 product,
-                variantDto.getVariantCode(),
+                variantCode,
                 variantDto.getInventoryQuantity(),
                 variantDto.getSellableQuantity(),
                 variantDto.getSize(),
                 variantDto.getColor(),
+                variantDto.getImageUrl(),
                 variantDto.getMaterial(),
                 variantDto.getUnit(),
                 variantDto.getOriginalPrice(),

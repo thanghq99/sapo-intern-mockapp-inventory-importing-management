@@ -24,7 +24,12 @@ public class ExceptionHandlerController {
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 
-    @ExceptionHandler({ForeignKeyConstraintException.class, UniqueKeyConstraintException.class, RecordNotFoundException.class})
+    @ExceptionHandler(RecordNotFoundException.class)
+    public ResponseEntity<?> handleNotFoundException(RecordNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler({ForeignKeyConstraintException.class, UniqueKeyConstraintException.class, IllegalStateException.class})
     public ResponseEntity<?> handleInternalServerException(Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }

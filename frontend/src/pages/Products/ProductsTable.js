@@ -22,7 +22,10 @@ import { visuallyHidden } from "@mui/utils";
 
 import { Link } from "react-router-dom";
 
-const rows = [];
+Number.prototype.format = function(n, x) {
+  var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+  return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+};
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -213,7 +216,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function ProductsTable({products}) {
+export default function ProductsTable({ products }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
@@ -319,11 +322,13 @@ export default function ProductsTable({products}) {
                       <TableCell component="th" scope="row" padding="none">
                         {/* {row.img} */}
                         <Box
-                            width="40px"
-                            height="40px"
-                            backgroundColor="green"
-                            mr={2}
-                          ></Box>
+                          width="40px"
+                          height="40px"
+                          backgroundColor="white"
+                          mr={2}
+                        >
+                          <img style={{ width: "40px", height: "40px" }} src={row.imageUrl ? row.imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"} />
+                        </Box>
                       </TableCell>
                       <TableCell
                         component="th"
@@ -331,13 +336,13 @@ export default function ProductsTable({products}) {
                         scope="row"
                         padding="none"
                       >
-                        <Link to={`/san-pham/${row.id}`} style={{ textDecoration: 'none', color: '#000'}}>
+                        <Link to={`/san-pham/${row.id}`} style={{ textDecoration: 'none', color: '#000' }}>
                           <Typography>{row.name}</Typography>
                         </Link>
                       </TableCell>
                       <TableCell align="left">{row.category}</TableCell>
                       <TableCell align="left">{row.brand}</TableCell>
-                      <TableCell align="center">{row.stock}</TableCell>
+                      <TableCell align="center">{row.stock.format()}</TableCell>
                     </TableRow>
                   );
                 })}

@@ -4,7 +4,6 @@ import ProductAPI from '../../api/ProductAPI'
 import { Box, TextField, InputAdornment, Button, Divider, Card, CardContent, Typography } from '@mui/material'
 import { Search, FilterAltOutlined, AddCircle, FactCheck } from '@mui/icons-material';
 import ProductsTable from './ProductsTable'
-import "./products.scss"
 
 export default function Products() {
     const history = useHistory();

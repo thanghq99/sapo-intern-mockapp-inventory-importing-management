@@ -125,7 +125,7 @@ export default function User() {
     return (
         <div style={{ background: "#F4F6F8", padding: "0 2em 1em 0", height: "100%" }}>
             <Grid sx={{ textAlign: "end" }}>
-                {checkRole && <Button onClick={() => handleOpenModal("create")} variant="outlined" sx={{ marginTop: "2em" }} startIcon={<AddCircle />}>Thêm nhân viên</Button>}
+                {checkRole && <Button onClick={() => handleOpenModal("create")} variant="contained" sx={{ marginTop: "2em" }} startIcon={<AddCircle />}>Thêm nhân viên</Button>}
             </Grid>
             <Box sx={{ flexGrow: 1, margin: 0, backGround: "white" }}>
                 <Grid sx={{ margin: 0 }} container spacing={2}>

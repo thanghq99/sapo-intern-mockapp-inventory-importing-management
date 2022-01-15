@@ -1,4 +1,4 @@
-package com.sapo.storemanagement.security;
+package com.sapo.storemanagement.dto;
 
 import com.sapo.storemanagement.entities.Role;
 
@@ -8,19 +8,19 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class RegisterRequest {
-    @NotNull(message = "Username cannot be null")
-    @Size(max = 32, message = "Username length cannot exceed {max}")
+    @NotBlank(message = "Tên tài khoản không được để trống")
+    @Size(max = 32, message = "Độ dài tên tài khoản không được vượt quá {max}")
     private String username;
 
-    @NotNull(message = "Password cannot be null")
-    @Size(min = 8, max = 255, message = "Ensure that password length is between {min} and {max}")
+    @NotBlank(message = "Mật khẩu không được để trống")
+    @Size(min = 8, max = 255, message = "Độ dài tên mật khẩu phải nằm giữa {min} và {max}")
     private String password;
 
-    @NotBlank(message = "Email cannot be blank")
+    @NotBlank(message = "Không được để trống email")
     @Email
     private String email;
 
-    @NotNull(message = "Role cannot be blank")
+    @NotNull(message = "Vai trò của người dùng không được null")
     private String role;
 
     public String getUsername() {

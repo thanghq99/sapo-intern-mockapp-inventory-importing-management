@@ -23,17 +23,17 @@ public class User {
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true, length = 32)
-    @NotNull(message = "Username cannot be null")
-    @Size(max = 32, message = "Username length cannot exceed {max}")
+    @NotNull(message = "Tên người dùng không được null")
+    @Size(max = 32, message = "Độ dài tên người dùng không được vượt quá {max} kí tự")
     private String username;
 
     @Column(name = "password", nullable = false)
-    @NotNull(message = "Password cannot be null")
-    @Size(min = 8, max = 255, message = "Ensure that password length is between {min} and {max}")
+    @NotNull(message = "Mật khẩu không được null")
+    @Size(min = 8, max = 255, message = "Độ dài mật khẩu phải nằm trong khoảng {min} and {max}")
     private String password;
 
     @Column(name = "email", nullable = false, unique = true, length = 128)
-    @NotBlank(message = "Email cannot be blank")
+    @NotBlank(message = "Không được để trống email")
     @Email
     private String email;
 

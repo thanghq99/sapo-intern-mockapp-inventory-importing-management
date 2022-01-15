@@ -1,6 +1,11 @@
 import React from "react";
 import { Box, Typography, Button, Divider, Grid } from "@mui/material";
 
+Number.prototype.format = function(n, x) {
+  var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+  return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+};
+
 function VariantDetails({ variantInfo, setViewState }) {
   const showEditForm = () => {
     setViewState(3);
@@ -15,12 +20,12 @@ function VariantDetails({ variantInfo, setViewState }) {
         backgroundColor="white"
       >
         <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="subtitle1" id="tableTitle" px={1}>
-          Thông tin chi tiết phiên bản
-        </Typography>
-        <Button variant="contained" color="primary" onClick={() => {showEditForm()}}>Chỉnh sửa phiển bản</Button>
+          <Typography variant="subtitle1" id="tableTitle" px={1}>
+            Thông tin chi tiết phiên bản
+          </Typography>
+          <Button variant="contained" color="primary" onClick={() => { showEditForm() }}>Chỉnh sửa phiển bản</Button>
         </Box>
-        
+
         <Divider sx={{ my: 1 }} />
         <Box display="flex" px={1} py={2}>
           <Box
@@ -49,8 +54,9 @@ function VariantDetails({ variantInfo, setViewState }) {
           </Box>
           <Box width="33.3333%" textAlign="center">
             <Box
+              sx={{ width: "15em" }}
               component="img"
-              src="https://sapo.dktcdn.net/100/583/900/variants/3b602191-ec13-43ff-a785-76ecffaff3be.jpg"
+              src={variantInfo.imageUrl ? variantInfo.imageUrl : "https://ih1.redbubble.net/image.11241105.4427/ssrco,slim_fit_t_shirt,womens,5e504c:7bf03840f4,front,square_product,600x600.jpg"}
               width="129px"
             />
           </Box>
@@ -80,7 +86,7 @@ function VariantDetails({ variantInfo, setViewState }) {
             </Grid>
             <Grid item xs={4}>
               <Typography variant="body2">
-                : {variantInfo.wholeSalePrice.toLocaleString()}
+                : {variantInfo.wholeSalePrice.format()}
               </Typography>
             </Grid>
             <Grid item xs={2}>
@@ -88,7 +94,7 @@ function VariantDetails({ variantInfo, setViewState }) {
             </Grid>
             <Grid item xs={4}>
               <Typography variant="body2">
-                : {variantInfo.retailPrice.toLocaleString()}
+                : {variantInfo.retailPrice.format()}
               </Typography>
             </Grid>
           </Grid>
@@ -99,7 +105,7 @@ function VariantDetails({ variantInfo, setViewState }) {
             </Grid>
             <Grid item xs={4}>
               <Typography variant="body2">
-                : {variantInfo.originalPrice.toLocaleString()}
+                : {variantInfo.originalPrice.format()}
               </Typography>
             </Grid>
           </Grid>
@@ -173,7 +179,7 @@ function VariantDetails({ variantInfo, setViewState }) {
         </Box>
       </Box>
     </React.Fragment>
-  ));
+    ));
 }
 
 export default VariantDetails;

@@ -1,16 +1,11 @@
 package com.sapo.storemanagement.controller;
 
-import com.sapo.storemanagement.dto.ImportReceiptDto;
-import com.sapo.storemanagement.dto.ImportReceiptResponseDto;
-import com.sapo.storemanagement.dto.OrderDto;
-import com.sapo.storemanagement.dto.PayOrderDto;
-import com.sapo.storemanagement.entities.ImportReceipt;
-import com.sapo.storemanagement.entities.Order;
-import com.sapo.storemanagement.entities.PaymentInvoice;
-import com.sapo.storemanagement.entities.VariantsOrder;
+import com.sapo.storemanagement.dto.*;
+import com.sapo.storemanagement.entities.*;
 import com.sapo.storemanagement.service.ImportReceiptService;
 import com.sapo.storemanagement.service.OrderService;
 import com.sapo.storemanagement.service.PaymentInvoiceService;
+import com.sapo.storemanagement.service.ReturnReceiptService;
 import com.sapo.storemanagement.utils.RequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +25,9 @@ public class OrderController {
 
     @Autowired
     private ImportReceiptService importReceiptService;
+
+    @Autowired
+    private ReturnReceiptService returnReceiptService;
 
     @Autowired
     private RequestUtils requestUtils;
@@ -60,7 +58,7 @@ public class OrderController {
 
     // Chỉnh sửa thông tin order
     @PutMapping("/{id}")
-    public Order updateOrder(@PathVariable long id, @RequestBody OrderDto orderDto){
+    public Order updateOrder(@PathVariable long id, @RequestBody @Valid OrderDto orderDto){
         return orderService.updateOrder(id, orderDto);
     }
 
@@ -72,7 +70,7 @@ public class OrderController {
 
     // Thanh toán
     @PostMapping("/{orderId}/payment-invoices")
-    public PaymentInvoice payOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody PayOrderDto payOrderDto) {
+    public PaymentInvoice payOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody @Valid PayOrderDto payOrderDto) {
         Long invoiceCreatorId = requestUtils.getUserIdFromRequest(servletRequest);
         return paymentInvoiceService.savePaymentInvoice(invoiceCreatorId, orderId, payOrderDto);
     }
@@ -84,7 +82,7 @@ public class OrderController {
     }
 
     @PostMapping("/{orderId}/import-receipts")
-    public ImportReceipt importOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody ImportReceiptDto importReceiptDto) {
+    public ImportReceipt importOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody @Valid ImportReceiptDto importReceiptDto) {
         Long creatorId = requestUtils.getUserIdFromRequest(servletRequest);
         return importReceiptService.saveImportReceipt(creatorId, orderId, importReceiptDto);
     }
@@ -92,6 +90,17 @@ public class OrderController {
     @GetMapping("/{orderId}/import-receipts")
     public List<ImportReceiptResponseDto> findAllImportReceiptsOfOrder(@PathVariable long orderId) {
         return importReceiptService.listAllImportReceiptsByOrder(orderId);
+    }
+
+    @PostMapping("/{orderId}/return-receipts")
+    public ReturnReceipt returnOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody @Valid ReturnReceiptDto returnReceiptDto) {
+        Long creatorId = requestUtils.getUserIdFromRequest(servletRequest);
+        return returnReceiptService.saveReturnReceipt(creatorId, orderId, returnReceiptDto);
+    }
+
+    @GetMapping("/{orderId}/return-receipts")
+    public List<ReturnReceiptResponseDto> findAllReturnReceiptsOfOrder(@PathVariable long orderId) {
+        return returnReceiptService.listAllReturnReceiptsByOrder(orderId);
     }
 }
 // @Valid put

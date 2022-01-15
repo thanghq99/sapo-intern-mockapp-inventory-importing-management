@@ -23,13 +23,13 @@ public class VariantsOrder {
     private Variant variant;
 
     @Column(name = "supplied_quantity", nullable = false)
-    @NotNull(message = "Please input retail price")
-    @Min(value = 0, message = "Invalid supplied quantity, must be positive")
+    @NotNull(message = "Hãy nhập số lượng nhập của sản phẩm")
+    @Min(value = 0, message = "số lượng nhập của sản phẩm không được nhỏ hơn {value}")
     private Long suppliedQuantity;
 
     @Column(name = "price", columnDefinition = "DECIMAL(12,2) DEFAULT 0.0")
-    @NotNull(message = "Please input retail price")
-    @Min(value = 0, message = "Invalid price, must be positive")
+    @NotNull(message = "Hãy nhập giá nhập hàng cho 1 đơn vị sản phẩm")
+    @Min(value = 0, message = "Giá nhập hàng cho 1 đơn vị sản phẩm không được nhỏ hơn {value}")
     private Double price = 0.0;
 
     public VariantsOrder() {

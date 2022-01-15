@@ -1,6 +1,7 @@
 import './ListOrder.scss';
 
 import * as React from 'react';
+import { CSVLink } from "react-csv";
 import { Box, Autocomplete, Button, TextField, Divider, InputAdornment } from '@mui/material'
 import { Download, Upload, AddCircle, Search, FilterAltOutlined, FilterAlt } from '@mui/icons-material';
 import { Link } from 'react-router-dom'
@@ -18,7 +19,23 @@ export default function ListOrder() {
         { title: 'lua chon so 7 ' },
         { title: 'lua chon so 8 ' },
         { title: 'lua chon so 9 ' }
-    ]
+    ];
+
+    const headers = [
+        { label: "Mã đơn hàng", key: 'code' },
+        { label: "Tên nhà cung cấp", key: 'supplier.name' },
+        { label: "SĐT nhà cung cấp", key: 'supplier.phone' },
+        { label: "Trạng thái đơn hàng", key: 'status' },
+        { label: "Trạng thái thanh toán", key: 'transactionStatus' },
+        { label: "Trạng thái nhập kho", key: 'importedStatus' },
+        { label: "Tổng tiền", key: 'totalAmount' },
+        { label: "Đã trả", key: 'paidAmount' },
+        { label: "Người tạo", key: 'createdBy.username' },
+        { label: "Ngày mong muốn nhận", key: 'expectedTime' },
+        { label: "Thời gian tạo đơn", key: 'createdAt' },
+        { label: "Mô tả", key: 'description' }
+    ];
+
     const [searchInput, setSearchInput] = React.useState('');
     const [searchedProducts, setSearchedProducts] = React.useState([]);
     const [listOrder, setListOrder] = React.useState([]);
@@ -42,11 +59,24 @@ export default function ListOrder() {
     }, [])
     console.log(searchedProducts);
     return (
-        <Box px={4} pt={2} backgroundColor="#F4F6F8" minHeight='90vh'>
+        <Box px={4} pt={2} backgroundColor="#F4F6F8" minHeight='90vh' >
+
             <Box display='flex' flexDirection='column'>
 
-
-                {/* <Divider /> */}
+                <Box display='flex' justifyContent='space-between'  py={2} px={2} backgroundColor='white'>
+                    <CSVLink data={searchedProducts} headers={headers} fileName="Orders.csv" target="_blank" 
+                    style={{ display: "flex", alignItems: "center", textDecoration: "none" , color: "black"}} 
+                    >
+                        <Download />
+                        Xuất File
+                    </CSVLink>
+                    <Box>
+                            <Link style={{ textDecoration: "none" }} to="/nhap-hang/tao-don-nhap-hang">
+                                <Button variant="contained" sx={{ width: 200 }} startIcon={<AddCircle />}>Tạo đơn nhập hàng</Button>
+                            </Link>
+                        </Box>
+                </Box>
+                <Divider />
                 <Box py={2} px={2} display='flex' justifyContent='space-between' backgroundColor='white'>
                     <Box display='flex' alignItems='center' sx={{ width: "60%" }}>
                         <TextField
@@ -68,7 +98,7 @@ export default function ListOrder() {
                         />
                     </Box>
 
-                    <Box display='flex' alignItems='center'>
+                    <Box display='flex' alignItems='center' ml={10} sx={{width: 200}}>
                         {/* <FilterAlt fontSize="large"/> */}
                         {/* <Autocomplete
                         multiple
@@ -97,13 +127,7 @@ export default function ListOrder() {
                                 ),
                             }}></TextField>
                     </Box>
-                    <Box display='flex' justifyContent='space-between' py={2} px={2} backgroundColor='white'>
-                        <Box>
-                            <Link style={{ textDecoration: "none" }} to="/nhap-hang/tao-don-nhap-hang">
-                                <Button variant="contained" sx={{ width: 200 }} startIcon={<AddCircle />}>Tạo đơn nhập hàng</Button>
-                            </Link>
-                        </Box>
-                    </Box>
+                    
                 </Box>
                 <TableOrder searchedProducts={searchedProducts} />
             </Box>

@@ -1,13 +1,13 @@
-package com.sapo.storemanagement.security;
+package com.sapo.storemanagement.dto;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 public class LoginRequest implements Serializable {
-    @NotBlank(message = "Please type in username")
+    @NotBlank(message = "Không được để trống tên tài khoản")
     private String username;
 
-    @NotBlank(message = "Blank password forbidden")
+    @NotBlank(message = "Không được để trống mật khẩu")
     private String password;
 
     public LoginRequest() {

@@ -17,6 +17,11 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 
+Number.prototype.format = function(n, x) {
+  var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+  return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+};
+
 function createData(name, calories, fat, carbs, protein) {
   return {
     name,
@@ -65,39 +70,6 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
-  {
-    id: "name",
-    numeric: false,
-    disablePadding: true,
-    label: "Dessert (100g serving)",
-  },
-  {
-    id: "calories",
-    numeric: true,
-    disablePadding: false,
-    label: "Calories",
-  },
-  {
-    id: "fat",
-    numeric: true,
-    disablePadding: false,
-    label: "Fat (g)",
-  },
-  {
-    id: "carbs",
-    numeric: true,
-    disablePadding: false,
-    label: "Carbs (g)",
-  },
-  {
-    id: "protein",
-    numeric: true,
-    disablePadding: false,
-    label: "Protein (g)",
-  },
-];
-
 function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
@@ -143,16 +115,16 @@ function EnhancedTableHead(props) {
           >
             {numSelected === 0 && (
               <React.Fragment>
-              <Typography
-                // sx={{ flex: "1 1 100%" }}
-                variant="subtitle2"
-                id="tableTitle"
-                sx={{ fontSize: "1rem", fontWeight: "normal" }}
+                <Typography
+                  // sx={{ flex: "1 1 100%" }}
+                  variant="subtitle2"
+                  id="tableTitle"
+                  sx={{ fontSize: "1rem", fontWeight: "normal" }}
                 // component="div"
-              >
-                Phiên bản ({variants.length})
-              </Typography>
-              <Button variant="contained" color="primary" onClick={() => {showCreateForm()}}>Thêm phiên bản</Button>
+                >
+                  Phiên bản ({variants.length})
+                </Typography>
+                <Button variant="contained" color="primary" onClick={() => { showCreateForm() }}>Thêm phiên bản</Button>
               </React.Fragment>
             )}
             {numSelected !== variants.length && numSelected > 0 && (
@@ -205,8 +177,7 @@ EnhancedTableHead.propTypes = {
 
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
-  const { openVariantSelectActions, setOpenVariantSelectActions } =
-    useState(false);
+  const { openVariantSelectActions, setOpenVariantSelectActions } = useState(false);
 
   return (
     <Toolbar
@@ -220,7 +191,7 @@ const EnhancedTableToolbar = (props) => {
           //sx={{ flex: "1 1 100%" }}
           variant="subtitle2"
           id="tableTitle"
-          //component="div"
+        //component="div"
         >
           Phiên bản ({rows.length})
         </Typography>
@@ -231,7 +202,7 @@ const EnhancedTableToolbar = (props) => {
           //sx={{ flex: "1 1 100%" }}
           variant="subtitle2"
           id="tableTitle"
-          //component="div"
+        //component="div"
         >
           Đã chọn {numSelected} phiên bản
         </Typography>
@@ -241,7 +212,7 @@ const EnhancedTableToolbar = (props) => {
           //sx={{ flex: "1 1 100%" }}
           variant="subtitle2"
           id="tableTitle"
-          //component="div"
+        //component="div"
         >
           Đã chọn tất cả phiên bản
         </Typography>
@@ -260,14 +231,15 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ setVariantInfo, variants, setViewState, handleDeleteVariant }) {
+export default function EnhancedTable({ setVariantInfo, variants, setViewState, handleDeleteVariant, chosenOneVariant }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(500); //list all variants
-  const [chosenVariant, setChosenVariant] = React.useState(variants[0].code);
+  const [chosenVariant, setChosenVariant] = React.useState(chosenOneVariant);
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -286,12 +258,12 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
 
   const handleDelete = () => {
     const IDs = [];
-    for(let i=0; i<selected.length; i++) {
+    for (let i = 0; i < selected.length; i++) {
       let result = variants.filter(v => v.code === selected[i]);
       IDs.push(result[0].id);
       handleDeleteVariant(result[0].id);
     }
-    
+
   }
 
   const handleClick = (event, code) => {
@@ -374,7 +346,7 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
                       sx={{
                         backgroundColor:
                           row.code === chosenVariant
-                            ? "rgb(0, 136, 255)"
+                            ? "#afafaf"
                             : "none",
                         "&:hover": {
                           cursor: "pointer",
@@ -415,11 +387,14 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
                           <Box
                             width="40px"
                             height="40px"
-                            backgroundColor="green"
+                            backgroundColor="white"
                             mr={2}
-                          ></Box>
+                          >
+                            <img style={{ width: "40px", height: "40px" }} src={row.imageUrl ? row.imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"} />
+                          </Box>
                           <Box
                             py={1}
+                            flex="1"
                             display="flex"
                             flexDirection="column"
                             sx={{
@@ -434,13 +409,13 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
                           >
                             <Typography
                               variant="subtitle2"
-                              sx={{ fontSize: "1rem", fontWeight: "normal"}}
+                              sx={{ fontSize: "1rem", fontWeight: "normal" }}
                             >
                               {row.code}
                             </Typography>
                             <Box display="flex">
-                              <Typography sx={{ pr: 4 }}>Tồn kho: {row.inventoryQuantity}</Typography>
-                              <Typography>Có thể bán: {row.sellableQuantity}</Typography>
+                              <Typography sx={{ flex: 1}}>Tồn kho: {row.inventoryQuantity.format()}</Typography>
+                              <Typography sx={{ flex: 1}}>Có thể bán: {row.sellableQuantity.format()}</Typography>
                             </Box>
                           </Box>
                         </Box>

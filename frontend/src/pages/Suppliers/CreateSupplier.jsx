@@ -83,9 +83,9 @@ export default function CreateSupplier() {
                     </Typography>
                 </div>
                 <div className="activity">
-                    <Button onClick={handleCreate} className="button_activity" variant="outlined"><i className="far fa-save"></i> <span>Lưu kết quả</span> </Button>
-                    <Button onClick={() => history.push("/nha-cung-cap")} className="button_activity" color="error" variant="outlined"><i className="far fa-window-close"></i> <span>Hủy thao tác</span> </Button>
-                    <Button className="button_activity" variant="outlined"><i className="far fa-question-circle"></i> <span>Trợ giúp</span> </Button>
+                    <Button onClick={() => history.push("/nha-cung-cap")} className="button_activity" color="error" variant="outlined">Hủy thao tác</Button>
+                    <Button onClick={handleCreate} className="button_activity" variant="contained"> Lưu kết quả</Button>
+                    <Button className="button_activity" variant="outlined">Trợ giúp</Button>
                 </div>
                 <hr />
                 <div className="createSupplier_form">

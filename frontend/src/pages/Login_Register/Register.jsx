@@ -21,7 +21,7 @@ export default function Register() {
             username: username.current.value,
             email: email.current.value,
             password: password.current.value,
-            role:"ADMIN"
+            role: "ADMIN"
         }
         if (username.current.value == "" || password.current.value == "" || email.current.value == "") {
             setStateAlert({ severity: "error", variant: "standard", open: true, content: "Yêu cầu điền tên đăng ký, email và mật khẩu" })
@@ -36,7 +36,7 @@ export default function Register() {
     }
 
     return (
-        <div className="login">
+        <div className="login_page">
             <div className="background">
                 <img className='logo_image' src="https://www.sapo.vn/Themes/Portal/Default/StylesV2/images/home/bg-banner-mobile.png?v=5" alt="" />
             </div>
@@ -44,42 +44,36 @@ export default function Register() {
                 <div className="img">
                     <img className='logo_image' src="https://www.sapo.vn/Themes/Portal/Default/StylesV2/images/logo/Sapo-logo.svg" alt="" />
                 </div>
-                <div className="login-content">
-                    <form onSubmit={RegisterHandle}>
-                        <h2 className="title">Đăng ký</h2>
-                        <div className="input-div one">
-                            <div className="i">
-                                <i className="fas fa-user" />
+                <div className="screen">
+                    <div className="screen__content">
+                        <form onSubmit={RegisterHandle} className="login">
+                            <div className="login__field">
+                                <i className="login__icon fas fa-user" />
+                                <input ref={username} type="text" className="login__input" placeholder="Tên đăng nhập" />
                             </div>
-                            <div className="div">
-                                <input ref={username} type="text" placeholder='Tên người dùng' className="input" />
+                            <div className="login__field">
+                                <i className="login__icon fas fa-envelope" />
+                                <input ref={email} type="text" className="login__input" placeholder="Email" />
                             </div>
-                        </div>
-                        <div className="input-div pass">
-                            <div className="i">
-                                <i className="fas fa-envelope"></i>
+                            <div className="login__field">
+                                <i className="login__icon fas fa-lock" />
+                                <input ref={password} type="password" className="login__input" placeholder="Mật khẩu" />
                             </div>
-                            <div className="div">
-                                <input ref={email} type="email" placeholder='Email' className="input" />
-                            </div>
-                        </div>
-                        <div className="input-div pass">
-                            <div className="i">
-                                <i className="fas fa-lock" />
-                            </div>
-                            <div className="div">
-                                <input ref={password} type="password" placeholder='Mật khẩu' className="input" />
-                            </div>
-                        </div>
-                        <div className="submit">
-                            <button type='submit'>Xác nhận</button>
-                            <Link to={"/login"} className='back_to_login'>
-                                Bạn đã có tài khoản
-                            </Link>
-                        </div>
-                    </form>
+                            <button type='submit' style={{ marginBottom: "1.5em" }} className="button login__submit">
+                                <span className="button__text">Đăng ký</span>
+                                <i className="button__icon fas fa-chevron-right" />
+                            </button>
+                            <Link to={"/login"} className='back_to_login'><strong>Bạn đã có tài khoản</strong></Link>
+                        </form>
+                    </div>
+                    <div className="screen__background">
+                        <span className="screen__background__shape screen__background__shape4" />
+                        <span className="screen__background__shape screen__background__shape3" />
+                        <span className="screen__background__shape screen__background__shape2" />
+                        <span className="screen__background__shape screen__background__shape1" />
+                    </div>
                 </div>
-            </div >
+            </div>
             <Snackbar
                 anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 open={stateAlert.open}
