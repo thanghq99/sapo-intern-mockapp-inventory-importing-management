@@ -50,7 +50,7 @@ function CreateProduct({ setStateAlert }) {
     weight: 0,
     brand: "",
     description: "",
-    imageUrl: null,
+    imageUrl: "",
   });
 
   useEffect(() => {
@@ -191,28 +191,28 @@ function CreateProduct({ setStateAlert }) {
       ...product,
       variants: variants
     })
-    // ProductAPI.createProduct({
-    //   ...product,
-    //   variants: variants
-    // })
+    ProductAPI.createProduct({
+      ...product,
+      variants: variants
+    })
     // ProductAPI.createProduct(product)
-    //   .then((res) => {
-    //     setStateAlert({
-    //       severity: "success",
-    //       variant: "filled",
-    //       open: true,
-    //       content: "Đã tạo thêm sản phẩm",
-    //     });
-    //     history.push("/san-pham");
-    //   })
-    //   .catch((err) => {
-    //     setStateAlert({
-    //       severity: "error",
-    //       variant: "filled",
-    //       open: true,
-    //       content: err.response.data,
-    //     });
-    //   });
+      .then((res) => {
+        setStateAlert({
+          severity: "success",
+          variant: "filled",
+          open: true,
+          content: "Đã tạo thêm sản phẩm",
+        });
+        history.push("/san-pham");
+      })
+      .catch((err) => {
+        setStateAlert({
+          severity: "error",
+          variant: "filled",
+          open: true,
+          content: err.response.data,
+        });
+      });
   };
 
   return (

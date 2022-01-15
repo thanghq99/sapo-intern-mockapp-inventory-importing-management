@@ -84,56 +84,73 @@ public class ProductServiceImpl implements ProductService {
             SellableStatus.SELLABLE
         ));
 
-        List<Variant> newVariantsList = new ArrayList<Variant>();
+        List<VariantDto> variantsList = new ArrayList<VariantDto>(productVariantDto.getVariants());
 
-        List<String> colors = new ArrayList<String>(productVariantDto.getColor());
-        List<String> materials = new ArrayList<String>(productVariantDto.getMaterial());
-        List<String> sizes = new ArrayList<String>(productVariantDto.getSize());
-        int colorNumbers = colors.size();
-        int materialNumbers = materials.size();
-        int sizeNumbers = sizes.size();
-
-        if (colorNumbers == 0 && materialNumbers == 0 && sizeNumbers == 0) {
+        for (VariantDto variant : variantsList) {
             Variant newVariant = new Variant(
                     newProduct,
                     itemCodeGenerator.generate(),
-                    productVariantDto.getInventoryQuantity(),
-                    productVariantDto.getSellableQuantity(),
-                    "",
-                    "",
-                    productVariantDto.getImageUrl(),
-                    "",
-                    productVariantDto.getUnit(),
-                    productVariantDto.getOriginalPrice(),
-                    productVariantDto.getWholeSalePrice(),
-                    productVariantDto.getRetailPrice());
+                    variant.getInventoryQuantity(),
+                    variant.getSellableQuantity(),
+                    variant.getSize(),
+                    variant.getColor(),
+                    variant.getImageUrl(),
+                    variant.getMaterial(),
+                    variant.getUnit(),
+                    variant.getOriginalPrice(),
+                    variant.getWholeSalePrice(),
+                    variant.getRetailPrice());
             variantRepository.save(newVariant);
-        } else {
-            if (colorNumbers == 0) colors.add(0, "");
-            if (sizeNumbers == 0) sizes.add(0, "");
-            if (materialNumbers == 0) materials.add(0, "");
-            for (String color : colors) {
-                for (String material : materials) {
-                    for (String size : sizes) {
-                        Variant newVariant = new Variant(
-                                newProduct,
-                                itemCodeGenerator.generate(),
-                                productVariantDto.getInventoryQuantity(),
-                                productVariantDto.getSellableQuantity(),
-                                size,
-                                color,
-                                productVariantDto.getImageUrl(),
-                                material,
-                                productVariantDto.getUnit(),
-                                productVariantDto.getOriginalPrice(),
-                                productVariantDto.getWholeSalePrice(),
-                                productVariantDto.getRetailPrice());
-                        newVariantsList.add(newVariant);
-                        variantRepository.save(newVariant);
-                    }
-                }
-            }
         }
+
+//        List<String> colors = new ArrayList<String>(productVariantDto.getColor());
+//        List<String> materials = new ArrayList<String>(productVariantDto.getMaterial());
+//        List<String> sizes = new ArrayList<String>(productVariantDto.getSize());
+//        int colorNumbers = colors.size();
+//        int materialNumbers = materials.size();
+//        int sizeNumbers = sizes.size();
+
+//        if (colorNumbers == 0 && materialNumbers == 0 && sizeNumbers == 0) {
+//            Variant newVariant = new Variant(
+//                    newProduct,
+//                    itemCodeGenerator.generate(),
+//                    productVariantDto.getInventoryQuantity(),
+//                    productVariantDto.getSellableQuantity(),
+//                    "",
+//                    "",
+//                    productVariantDto.getImageUrl(),
+//                    "",
+//                    productVariantDto.getUnit(),
+//                    productVariantDto.getOriginalPrice(),
+//                    productVariantDto.getWholeSalePrice(),
+//                    productVariantDto.getRetailPrice());
+//            variantRepository.save(newVariant);
+//        } else {
+//            if (colorNumbers == 0) colors.add(0, "");
+//            if (sizeNumbers == 0) sizes.add(0, "");
+//            if (materialNumbers == 0) materials.add(0, "");
+//            for (String color : colors) {
+//                for (String material : materials) {
+//                    for (String size : sizes) {
+//                        Variant newVariant = new Variant(
+//                                newProduct,
+//                                itemCodeGenerator.generate(),
+//                                productVariantDto.getInventoryQuantity(),
+//                                productVariantDto.getSellableQuantity(),
+//                                size,
+//                                color,
+//                                productVariantDto.getImageUrl(),
+//                                material,
+//                                productVariantDto.getUnit(),
+//                                productVariantDto.getOriginalPrice(),
+//                                productVariantDto.getWholeSalePrice(),
+//                                productVariantDto.getRetailPrice());
+//                        newVariantsList.add(newVariant);
+//                        variantRepository.save(newVariant);
+//                    }
+//                }
+//            }
+//        }
         return newProduct;
     }
 

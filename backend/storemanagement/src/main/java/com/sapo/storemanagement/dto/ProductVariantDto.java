@@ -33,11 +33,11 @@ public class ProductVariantDto {
     @Size(max = 255, message = "Độ dài mô tả sản phẩm không được vượt quá {max} kí tự")
     private String description;
 
-    @NotNull(message = "Mã phiên bản không được null")
+//    @NotNull(message = "Mã phiên bản không được null")
     @Size(max = 16, message = "Độ dài mã phiên bản không được vượt quá {max} kí tự")
     private String variantCode;
 
-    @NotNull(message = "Đường dẫn ảnh không được null")
+//    @NotNull(message = "Đường dẫn ảnh không được null")
     @Size(max = 255, message = "Độ dài đường dẫn ảnh không được vượt quá {max} kí tự")
     private String imageUrl;
 
@@ -64,6 +64,12 @@ public class ProductVariantDto {
     @NotNull(message = "Lượng hàng có thể bán không được null")
     @Min(value = 0, message = "Lượng hàng có thể bán không được nhỏ hơn {value}")
     private Long sellableQuantity;
+
+    private List<VariantDto> variants;
+
+    public List<VariantDto> getVariants() {
+        return variants;
+    }
 
     public String getProductName() {
         return productName;
