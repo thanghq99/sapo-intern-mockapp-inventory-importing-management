@@ -44,7 +44,7 @@ public class VariantDto {
     @Min(value = 0, message = "Lượng hàng có thể bán không được nhỏ hơn {value}")
     private Long sellableQuantity;
 
-    @NotNull(message = "Đường dẫn ảnh không được null")
+//    @NotNull(message = "Đường dẫn ảnh không được null")
     @Size(max = 255, message = "Độ dài đường dẫn ảnh không được vượt quá {max} kí tự")
     private String imageUrl;
 
