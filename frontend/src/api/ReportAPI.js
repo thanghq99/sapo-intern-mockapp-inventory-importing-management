@@ -11,5 +11,10 @@ function ReportAPI() {
     this.totalOrders = (year) => {
         return callAPI.get(`report/total-orders?year=${year}`)
     }
+
+    // [GET] get all each month
+    this.eachMonth = (year) => {
+        return callAPI.get(`report/each-month?year=${year}`)
+    }
 }
 export default new ReportAPI();
