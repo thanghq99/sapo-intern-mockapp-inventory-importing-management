@@ -35,4 +35,12 @@ public interface VariantsOrderRepository extends JpaRepository<VariantsOrder, Va
     long totalSuppliedQuantityOfVariantInOrder(@Param("variantId") long variantId, @Param("orderId") long orderId);
 
     Optional<VariantsOrder> findByVariant_IdAndOrder_Id(long variantId, long orderId);
+
+    @Query(
+        value = "select coalesce(sum(supplied_quantity), 0) " +
+            "from orders join variants_orders on (orders.id = variants_orders.order_id) " +
+            "where month(created_at) = :month and year(created_at) = :year",
+        nativeQuery = true
+    )
+    long countTotalSuppliedQuantityInMonthInYear(@Param("month") int month, @Param("year") int year);
 }
