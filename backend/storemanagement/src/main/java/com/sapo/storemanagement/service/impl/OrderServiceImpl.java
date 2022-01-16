@@ -71,6 +71,7 @@ public class OrderServiceImpl implements OrderService {
         if(orderCode == null || orderCode.isBlank()) {
             orderCode = orderCodeGenerator.generate();
         }
+        Double discount = (100- orderDto.getDiscount()) / 100;
 
         Supplier supplier = supplierService.getSupplierById(orderDto.getSupplierId());
         User user = userService.getUserById(orderCreatorId);
@@ -79,6 +80,7 @@ public class OrderServiceImpl implements OrderService {
             supplier,
             orderDto.getDescription(),
             orderDto.getDeliveryTime(),
+            orderDto.getDiscount(),
             user
         ));
         orderDto.getLineItems().forEach(item -> {
@@ -93,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
             variantsOrderRepository.save(variantsOrder);
             newOrder.setTotalAmount(newOrder.getTotalAmount() + item.getPrice()*item.getQuantity());
         } );
-        newOrder.setTotalAmount(newOrder.getTotalAmount() * 0.94);
+        newOrder.setTotalAmount(newOrder.getTotalAmount() * discount);
         supplierService.increaseDebt(newOrder.getSupplier().getId(), newOrder.getTotalAmount());
         return newOrder;
     }
@@ -105,6 +107,9 @@ public class OrderServiceImpl implements OrderService {
         Order orderUpdate = this.getOrderById(id);
         double oldTotalAmount = orderUpdate.getTotalAmount();
 
+        double oldDiscount = (100 - orderUpdate.getDiscount()) /100;
+        double newDiscount = (100 - newOrderDto.getDiscount()) / 100;
+
         if(orderUpdate.getStatus().equals("Đang giao dịch")) {
             List<LineItemDto> newVariantOrders = newOrderDto.getLineItems();
             List<VariantsOrder> variantsOrderUpdates = variantsOrderRepository.findVariantByOrderId(orderUpdate.getId());
@@ -114,7 +119,7 @@ public class OrderServiceImpl implements OrderService {
                 AtomicBoolean check = new AtomicBoolean(false);
                 newVariantOrders.forEach(newVariant -> {
                     if(newVariant.getVariantId().equals(oldVariant.getVariant().getId())){
-                        orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() - (oldVariant.getPrice() * oldVariant.getSuppliedQuantity() * 0.94) + (newVariant.getPrice() * newVariant.getQuantity() * 0.94));
+                        orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() - (oldVariant.getPrice() * oldVariant.getSuppliedQuantity() * oldDiscount) + (newVariant.getPrice() * newVariant.getQuantity() * newDiscount));
                         oldVariant.setPrice(newVariant.getPrice());
                         oldVariant.setSuppliedQuantity(newVariant.getQuantity());
 
@@ -123,7 +128,7 @@ public class OrderServiceImpl implements OrderService {
                     }
                 });
                 if(!check.get()){
-                    orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() - (oldVariant.getPrice() * oldVariant.getSuppliedQuantity() * 0.94));
+                    orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() - (oldVariant.getPrice() * oldVariant.getSuppliedQuantity() * oldDiscount));
                     variantsOrderRepository.deleteVariantOderInOrder(oldVariant.getOrder().getId(), oldVariant.getVariant().getId());
                 }
             });
@@ -140,7 +145,7 @@ public class OrderServiceImpl implements OrderService {
                 });
 
                 if(!check.get()){
-                    orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() + (newVariant.getPrice() * newVariant.getQuantity() * 0.94));
+                    orderUpdate.setTotalAmount(orderUpdate.getTotalAmount() + (newVariant.getPrice() * newVariant.getQuantity() * newDiscount));
                     Variant variant = variantService.getVariantById(newVariant.getVariantId());
                     VariantsOrder variantsOrderAdd = new VariantsOrder(
                             orderUpdate,
