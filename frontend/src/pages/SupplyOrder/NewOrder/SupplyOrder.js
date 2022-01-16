@@ -18,7 +18,7 @@ import SupplySelect from './supplySelect/SupplySelect';
 import ProductSelect from './productSelect/ProductSelect';
 import OrderAPI from '../../../api/OrderAPI';
 
-export default function SupplyOrder() {
+export default function SupplyOrder({ setStateAlert }) {
     const [supplier, setSupplier] = React.useState();
     const code = React.useRef("");
     const [description, setDescription] = React.useState('');
@@ -73,9 +73,20 @@ export default function SupplyOrder() {
         console.log(data);
         try {
             await OrderAPI.createOrder(data);
+            setStateAlert({
+                severity: "success",
+                variant: "filled",
+                open: true,
+                content: "Đã tạo đơn hàng thành công",
+              });
             history.push("/nhap-hang");
-        } catch (error) {
-            console.log(error);
+        } catch (err) {
+            setStateAlert({
+                severity: "error",
+                variant: "filled",
+                open: true,
+                content: err.response.data,
+              });
         }
    
     }
@@ -89,7 +100,7 @@ export default function SupplyOrder() {
     return (
 
         <div>
-            <Box py={2} px={5} sx={{ flexGrow: 1 }} className="body">
+            <Box py={2} px={5} sx={{ flexGrow: 1, minHeight: "85vh" }} className="body">
                 <Box className="test"  >
                     <Box className="back" onClick={history.goBack}>
                         <ArrowBackIosIcon />
@@ -120,7 +131,7 @@ export default function SupplyOrder() {
                             <Box className="time">
                                 <LocalizationProvider dateAdapter={AdapterDateFns}  >
                                     <DatePicker
-                                        inputFormat="yyyy/MM/dd"
+                                        // inputFormat="yyyy/MM/dd"
                                         value={date}
                                         
                                         onChange={(views) => {
@@ -136,9 +147,10 @@ export default function SupplyOrder() {
                             <textarea className="content-note" onChange={(e) => setDescription(e.target.value)}></textarea>
                         </Box>
 
-                        <Button variant="outlined" className="btn-order" onClick={SubmitOrder}>Đặt hàng</Button>
+                        {/* <Button variant="outlined" className="btn-order" onClick={SubmitOrder}>Đặt hàng</Button> */}
 
                     </Box>
+                    <Button variant="contained" className="btn-order" onClick={SubmitOrder} sx={{marginTop: "100px", position: "fixed"}}>Đặt hàng</Button>
                 </Box>
 
                 {/* </Grid> */}

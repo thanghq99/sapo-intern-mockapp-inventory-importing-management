@@ -1,7 +1,5 @@
 package com.sapo.storemanagement.entities;
 
-import com.sapo.storemanagement.exception.BadNumberException;
-
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -33,6 +31,10 @@ public class Order {
     @NotNull(message = "Tổng tiền của đơn hàng không được null")
     @Min(value = 0, message = "Tổng tiền đơn hàng không được nhở hơn {value}")
     private Double totalAmount = 0.0;
+
+    @Column(name="discount", nullable = false)
+    @Min(value = 0, message = "Chiết khấu không được nhỏ hơn {value}")
+    private Double discount;
 
     @Column(name = "paid_amount")
     @NotNull(message = "Số tiền đã trả của đơn hàng không được null")
@@ -70,11 +72,12 @@ public class Order {
     }
 
     public Order(String code, Supplier supplier, String description,
-                 LocalDate expectedTime, User createdBy) {
+                 LocalDate expectedTime, Double discount, User createdBy) {
         this.code = code;
         this.supplier = supplier;
         this.description = description;
         this.expectedTime = expectedTime;
+        this.discount = discount;
         this.createdBy = createdBy;
     }
 
@@ -118,6 +121,14 @@ public class Order {
         else {
             this.setTransactionStatus(TransactionStatus.PAID);
         }
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 
     public LocalDate getExpectedTime() {

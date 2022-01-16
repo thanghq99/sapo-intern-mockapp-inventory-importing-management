@@ -31,7 +31,7 @@ import { Collapse } from "@mui/material";
 import ProductAPI from "../../../api/ProductAPI";
 
 
-export default function DetailOrder() {
+export default function DetailOrder({ setStateAlert }) {
 
     const [order, setOrder] = React.useState();
     const [codeOrder, setCodeOrder] = React.useState();
@@ -74,10 +74,21 @@ export default function DetailOrder() {
         console.log(data);
         try {
             await OrderAPI.updateOrder(searchParam, data);
+            setStateAlert({
+                severity: "success",
+                variant: "filled",
+                open: true,
+                content: "Đã cập nhật đơn hàng thành công",
+              });
             history.goBack();
             // history.push("/nhap-hang");
-        } catch (error) {
-            console.log(error);
+        } catch (err) {
+            setStateAlert({
+                severity: "error",
+                variant: "filled",
+                open: true,
+                content: err.response.data,
+              });
         }
     }
 

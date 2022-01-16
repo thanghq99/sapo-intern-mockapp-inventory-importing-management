@@ -43,7 +43,7 @@ import PaymentAPI from "../../../api/PaymentAPI";
 import ImportReceiptsAPI from "../../../api/ImportReceiptsAPI";
 
 
-export default function DetailOrder() {
+export default function DetailOrder({setStateAlert}) {
 
     const [order, setOrder] = React.useState();
     const [codeOrder, setCodeOrder] = React.useState();
@@ -116,11 +116,29 @@ export default function DetailOrder() {
     // Thanh toan
     const SubmitPayment = async () => {
         // handleOpenPayment();
-        const res = await PaymentAPI.Paid(searchParam, { amount: payment });
-        // res.then(respons => {
-        handleOpenPayment();
-        // setOpenPaymented(true);
-        // })
+        try {
+            await PaymentAPI.Paid(searchParam, { amount: payment });
+            handleOpenPayment();
+            setStateAlert({
+                severity: "success",
+                variant: "filled",
+                open: true,
+                content: "Đã thanh toán đơn hàng thành công",
+              });
+
+        } catch (err) {
+            setStateAlert({
+                severity: "error",
+                variant: "filled",
+                open: true,
+                content: err.response.data,
+              });
+        }
+        // const res = await PaymentAPI.Paid(searchParam, { amount: payment });
+        // // res.then(respons => {
+        // handleOpenPayment();
+        // // setOpenPaymented(true);
+        // // })
 
 
     }
@@ -139,9 +157,20 @@ export default function DetailOrder() {
 
             await ImportReceiptsAPI.Import(searchParam, { lineItems: data });
             handleOpenImport();
+            setStateAlert({
+                severity: "success",
+                variant: "filled",
+                open: true,
+                content: "Đã nhập kho thành công",
+              });
 
-        } catch (error) {
-            console.log(error);
+        } catch (err) {
+            setStateAlert({
+                severity: "error",
+                variant: "filled",
+                open: true,
+                content: err.response.data,
+              });
         }
     }
 
@@ -255,7 +284,7 @@ export default function DetailOrder() {
     return (
 
         <div>
-            <Box py={2} px={5} sx={{ flexGrow: 1 }} className="body">
+            <Box py={2} px={5} sx={{ flexGrow: 1, minHeight: "85vh" }} className="body">
                 <Box className="header-page-detail">
                     <Box className="back" onClick={history.goBack}>
                         <ArrowBackIosIcon />
