@@ -24,7 +24,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<Long> totalOrderOneMonthInYear(int year) {
         List<Long> response = new ArrayList<>();
-        for(int i = 1; i <= 12; i++) {
+        for (int i = 1; i <= 12; i++) {
             response.add(orderRepository.countOrdersInMonthInYear(i, year));
         }
         return response;
@@ -33,7 +33,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<Long> totalSuppliedQuantityOneMonthInYear(int year) {
         List<Long> response = new ArrayList<>();
-        for(int i = 1; i <= 12; i++) {
+        for (int i = 1; i <= 12; i++) {
             response.add(variantsOrderRepository.countTotalSuppliedQuantityInMonthInYear(i, year));
         }
         return response;
@@ -42,14 +42,18 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<ReportEachMonthDto> reportEachMonth(int year) {
         List<ReportEachMonthDto> response = new ArrayList<>();
-        for(int i = 1; i <= 12; i++) {
+        for (int i = 1; i <= 12; i++) {
             long totalOrdersInMonthInYear = orderRepository.countOrdersInMonthInYear(i, year);
             long totalSuppliedQuantityInMonthInYear = variantsOrderRepository.countTotalSuppliedQuantityInMonthInYear(i, year);
             double totalAmountInMonthInYear = orderRepository.totalAmountInMonthInYear(i, year);
+            double paidAmountInMonthInYear = orderRepository.paidAmountInMonthInYear(i, year);
+            double debtAmountInMonthYear = totalAmountInMonthInYear - paidAmountInMonthInYear;
             ReportEachMonthDto dto = new ReportEachMonthDto(
-                totalOrdersInMonthInYear,
-                totalSuppliedQuantityInMonthInYear,
-                totalAmountInMonthInYear
+                    totalOrdersInMonthInYear,
+                    totalSuppliedQuantityInMonthInYear,
+                    totalAmountInMonthInYear,
+                    paidAmountInMonthInYear,
+                    debtAmountInMonthYear
             );
             response.add(dto);
         }
