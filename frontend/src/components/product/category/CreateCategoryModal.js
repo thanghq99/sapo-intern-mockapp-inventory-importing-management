@@ -105,8 +105,8 @@ export default function CreateCategoryModal({ handleSelectCategory, setCategory,
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Hủy</Button>
-          <Button onClick={handleCreate}>Tạo mới</Button>
+          <Button color="error" variant="outlined" onClick={handleClose}>Hủy</Button>
+          <Button color="primary" variant="contained" onClick={handleCreate}>Tạo mới</Button>
         </DialogActions>
       </Dialog>
     </div>

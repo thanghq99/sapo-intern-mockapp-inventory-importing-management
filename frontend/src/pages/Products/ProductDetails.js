@@ -44,21 +44,7 @@ function ProductDetails({ setStateAlert }) {
   const [viewState, setViewState] = useState(1); // 1: view details, 2: create, 3: edit
   const [product, setProduct] = useState([]);
   const [variants, setVariants] = useState([]);
-  const [variantInfo, setVariantInfo] = useState({
-    id: "---",
-    code: "---",
-    inventoryQuantity: "---",
-    sellableQuantity: "---",
-    size: "---",
-    color: "---",
-    material: "---",
-    unit: "---",
-    originalPrice: "---",
-    wholeSalePrice: "---",
-    retailPrice: "---",
-    recordStatus: "---",
-    sellableStatus: "---",
-  });
+  const [variantInfo, setVariantInfo] = useState({});
   async function getData() {
     const productData = await ProductAPI.product(params.id);
     setProduct(productData.data);
@@ -168,9 +154,13 @@ function ProductDetails({ setStateAlert }) {
               className="mySwiper"
             >
               {
-                variants.map((variant) => (
-                  <SwiperSlide key={variant.code}><img src={variant.imageUrl} /></SwiperSlide>
-                ))
+                variants.map((variant) => {
+                  if (variant.imageUrl) return <SwiperSlide key={variant.code}><img src={variant.imageUrl} /></SwiperSlide>
+                  else return null
+                })
+                // (
+                //   <React.Fragment> {  variant.imageUrl !== "" ? <SwiperSlide key={variant.code}><img src={variant.imageUrl} /></SwiperSlide> : null} </React.Fragment>
+                // ))
               }
             </Swiper>
           </Box>
