@@ -16,7 +16,7 @@ public interface ProductService {
 
     Product updateProduct(long id, ProductDto productDto);
 
-    String deleteProduct(Long id);
+    Product deleteProduct(Long id);
 
     Variant saveVariant(long id, VariantDto variantDto);
 }

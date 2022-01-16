@@ -14,10 +14,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
+import Button from "@mui/material/Button";
 import { visuallyHidden } from "@mui/utils";
 
 import { Link } from "react-router-dom";
@@ -159,7 +156,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected } = props;
+  const { numSelected, handleDelete } = props;
 
   return (
     <Toolbar
@@ -182,7 +179,7 @@ const EnhancedTableToolbar = (props) => {
           variant="subtitle1"
           component="div"
         >
-          {numSelected} selected
+          Đã chọn {numSelected} sản phẩm
         </Typography>
       ) : (
         <Typography
@@ -196,33 +193,32 @@ const EnhancedTableToolbar = (props) => {
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+          <Button variant="outlined" color="error" onClick={() => handleDelete()}>
+            Xóa
+          </Button>
+      ) : null
+      }
     </Toolbar>
   );
 };
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
+  handleDelete: PropTypes.func.isRequired,
 };
 
-export default function ProductsTable({ products }) {
+export default function ProductsTable({ products, handleDeleteProduct, triggerReload }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  React.useEffect(() => {
+    console.log("render product table");
+    setSelected([]);
+  },[products]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -239,12 +235,12 @@ export default function ProductsTable({ products }) {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -258,6 +254,14 @@ export default function ProductsTable({ products }) {
 
     setSelected(newSelected);
   };
+
+  const handleDelete = () => {
+    console.log("selected: " + selected)
+    selected.forEach(id => {
+      handleDeleteProduct(id);
+    })
+    triggerReload();
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -277,7 +281,7 @@ export default function ProductsTable({ products }) {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} handleDelete={handleDelete}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
