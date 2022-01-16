@@ -169,7 +169,7 @@ function ProductDetails({ setStateAlert }) {
             >
               {
                 variants.map((variant) => (
-                  <SwiperSlide><img src={variant.imageUrl} /></SwiperSlide>
+                  <SwiperSlide key={variant.code}><img src={variant.imageUrl} /></SwiperSlide>
                 ))
               }
             </Swiper>

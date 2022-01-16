@@ -1,4 +1,4 @@
-package com.sapo.storemanagement.security;
+package com.sapo.storemanagement.dto;
 
 import com.sapo.storemanagement.entities.Role;
 

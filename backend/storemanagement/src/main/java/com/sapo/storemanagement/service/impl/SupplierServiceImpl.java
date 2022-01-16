@@ -43,12 +43,12 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public Supplier getSupplierById(Long id) {
         if (id <= 0) {
-            throw new BadNumberException("id must be greater than 0");
+            throw new BadNumberException("Id phải lớn hơn 0");
         }
 
         return supplierRepository
                 .findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Supplier not found"));
+                .orElseThrow(() -> new RecordNotFoundException("Nhà cung cấp không tồn tại"));
     }
 
     @Override
@@ -61,7 +61,7 @@ public class SupplierServiceImpl implements SupplierService {
         }
 
         if (supplierRepository.existsByCode(supplierCode)) {
-            throw new UniqueKeyConstraintException("Supplier code already existed");
+            throw new UniqueKeyConstraintException("Mã nhà cung cấp đã tồn tại");
         }
         return supplierRepository.save(supplier);
     }
@@ -70,13 +70,13 @@ public class SupplierServiceImpl implements SupplierService {
     @Transactional
     public Supplier updateSupplier(long id, Supplier supplier) {
         if (id <= 0) {
-            throw new BadNumberException("id must be greater than 0");
+            throw new BadNumberException("Id phải lớn hơn 0");
         }
         Supplier existingSupplier = this.getSupplierById(id);
 
         if (supplierRepository.existsByCode(supplier.getCode()) &&
             !existingSupplier.getCode().equals(supplier.getCode())) {
-            throw new UniqueKeyConstraintException("Supplier code already existed");
+            throw new UniqueKeyConstraintException("Mã nhà cung cấp đã tồn tại");
         }
 
         existingSupplier.setActivityStatus(supplier.getActivityStatus());
@@ -97,7 +97,7 @@ public class SupplierServiceImpl implements SupplierService {
     @Transactional
     public String deleteSupplier(Long id) {
         if (id <= 0) {
-            throw new BadNumberException("id must be greater than 0");
+            throw new BadNumberException("Id phải lớn hơn 0");
         }
 
         Supplier supplier = this.getSupplierById(id);
@@ -111,7 +111,7 @@ public class SupplierServiceImpl implements SupplierService {
     @Transactional
     public Supplier decreaseDebt(long supplierId, double offset) {
         if (offset < 0) {
-            throw new BadNumberException("Offset cant be negative");
+            throw new BadNumberException("Số tiền không được âm");
         }
 
         Supplier supplier = this.getSupplierById(supplierId);
@@ -123,7 +123,7 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public Supplier increaseDebt(long supplierId, double offset) {
         if (offset < 0) {
-            throw new BadNumberException("Offset cant be negative");
+            throw new BadNumberException("Số tiền không được âm");
         }
 
         Supplier supplier = this.getSupplierById(supplierId);
@@ -135,7 +135,7 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public List<Order> findAllSuppliedOrders(long supplierId) {
         if(supplierId < 0) {
-            throw new BadNumberException("Offset cant be negative");
+            throw new BadNumberException("Số tiền không được âm");
         }
         return orderRepository.findAllOrdersBySupplierId(supplierId);
     }

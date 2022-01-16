@@ -13,8 +13,8 @@ public class Role {
     private Long id;
 
     @Column(name = "name", length = 32, nullable = false)
-    @NotBlank(message = "Role name cannot be blank")
-    @Size(max = 32, message = "Role name length cannot exceed {max}")
+    @NotBlank(message = "Không được để trống tên vai trò")
+    @Size(max = 32, message = "Độ dài tên vai trò không được vượt quá {max} kí tự")
     private String name;
 
     public Role() {

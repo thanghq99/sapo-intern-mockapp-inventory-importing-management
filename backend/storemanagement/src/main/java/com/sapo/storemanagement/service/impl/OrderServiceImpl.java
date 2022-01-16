@@ -56,10 +56,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getOrderById(long id) {
         if(id <= 0) {
-            throw new BadNumberException("id must be greater than 0");
+            throw new BadNumberException("Id phải lớn hơn 0");
         }
-        Order order = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Order not found"));
-        return order;
+        return orderRepository
+            .findById(id)
+            .orElseThrow(() -> new RecordNotFoundException("Đơn nhâp hàng " + id + " không tồn tại"));
     }
 
     // luu thong tin 1 don nhap hang
@@ -101,7 +102,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order updateOrder(long id, OrderDto newOrderDto) {
-        Order orderUpdate = orderRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("order not found"));
+        Order orderUpdate = this.getOrderById(id);
         double oldTotalAmount = orderUpdate.getTotalAmount();
 
         if(orderUpdate.getStatus().equals("Đang giao dịch")) {
@@ -154,7 +155,7 @@ public class OrderServiceImpl implements OrderService {
 
             double newTotalAmount = orderUpdate.getTotalAmount();
             if(newTotalAmount < 0) {
-                throw new BadNumberException("TotalAmount is invalid");
+                throw new BadNumberException("Tổng tiền không hợp lệ");
             }
             if(oldTotalAmount < newTotalAmount){
                 supplierService.increaseDebt(orderUpdate.getSupplier().getId(), (newTotalAmount - oldTotalAmount));
@@ -174,15 +175,15 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Order increasePaidAmount(long orderId, double offset) {
         if(offset < 0) {
-            throw new BadNumberException("You can't pay negative money");
+            throw new BadNumberException("Không được trả số tiền âm");
         }
 
         Order order = this.getOrderById(orderId);
         if(order.getStatus().equals(OrderStatus.COMPLETE.getStatus())) {
-            throw new IllegalStateException("You can't pay an order with status: complete");
+            throw new IllegalStateException("Không thể thao tác với đơn hàng với trạng thái hoàn thành");
         }
         if(order.getTransactionStatus().equals(TransactionStatus.PAID.getStatus())) {
-            throw new IllegalStateException("This order is already fully paid");
+            throw new IllegalStateException("Đơn hàng này đã được trả tiền toàn bộ");
         }
 
         order.setPaidAmount(order.getPaidAmount() + offset);
