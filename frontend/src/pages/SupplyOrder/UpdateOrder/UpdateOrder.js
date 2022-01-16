@@ -162,11 +162,7 @@ export default function DetailOrder({ setStateAlert }) {
               )
         )
 }
-    const Quantity = async () => {
-        variantOrder.map((item) => {
-            setNum({ ...num, [item.variant.id]: item.suppliedQuantity })
-        })
-    }
+
 
     React.useEffect(() => {
         let tmp = 0;

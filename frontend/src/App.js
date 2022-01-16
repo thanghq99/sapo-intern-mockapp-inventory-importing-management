@@ -23,6 +23,7 @@ import EditProduct from "./pages/Products/EditProduct";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { viVN } from "@mui/material/locale";
 import User from "./pages/User/User";
+import ReturnReceipts from "./pages/SupplyOrder/DetailOrder/ReturnReceipts";
 
 const theme = createTheme(
   {
@@ -75,6 +76,7 @@ function App() {
                   <Route exact path="/nha-cung-cap" component={Supplier} />
                   <Route path="/nha-cung-cap/tao-moi-nha-cung-cap" component={CreateSupplier}></Route>
                   <Route path="/thong-tin-nha-cung-cap" component={DetailSupplier}></Route>
+
                   <Route exact path="/nhap-hang" component={ListOrder} />
                   <Route path="/nhap-hang/tao-don-nhap-hang">
                     <SupplyOrder setStateAlert={setStateAlert} />
@@ -84,6 +86,9 @@ function App() {
                   </Route>
                   <Route path="/nhap-hang/sua-don-hang" >
                     <UpdateOrder setStateAlert={setStateAlert} />
+                  </Route>
+                  <Route path="/don-hang/hoan-tra">
+                    <ReturnReceipts setStateAlert={setStateAlert} />
                   </Route>
                   <Route path="/nguoi-dung" component={User}></Route>
                   <Route path="/cai-dat"></Route>

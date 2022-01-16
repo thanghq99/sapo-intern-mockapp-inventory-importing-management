@@ -43,7 +43,7 @@ import PaymentAPI from "../../../api/PaymentAPI";
 import ImportReceiptsAPI from "../../../api/ImportReceiptsAPI";
 
 
-export default function DetailOrder({setStateAlert}) {
+export default function DetailOrder({ setStateAlert }) {
 
     const [order, setOrder] = React.useState();
     const [codeOrder, setCodeOrder] = React.useState();
@@ -92,9 +92,9 @@ export default function DetailOrder({setStateAlert}) {
             )
         )
     }
-    const handlePayment = (event) => {
-        setPayment(event.target.value);
-    };
+    // const handlePayment = (event) => {
+    //     setPayment(event.target.value);
+    // };
 
     const handOpenHistoryPayment = (items) => {
         setHistoryPaid(items);
@@ -124,7 +124,7 @@ export default function DetailOrder({setStateAlert}) {
                 variant: "filled",
                 open: true,
                 content: "Đã thanh toán đơn hàng thành công",
-              });
+            });
 
         } catch (err) {
             setStateAlert({
@@ -132,7 +132,7 @@ export default function DetailOrder({setStateAlert}) {
                 variant: "filled",
                 open: true,
                 content: err.response.data,
-              });
+            });
         }
         // const res = await PaymentAPI.Paid(searchParam, { amount: payment });
         // // res.then(respons => {
@@ -162,7 +162,7 @@ export default function DetailOrder({setStateAlert}) {
                 variant: "filled",
                 open: true,
                 content: "Đã nhập kho thành công",
-              });
+            });
 
         } catch (err) {
             setStateAlert({
@@ -170,7 +170,7 @@ export default function DetailOrder({setStateAlert}) {
                 variant: "filled",
                 open: true,
                 content: err.response.data,
-              });
+            });
         }
     }
 
@@ -498,7 +498,7 @@ export default function DetailOrder({setStateAlert}) {
                                             <TextField id="outlined-basic" variant="outlined"
                                                 sx={{ width: 200, height: 40 }}
                                                 value={(payment).toLocaleString()}
-                                                onChange={handlePayment} />
+                                                onChange={e => setPayment(e.target.value)} />
                                         </Box>
                                     </Box>
                                     <Box sx={{ display: "flex" }} mt={2} mb={2}>
@@ -524,7 +524,7 @@ export default function DetailOrder({setStateAlert}) {
                                 (order?.importedStatus == "Đã nhập kho") ? null :
                                     <Box className="btn-import">
                                         <Button variant="contained"
-                                            onClick={handleOpenImport}>  Xác nhận nhập kho  </Button>
+                                            onClick={handleOpenImport}>  Xác  nhận  nhập kho  </Button>
                                     </Box>
                             }
 
@@ -630,6 +630,26 @@ export default function DetailOrder({setStateAlert}) {
                             </Box>
                         </Modal>
 
+                    </Box>
+                    <Box className="return" mt={2} pl={2} sx={{ backgroundColor: "white", border: "1px solid #e4e4e4" }} >
+                        <Box className="header-return" pt={2} mb={2} sx={{display: "flex", justifyContent: "space-between"}}>
+                            <Box className="header-return-info">
+                                <Box sx={{ display: "flex" }}>
+                                    <AccountBalanceWalletIcon />
+                                    <Typography sx={{ fontWeight: 600 }} ml={2} >Hoàn trả</Typography>
+                                </Box>
+                            </Box>
+                            <Box className="btn-return" mr={6}>
+                                <Link style={{ textDecoration: "none" }} to={`/don-hang/hoan-tra?id=${searchParam}`}>
+                                    <Button variant="contained">
+                                        Xác  nhận  hoàn  trả</Button>
+                                </Link>
+                               
+                            </Box>
+
+
+                        
+                        </Box>
                     </Box>
                 </Box>
 
