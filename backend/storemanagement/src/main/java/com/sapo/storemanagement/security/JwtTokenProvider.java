@@ -3,7 +3,9 @@ package com.sapo.storemanagement.security;
 import com.sapo.storemanagement.entities.AppUserDetails;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 
@@ -43,16 +45,15 @@ public class JwtTokenProvider {
             Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(authToken);
             return true;
         } catch (MalformedJwtException ex) {
-            System.out.println("Invalid JWT token");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid JWT token");
         } catch (ExpiredJwtException ex) {
-            System.out.println("Expired JWT token");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Expired JWT token");
         } catch (UnsupportedJwtException ex) {
-            System.out.println("Unsupported JWT token");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Unsupported JWT token");
         } catch (IllegalArgumentException ex) {
-            System.out.println("JWT claims string is empty.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "JWT claims string is empty.");
         } catch (SignatureException ex) {
-            System.out.println("JWT signature does not match locally computed signature");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "JWT signature does not match locally computed signature");
         }
-        return false;
     }
 }

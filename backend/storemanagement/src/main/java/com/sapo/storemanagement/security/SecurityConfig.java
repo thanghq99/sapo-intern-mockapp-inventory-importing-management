@@ -4,6 +4,7 @@ import com.sapo.storemanagement.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private final String ROLE_ADMIN = "ADMIN";
+    private final String ROLE_STORAGE_KEEPER = "STORAGE_KEEPER";
+    private final String ROLE_ACCOUNTANT = "ACCOUNTANT";
+
     @Autowired
     private UserService userService;
 
@@ -37,10 +42,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf().disable()
             .authorizeRequests()
             .antMatchers("/login", "/register").permitAll()
-            .antMatchers("/report/**").hasAnyAuthority("ADMIN", "STORAGE_KEEPER", "ACCOUNTANT")
-            .antMatchers("/products/**", "/variants/**", "/orders/**").hasAnyAuthority("ADMIN", "STORAGE_KEEPER")
-            .antMatchers("/suppliers/**", "/import-receipts/**").hasAnyAuthority("ADMIN", "STORAGE_KEEPER")
-            .antMatchers("/payment-invoices/**").hasAnyAuthority("ADMIN", "ACCOUNTANT")
+            .antMatchers(HttpMethod.GET).hasAnyAuthority(ROLE_ADMIN, ROLE_STORAGE_KEEPER, ROLE_ACCOUNTANT)
+            .antMatchers(HttpMethod.POST, "/users").hasAnyAuthority(ROLE_ADMIN)
+            .antMatchers("/report/**").hasAnyAuthority(ROLE_ADMIN, ROLE_STORAGE_KEEPER, ROLE_ACCOUNTANT)
+            .antMatchers("/orders/**/payment-invoices").hasAnyAuthority(ROLE_ADMIN, ROLE_ACCOUNTANT)
+            .antMatchers("/products/**", "/variants/**", "/orders/**").hasAnyAuthority(ROLE_ADMIN, ROLE_STORAGE_KEEPER)
+            .antMatchers("/suppliers/**", "/import-receipts/**").hasAnyAuthority(ROLE_ADMIN, ROLE_STORAGE_KEEPER)
+            .antMatchers("/payment-invoices/**").hasAnyAuthority(ROLE_ADMIN, ROLE_ACCOUNTANT)
             .anyRequest().authenticated()
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
