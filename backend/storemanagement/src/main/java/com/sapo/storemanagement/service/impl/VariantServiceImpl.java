@@ -4,6 +4,7 @@ import com.sapo.storemanagement.dto.ProductVariantDto;
 import com.sapo.storemanagement.dto.VariantDto;
 import com.sapo.storemanagement.entities.*;
 import com.sapo.storemanagement.exception.BadNumberException;
+import com.sapo.storemanagement.exception.ForeignKeyConstraintException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
 import com.sapo.storemanagement.exception.UniqueKeyConstraintException;
 import com.sapo.storemanagement.repository.ProductRepository;
@@ -62,24 +63,17 @@ public class VariantServiceImpl implements VariantService {
     @Override
     public Variant getVariantById(Long id) {
         if (id <= 0) {
-            throw new BadNumberException("id must be greater than 0");
+            throw new BadNumberException("Id phải lớn hơn 0");
         }
 
         return variantRepository
                 .findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Variant not found"));
+                .orElseThrow(() -> new RecordNotFoundException("Không tìm thấy phiên bản"));
     }
 
     @Override
     @Transactional
     public Variant updateVariant(long id, VariantDto variantDto) {
-        if(variantDto.getVariantCode().equals("")) throw new BadNumberException("Không được bỏ trống mã phiên bản");
-//      if(variantDto.getRetailPrice() == null) throw new BadNumberException("Không được bỏ trống giá bán lẻ");
-        if(variantDto.getWholeSalePrice() == null) throw new BadNumberException("Không được bỏ trống giá bán buôn");
-        if(variantDto.getOriginalPrice() == null) throw new BadNumberException("Không được bỏ trống giá nhập");
-        if(variantDto.getInventoryQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng trong kho");
-        if(variantDto.getSellableQuantity() == null) throw new BadNumberException("Không được bỏ trống số lượng có thể bán");
-
         Variant existingVariant = this.getVariantById(id);
 
         // check unique key constraint

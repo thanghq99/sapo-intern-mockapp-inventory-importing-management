@@ -1,6 +1,9 @@
 package com.sapo.storemanagement.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,6 +19,8 @@ public class ReturnReceipt {
     private Integer id;
 
     @Column(name = "code", length = 8)
+    @NotBlank(message = "Không được để trống mã đơn hoàn trả hàng")
+    @Size(max = 8, message = "Độ dài mã đơn hoàn trả hàng không được vượt quá {max} kí tự")
     private String code;
 
     @ManyToOne
@@ -23,6 +28,8 @@ public class ReturnReceipt {
     private Order order;
 
     @Column(name = "note")
+    @NotNull(message = "Ghi chú đơn hoàn trả không được null")
+    @Size(max = 255, message = "Độ dài ghi chú đơn hoàn trả không được vượt quá {max} kí tự")
     private String note = "";
 
     @Column(name = "created_at")

@@ -13,7 +13,7 @@ import {
   Box,
   Typography,
   Button,
-  Divider,
+  Divider
 } from "@mui/material";
 import { ArrowBackIosNew } from "@mui/icons-material";
 import { useHistory, useParams, useLocation } from "react-router-dom";
@@ -21,15 +21,24 @@ import VariantsTable from "./VariantsTable";
 import VariantDetails from "./VariantDetails";
 import CreateVariant from "./CreateVariant";
 import EditVariant from "./EditVariant";
-import DescriptionDialog from "./DescriptionDialog";
+import DescriptionDialog from "../../components/product/productDetails/DescriptionDialog";
 import "./products.scss"
+import ProductDetailsInfo from "../../components/product/productDetails/productDetailsInfo"
+
+
+Number.prototype.format = function (n, x) {
+  var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+  return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+};
+
+
 
 SwiperCore.use([Pagination, Navigation]);
 function ProductDetails({ setStateAlert }) {
 
   const history = useHistory();
   const params = useParams();
-  const {chosenVariant} = useLocation();
+  const { chosenVariant } = useLocation();
   const [loading, setLoading] = useState(true);
   const [trigger, setTrigger] = useState(false);
   const [viewState, setViewState] = useState(1); // 1: view details, 2: create, 3: edit
@@ -140,8 +149,10 @@ function ProductDetails({ setStateAlert }) {
           Chi tiết sản phẩm
         </Typography>
         <Divider sx={{ my: 1 }} />
+        {/* <ProductDetailsInfo product={product} variantNumber={variants.length}/> */}
         <Box display="flex">
           <Box
+
             width="25%"
             display="flex"
             justifyContent="center"
@@ -158,12 +169,12 @@ function ProductDetails({ setStateAlert }) {
             >
               {
                 variants.map((variant) => (
-                  <SwiperSlide><img src={variant.imageUrl} /></SwiperSlide>
+                  <SwiperSlide key={variant.code}><img src={variant.imageUrl} /></SwiperSlide>
                 ))
               }
             </Swiper>
           </Box>
-          <Box width="70%" display="flex" px={2} py={2}>
+          <Box width="75%" display="flex" px={2} py={2}>
             <Box
               width="25%"
               display="flex"

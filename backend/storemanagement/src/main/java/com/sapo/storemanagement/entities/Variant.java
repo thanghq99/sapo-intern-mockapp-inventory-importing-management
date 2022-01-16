@@ -23,55 +23,55 @@ public class Variant {
     private Product product;
 
     @Column(name = "code", nullable = false, unique = true, length = 16)
-    @NotBlank(message = "Variant code cannot be blank")
-    @Size(max = 16, message = "Variant code length cannot exceed {max}")
+    @NotBlank(message = "Không được để trống mã phiên bản")
+    @Size(max = 16, message = "Độ dài mã phiên bản không được vượt quá {max} kí tự")
     private String code;
 
     @Column(name = "inventory_quantity", nullable = false)
-    @Min(value = 0, message = "Invalid inventory quantity, must be positive")
-    private Long inventoryQuantity;
+    @Min(value = 0, message = "Lượng hàng tồn kho không được nhỏ hơn {value}")
+    private Long inventoryQuantity = 0L;
 
     @Column(name = "sellable_quantity", nullable = false)
-    @Min(value = 0, message = "Invalid sellable quantity, must be positive")
-    private Long sellableQuantity;
+    @Min(value = 0, message = "Lượng hàng có thể bán không được nhỏ hơn {value}")
+    private Long sellableQuantity = 0L;
 
     @Column(name = "size", length = 8)
-    @NotNull(message = "Variant size cannot be null")
-    @Size(max = 8, message = "Variant size length cannot exceed {max}")
+    @NotNull(message = "Kích thước của phiên bản không được null")
+    @Size(max = 8, message = "Độ dài kích thước phiên bản không được vượt quá {max}")
     private String size = "";
 
     @Column(name = "color", length = 16)
-    @NotNull(message = "Variant color cannot be null")
-    @Size(max = 16, message = "Variant color length cannot exceed {max}")
+    @NotNull(message = "Màu phiên bản không được null")
+    @Size(max = 16, message = "Độ dài màu phiên bản không được vượt quá {max} kí tự")
     private String color = "";
 
     @Column(name = "material", length = 32)
-    @NotNull(message = "Variant material cannot be null")
-    @Size(max = 32, message = "Variant material length cannot exceed {max}")
+    @NotNull(message = "Chất liệu phiên bản không được null")
+    @Size(max = 32, message = "Độ dài chất liệu phiên bản không được vượt quá {max} kí tự")
     private String material = "";
 
     @Column(name = "unit", length = 16)
-    @NotNull(message = "Variant unit cannot be null")
-    @Size(max = 16, message = "Variant unit length cannot exceed {max}")
+    @NotNull(message = "Đơn vị tính phiên bản không được null")
+    @Size(max = 16, message = "Độ dài đơn vị tính phiên bản không được vượt quá {max} kí tự")
     private String unit = "";
 
     @Column(name = "imageUrl")
     private String imageUrl = "";
 
     @Column(name = "original_price", nullable = false)
-    @NotNull(message = "Please input original price")
-    @Min(value = 0, message = "Invalid original price, must be positive")
-    private Double originalPrice;
+    @NotNull(message = "Hãy nhập giá nhập của phiên bản")
+    @Min(value = 0, message = "Giá nhập không được nhỏ hơn {value}")
+    private Double originalPrice = 0.0;
 
     @Column(name = "whole_sale_price", nullable = false)
-    @NotNull(message = "Please input wholesale price")
-    @Min(value = 0, message = "Invalid wholesale price, must be positive")
-    private Double wholeSalePrice;
+    @NotNull(message = "Hãy nhập giá bán buôn của phiên bản")
+    @Min(value = 0, message = "Giá bán buôn không được nhỏ hơn {value}")
+    private Double wholeSalePrice = 0.0;
 
     @Column(name = "retail_price", nullable = false)
-    @NotNull(message = "Please input retail price")
-    @Min(value = 0, message = "Invalid retail price, must be positive")
-    private Double retailPrice;
+    @NotNull(message = "Hãy nhập giá bán lẻ của phiên bản")
+    @Min(value = 0, message = "Giá bán lẻ không được nhỏ hơn {value}")
+    private Double retailPrice = 0.0;
 
     @Column(name = "record_status", length = 32)
     private RecordStatus recordStatus = RecordStatus.ACTIVE;

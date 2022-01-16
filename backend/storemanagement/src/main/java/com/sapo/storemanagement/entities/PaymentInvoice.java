@@ -14,8 +14,8 @@ public class PaymentInvoice {
     private Long id;
 
     @Column(name = "amount", nullable = false)
-    @NotNull(message = "Amount cannot be null")
-    @Min(value = 0, message = "Amount cannot be less than {value}")
+    @NotNull(message = "Số tiền thanh toán không được null")
+    @Min(value = 0, message = "Số tiền thanh toán không được nhỏ hơn {value}")
     private Double amount;
 
     @ManyToOne(optional = false)

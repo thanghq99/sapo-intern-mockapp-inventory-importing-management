@@ -60,12 +60,12 @@ public class ImportReceiptServiceImpl implements ImportReceiptService {
     @Override
     public ImportReceipt getImportReceiptById(long id) {
         if(id <= 0) {
-            throw new BadNumberException("id must be greater than 0");
+            throw new BadNumberException("Id của đơn nhập kho phải lớn hơn 0");
         }
 
         return importReceiptRepository
             .findById(id)
-            .orElseThrow(() -> new RecordNotFoundException("Import Receipt not found"));
+            .orElseThrow(() -> new RecordNotFoundException("Không tìm thấy đơn nhập kho"));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ImportReceiptServiceImpl implements ImportReceiptService {
         Order order = orderService.getOrderById(orderId);
 
         if(!order.getStatus().equals(OrderStatus.PROCESSING.getStatus())) {
-            throw new IllegalStateException("Order is not in awaiting status");
+            throw new IllegalStateException("Đơn hàng đã bị hủy hoặc đã hoàn thành");
         }
 
         String code = itemCodeGenerator.generate();
@@ -83,12 +83,16 @@ public class ImportReceiptServiceImpl implements ImportReceiptService {
         AtomicReference<ImportedStatus> importedStatus = new AtomicReference<>(ImportedStatus.IMPORTED);
 
         importReceiptDto.getLineItems().forEach(lineItem -> {
+            Variant variant = variantService.getVariantById(lineItem.getVariantId());
             /*
             Step 1: Check if imported variant is supplied in the order
                     If not, throw error
              */
             if(variantsOrderRepository.isVariantSuppliedInOrder(lineItem.getVariantId(), orderId) == 0) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Imported variant does not exist in supplied order");
+                throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Sản phẩm " + variant.getVariantName() + " chưa được cung cấp"
+                );
             }
 
             /*
@@ -103,7 +107,7 @@ public class ImportReceiptServiceImpl implements ImportReceiptService {
             if(totalAlreadyImportedQuantity + lineItem.getQuantity() > totalSuppliedQuantity) {
                 throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Imported quantity of variant " + lineItem.getVariantId() + " cannot exceed supplied quantity"
+                    "Tổng lượng nhập kho của sản phẩm " + variant.getVariantName() + " không được vượt quá số lượng được cung cấp"
                 );
             }
             else if(totalAlreadyImportedQuantity + lineItem.getQuantity() < totalSuppliedQuantity) {
@@ -113,7 +117,6 @@ public class ImportReceiptServiceImpl implements ImportReceiptService {
             /*
             Step 3: Save this imported variant to the database
              */
-            Variant variant = variantService.getVariantById(lineItem.getVariantId());
             VariantsImportReceipt variantsImportReceipt = variantsImportReceiptRepository.save(
                 new VariantsImportReceipt(
                     variant,

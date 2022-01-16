@@ -21,8 +21,8 @@ public class Order {
     private Long id;
 
     @Column(name = "code", nullable = false, unique = true, length = 8)
-    @NotNull(message = "Order code cannot be null")
-    @Size(max = 8, message = "Order code length cannot exceed {max}")
+    @NotBlank(message = "Không được để trống mã đơn nhập hàng")
+    @Size(max = 8, message = "Độ dài mã đơn nhập hàng không được vượt quá {max} kí tự")
     private String code;
 
     @ManyToOne(optional = false)
@@ -30,18 +30,18 @@ public class Order {
     private Supplier supplier;
 
     @Column(name = "total_amount", nullable = false)
-    @NotNull(message = "Total amount cannot be null")
-    @Min(value = 0, message = "Total amount cannot be less than {value}")
+    @NotNull(message = "Tổng tiền của đơn hàng không được null")
+    @Min(value = 0, message = "Tổng tiền đơn hàng không được nhở hơn {value}")
     private Double totalAmount = 0.0;
 
     @Column(name = "paid_amount")
-    @NotNull(message = "Paid amount cannot be null")
-    @Min(value = 0, message = "Total amount cannot be less than {value}")
+    @NotNull(message = "Số tiền đã trả của đơn hàng không được null")
+    @Min(value = 0, message = "Số tiền đã trả của đơn hàng không được nhỏ hơn {value}")
     private Double paidAmount = 0.0;
 
     @Column(name = "description", columnDefinition = "varchar(255) DEFAULT ''")
-    @NotNull(message = "Description cannot be null")
-    @Size(max = 255, message = "Order description length cannot exceed {max}")
+    @NotNull(message = "Mô tả đơn hàng không được null")
+    @Size(max = 255, message = "Độ dài mô tả đơn hàng không được vượt quá {max} kí tự")
     private String description;
 
     @Column(name = "expected_time", nullable = false)

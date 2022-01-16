@@ -58,7 +58,7 @@ public class OrderController {
 
     // Chỉnh sửa thông tin order
     @PutMapping("/{id}")
-    public Order updateOrder(@PathVariable long id, @RequestBody OrderDto orderDto){
+    public Order updateOrder(@PathVariable long id, @RequestBody @Valid OrderDto orderDto){
         return orderService.updateOrder(id, orderDto);
     }
 
@@ -70,7 +70,7 @@ public class OrderController {
 
     // Thanh toán
     @PostMapping("/{orderId}/payment-invoices")
-    public PaymentInvoice payOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody PayOrderDto payOrderDto) {
+    public PaymentInvoice payOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody @Valid PayOrderDto payOrderDto) {
         Long invoiceCreatorId = requestUtils.getUserIdFromRequest(servletRequest);
         return paymentInvoiceService.savePaymentInvoice(invoiceCreatorId, orderId, payOrderDto);
     }
@@ -82,7 +82,7 @@ public class OrderController {
     }
 
     @PostMapping("/{orderId}/import-receipts")
-    public ImportReceipt importOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody ImportReceiptDto importReceiptDto) {
+    public ImportReceipt importOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody @Valid ImportReceiptDto importReceiptDto) {
         Long creatorId = requestUtils.getUserIdFromRequest(servletRequest);
         return importReceiptService.saveImportReceipt(creatorId, orderId, importReceiptDto);
     }
@@ -93,7 +93,7 @@ public class OrderController {
     }
 
     @PostMapping("/{orderId}/return-receipts")
-    public ReturnReceipt returnOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody ReturnReceiptDto returnReceiptDto) {
+    public ReturnReceipt returnOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody @Valid ReturnReceiptDto returnReceiptDto) {
         Long creatorId = requestUtils.getUserIdFromRequest(servletRequest);
         return returnReceiptService.saveReturnReceipt(creatorId, orderId, returnReceiptDto);
     }

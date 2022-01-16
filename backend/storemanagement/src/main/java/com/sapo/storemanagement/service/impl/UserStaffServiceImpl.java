@@ -24,11 +24,11 @@ public class UserStaffServiceImpl implements UserStaffService {
     @Override
     public User getUserById(Long id) {
         if (id <= 0) {
-            throw new BadNumberException("id must be greater than 0");
+            throw new BadNumberException("Id phải lớn hơn 0");
         }
         return userRepository
                 .findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("User not found"));
+                .orElseThrow(() -> new RecordNotFoundException("Không tìm thấy người dùng"));
     }
 
     @Override
@@ -40,7 +40,7 @@ public class UserStaffServiceImpl implements UserStaffService {
     @Transactional
     public User updateUser(Long id, User user) {
         if (id <= 0) {
-            throw new BadNumberException("id must be greater than 0");
+            throw new BadNumberException("Id phải lớn hơn 0");
         }
         User existingUser = this.getUserById(id);
         existingUser.setEmail(user.getEmail());
@@ -54,12 +54,12 @@ public class UserStaffServiceImpl implements UserStaffService {
     @Transactional
     public String deleteUser(Long id) {
         if (id <= 0) {
-            throw new BadNumberException("id must be greater than 0");
+            throw new BadNumberException("Id phải lớn hơn 0");
         }
 
         User existingUser = this.getUserById(id);
         userRepository.delete(existingUser);
-        return "user has been deleted !!!";
+        return "Người dùng đã bị xóa";
     }
 
 }

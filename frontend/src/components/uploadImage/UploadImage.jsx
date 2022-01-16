@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 function LinearProgressWithLabel(props) {
@@ -65,8 +67,8 @@ export default function UploadImage(props) {
     return (
         <div>
             {selectedImage && (
-                <div>
-                    <img alt="not fount" style={{ width: "17em" }} src={URL.createObjectURL(selectedImage)} />
+                <div style={{height:"18em"}}>
+                    <img alt="not fount" style={{ height: "100%", width: "100%", objectFit: "contain" }} src={URL.createObjectURL(selectedImage)} />
                     <br />
                     <div style={{
                         display: "flex",
@@ -74,21 +76,15 @@ export default function UploadImage(props) {
                         textAlign: "center",
                         justifyContent: "space-around"
                     }}>
-                        <button
-                            style={{
-                                cursor: "pointer",
-                                padding: "0.2em",
-                                background: "#ff6767",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "0.3em"
-                            }}
-                            onClick={() => handleCancelImg()}>Xóa ảnh</button>
+                        <IconButton onClick={() => handleCancelImg()} aria-label="delete" size="small">
+                            <DeleteIcon fontSize="small" />
+                        </IconButton>
                     </div>
                 </div>
             )
             }
             <br />
+            <br />  
             <div style={{ display: displayState }}>
                 <h2>{(progress === 100) ? "Hoàn thành" : "Đang tải"}</h2>
                 <Box sx={{ width: '80%', marginLeft: "3em" }}>
@@ -100,7 +96,7 @@ export default function UploadImage(props) {
                 style={{
                     cursor: "pointer",
                     background: "#1976d2",
-                    padding: "0.8em",
+                    padding: "0.5em",
                     borderRadius: " 0.4em",
                     color: "white",
                     fontWeight: "500",

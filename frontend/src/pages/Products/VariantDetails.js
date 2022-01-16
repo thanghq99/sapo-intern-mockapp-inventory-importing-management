@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, Button, Divider, Grid } from "@mui/material";
 
-Number.prototype.format = function(n, x) {
+Number.prototype.format = function (n, x) {
   var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
   return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
 };
@@ -27,7 +27,7 @@ function VariantDetails({ variantInfo, setViewState }) {
         </Box>
 
         <Divider sx={{ my: 1 }} />
-        <Box display="flex" px={1} py={2}>
+        <Box sx={{ height: "15em" }} display="flex" px={1} py={2}>
           <Box
             width="33.3333%"
             display="flex"
@@ -54,9 +54,9 @@ function VariantDetails({ variantInfo, setViewState }) {
           </Box>
           <Box width="33.3333%" textAlign="center">
             <Box
-              sx={{ width: "15em" }}
+              sx={{ height: "100%", width: "100%", objectFit: "contain" }}
               component="img"
-              src={variantInfo.imageUrl ? variantInfo.imageUrl : "https://ih1.redbubble.net/image.11241105.4427/ssrco,slim_fit_t_shirt,womens,5e504c:7bf03840f4,front,square_product,600x600.jpg"}
+              src={variantInfo.imageUrl ? variantInfo.imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO6JPHK1VkhnXyF-JblYmBWNQqOsJ1p9AL1JmjnQABCNV3g3Vbn3ILskTCCti96pggJfc&usqp=CAU"}
               width="129px"
             />
           </Box>
