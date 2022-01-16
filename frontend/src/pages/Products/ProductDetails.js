@@ -21,9 +21,9 @@ import VariantsTable from "./VariantsTable";
 import VariantDetails from "./VariantDetails";
 import CreateVariant from "./CreateVariant";
 import EditVariant from "./EditVariant";
-//import DescriptionDialog from "./DescriptionDialog";
+import DescriptionDialog from "../../components/product/productDetails/DescriptionDialog";
 import "./products.scss"
-// import ProductDetailsInfo from "../../components/product/productDetails/productDetailsInfo"
+import ProductDetailsInfo from "../../components/product/productDetails/productDetailsInfo"
 
 
 Number.prototype.format = function (n, x) {
@@ -152,6 +152,7 @@ function ProductDetails({ setStateAlert }) {
         {/* <ProductDetailsInfo product={product} variantNumber={variants.length}/> */}
         <Box display="flex">
           <Box
+
             width="25%"
             display="flex"
             justifyContent="center"
@@ -168,12 +169,12 @@ function ProductDetails({ setStateAlert }) {
             >
               {
                 variants.map((variant) => (
-                  <SwiperSlide><img src={variant.imageUrl} /></SwiperSlide>
+                  <SwiperSlide key={variant.code}><img src={variant.imageUrl} /></SwiperSlide>
                 ))
               }
             </Swiper>
           </Box>
-          <Box width="70%" display="flex" px={2} py={2}>
+          <Box width="75%" display="flex" px={2} py={2}>
             <Box
               width="25%"
               display="flex"
@@ -205,7 +206,7 @@ function ProductDetails({ setStateAlert }) {
             >
               <Typography>Ngày tạo</Typography>
               <Typography>Ngày cập nhật cuối</Typography>
-              {/* <DescriptionDialog description={product.description} /> */}
+              <DescriptionDialog description={product.description} />
             </Box>
             <Box
               width="25%"

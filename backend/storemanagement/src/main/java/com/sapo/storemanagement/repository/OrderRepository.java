@@ -18,4 +18,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         nativeQuery = true
     )
     List<Order> findAllOrdersBySupplierId(@Param("supplierId") long supplierId);
+
+    @Query(
+        value = "select coalesce(count(id), 0) from orders where month(created_at) = :month and year(created_at) = :year",
+        nativeQuery = true
+    )
+    long countOrdersInMonthInYear(@Param("month") int month, @Param("year") int year);
 }

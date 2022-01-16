@@ -15,6 +15,7 @@ import DetailSupplier from "./pages/Suppliers/DetailSupplier";
 import ListOrder from "./pages/SupplyOrder/ListOrder/ListOrder";
 import DetailOrder from "./pages/SupplyOrder/DetailOrder/DetailOrder";
 import UpdateOrder from "./pages/SupplyOrder/UpdateOrder/UpdateOrder";
+import Home from "./pages/Home/Home";
 import Login from "./pages/Login_Register/Login";
 import Register from "./pages/Login_Register/Register";
 import { AuthContext } from "./contextAPI/AuthContext";
@@ -40,7 +41,7 @@ function App() {
     variant: "",
     open: false,
     content: "",
-  });  
+  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -68,8 +69,8 @@ function App() {
                   <Route path="/san-pham/:id/chinh-sua" >
                     <EditProduct setStateAlert={setStateAlert} />
                   </Route>
+                  <Route path="/trang-chu" component={Home}></Route>
                   <Route exact path="/kho-hang" component={Variants}></Route>
-                  <Route path="/kho-hang"></Route>
                   <Route path="/kiem-hang"></Route>
                   <Route exact path="/nha-cung-cap" component={Supplier} />
                   <Route path="/nha-cung-cap/tao-moi-nha-cung-cap" component={CreateSupplier}></Route>

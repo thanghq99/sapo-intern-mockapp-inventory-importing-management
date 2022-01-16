@@ -114,7 +114,7 @@ export default function MiniDrawer({ setHeaderTitle }) {
         <Box>
             <Drawer className="drawer" variant="permanent" open={open}>
                 <DrawerHeader className="leftbar_header" >
-                    {open && <img className='logo_image' src="https://www.sapo.vn/Themes/Portal/Default/StylesV2/images/logo/Sapo-logo.svg" alt="" />}
+                    {open && <Link to="/trang-chu"><img className='logo_image' src="https://www.sapo.vn/Themes/Portal/Default/StylesV2/images/logo/Sapo-logo.svg" alt="" /></Link>}
                     {open ?
                         <MoreVertIcon className="button_close" onClick={handleDrawerClose}>
                         </MoreVertIcon>
