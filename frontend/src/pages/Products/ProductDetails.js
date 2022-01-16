@@ -23,7 +23,6 @@ import CreateVariant from "./CreateVariant";
 import EditVariant from "./EditVariant";
 import DescriptionDialog from "../../components/product/productDetails/DescriptionDialog";
 import "./products.scss"
-import ProductDetailsInfo from "../../components/product/productDetails/productDetailsInfo"
 
 
 Number.prototype.format = function (n, x) {

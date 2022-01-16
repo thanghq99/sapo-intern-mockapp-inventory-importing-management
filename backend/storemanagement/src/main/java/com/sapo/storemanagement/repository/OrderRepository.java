@@ -14,20 +14,26 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findByCode(String code);
 
     @Query(
-        value = "SELECT * FROM orders WHERE supplier_id = :supplierId",
-        nativeQuery = true
+            value = "SELECT * FROM orders WHERE supplier_id = :supplierId",
+            nativeQuery = true
     )
     List<Order> findAllOrdersBySupplierId(@Param("supplierId") long supplierId);
 
     @Query(
-        value = "select coalesce(count(id), 0) from orders where month(created_at) = :month and year(created_at) = :year",
-        nativeQuery = true
+            value = "select coalesce(count(id), 0) from orders where month(created_at) = :month and year(created_at) = :year",
+            nativeQuery = true
     )
     long countOrdersInMonthInYear(@Param("month") int month, @Param("year") int year);
 
     @Query(
-        value = "select coalesce(sum(total_amount), 0) from orders where month(created_at) = :month and year(created_at) = :year",
-        nativeQuery = true
+            value = "select coalesce(sum(total_amount), 0) from orders where month(created_at) = :month and year(created_at) = :year",
+            nativeQuery = true
     )
     double totalAmountInMonthInYear(@Param("month") int month, @Param("year") int year);
+
+    @Query(
+            value = "select coalesce(sum(paid_amount), 0) from orders where month(created_at) = :month and year(created_at) = :year",
+            nativeQuery = true
+    )
+    double paidAmountInMonthInYear(@Param("month") int month, @Param("year") int year);
 }

@@ -34,7 +34,7 @@ const theme = createTheme(
 );
 
 function App() {
-  const [headerTitle, setHeaderTitle] = useState("");
+  const [headerTitle, setHeaderTitle] = useState("Trang quản lý");
   const { token } = useContext(AuthContext);
   const [stateAlert, setStateAlert] = useState({
     severity: "",

@@ -28,7 +28,7 @@ export default function Login() {
             try {
                 const res = await axios.post("http://localhost:9191/login", inputlogin);
                 dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
-                window.location.replace("/san-pham");
+                window.location.replace("/trang-chu");
                 // history.push("/san-pham")
             } catch (error) {
                 setStateAlert({ severity: "error", variant: "filled", open: true, content: "Tên đăng nhập hoặc mật khẩu không đúng" })
