@@ -22,24 +22,6 @@ Number.prototype.format = function(n, x) {
   return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
 };
 
-function createData(name, calories, fat, carbs, protein) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-  };
-}
-
-const rows = [
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Donut", 452, 25.0, 51, 4.9),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
-
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -116,11 +98,10 @@ function EnhancedTableHead(props) {
             {numSelected === 0 && (
               <React.Fragment>
                 <Typography
-                  // sx={{ flex: "1 1 100%" }}
                   variant="subtitle2"
                   id="tableTitle"
                   sx={{ fontSize: "1rem", fontWeight: "normal" }}
-                // component="div"
+                  component="div"
                 >
                   Phiên bản ({variants.length})
                 </Typography>
@@ -129,7 +110,6 @@ function EnhancedTableHead(props) {
             )}
             {numSelected !== variants.length && numSelected > 0 && (
               <Typography
-                // sx={{ flex: "1 1 100%" }}
                 variant="subtitle2"
                 id="tableTitle"
                 sx={{ fontSize: "1rem", fontWeight: "normal" }}
@@ -140,7 +120,6 @@ function EnhancedTableHead(props) {
             )}
             {numSelected === variants.length && numSelected > 0 && (
               <Typography
-                // sx={{ flex: "1 1 100%" }}
                 variant="subtitle2"
                 id="tableTitle"
                 sx={{ fontSize: "1rem", fontWeight: "normal" }}
@@ -175,63 +154,7 @@ EnhancedTableHead.propTypes = {
   handleDelete: PropTypes.func.isRequired,
 };
 
-const EnhancedTableToolbar = (props) => {
-  const { numSelected } = props;
-  const { openVariantSelectActions, setOpenVariantSelectActions } = useState(false);
-
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-      }}
-    >
-      {numSelected === 0 && (
-        <Typography
-          //sx={{ flex: "1 1 100%" }}
-          variant="subtitle2"
-          id="tableTitle"
-        //component="div"
-        >
-          Phiên bản ({rows.length})
-        </Typography>
-      )}
-
-      {numSelected !== rows.length && numSelected > 0 && (
-        <Typography
-          //sx={{ flex: "1 1 100%" }}
-          variant="subtitle2"
-          id="tableTitle"
-        //component="div"
-        >
-          Đã chọn {numSelected} phiên bản
-        </Typography>
-      )}
-      {numSelected === rows.length && numSelected > 0 && (
-        <Typography
-          //sx={{ flex: "1 1 100%" }}
-          variant="subtitle2"
-          id="tableTitle"
-        //component="div"
-        >
-          Đã chọn tất cả phiên bản
-        </Typography>
-      )}
-
-      {numSelected > 0 && (
-        <Button variant="outlined" color="error">
-          Xóa
-        </Button>
-      )}
-    </Toolbar>
-  );
-};
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
-
-export default function EnhancedTable({ setVariantInfo, variants, setViewState, handleDeleteVariant, chosenOneVariant }) {
+export default function EnhancedTable({ setVariantInfo, variants, setViewState, handleDeleteVariant, chosenOneVariant, triggerReload }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
@@ -257,13 +180,16 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
   };
 
   const handleDelete = () => {
-    const IDs = [];
+    let IDs = [];
     for (let i = 0; i < selected.length; i++) {
       let result = variants.filter(v => v.code === selected[i]);
       IDs.push(result[0].id);
-      handleDeleteVariant(result[0].id);
+      // handleDeleteVariant(result[0].id);
     }
-
+    IDs.forEach(id => {
+      handleDeleteVariant(id);
+    })
+    triggerReload();
   }
 
   const handleClick = (event, code) => {
@@ -346,7 +272,7 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
                       sx={{
                         backgroundColor:
                           row.code === chosenVariant
-                            ? "#afafaf"
+                            ? "#1976d2"
                             : "none",
                         "&:hover": {
                           cursor: "pointer",

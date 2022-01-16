@@ -59,7 +59,9 @@ function App() {
                 <Sidebar setHeaderTitle={setHeaderTitle} />
                 <Box className="box_content" component="main">
                   <Topbar headerTitle={headerTitle} setHeaderTitle={setHeaderTitle} ></Topbar>
-                  <Route exact path="/san-pham" component={Products}></Route>
+                  <Route exact path="/san-pham">
+                    <Products setStateAlert={setStateAlert} />
+                  </Route>
                   <Route path="/tao-san-pham">
                     <CreateProduct setStateAlert={setStateAlert} />
                   </Route>
@@ -70,7 +72,9 @@ function App() {
                     <EditProduct setStateAlert={setStateAlert} />
                   </Route>
                   <Route path="/trang-chu" component={Home}></Route>
-                  <Route exact path="/kho-hang" component={Variants}></Route>
+                  <Route exact path="/kho-hang">
+                    <Variants setStateAlert={setStateAlert} />
+                  </Route>
                   <Route path="/kiem-hang"></Route>
                   <Route exact path="/nha-cung-cap" component={Supplier} />
                   <Route path="/nha-cung-cap/tao-moi-nha-cung-cap" component={CreateSupplier}></Route>
