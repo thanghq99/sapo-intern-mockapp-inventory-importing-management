@@ -38,7 +38,7 @@ export default function Register() {
     return (
         <div className="login_page">
             <div className="background">
-                <img className='logo_image' src="https://www.sapo.vn/Themes/Portal/Default/StylesV2/images/home/bg-banner-mobile.png?v=5" alt="" />
+                <img className='logo_image' src="https://www.sapo.vn/Themes/Portal/Default/StylesV2/images/home/bg-banner-tet-1280.png?v=7" alt="" />
             </div>
             <div className="container">
                 <div className="img">
