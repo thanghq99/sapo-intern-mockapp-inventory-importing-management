@@ -21,6 +21,7 @@ import OrderAPI from '../../../api/OrderAPI';
 export default function SupplyOrder({ setStateAlert }) {
     const [supplier, setSupplier] = React.useState();
     const code = React.useRef("");
+    const [discount, setDiscountFinal] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [product, setProduct] = React.useState();
     const [date, setDate] = React.useState('');
@@ -68,6 +69,7 @@ export default function SupplyOrder({ setStateAlert }) {
             supplierId: supplier,
             description: description,
             deliveryTime: moment(date).format('YYYY-MM-DD'),
+            discount: discount,
             lineItems: product
         };
         console.log(data);
@@ -100,14 +102,14 @@ export default function SupplyOrder({ setStateAlert }) {
     return (
 
         <div>
-            <Box py={2} px={5} sx={{ flexGrow: 1, minHeight: "85vh" }} className="body">
+            <Box py={2} px={5} sx={{ flexGrow: 1, minHeight: "91vh" }} className="body">
                 <Box className="test"  >
                     <Box className="back" onClick={history.goBack}>
                         <ArrowBackIosIcon />
                         <Box>Đơn nhập hàng</Box>
                     </Box>
                     <SupplySelect setSupplier={setSupplier} />
-                    <ProductSelect setProduct={setProduct} />
+                    <ProductSelect setProduct={setProduct} setDiscountFinal={setDiscountFinal} />
                 </Box>
                 <Box sx={{ paddingLeft: "10px" }} className="more-info">
 

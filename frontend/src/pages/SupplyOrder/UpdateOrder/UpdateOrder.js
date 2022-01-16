@@ -42,6 +42,7 @@ export default function DetailOrder({ setStateAlert }) {
     const [nameSupplier, setNameSupplier] = React.useState();
     const [address, setAddRess] = React.useState();
     const [email, setEmail] = React.useState();
+    const [discount, setDiscount] = React.useState('');
 
     const searchParam = window.location.search.replace("?code=", "");
 
@@ -69,6 +70,7 @@ export default function DetailOrder({ setStateAlert }) {
             supplierId: order.supplier.id,
             description: description,
             deliveryTime:  moment(date).format('YYYY-MM-DD'),
+            discount: discount,
             lineItems: productSelectLast
         };
         console.log(data);
@@ -263,6 +265,7 @@ export default function DetailOrder({ setStateAlert }) {
             setCodeOrder(orderRes.data.code);
             setExpectedTime(orderRes.data.expectedTime);
             setTotalAmount(orderRes.data.totalAmount);
+            setDiscount(orderRes.data.discount);
 
         }
         catch (err) {
@@ -411,7 +414,7 @@ export default function DetailOrder({ setStateAlert }) {
                                 </Box>
                                 <Box className="pay-info-item" sx={{ color: "#007BFF" }}>
                                     <Typography >Tổng chiết khấu</Typography>
-                                    <Typography>6%</Typography>
+                                    <Typography>{discount}%</Typography>
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography sx={{ fontWeight: 700 }}>Phải trả</Typography>
