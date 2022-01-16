@@ -1,5 +1,6 @@
 package com.sapo.storemanagement.service.impl;
 
+import com.sapo.storemanagement.dto.ReportEachMonthDto;
 import com.sapo.storemanagement.repository.OrderRepository;
 import com.sapo.storemanagement.repository.VariantsOrderRepository;
 import com.sapo.storemanagement.service.ReportService;
@@ -34,6 +35,23 @@ public class ReportServiceImpl implements ReportService {
         List<Long> response = new ArrayList<>();
         for(int i = 1; i <= 12; i++) {
             response.add(variantsOrderRepository.countTotalSuppliedQuantityInMonthInYear(i, year));
+        }
+        return response;
+    }
+
+    @Override
+    public List<ReportEachMonthDto> reportEachMonth(int year) {
+        List<ReportEachMonthDto> response = new ArrayList<>();
+        for(int i = 1; i <= 12; i++) {
+            long totalOrdersInMonthInYear = orderRepository.countOrdersInMonthInYear(i, year);
+            long totalSuppliedQuantityInMonthInYear = variantsOrderRepository.countTotalSuppliedQuantityInMonthInYear(i, year);
+            double totalAmountInMonthInYear = orderRepository.totalAmountInMonthInYear(i, year);
+            ReportEachMonthDto dto = new ReportEachMonthDto(
+                totalOrdersInMonthInYear,
+                totalSuppliedQuantityInMonthInYear,
+                totalAmountInMonthInYear
+            );
+            response.add(dto);
         }
         return response;
     }

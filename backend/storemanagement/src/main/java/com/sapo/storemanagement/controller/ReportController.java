@@ -1,5 +1,6 @@
 package com.sapo.storemanagement.controller;
 
+import com.sapo.storemanagement.dto.ReportEachMonthDto;
 import com.sapo.storemanagement.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,5 +35,13 @@ public class ReportController {
             year = Year.now().getValue();
         }
         return reportService.totalSuppliedQuantityOneMonthInYear(year);
+    }
+
+    @GetMapping("/each-month")
+    public List<ReportEachMonthDto> reportEachMonth(@RequestParam(name = "year", required = false) Integer year) {
+        if(year == null) {
+            year = Year.now().getValue();
+        }
+        return reportService.reportEachMonth(year);
     }
 }
