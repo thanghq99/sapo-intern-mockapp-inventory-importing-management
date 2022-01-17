@@ -1,17 +1,16 @@
 package com.sapo.storemanagement.controller;
 
+import com.sapo.storemanagement.dto.ReportEachMonthDto;
 import com.sapo.storemanagement.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Year;
 import java.util.List;
 
 @RestController
 @RequestMapping("/report")
+@CrossOrigin
 public class ReportController {
     private final ReportService reportService;
 
@@ -34,5 +33,13 @@ public class ReportController {
             year = Year.now().getValue();
         }
         return reportService.totalSuppliedQuantityOneMonthInYear(year);
+    }
+
+    @GetMapping("/each-month")
+    public List<ReportEachMonthDto> reportEachMonth(@RequestParam(name = "year", required = false) Integer year) {
+        if(year == null) {
+            year = Year.now().getValue();
+        }
+        return reportService.reportEachMonth(year);
     }
 }

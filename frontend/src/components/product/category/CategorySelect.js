@@ -4,12 +4,10 @@ import {
   TextField,
   Typography,
   InputAdornment,
-  Button,
   MenuItem
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
-import { Search, ArrowDropDown, Add, Category } from "@mui/icons-material";
-import { useHistory, Link } from "react-router-dom";
+import { Search, ArrowDropDown } from "@mui/icons-material";
 import CategoryAPI from "../../../api/CategoryAPI";
 import CreateCategoryModal from './CreateCategoryModal'
 import "./style.scss";
@@ -34,7 +32,7 @@ function CategorySelect({handleSelectCategory, categoryName}) {
     CategoryAPI.CategoryList().then((result) => {
       setCategories(result.data);
       setSearchedCategories(result.data);
-      setCategory(categoryName)
+      setCategory(categoryName);
     }).catch((err) => {
       console.log(err);
     })

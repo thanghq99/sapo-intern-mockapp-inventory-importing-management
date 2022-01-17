@@ -173,7 +173,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public String deleteProduct(Long id) {
+    public Product deleteProduct(Long id) {
         if (id <= 0) {
             throw new BadNumberException("Hãy nhập id lớn hơn 0");
         }
@@ -184,7 +184,7 @@ public class ProductServiceImpl implements ProductService {
 
         variantService.listAllVariantsByProductId(productToDelete.getId())
                 .forEach(variant -> variant.setRecordStatus(RecordStatus.DELETED));
-        return productToDelete.getName() + "đã được xóa";
+        return productToDelete;
     }
 
     @Override

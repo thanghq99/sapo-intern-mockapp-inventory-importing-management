@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory, Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import ProductAPI from '../../api/ProductAPI'
 import { Box, TextField, InputAdornment, Button, Divider, Card, CardContent, Typography } from '@mui/material'
-import { Search, FilterAltOutlined, AddCircle, FactCheck } from '@mui/icons-material';
+import { Search, FilterAltOutlined, AddCircle } from '@mui/icons-material';
 import ProductsTable from './ProductsTable'
 
-export default function Products() {
+export default function Products({setStateAlert}) {
     const history = useHistory();
+    const [trigger, setTrigger] = useState(false);
     const [products, setProducts] = useState([]);
     const [variants, setVariants] = useState([]);
     const [totalStorage, setTotalStorage] = useState(0);
@@ -25,19 +26,23 @@ export default function Products() {
         ProductAPI.getAllVariants()
             .then((vResult) => {
                 setVariants(vResult.data);
-                console.log(vResult);
                 setTotalStorage(vResult.data.reduce((sum, v) => sum + v.inventoryQuantity, 0));
                 setActiveVariants(vResult.data.filter((variant) => variant.sellableStatus === "Có thể bán").length);
                 setOutStockProducts(vResult.data.filter((variant) => variant.inventoryQuantity === 0).length);
-            }).then(() => {
-                //couting
-
+            })
+            .catch(err => {
+                setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra" });
+                history.push('/san-pham');
             });
         return true;
     }
     useEffect(() => {
         getData();
-    }, [])
+    }, [trigger])
+
+    const triggerReload = () => {
+        setTrigger(!trigger);
+    };
 
     //inputs
     const handleChange = (e) => {
@@ -47,9 +52,19 @@ export default function Products() {
         let result = products.filter(product => product.name.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
         setSearchedProducts([...result]);
     }
+
+    const handleDeleteProduct = (id) => {
+        ProductAPI.deleteProduct(id)
+        .then(res => {
+            setStateAlert({ severity: "success", variant: "filled", open: true, content: res.data.name + " đã được xóa" });
+          })
+          .catch(err => {
+            setStateAlert({ severity: "error", variant: "filled", open: true, content: err.response.data });
+          });
+    }
     
     return (
-        <Box backgroundColor="#F4F6F8" pt={2} pb={4} px={4}>
+        <Box backgroundColor="#F4F6F8" minHeight="93vh" pt={2} pb={4} px={4}>
             <Box py={2} px={2} display="flex" justifyContent="space-between" backgroundColor='white'>
                 <Box >
                     <TextField
@@ -66,17 +81,6 @@ export default function Products() {
                                 </InputAdornment>
                             ),
                         }}></TextField>
-                    <TextField
-                        placeholder="Lọc sản phẩm"
-                        variant="outlined"
-                        size='small'
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <FilterAltOutlined />
-                                </InputAdornment>
-                            ),
-                        }}></TextField>
                 </Box>
                 <Box>
                     <Button
@@ -86,13 +90,6 @@ export default function Products() {
                         onClick={() => { history.push('/tao-san-pham') }}
                     >Thêm sản phẩm
                     </Button>
-                    <Link style={{ textDecoration: "none" }} to="/kiem-hang">
-                        <Button
-                            variant='contained'
-                            startIcon={<FactCheck />}
-                        >Kiểm hàng</Button>
-                    </Link>
-
                 </Box>
             </Box>
             <Divider />
@@ -139,7 +136,7 @@ export default function Products() {
                 </Card>
             </Box>
             <Box py={2}>
-                <ProductsTable products={searchedProducts} />
+                <ProductsTable products={searchedProducts} handleDeleteProduct={handleDeleteProduct} triggerReload={triggerReload}/>
             </Box>
         </Box>
     )

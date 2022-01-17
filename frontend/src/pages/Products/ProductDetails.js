@@ -23,7 +23,6 @@ import CreateVariant from "./CreateVariant";
 import EditVariant from "./EditVariant";
 import DescriptionDialog from "../../components/product/productDetails/DescriptionDialog";
 import "./products.scss"
-import ProductDetailsInfo from "../../components/product/productDetails/productDetailsInfo"
 
 
 Number.prototype.format = function (n, x) {
@@ -44,25 +43,14 @@ function ProductDetails({ setStateAlert }) {
   const [viewState, setViewState] = useState(1); // 1: view details, 2: create, 3: edit
   const [product, setProduct] = useState([]);
   const [variants, setVariants] = useState([]);
-  const [variantInfo, setVariantInfo] = useState({
-    id: "---",
-    code: "---",
-    inventoryQuantity: "---",
-    sellableQuantity: "---",
-    size: "---",
-    color: "---",
-    material: "---",
-    unit: "---",
-    originalPrice: "---",
-    wholeSalePrice: "---",
-    retailPrice: "---",
-    recordStatus: "---",
-    sellableStatus: "---",
-  });
+  const [variantInfo, setVariantInfo] = useState({});
   async function getData() {
     const productData = await ProductAPI.product(params.id);
     setProduct(productData.data);
     const variantsData = await ProductAPI.variantList(params.id);
+    // if(productData.data.recordStatus !== "Đang hoạt động") history.push(`/san-pham`);
+    // redirect to /products when all variants are already deleted
+    if(variantsData.data.length < 1) history.push(`/san-pham`);
     setVariants(variantsData.data);
     if (chosenVariant) {
       setVariantInfo(chosenVariant);
@@ -81,13 +69,24 @@ function ProductDetails({ setStateAlert }) {
   }, [trigger]);
 
   const handleDeleteProduct = () => {
-    ProductAPI.deleteProduct(product.id);
-    alert(product.name + " has been deleted!");
-    history.push(`/san-pham`);
+    ProductAPI.deleteProduct(product.id)
+    .then(res => {
+      setStateAlert({ severity: "success", variant: "filled", open: true, content: res.data.name + " đã được xóa" });
+      history.push(`/san-pham`);
+    })
+    .catch(err => {
+      setStateAlert({ severity: "error", variant: "filled", open: true, content: err.response.data });
+    });
   };
 
   const handleDeleteVariant = (id) => {
-    ProductAPI.deleteVariant(id);
+    ProductAPI.deleteVariant(id)
+    .then(res => {
+      setStateAlert({ severity: "success", variant: "filled", open: true, content: res.data.variantName + " đã được xóa" });
+    })
+    .catch(err => {
+      setStateAlert({ severity: "error", variant: "filled", open: true, content: err.response.data });
+    });
   };
 
   const triggerReload = () => {
@@ -168,9 +167,13 @@ function ProductDetails({ setStateAlert }) {
               className="mySwiper"
             >
               {
-                variants.map((variant) => (
-                  <SwiperSlide key={variant.code}><img src={variant.imageUrl} /></SwiperSlide>
-                ))
+                variants.map((variant) => {
+                  if (variant.imageUrl) return <SwiperSlide key={variant.code}><img src={variant.imageUrl} /></SwiperSlide>
+                  else return null
+                })
+                // (
+                //   <React.Fragment> {  variant.imageUrl !== "" ? <SwiperSlide key={variant.code}><img src={variant.imageUrl} /></SwiperSlide> : null} </React.Fragment>
+                // ))
               }
             </Swiper>
           </Box>
@@ -229,10 +232,12 @@ function ProductDetails({ setStateAlert }) {
       <Box pt={1} pb={2} display="flex">
         <Box width="33.3333%" mr={3}>
           <VariantsTable
+            handleDeleteVariant={handleDeleteVariant}
             chosenOneVariant={variantInfo.code}
             setVariantInfo={setVariantInfo}
             variants={variants}
             setViewState={setViewState}
+            triggerReload={triggerReload}
           />
         </Box>
         <Box display="flex" flexDirection="column" width="66.6667%">

@@ -101,8 +101,8 @@ export default function UploadImage(props) {
                     color: "white",
                     fontWeight: "500",
                 }}
-                for="file-upload"
-                class="custom-file-upload"
+                htmlFor="file-upload"
+                className="custom-file-upload"
             >
                 Thêm ảnh
             </label>

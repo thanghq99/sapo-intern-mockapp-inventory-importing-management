@@ -31,7 +31,7 @@ function EditProduct({ setStateAlert }) {
       ...result.data,
       categoryId: result.data.category.id
     });
-    setCategoryName(result.data.category.name);
+    setCategoryName(result.data.category);
     setWeightValue(result.data.weight);
     setLoading(false);
   }
