@@ -223,7 +223,7 @@ function CreateProduct({ setStateAlert }) {
       display="flex"
       flexDirection="column"
     >
-      <Box py={1}>
+      <Box py={1} px={1}>
         <Typography
           underline="none"
           onClick={cancelAction}
@@ -244,6 +244,7 @@ function CreateProduct({ setStateAlert }) {
         alignItems="center"
         pt={1}
         pb={2}
+        px={1}
       >
         <Typography variant="h4">Tạo mới sản phẩm</Typography>
         <Box display="flex">
