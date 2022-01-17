@@ -81,23 +81,27 @@ public class OrderController {
         return paymentInvoiceService.listAllPaymentInvoicesByOrder(orderId);
     }
 
+    // Nhập kho
     @PostMapping("/{orderId}/import-receipts")
     public ImportReceipt importOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody @Valid ImportReceiptDto importReceiptDto) {
         Long creatorId = requestUtils.getUserIdFromRequest(servletRequest);
         return importReceiptService.saveImportReceipt(creatorId, orderId, importReceiptDto);
     }
 
+    // History nhập kho
     @GetMapping("/{orderId}/import-receipts")
     public List<ImportReceiptResponseDto> findAllImportReceiptsOfOrder(@PathVariable long orderId) {
         return importReceiptService.listAllImportReceiptsByOrder(orderId);
     }
 
+    // Hoàn hàng
     @PostMapping("/{orderId}/return-receipts")
     public ReturnReceipt returnOrder(HttpServletRequest servletRequest, @PathVariable long orderId, @RequestBody @Valid ReturnReceiptDto returnReceiptDto) {
         Long creatorId = requestUtils.getUserIdFromRequest(servletRequest);
         return returnReceiptService.saveReturnReceipt(creatorId, orderId, returnReceiptDto);
     }
 
+    // History Hoàn hàng
     @GetMapping("/{orderId}/return-receipts")
     public List<ReturnReceiptResponseDto> findAllReturnReceiptsOfOrder(@PathVariable long orderId) {
         return returnReceiptService.listAllReturnReceiptsByOrder(orderId);

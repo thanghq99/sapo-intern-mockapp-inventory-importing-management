@@ -41,9 +41,10 @@ import { Collapse } from "@mui/material";
 import ProductAPI from "../../../api/ProductAPI";
 import PaymentAPI from "../../../api/PaymentAPI";
 import ImportReceiptsAPI from "../../../api/ImportReceiptsAPI";
+import ReturnReceiptsAPI from "../../../api/ReturnReceiptsAPI";
 
 
-export default function DetailOrder({setStateAlert}) {
+export default function DetailOrder({ setStateAlert }) {
 
     const [order, setOrder] = React.useState();
     const [codeOrder, setCodeOrder] = React.useState();
@@ -69,12 +70,15 @@ export default function DetailOrder({setStateAlert}) {
 
     const [historyImport, setHistoryImport] = React.useState([]);
 
+    const [historyReturn, setHistoryReturn] = React.useState([]);
+
     const [productList, setProductList] = React.useState([]);
 
     const [num, setNum] = React.useState([]);
 
     const [openImportHistory, setOpenImportHistory] = React.useState([]);
     const [openPaymentHistory, setOpenPaymentHistory] = React.useState([]);
+    const [openReturnHistory, setOpenReturnHistory] = React.useState([]);
 
     const handleMenu = () => {
         setOpenMenu(!openMenu);
@@ -92,9 +96,6 @@ export default function DetailOrder({setStateAlert}) {
             )
         )
     }
-    const handlePayment = (event) => {
-        setPayment(event.target.value);
-    };
 
     const handOpenHistoryPayment = (items) => {
         setHistoryPaid(items);
@@ -112,6 +113,14 @@ export default function DetailOrder({setStateAlert}) {
             )
         )
     }
+    const handOpenHistoryReturn = (items) => {
+        setHistoryReturn(items)
+        setOpenReturnHistory(
+            items.reduce(
+                (obj, product) => ({ ...obj, [product.code]: false }), {}
+            )
+        )
+    }
 
     // Thanh toan
     const SubmitPayment = async () => {
@@ -124,7 +133,7 @@ export default function DetailOrder({setStateAlert}) {
                 variant: "filled",
                 open: true,
                 content: "Đã thanh toán đơn hàng thành công",
-              });
+            });
 
         } catch (err) {
             setStateAlert({
@@ -132,7 +141,7 @@ export default function DetailOrder({setStateAlert}) {
                 variant: "filled",
                 open: true,
                 content: err.response.data,
-              });
+            });
         }
         // const res = await PaymentAPI.Paid(searchParam, { amount: payment });
         // // res.then(respons => {
@@ -162,7 +171,7 @@ export default function DetailOrder({setStateAlert}) {
                 variant: "filled",
                 open: true,
                 content: "Đã nhập kho thành công",
-              });
+            });
 
         } catch (err) {
             setStateAlert({
@@ -170,7 +179,7 @@ export default function DetailOrder({setStateAlert}) {
                 variant: "filled",
                 open: true,
                 content: err.response.data,
-              });
+            });
         }
     }
 
@@ -227,6 +236,7 @@ export default function DetailOrder({setStateAlert}) {
             const ProductRes = await OrderAPI.VariantOrder(searchParam);
             const HistoryPaidRes = await PaymentAPI.HistoryPaid(searchParam);
             const HistoryImportRes = await ImportReceiptsAPI.HistoryImport(searchParam);
+            const HistoryReturnRes = await ReturnReceiptsAPI.HistoryReturn(searchParam);
 
             setProductList(ProductRes.data);
 
@@ -245,6 +255,8 @@ export default function DetailOrder({setStateAlert}) {
 
             // setHistoryImport(HistoryImportRes.data);
             handOpenHistoryImport(HistoryImportRes.data);
+
+            handOpenHistoryReturn(HistoryReturnRes.data);
 
 
 
@@ -421,7 +433,7 @@ export default function DetailOrder({setStateAlert}) {
                                     openPaymented ?
                                         <Box className="btn-payment">
                                             <Button variant="contained"
-                                                onClick={handleOpenPayment}
+                                                onClick={handleOpenPayment} sx={{width: "180px"}}
                                             >Xác nhận thanh toán</Button>
                                         </Box> : null
 
@@ -498,7 +510,7 @@ export default function DetailOrder({setStateAlert}) {
                                             <TextField id="outlined-basic" variant="outlined"
                                                 sx={{ width: 200, height: 40 }}
                                                 value={(payment).toLocaleString()}
-                                                onChange={handlePayment} />
+                                                onChange={e => setPayment(e.target.value)} />
                                         </Box>
                                     </Box>
                                     <Box sx={{ display: "flex" }} mt={2} mb={2}>
@@ -523,7 +535,7 @@ export default function DetailOrder({setStateAlert}) {
                             {
                                 (order?.importedStatus == "Đã nhập kho") ? null :
                                     <Box className="btn-import">
-                                        <Button variant="contained"
+                                        <Button variant="contained" sx={{width: "180px"}}
                                             onClick={handleOpenImport}>  Xác nhận nhập kho  </Button>
                                     </Box>
                             }
@@ -531,7 +543,7 @@ export default function DetailOrder({setStateAlert}) {
 
                         </Box>
                         {
-                            historyImport ?
+                            (historyImport.length != 0) ?
                                 <Box className="history-import" sx={{ display: "flex" }} mt={2} mb={2}>
                                     <Divider />
                                     <Timeline className="body-history-import">
@@ -546,7 +558,7 @@ export default function DetailOrder({setStateAlert}) {
                                                         <TimelineContent>
                                                             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                                                                 <Typography ml={2} sx={{ cursor: "pointer" }} onClick={() => setOpenImportHistory({ ...openImportHistory, [item.code]: !openImportHistory[item.code] })}><span style={{ fontWeight: 550 }}>{item.code}</span> Đã nhập kho</Typography>
-                                                                <Typography ml={2}>Thời gian: {item.createdAt}</Typography>
+                                                                <Typography ml={2}>{item.createdAt}</Typography>
                                                             </Box>
                                                             {
                                                                 openImportHistory ?
@@ -630,6 +642,80 @@ export default function DetailOrder({setStateAlert}) {
                             </Box>
                         </Modal>
 
+                    </Box>
+                    <Box className="return" mt={2} pl={2} sx={{ backgroundColor: "white", border: "1px solid #e4e4e4" }} >
+                        <Box className="header-return" pt={2} mb={2} sx={{display: "flex", justifyContent: "space-between"}}>
+                            <Box className="header-return-info">
+                                <Box sx={{ display: "flex" }}>
+                                    <AccountBalanceWalletIcon />
+                                    <Typography sx={{ fontWeight: 600 }} ml={2} >Hoàn trả</Typography>
+                                </Box>
+                            </Box>
+                            <Box className="btn-return" sx={{width: "30%", textAlign: "center"}}>
+                                <Link style={{ textDecoration: "none" }} to={`/don-hang/hoan-tra?id=${searchParam}`}>
+                                    <Button variant="contained" sx={{width: "180px"}}>
+                                        Xác nhận hoàn trả</Button>
+                                </Link>
+                               
+                            </Box>
+                        </Box>
+                        {
+                            
+                            (historyReturn.length != 0) ?
+                            <Box className="history-import" sx={{ display: "flex" }} mt={2} mb={2}>
+                                <Divider />
+                                <Timeline className="body-history-import">
+                                    {
+                                        historyReturn ? historyReturn.map((item) => {
+                                            return (
+                                                <TimelineItem>
+                                                    <TimelineSeparator>
+                                                        <TimelineDot color="primary" />
+                                                        <TimelineConnector />
+                                                    </TimelineSeparator>
+                                                    <TimelineContent>
+                                                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                                            <Typography ml={2} sx={{ cursor: "pointer" }} onClick={() => setOpenReturnHistory({ ...openReturnHistory, [item.code]: !openReturnHistory[item.code] })}><span style={{ fontWeight: 550 }}>{item.code}</span> Đã hoàn trả</Typography>
+                                                            <Typography ml={2}>{item.createdAt}</Typography>
+                                                        </Box>
+                                                        {
+                                                            openReturnHistory ?
+                                                            openReturnHistory[item.code] ?
+                                                                    <Box>
+                                                                        <Box sx={{ display: "flex", justifyContent: "space-between" }} mt={2}>
+                                                                            <Box sx={{ width: "50%" }} ml={2}>
+                                                                                <Typography sx={{ color: "#6f6f6f" }}>Mã phiếu hoàn trả</Typography>
+                                                                                <Typography>{item.code}</Typography>
+                                                                            </Box>
+                                                                            <Box sx={{ width: "50%" }} >
+                                                                                <Typography sx={{ color: "#6f6f6f" }}>Người thực hiện</Typography>
+                                                                                <Typography>{item.creatorName}</Typography>
+                                                                            </Box>
+                                                                        </Box>
+                                                                        <Box mt={2} ml={2} >
+                                                                            <Typography sx={{ color: "#6f6f6f" }}>Sản phẩm</Typography>
+                                                                            {
+                                                                                item.lineItems.map((variantImport) => {
+                                                                                    return (
+                                                                                        <Box>{variantImport.quantity} x {variantImport.name}</Box>
+                                                                                    )
+                                                                                })
+                                                                            }
+                                                                        </Box>
+                                                                    </Box> : null
+                                                                : null
+                                                        }
+
+
+                                                    </TimelineContent>
+                                                </TimelineItem>
+                                            )
+                                        }) : null
+                                    }
+
+                                </Timeline>
+                            </Box> : null
+                        }
                     </Box>
                 </Box>
 
