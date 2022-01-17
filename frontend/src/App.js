@@ -24,6 +24,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { viVN } from "@mui/material/locale";
 import User from "./pages/User/User";
 import ReturnReceipts from "./pages/SupplyOrder/DetailOrder/ReturnReceipts";
+import RoleBasedRouting from "./components/roleBasedRender/RoleBasedRouting"
 
 const theme = createTheme(
   {
@@ -60,7 +61,7 @@ function App() {
                 <Sidebar ebar setHeaderTitle={setHeaderTitle} />
                 <Box className="box_content" component="main">
                   <Topbar headerTitle={headerTitle} setHeaderTitle={setHeaderTitle} ></Topbar>
-                  <Route exact path="/san-pham">
+                  {/* <Route exact path="/san-pham">
                     <Products setStateAlert={setStateAlert} />
                   </Route>
                   <Route path="/tao-san-pham">
@@ -95,7 +96,56 @@ function App() {
                     <ReturnReceipts setStateAlert={setStateAlert} />
                   </Route>
                   <Route path="/nguoi-dung" component={User}></Route>
-                  <Route path="/cai-dat"></Route>
+                  <Route path="/cai-dat"></Route> */}
+
+                  {/* Role based render */}
+                  <RoleBasedRouting exact path="/san-pham" roles={['ADMIN', 'Nhân viên kho', 'Kế toán']}>
+                    <Products setStateAlert={setStateAlert} />
+                  </RoleBasedRouting>
+                   <RoleBasedRouting path="/tao-san-pham" roles={['ADMIN', 'Nhân viên kho']}>
+                    <CreateProduct setStateAlert={setStateAlert} />
+                  </RoleBasedRouting>
+                  <RoleBasedRouting exact path="/san-pham/:id" roles={['ADMIN', 'Nhân viên kho', 'Kế toán']}>
+                    <ProductDetails setStateAlert={setStateAlert} />
+                  </RoleBasedRouting>
+                  <RoleBasedRouting path="/san-pham/:id/chinh-sua" roles={['ADMIN', 'Nhân viên kho']}>
+                    <EditProduct setStateAlert={setStateAlert} />
+                  </RoleBasedRouting>
+                  <RoleBasedRouting path="/trang-chu" roles={['ADMIN', 'Nhân viên kho', 'Kế toán']}>
+                    <Home />
+                  </RoleBasedRouting>
+                  <RoleBasedRouting exact path="/kho-hang" roles={['ADMIN', 'Nhân viên kho', 'Kế toán']}>
+                    <Variants setStateAlert={setStateAlert} />
+                  </RoleBasedRouting>
+                  <RoleBasedRouting path="/kiem-hang" roles={['ADMIN', 'Nhân viên kho', 'Kế toán']}></RoleBasedRouting>
+                  <RoleBasedRouting exact path="/nha-cung-cap"  roles={['ADMIN', 'Nhân viên kho', 'Kế toán']}>
+                    <Supplier />
+                  </RoleBasedRouting>
+                  <RoleBasedRouting path="/nha-cung-cap/tao-moi-nha-cung-cap" roles={['ADMIN', 'Nhân viên kho']}>
+                    <CreateSupplier />
+                  </RoleBasedRouting>
+                  <RoleBasedRouting path="/thong-tin-nha-cung-cap"  roles={['ADMIN', 'Nhân viên kho', 'Kế toán']}>
+                    <DetailSupplier />
+                  </RoleBasedRouting>
+                  <RoleBasedRouting exact path="/nhap-hang"  roles={['ADMIN', 'Nhân viên kho', 'Kế toán']}>
+                    <ListOrder />
+                  </RoleBasedRouting>
+                  <RoleBasedRouting path="/nhap-hang/tao-don-nhap-hang" roles={['ADMIN', 'Nhân viên kho']}>
+                    <SupplyOrder setStateAlert={setStateAlert} />
+                  </RoleBasedRouting>
+                  <RoleBasedRouting path="/nhap-hang/don-hang" roles={['ADMIN', 'Nhân viên kho', 'Kế toán']}>
+                    <DetailOrder setStateAlert={setStateAlert} />
+                  </RoleBasedRouting>
+                  <RoleBasedRouting path="/nhap-hang/sua-don-hang" roles={['ADMIN', 'Nhân viên kho', 'Kế toán']}>
+                    <UpdateOrder setStateAlert={setStateAlert} />
+                  </RoleBasedRouting>
+                  <RoleBasedRouting path="/don-hang/hoan-tra" roles={['ADMIN', 'Nhân viên kho', 'Kế toán']}>
+                    <ReturnReceipts setStateAlert={setStateAlert} />
+                  </RoleBasedRouting>
+                  <RoleBasedRouting path="/nguoi-dung" roles={['ADMIN', 'Nhân viên kho', 'Kế toán']}>
+                    <User />
+                  </RoleBasedRouting>
+                  {/*<RoleBasedRouting path="/cai-dat"></RoleBasedRouting> */}
                   {stateAlert.severity && (
                     <Snackbar
                       anchorOrigin={{ vertical: "top", horizontal: "center" }}

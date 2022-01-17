@@ -22,7 +22,6 @@ export default function Variants({setStateAlert}) {
             .then((vResult) => {
                 setVariants(vResult.data.reverse());
                 setSearchedVariants(vResult.data);
-                console.log(vResult.data)
             })
             .catch(err => {
                 setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra" });
@@ -30,7 +29,6 @@ export default function Variants({setStateAlert}) {
             });
         CategoryAPI.CategoryList()
         .then((cResult) => {
-            console.log(cResult.data);
             setCategories(cResult.data);
         })
         .catch(err => {

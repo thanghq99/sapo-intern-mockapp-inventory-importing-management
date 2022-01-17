@@ -216,7 +216,6 @@ export default function ProductsTable({ products, handleDeleteProduct, triggerRe
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   React.useEffect(() => {
-    console.log("render product table");
     setSelected([]);
   },[products]);
 

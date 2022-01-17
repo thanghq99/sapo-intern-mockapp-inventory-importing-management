@@ -23,7 +23,6 @@ export default function Products({ setStateAlert }) {
         ProductAPI.productList()
             .then((pResult) => {
                 let reversedResult = pResult.data.reverse();
-                console.log(pResult.data);
                 setProducts(reversedResult);
                 setSearchedProducts(reversedResult);
             })
@@ -44,7 +43,6 @@ export default function Products({ setStateAlert }) {
             });
             CategoryAPI.CategoryList()
             .then((cResult) => {
-                console.log(cResult.data);
                 setCategories(cResult.data);
             })
             .catch(err => {
