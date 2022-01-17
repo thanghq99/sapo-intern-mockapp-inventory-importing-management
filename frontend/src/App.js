@@ -57,7 +57,7 @@ function App() {
               :
               <Box sx={{ display: "flex", width: "100%", background: "#27274b", }}>
                 <CssBaseline />
-                <Sidebar setHeaderTitle={setHeaderTitle} />
+                <Sidebar ebar setHeaderTitle={setHeaderTitle} />
                 <Box className="box_content" component="main">
                   <Topbar headerTitle={headerTitle} setHeaderTitle={setHeaderTitle} ></Topbar>
                   <Route exact path="/san-pham">

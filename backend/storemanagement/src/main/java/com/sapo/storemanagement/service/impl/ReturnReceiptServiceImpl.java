@@ -61,10 +61,11 @@ public class ReturnReceiptServiceImpl implements ReturnReceiptService {
         String note = returnReceiptDto.getNote();
 
         if(!order.getImportedStatus().equals(ImportedStatus.PARTIAL_IMPORTED.getStatus()) &&
-            !order.getImportedStatus().equals(ImportedStatus.IMPORTED.getStatus())) {
+            !order.getImportedStatus().equals(ImportedStatus.IMPORTED.getStatus()) &&
+            !order.getImportedStatus().equals(ImportedStatus.PARTIAL_REFUND.getStatus())) {
             throw new ResponseStatusException(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "Đơn hàng chưa từng nhập kho để có thể hoàn trả"
+                "Đơn hàng chưa nhập kho để có thể hoàn trả"
             );
         }
 

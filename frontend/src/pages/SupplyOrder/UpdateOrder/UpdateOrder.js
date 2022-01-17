@@ -30,7 +30,10 @@ import OrderAPI from '../../../api/OrderAPI'
 import { Collapse } from "@mui/material";
 import ProductAPI from "../../../api/ProductAPI";
 
-
+Number.prototype.format = function(n, x) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+    return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+  };
 export default function DetailOrder({ setStateAlert }) {
 
     const [order, setOrder] = React.useState();
@@ -272,7 +275,7 @@ export default function DetailOrder({ setStateAlert }) {
     React.useEffect(() => {
         getData();
     }, [])
-    console.log(productSelectLast);
+    // console.log(productSelectLast);
 
     return (
 
@@ -300,7 +303,7 @@ export default function DetailOrder({ setStateAlert }) {
                                     <Typography sx={{ marginRight: "5px", fontWeight: 600 }}>{nameSupplier}</Typography>
 
                                 </Box>
-                                <Typography className="debt" sx={{fontWeight: 600}} >Công nợ: {debt?.toLocaleString()} vnd</Typography>
+                                <Typography className="debt" sx={{fontWeight: 600}} >Công nợ: {debt?.format()} vnd</Typography>
                             </Box>
                         </Box>
                         <Divider />
@@ -343,12 +346,12 @@ export default function DetailOrder({ setStateAlert }) {
                                             <Box>Img</Box>
                                             <Box className="info">
                                                 <Box sx={{ display: "flex" }} className="info-prod" >
-                                                    <Box>{option.product.name}</Box>
-                                                    <Box>{option.originalPrice}</Box>
+                                                    <Box sx={{ fontWeight: 550 }}>{option.variantName}</Box>
+                                                    <Box>{option.originalPrice.format()}</Box>
                                                 </Box>
                                                 <Box sx={{ display: "flex" }} className="info-prod">
                                                     <Box>{option.code}</Box>
-                                                    <Box>Số lượng: {option.inventoryQuantity}</Box>
+                                                    <Box>Số lượng: {option.inventoryQuantity.format()}</Box>
                                                 </Box>
                                             </Box>
                                         </Box>
@@ -378,17 +381,17 @@ export default function DetailOrder({ setStateAlert }) {
                                             <ListItem className="product-item"
                                             >
                                                 <Typography sx={{ width: '10%', alignItems: "center" }}>{item.code}</Typography>
-                                                <Typography sx={{ width: '48%', paddingLeft: "5px" }} >{item.product.name}</Typography>
+                                                <Typography sx={{ width: '48%', paddingLeft: "5px", fontWeight: 550 }} >{item.variantName}</Typography>
                                                 <Typography sx={{ width: '10%', textAlign: "center" }}>{item.unit}</Typography>
-                                                <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="num" value={num[item.id]}
+                                                <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="num" value={(num[item.id])}
                                                     onChange={e =>
                                                         setNum({ ...num, [item.id]: e.target.value })}
                                                 /></Box>
-                                                <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="originalPrice" value={(originalPrice[item.id])?.toLocaleString()}
+                                                <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="originalPrice" value={(originalPrice[item.id])}
                                                     onChange={e => setOriginalPrice({ ...originalPrice, [item.id]: e.target.value })}
                                                 /></Box>
 
-                                                <Typography sx={{ width: '10%', textAlign: "center" }}>{(Number(num[item.id]) * Number(originalPrice[item.id]))?.toLocaleString()}</Typography>
+                                                <Typography sx={{ width: '10%', textAlign: "center" }}>{(Number(num[item.id]) * Number(originalPrice[item.id]))?.format()}</Typography>
                                                 <CancelIcon sx={{ width: '2%', textAlign: "center" }} onClick={() => handDeleteProduct(item.id)} />
                                             </ListItem>)
                                     })
@@ -398,15 +401,15 @@ export default function DetailOrder({ setStateAlert }) {
                             <Box className="pay-info">
                                 <Box className="pay-info-item">
                                     <Typography>Tổng sản phẩm</Typography>
-                                    <Typography>{numProduct?.toLocaleString()}</Typography>
+                                    <Typography>{numProduct?.format()}</Typography>
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography>Tổng loại sản phẩm</Typography>
-                                    <Typography>{numCategory}</Typography>
+                                    <Typography>{numCategory?.format()}</Typography>
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography>Tổng tiền</Typography>
-                                    <Typography>{total?.toLocaleString()} vnd</Typography>
+                                    <Typography>{total?.format()} vnd</Typography>
                                 </Box>
                                 <Box className="pay-info-item" sx={{ color: "#007BFF" }}>
                                     <Typography >Tổng chiết khấu</Typography>
@@ -414,7 +417,7 @@ export default function DetailOrder({ setStateAlert }) {
                                 </Box>
                                 <Box className="pay-info-item">
                                     <Typography sx={{ fontWeight: 700 }}>Phải trả</Typography>
-                                    <Typography>{((total*0.94).toFixed(2)).toLocaleString()} vnd</Typography>
+                                    <Typography>{Number((total * Number(100 - discount)/100).toFixed(2)).format()} vnd</Typography>
                                     
                                 </Box>
 
