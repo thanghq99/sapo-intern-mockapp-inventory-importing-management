@@ -57,7 +57,7 @@ export default function ReturnReceipts({ setStateAlert }) {
 
     }
 
-    const SubmitReturn = () => {
+    const SubmitReturn = async () => {
         let lineItems = [];
         variantOrder.map((item) => {
             let dataTmp = {};
@@ -171,7 +171,7 @@ export default function ReturnReceipts({ setStateAlert }) {
                                 </Box>
                                 <Box mt={2} sx={{display: "flex", justifyContent: "space-between"}}>
                                     <Typography sx={{fontWeight: 550}}>Tổng giá trị trả:</Typography>
-                                    <Typography>{totalAmountReturn.toFixed(2)} vnd</Typography>
+                                    <Typography>{Number(totalAmountReturn)?.toFixed(2)} vnd</Typography>
                                 </Box>
                             </Box>
 

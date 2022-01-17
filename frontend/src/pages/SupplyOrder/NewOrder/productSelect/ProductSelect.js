@@ -284,7 +284,7 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
                             <Typography>{discount}%</Typography>
                         </Box>
                         {
-                            openDiscount ? null :
+                            !openDiscount ? null :
                                 <Box className="changeDiscount" sx={{ width: "100%" }}>
                                     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                                         <Box sx={{display: "flex", alignItems: "center"}}>

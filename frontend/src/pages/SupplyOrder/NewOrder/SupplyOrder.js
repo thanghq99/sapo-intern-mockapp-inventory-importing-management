@@ -73,23 +73,36 @@ export default function SupplyOrder({ setStateAlert }) {
             lineItems: product
         };
         console.log(data);
-        try {
-            await OrderAPI.createOrder(data);
-            setStateAlert({
-                severity: "success",
-                variant: "filled",
-                open: true,
-                content: "Đã tạo đơn hàng thành công",
+        // try {
+            OrderAPI.createOrder(data)
+            .then(res => {
+                setStateAlert({
+                    severity: "success",
+                    variant: "filled",
+                    open: true,
+                    content: "Đã tạo đơn hàng thành công",
+                    });
+                history.push(`/nhap-hang/don-hang?code=${res.data.id}`);
+            }).catch((err) => {
+                setStateAlert({
+                  severity: "error",
+                  variant: "filled",
+                  open: true,
+                  content: err.response.data,
+                });
               });
-            history.push("/nhap-hang");
-        } catch (err) {
-            setStateAlert({
-                severity: "error",
-                variant: "filled",
-                open: true,
-                content: err.response.data,
-              });
-        }
+            // history.push("/nhap-hang");
+            
+           
+            
+        // } catch (err) {
+        //     setStateAlert({
+        //         severity: "error",
+        //         variant: "filled",
+        //         open: true,
+        //         content: err.response.data,
+        //       });
+        // }
    
     }
 
