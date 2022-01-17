@@ -331,8 +331,8 @@ export default function User() {
                                     name="radio-buttons-group"
                                     sx={{ marginLeft: "4em", display: "inline-block", alignItems: "center" }}
                                 >
-                                    <FormControlLabel value="STORAGE_KEEPER" control={<Radio />} label="Nhân viên nhập kho" />
-                                    <FormControlLabel value="ACCOUNTANT" control={<Radio />} label="Kế toán" />
+                                    <FormControlLabel value="Nhân viên kho" control={<Radio />} label="Nhân viên kho" />
+                                    <FormControlLabel value="Kế toán" control={<Radio />} label="Kế toán" />
                                 </RadioGroup>
                             </Grid>
                             <Grid sx={{ textAlign: "end", paddingTop: "2.4em" }}>

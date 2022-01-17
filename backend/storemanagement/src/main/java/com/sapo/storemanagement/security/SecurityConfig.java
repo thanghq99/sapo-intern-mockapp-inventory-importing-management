@@ -17,8 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final String ROLE_ADMIN = "ADMIN";
-    private final String ROLE_STORAGE_KEEPER = "STORAGE_KEEPER";
-    private final String ROLE_ACCOUNTANT = "ACCOUNTANT";
+    private final String ROLE_STORAGE_KEEPER = "Nhân viên kho";
+    private final String ROLE_ACCOUNTANT = "Kế toán";
 
     @Autowired
     private UserService userService;

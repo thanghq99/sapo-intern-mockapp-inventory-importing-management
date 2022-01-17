@@ -22,6 +22,12 @@ import { visuallyHidden } from '@mui/utils';
 import { Link } from 'react-router-dom';
 
 
+
+Number.prototype.format = function(n, x) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+    return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+  };
+
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -112,7 +118,7 @@ function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox">
+                {/* <TableCell padding="checkbox">
                     <Checkbox
                         color="primary"
                         indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -122,7 +128,7 @@ function EnhancedTableHead(props) {
                             'aria-label': 'select all desserts',
                         }}
                     />
-                </TableCell>
+                </TableCell> */}
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
@@ -157,6 +163,8 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
 };
+
+
 
 const EnhancedTableToolbar = (props) => {
     const { numSelected } = props;
@@ -337,7 +345,7 @@ export default function TableSupply({ searchedProducts }) {
                                             key={row.code}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell padding="checkbox">
+                                            {/* <TableCell padding="checkbox">
                                                 <Checkbox
                                                     color="primary"
                                                     checked={isItemSelected}
@@ -345,7 +353,7 @@ export default function TableSupply({ searchedProducts }) {
                                                         'aria-labelledby': labelId,
                                                     }}
                                                 />
-                                            </TableCell>
+                                            </TableCell> */}
                                             <TableCell
                                                 component="th"
                                                 id={labelId}
