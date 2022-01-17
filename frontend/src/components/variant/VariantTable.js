@@ -344,12 +344,13 @@ export default function VariantsTable({variants, handleDeleteVariant, triggerRel
                       </TableCell>
                       <TableCell component="th" scope="row" padding="none">
                         {/* {row.img} */}
-                        <Box
+                        {/* <Box
                             width="40px"
                             height="40px"
                             backgroundColor="green"
                             mr={2}
-                          ></Box>
+                          ></Box> */}
+                          <img style={{ width: "40px", height: "40px" }} src={row.imageUrl ? row.imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"} />
                       </TableCell>
                       <TableCell
                         component="th"

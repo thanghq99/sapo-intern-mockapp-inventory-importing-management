@@ -536,7 +536,7 @@ export default function DetailOrder({ setStateAlert }) {
                                             <Typography sx={{ fontWeight: 600 }} mb={2}>Số tiền thanh toán</Typography>
                                             <TextField id="outlined-basic" variant="outlined"
                                                 sx={{ width: 200, height: 40 }}
-                                                value={Number(payment).format()}
+                                                value={Number(payment)}
                                                 onChange={e => setPayment(e.target.value)} />
                                         </Box>
                                     </Box>
@@ -731,7 +731,7 @@ export default function DetailOrder({ setStateAlert }) {
                                                                                         
                                                                                             // {
                                                                                                 (variantImport.quantity == 0) ? 
-                                                                                                null :
+                                                                                                <Box></Box> :
                                                                                                 <Box>{variantImport.quantity} x {variantImport.name}</Box>
                                                                                             // } 
                                                                                            

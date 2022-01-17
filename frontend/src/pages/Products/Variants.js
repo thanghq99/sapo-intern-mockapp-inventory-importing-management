@@ -20,7 +20,7 @@ export default function Variants({setStateAlert}) {
     function getData() {
         ProductAPI.getAllVariants()
             .then((vResult) => {
-                setVariants(vResult.data);
+                setVariants(vResult.data.reverse());
                 setSearchedVariants(vResult.data);
                 console.log(vResult.data)
             })
