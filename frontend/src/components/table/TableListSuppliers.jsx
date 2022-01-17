@@ -109,11 +109,11 @@ const headCells = [
 // function set color status supplier ***********************/
 const handleColor = (key) => {
     switch (key) {
-        case "UNCOOPERATIVE":
+        case "Ngừng hợp tác":
             return "red";
 
-        case "COOPERATIVE":
-            return "#06b106";
+        case "Đang hợp tác":
+            return "#1ec709";
 
         default:
             return "black";

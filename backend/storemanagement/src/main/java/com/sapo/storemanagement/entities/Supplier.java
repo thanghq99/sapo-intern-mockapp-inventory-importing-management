@@ -161,16 +161,16 @@ public class Supplier {
         this.debt = debt;
     }
 
-    public SupplierStatus getActivityStatus() {
-        return activityStatus;
+    public String getActivityStatus() {
+        return activityStatus.getStatus();
     }
 
     public void setActivityStatus(SupplierStatus activityStatus) {
         this.activityStatus = activityStatus;
     }
 
-    public RecordStatus getRecordStatus() {
-        return recordStatus;
+    public String getRecordStatus() {
+        return recordStatus.getStatus();
     }
 
     public void setRecordStatus(RecordStatus recordStatus) {
