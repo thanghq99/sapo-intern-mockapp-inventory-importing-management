@@ -7,13 +7,14 @@ import { Avatar, Button, Typography } from '@mui/material';
 import HelpIcon from '@mui/icons-material/Help';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Link } from 'react-router-dom';
+import { FormatAlignJustify } from '@mui/icons-material';
 
 
 export default function Topbar({ headerTitle, setHeaderTitle }) {
 
     return (
         <Box sx={{ flexGrow: 1, background: "white"}}>
-            <AppBar sx={{ background: "white", height: '7vh' }} position="static">
+            <AppBar sx={{ background: "white", height: '9vh' }} position="static">
                 <Toolbar>
                     <Typography className="title_topbar" >
                         {headerTitle}

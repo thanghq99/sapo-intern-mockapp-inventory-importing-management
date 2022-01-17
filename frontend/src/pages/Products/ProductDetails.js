@@ -159,6 +159,18 @@ function ProductDetails({ setStateAlert }) {
             px={2}
             py={2}
           >
+            {variants.every(v => v.imageUrl === null) ? 
+            // <div>hehe</div>
+            <Swiper
+              navigation={true}
+              pagination={{
+                dynamicBullets: true
+              }}
+              className="mySwiper"
+            >
+              <SwiperSlide><img src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO6JPHK1VkhnXyF-JblYmBWNQqOsJ1p9AL1JmjnQABCNV3g3Vbn3ILskTCCti96pggJfc&usqp=CAU"} /></SwiperSlide>
+            </Swiper>
+            :
             <Swiper
               navigation={true}
               pagination={{
@@ -171,11 +183,9 @@ function ProductDetails({ setStateAlert }) {
                   if (variant.imageUrl) return <SwiperSlide key={variant.code}><img src={variant.imageUrl} /></SwiperSlide>
                   else return null
                 })
-                // (
-                //   <React.Fragment> {  variant.imageUrl !== "" ? <SwiperSlide key={variant.code}><img src={variant.imageUrl} /></SwiperSlide> : null} </React.Fragment>
-                // ))
               }
             </Swiper>
+            }
           </Box>
           <Box width="75%" display="flex" px={2} py={2}>
             <Box
