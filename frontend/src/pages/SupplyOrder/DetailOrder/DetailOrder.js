@@ -27,9 +27,6 @@ import TimelineDot from '@mui/lab/TimelineDot';
 import Modal from '@mui/material/Modal';
 
 import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
     Link,
     useHistory
 } from "react-router-dom";
@@ -37,8 +34,6 @@ import {
 
 import './DetailOrder.scss';
 import OrderAPI from '../../../api/OrderAPI'
-import { Collapse } from "@mui/material";
-import ProductAPI from "../../../api/ProductAPI";
 import PaymentAPI from "../../../api/PaymentAPI";
 import ImportReceiptsAPI from "../../../api/ImportReceiptsAPI";
 import ReturnReceiptsAPI from "../../../api/ReturnReceiptsAPI";
@@ -338,8 +333,6 @@ export default function DetailOrder({ setStateAlert }) {
                                     <Link to={`/nhap-hang/sua-don-hang?code=${searchParam}`} className="link-update">
                                         <Button variant="contained" sx={{ width: "200px" }}> Chỉnh sửa đơn hàng</Button>
                                     </Link>
-
-
                                 </Box>
                         }
 

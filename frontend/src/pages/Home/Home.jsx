@@ -158,11 +158,13 @@ export default function Home() {
             name: 'Tiền đã trả',
             data: totalEachMonth.map((e) => e.paidAmount),
             color: "#20ff46"
-        }, {
-            name: 'Tiền còn nợ',
-            data: totalEachMonth.map((e) => e.debtAmount),
-            color: "#ff3e3e"
-        }]
+        }
+            // , {
+            //     name: 'Tiền còn nợ',
+            //     data: totalEachMonth.map((e) => e.debtAmount),
+            //     color: "#ff3e3e"
+            // }
+        ]
     };
 
     return (
