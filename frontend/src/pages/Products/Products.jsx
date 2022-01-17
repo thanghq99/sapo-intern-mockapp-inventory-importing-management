@@ -1,27 +1,35 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import ProductAPI from '../../api/ProductAPI'
-import { Box, TextField, InputAdornment, Button, Divider, Card, CardContent, Typography } from '@mui/material'
-import { Search, FilterAltOutlined, AddCircle } from '@mui/icons-material';
+import CategoryAPI from '../../api/CategoryAPI'
+import { Box, TextField, InputAdornment, Button, Divider, Card, CardContent, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material'
+import { Search, AddCircle } from '@mui/icons-material';
 import ProductsTable from './ProductsTable'
 
-export default function Products({setStateAlert}) {
+export default function Products({ setStateAlert }) {
     const history = useHistory();
     const [trigger, setTrigger] = useState(false);
     const [products, setProducts] = useState([]);
     const [variants, setVariants] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [totalStorage, setTotalStorage] = useState(0);
     const [activeVariants, setActiveVariants] = useState();
     const [outStockProducts, setOutStockProducts] = useState();
 
     const [searchInput, setSearchInput] = useState('');
+    const [categoryFilter, setCategoryFilter] = useState('');
     const [searchedProducts, setSearchedProducts] = useState([]);
     function getData() {
         ProductAPI.productList()
             .then((pResult) => {
                 let reversedResult = pResult.data.reverse();
+                console.log(pResult.data);
                 setProducts(reversedResult);
                 setSearchedProducts(reversedResult);
+            })
+            .catch(err => {
+                setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra" });
+                history.push('/san-pham');
             });
         ProductAPI.getAllVariants()
             .then((vResult) => {
@@ -34,11 +42,23 @@ export default function Products({setStateAlert}) {
                 setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra" });
                 history.push('/san-pham');
             });
-        return true;
+            CategoryAPI.CategoryList()
+            .then((cResult) => {
+                console.log(cResult.data);
+                setCategories(cResult.data);
+            })
+            .catch(err => {
+                setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra" });
+                history.push('/san-pham');
+            });
     }
     useEffect(() => {
         getData();
     }, [trigger])
+
+    useEffect(() => {
+        searchAndFilter()
+    }, [categoryFilter, searchInput]);
 
     const triggerReload = () => {
         setTrigger(!trigger);
@@ -48,49 +68,86 @@ export default function Products({setStateAlert}) {
     const handleChange = (e) => {
         let value = e.target.value.toLowerCase();
         setSearchInput(value);
-        let input = value.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
-        let result = products.filter(product => product.name.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
+        // let input = value.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
+        // let result = products.filter(product => product.name.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
+        // setSearchedProducts([...result]);
+    }
+
+    const handleChangeCategory = (e) => {
+        let value = e.target.value;
+        setCategoryFilter(value);
+        console.log(value);
+    }
+
+    const searchAndFilter = () => {
+        let categoryFilterValue = categoryFilter;
+        let searchValue = searchInput.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
+        let result = [];
+
+        if (categoryFilterValue != "") {
+            result = products.filter(product => product.category === categoryFilterValue);
+        } else {
+            result = products;
+        }
+        result = result.filter(product => product.name.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(searchValue) >= 0);
         setSearchedProducts([...result]);
     }
 
     const handleDeleteProduct = (id) => {
         ProductAPI.deleteProduct(id)
-        .then(res => {
-            setStateAlert({ severity: "success", variant: "filled", open: true, content: res.data.name + " đã được xóa" });
-          })
-          .catch(err => {
-            setStateAlert({ severity: "error", variant: "filled", open: true, content: err.response.data });
-          });
+            .then(res => {
+                setStateAlert({ severity: "success", variant: "filled", open: true, content: res.data.name + " đã được xóa" });
+            })
+            .catch(err => {
+                setStateAlert({ severity: "error", variant: "filled", open: true, content: err.response.data });
+            });
     }
-    
+
     return (
         <Box backgroundColor="#F4F6F8" minHeight="93vh" pt={2} pb={4} px={4}>
-            <Box py={2} px={2} display="flex" justifyContent="space-between" backgroundColor='white'>
-                <Box >
-                    <TextField
-                        placeholder="Tìm kiếm sản phẩm"
-                        variant="outlined"
+            <Box py={2} px={2} display="flex" backgroundColor='white'>
+                <TextField
+                    placeholder="Tìm kiếm sản phẩm"
+                    variant="outlined"
+                    size='small'
+                    sx={{ mr: 2, flexGrow: 1 }}
+                    value={searchInput}
+                    onChange={(e) => handleChange(e)}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="end">
+                                <Search />
+                            </InputAdornment>
+                        ),
+                    }}></TextField>
+                <FormControl sx={{minWidth: 150, mr: 2}}>
+                    {/* <InputLabel>Loại sản phẩm</InputLabel> */}
+                    <Select
+                        value={categoryFilter}
                         size='small'
-                        sx={{ mr: 2, width: 600 }}
-                        value={searchInput}
-                        onChange={(e) => handleChange(e)}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="end">
-                                    <Search />
-                                </InputAdornment>
-                            ),
-                        }}></TextField>
-                </Box>
-                <Box>
-                    <Button
-                        variant='contained'
-                        sx={{ mr: 2 }}
-                        startIcon={<AddCircle />}
-                        onClick={() => { history.push('/tao-san-pham') }}
-                    >Thêm sản phẩm
-                    </Button>
-                </Box>
+                        displayEmpty
+                        onChange={handleChangeCategory}
+                        renderValue={
+                            categoryFilter !== "" ? undefined : () => <Typography sx={{color: "#aaa"}}>Loại sản phẩm</Typography>
+                          }
+                    >
+                        <MenuItem value="">
+                            <Typography >Tất cả</Typography>
+                        </MenuItem>
+                        {categories.map(category => (
+                        <MenuItem key={category.id} value={category.name}>
+                            <Typography >{category.name}</Typography>
+                        </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <Button
+                    variant='contained'
+                    sx={{ mr: 2 }}
+                    startIcon={<AddCircle />}
+                    onClick={() => { history.push('/tao-san-pham') }}
+                >Thêm sản phẩm
+                </Button>
             </Box>
             <Divider />
             <Box py={2} px={1} display="flex" justifyContent="space-evenly" backgroundColor='white'>
@@ -136,7 +193,7 @@ export default function Products({setStateAlert}) {
                 </Card>
             </Box>
             <Box py={2}>
-                <ProductsTable products={searchedProducts} handleDeleteProduct={handleDeleteProduct} triggerReload={triggerReload}/>
+                <ProductsTable products={searchedProducts} handleDeleteProduct={handleDeleteProduct} triggerReload={triggerReload} />
             </Box>
         </Box>
     )
