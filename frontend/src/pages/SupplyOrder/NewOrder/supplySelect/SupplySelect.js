@@ -14,7 +14,10 @@ import { useHistory } from 'react-router-dom';
 import SupplierAPI from '../../../../api/SupplierAPI';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
-
+Number.prototype.format = function(n, x) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+    return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+  };
 export default function SupplySelect({setSupplier}) {
     const [detailSupply, setDetailSupply] = React.useState(false);
     const [Search, setSearch] = React.useState(true);
@@ -94,8 +97,8 @@ export default function SupplySelect({setSupplier}) {
         getData();
  
     }, []);
-    console.log(supplierList);
-    console.log(value);
+    // console.log(supplierList);
+    // console.log(value);
     return (
         <div>
             <Box className="Supply">
@@ -112,7 +115,7 @@ export default function SupplySelect({setSupplier}) {
                         renderOption={(props ,option) => (
                             <Box {...props}>
                             <AccountCircleRoundedIcon />
-                            <Box>
+                            <Box ml={21}>
                                 {option.name}
                                 </Box> 
                                </Box>
@@ -140,7 +143,7 @@ export default function SupplySelect({setSupplier}) {
                                     <Typography sx={{marginRight: "5px"}}>{value.name}</Typography>
                                     <CancelOutlinedIcon sx={{cursor: "pointer"}} onClick={closeDetail} />
                                 </Box>
-                                <Typography className="debt">Công nợ: {(value.debt.toLocaleString())}vnd</Typography>
+                                <Typography className="debt">Công nợ: {(value.debt.format())}vnd</Typography>
                             </Box>
                             <Divider />
                             <Box className="detail-supplier">

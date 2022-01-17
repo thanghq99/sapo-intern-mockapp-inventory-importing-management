@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { makeStyles } from "@material-ui/core/styles";
 import List from '@mui/material/List';
 import Menu from '@mui/material/Menu';
@@ -14,6 +15,13 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItem from '@mui/material/ListItem';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ProductAPI from '../../../../api/ProductAPI';
+
+
+
+Number.prototype.format = function(n, x) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+    return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+  };
 
 export default function ProductSelect({ setProduct, setDiscountFinal }) {
 
@@ -30,6 +38,10 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
     const [num, setNum] = React.useState([]);
 
     const [openDiscount, setOpenDiscount] = React.useState(false);
+
+
+
+
 
     const handleOpenChangeDiscount = () => {
 
@@ -187,9 +199,9 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
     }, []);
 
 
-    console.log(productSelect);
-    console.log(lastProduct);
-    console.log(productList);
+    // console.log(productSelect);
+    // console.log(lastProduct);
+    // console.log(productList);
 
     return (
         <div>
@@ -214,11 +226,11 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
                                     <Box className="info">
                                         <Box sx={{ display: "flex" }} className="info-prod" >
                                             <Box sx={{ fontWeight: 550 }}>{option.variantName}</Box>
-                                            <Box>{option.originalPrice}</Box>
+                                            <Box>{option.originalPrice.format()}</Box>
                                         </Box>
                                         <Box sx={{ display: "flex" }} className="info-prod">
                                             <Box>{option.code}</Box>
-                                            <Box>Số lượng: {option.inventoryQuantity}</Box>
+                                            <Box>Số lượng: {option.inventoryQuantity.format()}</Box>
                                         </Box>
                                     </Box>
                                 </Box>
@@ -250,15 +262,15 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
                                         <Typography sx={{ width: '10%', textAlign: "center" }}>{item.code}</Typography>
                                         <Typography sx={{ width: '48%', paddingLeft: "5px", fontWeight: 550 }} >{item.variantName}</Typography>
                                         <Typography sx={{ width: '10%', textAlign: "center" }}>{item.unit}</Typography>
-                                        <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="num" value={num[item.id]}
+                                        <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="num" value={(num[item.id])}
                                             onChange={e =>
                                                 setNum({ ...num, [item.id]: e.target.value })}
                                         /></Box>
-                                        <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="originalPrice" value={(originalPrice[item.id]).toLocaleString()}
+                                        <Box sx={{ width: '10%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="originalPrice" value={(originalPrice[item.id])}
                                             onChange={e => setOriginalPrice({ ...originalPrice, [item.id]: e.target.value })}
                                         /></Box>
 
-                                        <Typography sx={{ width: '10%', textAlign: "center" }}>{(num[item.id] * originalPrice[item.id]).toLocaleString()}</Typography>
+                                        <Typography sx={{ width: '10%', textAlign: "center" }}>{Number(num[item.id] * originalPrice[item.id]).format()}</Typography>
                                         <CancelIcon sx={{ width: '2%', textAlign: "center" }} onClick={() => handDeleteProduct(item.id)} />
 
                                     </ListItem>)
@@ -269,18 +281,18 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
                     <Box className="pay-info">
                         <Box className="pay-info-item">
                             <Typography>Tổng sản phẩm</Typography>
-                            <Typography>{numProduct?.toLocaleString()}</Typography>
+                            <Typography>{numProduct?.format()}</Typography>
                         </Box>
                         <Box className="pay-info-item">
                             <Typography>Tổng loại sản phẩm</Typography>
-                            <Typography>{numCategory}</Typography>
+                            <Typography>{numCategory?.format}</Typography>
                         </Box>
                         <Box className="pay-info-item">
                             <Typography>Tổng tiền</Typography>
-                            <Typography>{total?.toLocaleString()} vnd</Typography>
+                            <Typography>{total?.format()} vnd</Typography>
                         </Box>
                         <Box className="pay-info-item" sx={{ color: "#007BFF", cursor: "pointer" }}>
-                            <Typography onClick={handleOpenDiscount}>Tổng chiết khấu</Typography>
+                            <Typography onClick={handleOpenDiscount}>Tổng chiết khấu <span><ArrowDropDownIcon /></span> </Typography>
                             <Typography>{discount}%</Typography>
                         </Box>
                         {
@@ -303,7 +315,7 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
                         }
                         <Box className="pay-info-item">
                             <Typography sx={{ fontWeight: 700 }}>Phải trả</Typography>
-                            <Typography>{((total * 0.94).toFixed(2)).toLocaleString()} vnd</Typography>
+                            <Typography>{Number((total * (100 -discount)/100).toFixed(2)).format()} vnd</Typography>
                         </Box>
 
                     </Box>
