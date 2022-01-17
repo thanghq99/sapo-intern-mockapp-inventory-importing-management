@@ -1,5 +1,5 @@
-import React, {useRef} from "react";
-import { useState } from "react";
+import React from "react";
+import { useState, useRef } from "react";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase/firebase";
 import PropTypes from 'prop-types';
@@ -30,7 +30,7 @@ LinearProgressWithLabel.propTypes = {
 };
 
 
-export default function UploadImage(props) {
+export default function UploadImageForMultipleVariants(props) {
 
     const [progress, setProgress] = useState(0);
     const inputRef = useRef();
@@ -51,7 +51,7 @@ export default function UploadImage(props) {
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     console.log(downloadURL);
-                    props.changeImageUrl(downloadURL);
+                    props.changeImageUrl(downloadURL, props.index);
                 })
             }
         )
@@ -70,7 +70,7 @@ export default function UploadImage(props) {
     return (
         <div>
             {selectedImage && (
-                <div style={{ height: props.sizeMode ? "3em" : "15em" }}>
+                <div style={{ height: "5em"}}>
                     <img alt="not found" style={{ height: "100%", width: "100%", objectFit: "contain" }} src={URL.createObjectURL(selectedImage)} />
                     <br></br>
                 </div>

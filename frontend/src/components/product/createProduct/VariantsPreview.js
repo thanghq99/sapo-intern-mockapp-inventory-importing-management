@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   TextField,
   Table,
@@ -6,9 +6,9 @@ import {
   TableBody,
   TableRow,
 } from "@mui/material";
-import VariantEditForm from "./VariantEditForm";
 import { makeStyles } from "@material-ui/core/styles";
 import { TableCell } from "@material-ui/core";
+import UploadImageForMultipleVariants from "../../uploadImage/UploadImageForMultipleVariants";
 
 const useStyles = makeStyles({
   table: {
@@ -27,11 +27,10 @@ const useStyles = makeStyles({
 function VariantsPreview({ variants, setVariants, productName }) {
   const classes = useStyles();
 
-  function handleChange(evt, index) {
-    const value = evt.target.valueAsNumber;
-    const name = evt.target.name;
+
+  const handleImageUrl = (url, index) => {
     let newVariants = variants;
-    newVariants[index] = { ...newVariants[index], [name]: value };
+    newVariants[index] = { ...newVariants[index], imageUrl: url };
     setVariants([...newVariants]);
   }
 
@@ -66,7 +65,7 @@ function VariantsPreview({ variants, setVariants, productName }) {
             >
               Phiên bản
             </TableCell>
-            <TableCell>Mã phiên bản</TableCell>
+            <TableCell>Ảnh sản phẩm</TableCell>
             <TableCell>Giá bán lẻ</TableCell>
             <TableCell>Giá bán sỉ</TableCell>
             <TableCell>Giá nhập</TableCell>
@@ -77,16 +76,11 @@ function VariantsPreview({ variants, setVariants, productName }) {
         <TableBody>
           {variants?.map((variant, index) => (
             <TableRow key={index}>
-              {/* <VariantEditForm variant={variant}/> */}
               <TableCell className={classes.sticky} component="th">
                 {getVariantName(variant)}
               </TableCell>
               <TableCell>
-                <TextField
-                  name="variantCode"
-                  value={variant.variantCode}
-                  onChange={(evt) => handleChange(evt, index)}
-                />
+                <UploadImageForMultipleVariants variantImg={variant.imageUrl} index={index} changeImageUrl={handleImageUrl}/>
               </TableCell>
               <TableCell>
                 <TextField

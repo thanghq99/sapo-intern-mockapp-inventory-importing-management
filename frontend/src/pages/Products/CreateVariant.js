@@ -118,6 +118,7 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
             display="flex"
             flexDirection="column"
             justifyContent="space-between"
+            marginRight={2}
           >
             <Grid container>
               <Typography variant="body2">Mã SKU</Typography>
@@ -176,11 +177,6 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
             </Box>
           </Box>
           <Box width="33.3333%" textAlign="center">
-            <Box
-              width="100%"
-              heigh="273px"
-              sx={{ border: 1, display: "inline-block" }}
-            ></Box>
             <UploadImage changeImageUrl={handleImageUrl} />
           </Box>
         </Box>
