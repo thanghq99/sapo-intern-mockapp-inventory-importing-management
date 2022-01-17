@@ -4,6 +4,7 @@ import React from 'react'
 import { CSVLink } from "react-csv";
 import { Link } from 'react-router-dom'
 import TableSupply from '../../components/table/TableListSuppliers'
+import UnlockAccess from '../../components/roleBasedRender/UnlockAccess'
 import "./suppliers.scss"
 
 
@@ -44,9 +45,11 @@ export default function Supplier() {
                         </CSVLink>
                     </Box>
                     <Box>
-                        <Link style={{ textDecoration: "none" }} to="/nha-cung-cap/tao-moi-nha-cung-cap">
-                            <Button variant="contained" sx={{ width: 200 }} startIcon={<AddCircle />}>Thêm nhà cung cấp</Button>
-                        </Link>
+                        <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
+                            <Link style={{ textDecoration: "none" }} to="/nha-cung-cap/tao-moi-nha-cung-cap">
+                                <Button variant="contained" sx={{ width: 200 }} startIcon={<AddCircle />}>Thêm nhà cung cấp</Button>
+                            </Link>
+                        </UnlockAccess>
                     </Box>
                 </Box>
                 <Divider />

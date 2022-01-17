@@ -25,6 +25,7 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import Modal from '@mui/material/Modal';
+import UnlockAccess from '../../../components/roleBasedRender/UnlockAccess'
 
 import {
     Link,
@@ -326,6 +327,7 @@ export default function DetailOrder({ setStateAlert }) {
                     </Box>
                     <Box sx={{ display: "flex", justifyContent: "space-between" }} ml={2}>
                         <Typography sx={{ fontSize: 36, fontWeight: 450 }}>{codeOrder}</Typography>
+                        <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
                         {
                             (order?.status == "Đã hoàn thành") ? null :
                                 <Box sx={{ display: "flex", alignItems: "center" }} >
@@ -335,7 +337,7 @@ export default function DetailOrder({ setStateAlert }) {
                                     </Link>
                                 </Box>
                         }
-
+                        </UnlockAccess>
                     </Box>
 
                 </Box>
@@ -446,20 +448,21 @@ export default function DetailOrder({ setStateAlert }) {
                                     <Typography>Còn phải trả: {(order?.totalAmount - order?.paidAmount)?.format()} vnd </Typography>
                                 </Box>
                             </Box>
-                            {
-                                (order?.transactionStatus == "Đã thanh toán") ? null :
+                            <UnlockAccess request={['ADMIN', 'Kế toán']}>
+                                {
+                                    (order?.transactionStatus == "Đã thanh toán") ? null :
 
 
-                                    openPaymented ?
-                                        <Box className="btn-payment">
-                                            <Button variant="contained"
-                                                onClick={handleOpenPayment} sx={{ width: "180px" }}
-                                            >Xác nhận thanh toán</Button>
-                                        </Box> : null
+                                        openPaymented ?
+                                            <Box className="btn-payment">
+                                                <Button variant="contained"
+                                                    onClick={handleOpenPayment} sx={{ width: "180px" }}
+                                                >Xác nhận thanh toán</Button>
+                                            </Box> : null
 
 
-                            }
-
+                                }
+                            </UnlockAccess>
                         </Box>
                         {
                             openPaymented ?
@@ -552,6 +555,7 @@ export default function DetailOrder({ setStateAlert }) {
                                 <LocalShippingIcon />
                                 <Typography sx={{ fontWeight: 600 }} ml={2}>Nhập Kho</Typography>
                             </Box>
+                        <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
                             {
                                 (order?.importedStatus == "Đã nhập kho") ? null :
                                     <Box className="btn-import">
@@ -559,6 +563,8 @@ export default function DetailOrder({ setStateAlert }) {
                                             onClick={handleOpenImport}>  Xác nhận nhập kho  </Button>
                                     </Box>
                             }
+                        </UnlockAccess>
+                           
 
 
                         </Box>

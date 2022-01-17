@@ -16,6 +16,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
+import UnlockAccess from '../../components/roleBasedRender/UnlockAccess'
 
 Number.prototype.format = function(n, x) {
   var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
@@ -105,7 +106,9 @@ function EnhancedTableHead(props) {
                 >
                   Phiên bản ({variants.length})
                 </Typography>
+                <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
                 <Button variant="contained" color="primary" onClick={() => { showCreateForm() }}>Thêm phiên bản</Button>
+                </UnlockAccess>
               </React.Fragment>
             )}
             {numSelected !== variants.length && numSelected > 0 && (
@@ -128,12 +131,13 @@ function EnhancedTableHead(props) {
                 Đã chọn tất cả phiên bản
               </Typography>
             )}
-
-            {numSelected > 0 && (
-              <Button variant="outlined" color="error" onClick={handleDelete}>
-                Xóa
-              </Button>
-            )}
+            <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
+              {numSelected > 0 && (
+                <Button variant="outlined" color="error" onClick={handleDelete}>
+                  Xóa
+                </Button>
+              )}
+            </UnlockAccess>
           </Box>
         </TableCell>
       </TableRow>
