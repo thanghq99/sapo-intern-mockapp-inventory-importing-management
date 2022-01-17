@@ -17,7 +17,7 @@ public class RegisterRequest {
     private String password;
 
     @NotBlank(message = "Không được để trống email")
-    @Email
+    @Email(message = "Email không hợp lệ")
     private String email;
 
     @NotNull(message = "Vai trò của người dùng không được null")
