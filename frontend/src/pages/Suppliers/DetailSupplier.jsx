@@ -14,6 +14,7 @@ import Alert from '@mui/material/Alert';
 import { ArrowBackIosNew } from "@mui/icons-material";
 import SupplierAPI from '../../api/SupplierAPI';
 import { useHistory } from 'react-router-dom';
+import UnlockAccess from '../../components/roleBasedRender/UnlockAccess'
 
 
 const style = {
@@ -215,14 +216,16 @@ export default function DetailSupplier() {
                                 <Grid className="upper_item" item xs={4}>
                                     <p style={{ color: handleColor(supplier.activityStatus) }}>{supplier.activityStatus}</p>
                                 </Grid>
-                                <Grid className="upper_item" item xs={4}>
-                                    <Button color="error" onClick={() => handleOpenModal("delete")} variant="outlined">
-                                        Xóa
-                                    </Button>&emsp;
-                                    <Button onClick={() => handleOpenModal("edit")} variant="contained">
-                                        Chỉnh sửa
-                                    </Button>
-                                </Grid>
+                                <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
+                                    <Grid className="upper_item" item xs={4}>
+                                        <Button color="error" onClick={() => handleOpenModal("delete")} variant="outlined">
+                                            Xóa
+                                        </Button>&emsp;
+                                        <Button onClick={() => handleOpenModal("edit")} variant="contained">
+                                            Chỉnh sửa
+                                        </Button>
+                                    </Grid>
+                                </UnlockAccess>
                             </Grid>
 
                         </div>

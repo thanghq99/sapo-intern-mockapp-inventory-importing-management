@@ -5,6 +5,7 @@ import CategoryAPI from '../../api/CategoryAPI'
 import { Box, TextField, InputAdornment, Button, Divider, Card, CardContent, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material'
 import { Search, AddCircle } from '@mui/icons-material';
 import ProductsTable from './ProductsTable'
+import UnlockAccess from '../../components/roleBasedRender/UnlockAccess'
 
 export default function Products({ setStateAlert }) {
     const history = useHistory();
@@ -139,6 +140,7 @@ export default function Products({ setStateAlert }) {
                         ))}
                     </Select>
                 </FormControl>
+                <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
                 <Button
                     variant='contained'
                     sx={{ mr: 2 }}
@@ -146,6 +148,7 @@ export default function Products({ setStateAlert }) {
                     onClick={() => { history.push('/tao-san-pham') }}
                 >Thêm sản phẩm
                 </Button>
+                </UnlockAccess>
             </Box>
             <Divider />
             <Box py={2} px={1} display="flex" justifyContent="space-evenly" backgroundColor='white'>

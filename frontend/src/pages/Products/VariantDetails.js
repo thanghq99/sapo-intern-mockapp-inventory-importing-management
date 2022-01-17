@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography, Button, Divider, Grid } from "@mui/material";
+import UnlockAccess from '../../components/roleBasedRender/UnlockAccess'
 
 Number.prototype.format = function (n, x) {
   var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
@@ -23,7 +24,9 @@ function VariantDetails({ variantInfo, setViewState }) {
           <Typography variant="subtitle1" id="tableTitle" px={1}>
             Thông tin chi tiết phiên bản
           </Typography>
-          <Button variant="contained" color="primary" onClick={() => { showEditForm() }}>Chỉnh sửa phiển bản</Button>
+          <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
+            <Button variant="contained" color="primary" onClick={() => { showEditForm() }}>Chỉnh sửa phiển bản</Button>
+          </UnlockAccess>
         </Box>
 
         <Divider sx={{ my: 1 }} />

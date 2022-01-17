@@ -16,8 +16,10 @@ import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import { visuallyHidden } from "@mui/utils";
-
 import { Link } from "react-router-dom";
+
+import UnlockAccess from '../../components/roleBasedRender/UnlockAccess'
+
 
 Number.prototype.format = function(n, x) {
   var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
@@ -192,12 +194,14 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       )}
 
+      <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
       {numSelected > 0 ? (
-          <Button variant="outlined" color="error" onClick={() => handleDelete()}>
-            Xóa
-          </Button>
-      ) : null
-      }
+              <Button variant="outlined" color="error" onClick={() => handleDelete()}>
+                Xóa
+              </Button>
+          ) : null
+          }
+      </UnlockAccess>
     </Toolbar>
   );
 };

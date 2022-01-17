@@ -6,6 +6,7 @@ import { Box, Autocomplete, Button, TextField, Divider, InputAdornment } from '@
 import { Download, Upload, AddCircle, Search, FilterAltOutlined, FilterAlt } from '@mui/icons-material';
 import { Link } from 'react-router-dom'
 import TableOrder from '../../../components/table/TableListOrder';
+import UnlockAccess from '../../../components/roleBasedRender/UnlockAccess'
 import OrderAPI from '../../../api/OrderAPI';
 
 export default function ListOrder() {
@@ -104,11 +105,13 @@ export default function ListOrder() {
                         <Download />
                         Xuất File
                     </CSVLink>
+                <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
                     <Box>
                         <Link style={{ textDecoration: "none" }} to="/nhap-hang/tao-don-nhap-hang">
                             <Button variant="contained" sx={{ width: 200 }} startIcon={<AddCircle />}>Tạo đơn nhập hàng</Button>
                         </Link>
                     </Box>
+                </UnlockAccess>
                 </Box>
                 <Divider />
                 <Box py={2} px={2} display='flex' justifyContent='space-between' backgroundColor='white'>
