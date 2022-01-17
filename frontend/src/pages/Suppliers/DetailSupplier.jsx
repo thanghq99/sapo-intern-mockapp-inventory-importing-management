@@ -65,10 +65,10 @@ function a11yProps(index) {
 // function set color status supplier ***********************/
 const handleColor = (key) => {
     switch (key) {
-        case "UNCOOPERATIVE":
+        case "Ngừng hợp tác":
             return "red";
 
-        case "COOPERATIVE":
+        case "Đang hợp tác":
             return "#1ec709";
 
         default:

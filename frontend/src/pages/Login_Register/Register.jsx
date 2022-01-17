@@ -30,7 +30,7 @@ export default function Register() {
                 await axios.post("http://localhost:9191/register", newAdmin);
                 history.push("/login");
             } catch (error) {
-                setStateAlert({ severity: "error", variant: "filled", open: true, content: "Người dùng hoặc email này đã tồn tại" })
+                setStateAlert({ severity: "error", variant: "filled", open: true, content: error.response.data })
             }
         }
     }

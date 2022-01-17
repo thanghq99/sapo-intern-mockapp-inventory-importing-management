@@ -79,7 +79,6 @@ public class SupplierServiceImpl implements SupplierService {
             throw new UniqueKeyConstraintException("Mã nhà cung cấp đã tồn tại");
         }
 
-        existingSupplier.setActivityStatus(supplier.getActivityStatus());
         existingSupplier.setAddress(supplier.getAddress());
         existingSupplier.setCode(supplier.getCode());
         existingSupplier.setDescription(supplier.getDescription());
