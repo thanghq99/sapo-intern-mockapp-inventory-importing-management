@@ -22,6 +22,7 @@ import VariantDetails from "./VariantDetails";
 import CreateVariant from "./CreateVariant";
 import EditVariant from "./EditVariant";
 import DescriptionDialog from "../../components/product/productDetails/DescriptionDialog";
+import UnlockAccess from '../../components/roleBasedRender/UnlockAccess'
 import "./products.scss"
 
 
@@ -118,6 +119,7 @@ function ProductDetails({ setStateAlert }) {
         pb={2}
       >
         <Typography variant="h4">{product.name}</Typography>
+        <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
         <Box display="flex">
           <Button
             variant="outlined"
@@ -135,6 +137,7 @@ function ProductDetails({ setStateAlert }) {
             Chỉnh sửa sản phẩm
           </Button>
         </Box>
+        </UnlockAccess>
       </Box>
 
       <Box

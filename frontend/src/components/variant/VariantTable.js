@@ -18,11 +18,12 @@ import Button from "@mui/material/Button";
 import { visuallyHidden } from "@mui/utils";
 
 import { Link } from "react-router-dom";
-  
-Number.prototype.format = function(n, x) {
-    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
-    return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
-  };
+import UnlockAccess from '../../components/roleBasedRender/UnlockAccess'
+
+Number.prototype.format = function (n, x) {
+  var re = "\\d(?=(\\d{" + (x || 3) + "})+" + (n > 0 ? "\\." : "$") + ")";
+  return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, "g"), "$&,");
+};
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -95,21 +96,21 @@ const headCells = [
     numeric: true,
     disablePadding: true,
     label: "Giá bán lẻ",
-    width: `${40/3}%`,
+    width: `${40 / 3}%`,
   },
   {
     id: "originalPrice",
     numeric: true,
     disablePadding: true,
     label: "Giá nhập",
-    width: `${40/3}%`,
+    width: `${40 / 3}%`,
   },
   {
     id: "wholeSalePrice",
     numeric: true,
     disablePadding: true,
     label: "Giá bán buôn",
-    width: `${40/3}%`,
+    width: `${40 / 3}%`,
   },
 ];
 
@@ -213,11 +214,17 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       )}
 
-      {numSelected > 0 ? (
-        <Button variant="outlined" color="error" onClick={() => handleDelete()}>
-          Xóa
-        </Button>
-      ) : null}
+      <UnlockAccess request={["ADMIN", "Nhân viên kho"]}>
+        {numSelected > 0 ? (
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => handleDelete()}
+          >
+            Xóa
+          </Button>
+        ) : null}
+      </UnlockAccess>
     </Toolbar>
   );
 };
@@ -227,7 +234,11 @@ EnhancedTableToolbar.propTypes = {
   handleDelete: PropTypes.func.isRequired,
 };
 
-export default function VariantsTable({variants, handleDeleteVariant, triggerReload}) {
+export default function VariantsTable({
+  variants,
+  handleDeleteVariant,
+  triggerReload,
+}) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
@@ -237,7 +248,7 @@ export default function VariantsTable({variants, handleDeleteVariant, triggerRel
 
   React.useEffect(() => {
     setSelected([]);
-  },[variants]);
+  }, [variants]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -275,12 +286,12 @@ export default function VariantsTable({variants, handleDeleteVariant, triggerRel
   };
 
   const handleDelete = () => {
-    console.log("selected: " + selected)
-    selected.forEach(id => {
+    console.log("selected: " + selected);
+    selected.forEach((id) => {
       handleDeleteVariant(id);
-    })
+    });
     triggerReload();
-  }
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -300,17 +311,19 @@ export default function VariantsTable({variants, handleDeleteVariant, triggerRel
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} handleDelete={handleDelete}/>
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          handleDelete={handleDelete}
+        />
         <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-          >
+          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <EnhancedTableHead
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={(event) => handleSelectAllClick(event, variants)}
+              onSelectAllClick={(event) =>
+                handleSelectAllClick(event, variants)
+              }
               onRequestSort={handleRequestSort}
               rowCount={variants.length}
             />
@@ -350,7 +363,14 @@ export default function VariantsTable({variants, handleDeleteVariant, triggerRel
                             backgroundColor="green"
                             mr={2}
                           ></Box> */}
-                          <img style={{ width: "40px", height: "40px" }} src={row.imageUrl ? row.imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"} />
+                        <img
+                          style={{ width: "40px", height: "40px" }}
+                          src={
+                            row.imageUrl
+                              ? row.imageUrl
+                              : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"
+                          }
+                        />
                       </TableCell>
                       <TableCell
                         component="th"
@@ -358,16 +378,32 @@ export default function VariantsTable({variants, handleDeleteVariant, triggerRel
                         scope="row"
                         padding="none"
                       >
-                        <Link to={{pathname: `/san-pham/${row.product.id}`, chosenVariant: row}} style={{ textDecoration: 'none', color: '#000'}}>
+                        <Link
+                          to={{
+                            pathname: `/san-pham/${row.product.id}`,
+                            chosenVariant: row,
+                          }}
+                          style={{ textDecoration: "none", color: "#000" }}
+                        >
                           <Typography>{row.variantName}</Typography>
                         </Link>
                       </TableCell>
-                      <TableCell align="center">{row.sellableQuantity}</TableCell>
-                      <TableCell align="center">{row.inventoryQuantity}</TableCell>
+                      <TableCell align="center">
+                        {row.sellableQuantity}
+                      </TableCell>
+                      <TableCell align="center">
+                        {row.inventoryQuantity}
+                      </TableCell>
                       <TableCell align="center">{row.createdAt}</TableCell>
-                      <TableCell align="right">{row.retailPrice.format()}</TableCell>
-                      <TableCell align="right">{row.originalPrice.format()}</TableCell>
-                      <TableCell align="right">{row.wholeSalePrice.format()}</TableCell>
+                      <TableCell align="right">
+                        {row.retailPrice.format()}
+                      </TableCell>
+                      <TableCell align="right">
+                        {row.originalPrice.format()}
+                      </TableCell>
+                      <TableCell align="right">
+                        {row.wholeSalePrice.format()}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
