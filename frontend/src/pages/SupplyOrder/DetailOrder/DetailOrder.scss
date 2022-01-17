@@ -185,6 +185,19 @@
     }
 }
 
+.return {
+    .history-import {
+        .body-history-import {
+            .css-ha3bif-MuiTimelineItem-root {
+                min-height: 45px;
+            }
+            .css-ha3bif-MuiTimelineItem-root::before {
+                content: none;
+            }
+        }
+    }
+}
+
 .detail-supplier {
     display: flex;
     justify-content: space-between;

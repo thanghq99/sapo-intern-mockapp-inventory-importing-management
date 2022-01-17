@@ -93,6 +93,14 @@
                 height: 30px;
                 padding-right: 10px;
             }
+            .changeDiscount {
+                // background-color: #FFFFFF;
+                .MuiFormControl-root .MuiOutlinedInput-root {
+                    height: 35px;
+                    width: 150px;
+                }
+            }
+            
         }
     }
 }
