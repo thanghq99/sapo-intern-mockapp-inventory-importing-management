@@ -11,20 +11,6 @@ import { AddCircle } from '@mui/icons-material';
 import UsersApi from '../../api/UsersApi';
 
 
-
-function parseJwt(token) {
-    var base64Url = token?.split('.')[1];
-    var base64 = base64Url?.replace(/-/g, '+').replace(/_/g, '/');
-    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-};
-
-// console.log(JSON.parse(sessionStorage.getItem("token")));
-// sessionStorage.getItem("token") && console.log(parseJwt(JSON.parse(sessionStorage.getItem("token")).jwt));
-
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
     padding: theme.spacing(1),
@@ -45,7 +31,7 @@ const checkRole = (JSON.parse(sessionStorage.getItem("token"))?.role[0].name == 
 export default function User() {
 
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -111,7 +97,7 @@ export default function User() {
                 try {
                     await UsersApi.createUserStaff(newUser);
                     setTrigger(!trigger);
-                    setStateAlert({ severity: "success", variant: "filled", open: true, content: "Tao nhan vien thanh cong" })
+                    setStateAlert({ severity: "success", variant: "filled", open: true, content: "Tạo nhân viên thành công" })
                     setOpenModal(false);
                 } catch (error) {
                     setStateAlert({ severity: "error", variant: "filled", open: true, content: "Người dùng hoặc email này đã tồn tại" })
@@ -119,6 +105,13 @@ export default function User() {
             }
 
         }
+    }
+
+    //delete user 
+    const deleteAnUser = async (e) => {
+        e.preventDefault();
+        await UsersApi.deleteUserStaff(currentUser.id)
+        setStateAlert({ severity: "error", variant: "filled", open: true, content: "Người dùng hoặc email này đã tồn tại" })
     }
 
 
@@ -137,7 +130,7 @@ export default function User() {
                                 sx={{ width: "14em", height: "14em", margin: "auto" }}
                             />
                             <Button sx={{ fontSize: "0.8em", textTransform: 'capitalize', margin: "0.5em 0 2em 0" }} variant="outlined">Thay ảnh</Button>
-                            <h3><strong style={{ fontSize: "1.5em" }}>Nhân viên kho</strong></h3>
+                            <h3><strong style={{ fontSize: "1.5em" }}>{currentUser.roles?.map((role) => (role.name))}</strong></h3>
                         </Item>
                     </Grid>
                     <Grid item xs={8}>
@@ -185,14 +178,14 @@ export default function User() {
             <Grid sx={{ padding: "4em 0em 1em 1em" }}>
                 <h3 style={{ marginBottom: "1em" }}><strong style={{ fontSize: "1.5em" }}>Thông tin nhân viên đang hoạt động</strong></h3>
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                    <TableContainer sx={{ maxHeight: 440 }}>
+                    <TableContainer sx={{ padding: "0 0 0 2em", maxHeight: 440 }}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                                 <TableRow>
                                     {columns.map((column) => (
                                         <TableCell
                                             key={column.id}
-                                            align="center"
+                                            align="left"
                                         >
                                             {column.label}
                                         </TableCell>
@@ -206,10 +199,10 @@ export default function User() {
                                     .map((row) => {
                                         return (
                                             <TableRow>
-                                                <TableCell align="center">{row.id} </TableCell>
-                                                <TableCell align="center">{row.username} </TableCell>
-                                                <TableCell align="center">{row.roles?.map((r) => (r.name))} </TableCell>
-                                                <TableCell align="center">{row.email} </TableCell>
+                                                <TableCell align="left">{row.id} </TableCell>
+                                                <TableCell align="left">{row.username} </TableCell>
+                                                <TableCell align="left">{row.roles?.map((r) => (r.name))} </TableCell>
+                                                <TableCell align="left">{row.email} </TableCell>
                                             </TableRow>
                                         );
                                     })}
@@ -218,7 +211,7 @@ export default function User() {
                     </TableContainer>
                     <TablePagination
                         labelRowsPerPage="Số hàng một trang"
-                        rowsPerPageOptions={[5, 10, 15]}
+                        rowsPerPageOptions={[10, 20, 50]}
                         component="div"
                         count={listUsers.length}
                         rowsPerPage={rowsPerPage}
@@ -237,12 +230,12 @@ export default function User() {
                         aria-describedby="modal-modal-description"
                         sx={{ margin: 0, padding: "6em", textAlign: "center" }}
                     >
-                        <Box sx={{ flexGrow: 1, margin: "auto", background: "white", width: "90vw" }}>
+                        <Box sx={{ flexGrow: 1, margin: "auto", background: "white", width: "60vw" }}>
                             <Grid sx={{ margin: 0, display: "grid", padding: "3em", textAlign: "center " }} container spacing={2}>
                                 <h3><strong style={{ fontSize: "1.5em" }} >Thay đổi thông tin nhân viên</strong></h3>
                                 <Grid sx={{ display: "flex", textAlign: "left", padding: "1em 2em", alignItems: "center" }}>
                                     <Grid item xs={5} >
-                                        <PersonIcon sx={{ margin: "0 1em -0.2em 0" }} /> <strong  >Họ và tên</strong>
+                                        <PersonIcon sx={{ margin: "0 1em -0.2em 0" }} /> <strong >Họ và tên</strong>
                                     </Grid>
                                     <Grid item xs={7} >
                                         <Input sx={{ width: "90%" }} defaultValue={currentUser.username} />
