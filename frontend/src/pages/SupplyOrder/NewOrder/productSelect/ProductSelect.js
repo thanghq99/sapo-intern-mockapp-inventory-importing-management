@@ -239,7 +239,7 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
                             renderInput={(params) => <TextField {...params} style={{ padding: 0 }} placeholder="Chọn sản phẩm cần nhập" />}
                         />
                     </Box>
-                    <Button variant="outlined" className="btn-more-select">Chọn nhiều</Button>
+                    {/* <Button variant="outlined" className="btn-more-select">Chọn nhiều</Button> */}
                 </Box>
                 <Box className="header-Product">
                     <div style={{ width: "10%", textAlign: "center" }}>Mã SKU</div>
@@ -292,7 +292,10 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
                             <Typography>{total?.format()} vnd</Typography>
                         </Box>
                         <Box className="pay-info-item" sx={{ color: "#007BFF", cursor: "pointer" }}>
-                            <Typography onClick={handleOpenDiscount}>Tổng chiết khấu <span><ArrowDropDownIcon /></span> </Typography>
+                            <Typography onClick={handleOpenDiscount} sx={{display: "flex", alignItems: "center"}}>
+                                <Typography>Tổng chiết khấu</Typography>
+                                <ArrowDropDownIcon />
+                            </Typography>
                             <Typography>{discount}%</Typography>
                         </Box>
                         {

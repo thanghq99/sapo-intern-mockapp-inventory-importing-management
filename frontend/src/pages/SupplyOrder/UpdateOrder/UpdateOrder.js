@@ -8,6 +8,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Divider from "@mui/material/Divider";
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -18,11 +19,11 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
-import * as moment  from 'moment';
+import * as moment from 'moment';
 
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 
 import './UpdateOrder.scss';
@@ -30,10 +31,10 @@ import OrderAPI from '../../../api/OrderAPI'
 import { Collapse } from "@mui/material";
 import ProductAPI from "../../../api/ProductAPI";
 
-Number.prototype.format = function(n, x) {
+Number.prototype.format = function (n, x) {
     var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
     return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
-  };
+};
 export default function DetailOrder({ setStateAlert }) {
 
     const [order, setOrder] = React.useState();
@@ -46,6 +47,7 @@ export default function DetailOrder({ setStateAlert }) {
     const [address, setAddRess] = React.useState();
     const [email, setEmail] = React.useState();
     const [discount, setDiscount] = React.useState('');
+    const [openDiscount, setOpenDiscount] = React.useState(false);
 
     const searchParam = window.location.search.replace("?code=", "");
 
@@ -72,7 +74,7 @@ export default function DetailOrder({ setStateAlert }) {
             orderCode: codeOrder,
             supplierId: order.supplier.id,
             description: description,
-            deliveryTime:  moment(date).format('YYYY-MM-DD'),
+            deliveryTime: moment(date).format('YYYY-MM-DD'),
             discount: discount,
             lineItems: productSelectLast
         };
@@ -84,7 +86,7 @@ export default function DetailOrder({ setStateAlert }) {
                 variant: "filled",
                 open: true,
                 content: "Đã cập nhật đơn hàng thành công",
-              });
+            });
             history.goBack();
             // history.push("/nhap-hang");
         } catch (err) {
@@ -93,8 +95,11 @@ export default function DetailOrder({ setStateAlert }) {
                 variant: "filled",
                 open: true,
                 content: err.response.data,
-              });
+            });
         }
+    }
+    const handleOpenDiscount = () => {
+        setOpenDiscount(!openDiscount);
     }
 
     async function add(newValue) {
@@ -114,7 +119,7 @@ export default function DetailOrder({ setStateAlert }) {
 
     async function handleSelectProd(event, newValue) {
         console.log(newValue);
-        if (newValue == null) {}
+        if (newValue == null) { }
         else {
             // setCheck(false);
             let checked = false;
@@ -126,7 +131,7 @@ export default function DetailOrder({ setStateAlert }) {
             })
             console.log(checked);
             if (!checked) {
-               await add(newValue);
+                await add(newValue);
             }
         }
     }
@@ -152,19 +157,19 @@ export default function DetailOrder({ setStateAlert }) {
         // Quantity();
     }
     const handleOriPriceProduct = async (list) => {
-        setOriginalPrice (
+        setOriginalPrice(
             list.reduce(
-                (obj, product) => ({ ...obj,[product.id]: product.originalPrice }),
+                (obj, product) => ({ ...obj, [product.id]: product.originalPrice }),
                 {}
-              )
+            )
         )
         setNum(
             list.reduce(
-                (obj, product) => ({ ...obj,[product.id]: 1 }),
+                (obj, product) => ({ ...obj, [product.id]: 1 }),
                 {}
-              )
+            )
         )
-}
+    }
 
 
     React.useEffect(() => {
@@ -177,27 +182,27 @@ export default function DetailOrder({ setStateAlert }) {
         console.log(originalPrice);
         productSelect.map((item) => {
             tmp += Number(num[item.id]);
-            numCate +=1;
-            totalTmp += Number(num[item.id])*Number(originalPrice[item.id]);
+            numCate += 1;
+            totalTmp += Number(num[item.id]) * Number(originalPrice[item.id]);
             let productTmp = {}
             productTmp["variantId"] = item.id;
             productTmp["price"] = originalPrice[item.id];
             productTmp["quantity"] = Number(num[item.id]);
             test.push(productTmp);
-            
+
             // setLastProduct( [
             //     // copy the current users state
             //     ...lastProduct,  (productTmp)
             //     // now you can add a new object to add to the array
-               
+
             // ]);
-            
+
         });
         setProductSelectLast(test);
         setNumProduct(tmp);
         setNumCategory(numCate);
         setTotal(totalTmp);
- 
+
     }, [num, productSelect, originalPrice]);
 
     const useStyles = makeStyles((theme) => ({
@@ -244,7 +249,7 @@ export default function DetailOrder({ setStateAlert }) {
             const VariantOrdertRes = await OrderAPI.VariantOrder(searchParam);
 
             let tmp = [];
-            VariantOrdertRes.data.map( (item) => {
+            VariantOrdertRes.data.map((item) => {
                 tmp.push(item.variant)
             })
             setProductSelect(tmp);
@@ -254,7 +259,7 @@ export default function DetailOrder({ setStateAlert }) {
             setOrder(orderRes.data);
             handleOriPriceProduct(ProductRes.data);
             handleOriPrice(VariantOrdertRes.data);
-           
+
             setDate(orderRes.data.expectedTime);
 
             setNameSupplier(orderRes.data.supplier.name);
@@ -303,7 +308,7 @@ export default function DetailOrder({ setStateAlert }) {
                                     <Typography sx={{ marginRight: "5px", fontWeight: 600 }}>{nameSupplier}</Typography>
 
                                 </Box>
-                                <Typography className="debt" sx={{fontWeight: 600}} >Công nợ: {debt?.format()} vnd</Typography>
+                                <Typography className="debt" sx={{ fontWeight: 600 }} >Công nợ: {debt?.format()} vnd</Typography>
                             </Box>
                         </Box>
                         <Divider />
@@ -360,7 +365,7 @@ export default function DetailOrder({ setStateAlert }) {
                                     renderInput={(params) => <TextField {...params} style={{ padding: 0 }} placeholder="Chọn sản phẩm cần nhập" />}
                                 />
                             </Box>
-                            <Button variant="outlined" className="btn-more-select">Chọn nhiều</Button>
+                            {/* <Button variant="outlined" className="btn-more-select">Chọn nhiều</Button> */}
                         </Box>
                         <Box className="header-Product">
                             <div style={{ width: "10%", textAlign: "center" }}>Mã SKU</div>
@@ -411,14 +416,35 @@ export default function DetailOrder({ setStateAlert }) {
                                     <Typography>Tổng tiền</Typography>
                                     <Typography>{total?.format()} vnd</Typography>
                                 </Box>
-                                <Box className="pay-info-item" sx={{ color: "#007BFF" }}>
-                                    <Typography >Tổng chiết khấu</Typography>
+                                <Box className="pay-info-item" sx={{ color: "#007BFF", cursor: "pointer" }}>
+                                    <Typography onClick={handleOpenDiscount} sx={{ display: "flex", alignItems: "center" }}>
+                                        <Typography>Tổng chiết khấu</Typography>
+                                        <ArrowDropDownIcon />
+                                    </Typography>
                                     <Typography>{discount}%</Typography>
                                 </Box>
+                                {
+                                    !openDiscount ? null :
+                                        <Box className="changeDiscount" sx={{ width: "100%" }}>
+                                            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                                <Box sx={{ display: "flex", alignItems: "center" }}>
+                                                    <TextField
+
+                                                        onChange={e => setDiscount(e.target.value)} >
+
+                                                    </TextField>
+                                                    <Typography>%</Typography>
+                                                </Box>
+                                                <Button variant="contained" className="btn-discount" onClick={handleOpenDiscount}
+                                                    sx={{ marginLeft: "20px", backgroundColor: "#007BFF" }}>Áp dụng</Button>
+                                            </Box>
+
+                                        </Box>
+                                }
                                 <Box className="pay-info-item">
                                     <Typography sx={{ fontWeight: 700 }}>Phải trả</Typography>
-                                    <Typography>{Number((total * Number(100 - discount)/100).toFixed(2)).format()} vnd</Typography>
-                                    
+                                    <Typography>{Number((total * Number(100 - discount) / 100).toFixed(2)).format()} vnd</Typography>
+
                                 </Box>
 
                             </Box>
@@ -450,7 +476,7 @@ export default function DetailOrder({ setStateAlert }) {
                                     <DatePicker
                                         inputFormat="yyyy/MM/dd"
                                         value={date}
-                                        
+
                                         onChange={(views) => {
                                             setDate(views);
                                         }}
@@ -467,14 +493,14 @@ export default function DetailOrder({ setStateAlert }) {
                             <textarea className="content-note" onChange={(e) => setDescription(e.target.value)}>{description}</textarea>
                             <Box></Box>
                         </Box>
-                        
+
 
                     </Box>
-                   
+
                 </Box>
-                <Button variant="contained" className="btn-order" sx={{position: "absolute"}}
-                         onClick={SubmitUpdate}
-                         >Lưu</Button>
+                <Button variant="contained" className="btn-order" sx={{ position: "absolute" }}
+                    onClick={SubmitUpdate}
+                >Lưu</Button>
 
                 {/* </Grid> */}
             </Box>
