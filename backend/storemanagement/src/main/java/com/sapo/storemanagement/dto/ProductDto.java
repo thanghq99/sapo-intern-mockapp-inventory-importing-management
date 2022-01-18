@@ -29,7 +29,6 @@ public class ProductDto {
     @Size(max = 255, message = "Độ dài mô tả sản phẩm không được vượt quá {max} kí tự")
     private String description;
 
-    @NotNull(message = "Đường dẫn ảnh không được null")
     @Size(max = 255, message = "Độ dài đường dẫn ảnh không được vượt quá {max} kí tự")
     private String imageUrl;
 }

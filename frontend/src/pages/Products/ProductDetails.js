@@ -177,6 +177,9 @@ function ProductDetails({ setStateAlert }) {
             </Swiper>
             :
             <Swiper
+              slidesPerView={1}
+              spaceBetween={50}
+              loop={true}
               navigation={true}
               pagination={{
                 dynamicBullets: true
