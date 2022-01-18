@@ -115,7 +115,7 @@ export default function SupplySelect({setSupplier}) {
                         renderOption={(props ,option) => (
                             <Box {...props}>
                             <AccountCircleRoundedIcon />
-                            <Box ml={21}>
+                            <Box ml={2}>
                                 {option.name}
                                 </Box> 
                                </Box>

@@ -10,8 +10,8 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import * as moment  from 'moment';
-import {useHistory} from "react-router-dom";
+import * as moment from 'moment';
+import { useHistory } from "react-router-dom";
 
 import './SupplyOrder.scss';
 import SupplySelect from './supplySelect/SupplySelect';
@@ -63,7 +63,7 @@ export default function SupplyOrder({ setStateAlert }) {
         'Thanh toán',
     ];
 
-    const SubmitOrder =  async () => {
+    const SubmitOrder = async () => {
         let data = {
             orderCode: code.current.value,
             supplierId: supplier,
@@ -74,27 +74,27 @@ export default function SupplyOrder({ setStateAlert }) {
         };
         console.log(data);
         // try {
-            OrderAPI.createOrder(data)
+        OrderAPI.createOrder(data)
             .then(res => {
                 setStateAlert({
                     severity: "success",
                     variant: "filled",
                     open: true,
                     content: "Đã tạo đơn hàng thành công",
-                    });
+                });
                 history.push(`/nhap-hang/don-hang?code=${res.data.id}`);
             }).catch((err) => {
                 setStateAlert({
-                  severity: "error",
-                  variant: "filled",
-                  open: true,
-                  content: err.response.data,
+                    severity: "error",
+                    variant: "filled",
+                    open: true,
+                    content: err.response.data,
                 });
-              });
-            // history.push("/nhap-hang");
-            
-           
-            
+            });
+        // history.push("/nhap-hang");
+
+
+
         // } catch (err) {
         //     setStateAlert({
         //         severity: "error",
@@ -103,11 +103,11 @@ export default function SupplyOrder({ setStateAlert }) {
         //         content: err.response.data,
         //       });
         // }
-   
+
     }
 
     React.useEffect(() => {
-        
+
     }, [])
     // console.log(product);
 
@@ -116,17 +116,12 @@ export default function SupplyOrder({ setStateAlert }) {
 
         <div>
             <Box py={2} px={5} sx={{ flexGrow: 1, minHeight: "91vh" }} className="body">
-                <Box className="test"  >
+                <Box sx={{width: "100%", display: "flex", justifyContent: "space-between"}}>
                     <Box className="back" onClick={history.goBack}>
                         <ArrowBackIosIcon />
                         <Box>Đơn nhập hàng</Box>
                     </Box>
-                    <SupplySelect setSupplier={setSupplier} />
-                    <ProductSelect setProduct={setProduct} setDiscountFinal={setDiscountFinal} />
-                </Box>
-                <Box sx={{ paddingLeft: "10px" }} className="more-info">
-
-                    <Box sx={{ width: '100%' }} className="time-line">
+                    <Box sx={{ width: '35%' }} className="time-line">
                         <Stepper activeStep={0} alternativeLabel>
                             {steps.map((label) => (
                                 <Step key={label}>
@@ -135,37 +130,45 @@ export default function SupplyOrder({ setStateAlert }) {
                             ))}
                         </Stepper>
                     </Box>
-                    <Box className="more-info-detail-created">
-                        <Box className="title">Thông tin bổ sung</Box>
-                        <Box className="code-supply-order">
-                            <Box className='title'>Mã đơn nhập hàng</Box>
-                            <TextField inputRef={code} id="outlined-basic" className="info" variant="outlined" />
-                        </Box>
-                        <Box className="time-supply-order">
-                            <Box className='title'>Ngày nhận hàng</Box>
-                            <Box className="time">
-                                <LocalizationProvider dateAdapter={AdapterDateFns}  >
-                                    <DatePicker
-                                        // inputFormat="yyyy/MM/dd"
-                                        value={date}
-                                        
-                                        onChange={(views) => {
-                                            setDate(views);
-                                        }}
-                                        renderInput={(params) => <TextField {...params} placeholder="Ngày nhận" />}
-                                    />
-                                </LocalizationProvider>
-                            </Box>
-                        </Box>
-                        <Box className="note">
-                            <Box className="title">Ghi chú</Box>
-                            <textarea className="content-note" onChange={(e) => setDescription(e.target.value)}></textarea>
-                        </Box>
-
-                        {/* <Button variant="outlined" className="btn-order" onClick={SubmitOrder}>Đặt hàng</Button> */}
-
+                </Box>
+                <Box sx={{width: "100%", display: "flex"}} mt={2}>
+                    <Box className="test"  >
+                        <SupplySelect setSupplier={setSupplier} />
+                        <ProductSelect setProduct={setProduct} setDiscountFinal={setDiscountFinal} />
                     </Box>
-                    <Button variant="contained" className="btn-order" onClick={SubmitOrder} sx={{marginTop: "100px", position: "fixed"}}>Đặt hàng</Button>
+                    <Box sx={{ paddingLeft: "10px" }} className="more-info">
+                        <Box className="more-info-detail-created">
+                            <Box className="title">Thông tin bổ sung</Box>
+                            <Box className="code-supply-order">
+                                <Box className='title'>Mã đơn nhập hàng</Box>
+                                <TextField inputRef={code} id="outlined-basic" className="info" variant="outlined" />
+                            </Box>
+                            <Box className="time-supply-order">
+                                <Box className='title'>Ngày nhận hàng</Box>
+                                <Box className="time">
+                                    <LocalizationProvider dateAdapter={AdapterDateFns}  >
+                                        <DatePicker
+                                            // inputFormat="yyyy/MM/dd"
+                                            value={date}
+
+                                            onChange={(views) => {
+                                                setDate(views);
+                                            }}
+                                            renderInput={(params) => <TextField {...params} placeholder="Ngày nhận" />}
+                                        />
+                                    </LocalizationProvider>
+                                </Box>
+                            </Box>
+                            <Box className="note">
+                                <Box className="title">Ghi chú</Box>
+                                <textarea className="content-note" onChange={(e) => setDescription(e.target.value)}></textarea>
+                            </Box>
+
+                            {/* <Button variant="outlined" className="btn-order" onClick={SubmitOrder}>Đặt hàng</Button> */}
+
+                        </Box>
+                        <Button variant="contained" className="btn-order" onClick={SubmitOrder} sx={{ marginTop: "100px", position: "fixed" }}>Đặt hàng</Button>
+                    </Box>
                 </Box>
 
                 {/* </Grid> */}

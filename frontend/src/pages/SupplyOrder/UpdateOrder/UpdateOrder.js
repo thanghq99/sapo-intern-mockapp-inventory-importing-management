@@ -360,7 +360,7 @@ export default function DetailOrder({ setStateAlert }) {
                                     renderInput={(params) => <TextField {...params} style={{ padding: 0 }} placeholder="Chọn sản phẩm cần nhập" />}
                                 />
                             </Box>
-                            <Button variant="outlined" className="btn-more-select">Chọn nhiều</Button>
+                            {/* <Button variant="outlined" className="btn-more-select">Chọn nhiều</Button> */}
                         </Box>
                         <Box className="header-Product">
                             <div style={{ width: "10%", textAlign: "center" }}>Mã SKU</div>
