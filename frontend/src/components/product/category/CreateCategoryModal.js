@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import CategoryAPI from "../../../api/CategoryAPI";
-import { Add, Category } from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 
 export default function CreateCategoryModal({ handleSelectCategory, setCategory, setMenuOpen, menuOpen }) {
   const [open, setOpen] = React.useState(false);

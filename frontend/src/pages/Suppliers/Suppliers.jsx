@@ -37,7 +37,7 @@ export default function Supplier() {
             <Box display='flex' flexDirection='column'>
                 <Box display='flex' justifyContent='space-between' py={2} px={2} backgroundColor='white'>
                     <Box display='flex' alignItems='center'>
-                        <CSVLink data={listSuppliers} headers={headers} fileName="Suppliers.csv" target="_blank"
+                        <CSVLink data={listSuppliers} headers={headers} filename="Suppliers.csv" target="_blank"
                             style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "black" }}
                         >
                             <Download />

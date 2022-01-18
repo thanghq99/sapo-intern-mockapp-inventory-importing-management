@@ -1,5 +1,6 @@
 package com.sapo.storemanagement.service.impl;
 
+import com.sapo.storemanagement.entities.RecordStatus;
 import com.sapo.storemanagement.entities.User;
 import com.sapo.storemanagement.exception.BadNumberException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
@@ -32,6 +33,11 @@ public class UserStaffServiceImpl implements UserStaffService {
     }
 
     @Override
+    public Iterable<User> listAllUsersByRecordStatus() {
+        return userRepository.findByRecordStatus(RecordStatus.ACTIVE.getStatus());
+    }
+
+    @Override
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -44,7 +50,7 @@ public class UserStaffServiceImpl implements UserStaffService {
         }
         User existingUser = this.getUserById(id);
         existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(user.getPassword());
+        //existingUser.setPassword(user.getPassword());
         existingUser.setUsername(user.getUsername());
 
         return userRepository.save(existingUser);
@@ -58,7 +64,8 @@ public class UserStaffServiceImpl implements UserStaffService {
         }
 
         User existingUser = this.getUserById(id);
-        userRepository.delete(existingUser);
+        existingUser.setRecordStatus(RecordStatus.DELETED);
+        userRepository.save(existingUser);
         return "Người dùng đã bị xóa";
     }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import {
   SquareRounded,
@@ -12,7 +12,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
@@ -56,18 +55,12 @@ function stableSort(array, comparator) {
 function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
-    order,
-    orderBy,
     numSelected,
     rowCount,
-    onRequestSort,
     variants,
     setViewState,
     handleDelete
   } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
   const showCreateForm = () => {
     setViewState(2);
   }
@@ -221,19 +214,6 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
     setViewState(1);
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
-
   const isSelected = (code) => selected.indexOf(code) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -320,7 +300,7 @@ export default function EnhancedTable({ setVariantInfo, variants, setViewState, 
                             backgroundColor="white"
                             mr={2}
                           >
-                            <img style={{ width: "40px", height: "40px" }} src={row.imageUrl ? row.imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"} />
+                            <img alt="Ảnh phiên bản sản phẩm" style={{ width: "40px", height: "40px" }} src={row.imageUrl ? row.imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"} />
                           </Box>
                           <Box
                             py={1}

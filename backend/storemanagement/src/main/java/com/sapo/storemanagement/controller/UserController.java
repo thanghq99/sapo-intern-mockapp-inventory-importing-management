@@ -1,6 +1,7 @@
 package com.sapo.storemanagement.controller;
 
 
+import com.sapo.storemanagement.entities.Supplier;
 import com.sapo.storemanagement.entities.User;
 import com.sapo.storemanagement.dto.RegisterRequest;
 import com.sapo.storemanagement.service.UserStaffService;
@@ -25,15 +26,20 @@ public class UserController {
         this.userStaffService = userStaffService;
     }
 
+    @GetMapping
+    public Iterable<User> findAllUserByRecordStatus() {
+        return userStaffService.listAllUsersByRecordStatus();
+    }
+
     @GetMapping("/{id}")
     public User findUserById(@PathVariable long id) {
         return userStaffService.getUserById(id);
     }
 
-    @GetMapping
-    public Iterable<User> findAllUsers() {
-        return userStaffService.listAllUsers();
-    }
+//    @GetMapping
+//    public Iterable<User> findAllUsers() {
+//        return userStaffService.listAllUsers();
+//    }
 
     @PostMapping
     public void createUserStaff(@RequestBody @Valid RegisterRequest registerRequest) {

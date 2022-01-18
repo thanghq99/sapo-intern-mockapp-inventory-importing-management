@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useRef } from "react";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase/firebase";
@@ -35,6 +35,18 @@ export default function UploadImageForMultipleVariants(props) {
     const [progress, setProgress] = useState(0);
     const inputRef = useRef();
 
+    useEffect(() => {
+        if(props.variantImg) {
+            setSelectedImage(inputRef.current.files[0]);
+            setProgress(100);
+            setDisplayState("flex");
+        } else {
+            handleCancelImg();
+        }
+        console.log(selectedImage);
+        console.log("props: " + props.variantImg);
+    }, [props.variantImg])
+
     const uploadImage = (file) => {
         if (!file) return;
         const storageRef = ref(storage, `images/${file.name}`);
@@ -58,7 +70,7 @@ export default function UploadImageForMultipleVariants(props) {
     }
 
     const [displayState, setDisplayState] = React.useState("none")
-    const [selectedImage, setSelectedImage] = React.useState(null);
+    const [selectedImage, setSelectedImage] = React.useState(props.variantImg);
 
     const handleCancelImg = () => {
         setSelectedImage(null);
@@ -69,9 +81,10 @@ export default function UploadImageForMultipleVariants(props) {
 
     return (
         <div>
-            {selectedImage && (
+            {(props.variantImg && selectedImage) && (
                 <div style={{ height: "5em"}}>
-                    <img alt="not found" style={{ height: "100%", width: "100%", objectFit: "contain" }} src={URL.createObjectURL(selectedImage)} />
+                    {/* <img alt="not found" style={{ height: "100%", width: "100%", objectFit: "contain" }} src={URL?.createObjectURL(selectedImage)} /> */}
+                    <img alt="not found" style={{ height: "100%", width: "100%", objectFit: "contain" }} src={props.variantImg} />
                     <br></br>
                 </div>
             )
@@ -97,7 +110,6 @@ export default function UploadImageForMultipleVariants(props) {
                         style={{ display: "none" }}
                         id="file-upload"
                         onChange={(event) => {
-                            console.log(event.target.files[0]);
                             setSelectedImage(event.target.files[0]);
                             uploadImage(event.target.files[0]);
                             setDisplayState("flex");

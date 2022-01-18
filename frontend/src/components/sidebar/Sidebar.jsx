@@ -16,11 +16,8 @@ import "./sidebar.scss";
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import SettingsIcon from '@mui/icons-material/Settings';
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import PhoneIcon from '@mui/icons-material/Phone';
-import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -77,7 +74,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 const navList = [{ title: 'Sản phẩm', url: '/san-pham' }, { title: 'Quản lý kho', url: '/kho-hang' }, { title: 'Nhập hàng', url: '/nhap-hang' }, { title: 'Nhà cung cấp', url: '/nha-cung-cap' }];
-const subMenuList = [{ title: 'Hotline: 1900 0000', url: '/hotline', phone: '1900 0000' }, { title: 'Thông tin tài khoản', url: '/nguoi-dung' }]
+const subMenuList = [{ title: 'Hotline:', url: '/hotline', phone: '1900 0000' }, { title: 'Thông tin tài khoản', url: '/nguoi-dung' }]
 const navListIcons = [
     <LocalMallIcon />, <WarehouseIcon />, <AddShoppingCartIcon />, <AddBusinessIcon />
 ]

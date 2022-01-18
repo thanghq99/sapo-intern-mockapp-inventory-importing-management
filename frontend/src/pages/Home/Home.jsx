@@ -8,6 +8,7 @@ import { Box, Grid, Paper, MenuItem, Select, FormControl } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import CodeOffIcon from '@mui/icons-material/CodeOff';
 
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
@@ -255,7 +256,7 @@ export default function Home() {
                             <Grid pt={4} pl={4} container spacing={2}>
                                 <Grid xs={6}>
                                     92 <br />
-                                    <ArrowDownwardIcon sx={{ marginBottom: "-0.3em", color: "#ff4e4e", fontSize: "1.8em" }} /> 10%
+                                    <CodeOffIcon sx={{ marginBottom: "-0.3em", color: "#fff700", fontSize: "1.8em" }} /> Không so sánh
                                 </Grid>
                                 <Grid xs={6}>
                                     <i style={{ fontSize: "3em" }} className="fas fa-warehouse"></i>

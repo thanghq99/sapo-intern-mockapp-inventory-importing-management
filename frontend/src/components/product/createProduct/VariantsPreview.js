@@ -80,7 +80,7 @@ function VariantsPreview({ variants, setVariants, productName }) {
                 {getVariantName(variant)}
               </TableCell>
               <TableCell>
-                <UploadImageForMultipleVariants variantImg={variant.imageUrl} index={index} changeImageUrl={handleImageUrl}/>
+                <UploadImageForMultipleVariants variantImg={variant.imageUrl} index={index} changeImageUrl={handleImageUrl} />
               </TableCell>
               <TableCell>
                 <TextField

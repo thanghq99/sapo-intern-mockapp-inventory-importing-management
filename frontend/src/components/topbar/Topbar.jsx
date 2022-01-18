@@ -7,7 +7,6 @@ import { Avatar, Button, Typography } from '@mui/material';
 import HelpIcon from '@mui/icons-material/Help';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Link } from 'react-router-dom';
-import { FormatAlignJustify } from '@mui/icons-material';
 
 
 export default function Topbar({ headerTitle, setHeaderTitle }) {

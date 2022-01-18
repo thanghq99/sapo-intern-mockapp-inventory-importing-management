@@ -93,16 +93,14 @@
     }
 }
 .createSupplier_form {
+    padding: 1em;
     font-size: 14px;
-    margin-top: 1em;
-    padding: 2em 1em;
     background: #f4f6f8;
 
     .left_info {
-        margin-right: 2em;
         .left_info_first {
-            border-radius: 1em;
-            border: 1px rgb(177, 177, 177) solid;
+            //border-radius: 1em;
+            //border: 1px rgb(177, 177, 177) solid;
             padding: 1em;
             background: white;
             .left_info_first_input {
