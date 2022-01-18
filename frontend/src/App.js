@@ -99,7 +99,7 @@ function App() {
                   <Route path="/cai-dat"></Route> */}
 
                   {/* Role based render */}
-                  <RoleBasedRouting exact path="/san-pham" roles={['ADMIN', 'Nhân viên kho', 'Kế toán']}>
+                  <RoleBasedRouting exact path="/san-pham" roles={['ADMIN', 'Nhân viên kho', 'Kế toán']} currRole={token.role[0].name}>
                     <Products setStateAlert={setStateAlert} />
                   </RoleBasedRouting>
                    <RoleBasedRouting path="/tao-san-pham" roles={['ADMIN', 'Nhân viên kho']}>

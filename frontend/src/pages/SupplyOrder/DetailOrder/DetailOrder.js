@@ -82,12 +82,17 @@ export default function DetailOrder({ setStateAlert }) {
     const [openPaymentHistory, setOpenPaymentHistory] = React.useState([]);
     const [openReturnHistory, setOpenReturnHistory] = React.useState([]);
 
+    const [active, setActive] = React.useState(1);
 
 
 
-
-    const handleMenu = () => {
-        setOpenMenu(!openMenu);
+    const handleActive = (item) => {
+        if(item?.importedStatus == "Đã nhập kho") {
+            setActive(2);
+        }
+        if(item?.status == "Đã hoàn thành") {
+            setActive(3);
+        }
     }
     const handleOpenPayment = () => {
         // setOpenPayment(!openPayment);
@@ -281,6 +286,8 @@ export default function DetailOrder({ setStateAlert }) {
 
             handOpenHistoryReturn(HistoryReturnRes.data);
 
+            handleActive(orderRes.data);
+
 
 
             let tmp = 0;
@@ -315,13 +322,16 @@ export default function DetailOrder({ setStateAlert }) {
         p: 4,
     };
 
-    console.log(productList);
+    // console.log(productList);
+    const gobackOrder = () => {
+        history.push("/nhap-hang");
+    }
     return (
 
         <div>
             <Box py={2} px={5} sx={{ flexGrow: 1, minHeight: "85vh" }} className="body">
                 <Box className="header-page-detail">
-                    <Box className="back" onClick={history.goBack}>
+                    <Box className="back" onClick={gobackOrder}>
                         <ArrowBackIosIcon />
                         <Box>Đơn nhập hàng</Box>
                     </Box>
@@ -604,9 +614,10 @@ export default function DetailOrder({ setStateAlert }) {
                                                                                 <Typography sx={{ color: "#6f6f6f" }}>Sản phẩm</Typography>
                                                                                 {
                                                                                     item.lineItems.map((variantImport) => {
-                                                                                        return (
-                                                                                            <Box>{(variantImport.quantity).format()} x {variantImport.name}</Box>
-                                                                                        )
+                                                                                        if(variantImport.quantity !=0 )
+                                                                                            return (
+                                                                                                <Box>{(variantImport.quantity).format()} x {variantImport.name}</Box>
+                                                                                            )
                                                                                     })
                                                                                 }
                                                                             </Box>
@@ -729,9 +740,11 @@ export default function DetailOrder({ setStateAlert }) {
 
                                                                                         
                                                                                             // {
-                                                                                                (variantImport.quantity == 0) ? 
-                                                                                                <Box></Box> :
-                                                                                                <Box>{variantImport.quantity} x {variantImport.name}</Box>
+                                                                                                if (variantImport.quantity != 0)  
+                                                                                                return(
+                                                                                                    <Box>{variantImport.quantity} x {variantImport.name}</Box>
+                                                                                                )
+                                                                                               
                                                                                             // } 
                                                                                            
                                                                                         
@@ -758,7 +771,7 @@ export default function DetailOrder({ setStateAlert }) {
                 <Box sx={{ paddingLeft: "10px" }} className="more-info">
 
                     <Box sx={{ width: '100%' }} className="time-line">
-                        <Stepper activeStep={2} alternativeLabel>
+                        <Stepper activeStep={active} alternativeLabel>
                             {steps.map((label) => (
                                 <Step key={label}>
                                     <StepLabel>{label}</StepLabel>

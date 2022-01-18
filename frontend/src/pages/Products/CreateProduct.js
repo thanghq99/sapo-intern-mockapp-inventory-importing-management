@@ -10,18 +10,20 @@ import {
   Chip,
   IconButton,
 } from "@mui/material";
-import { ArrowBackIosNew, Add, SwapHoriz } from "@mui/icons-material";
+import { ArrowBackIosNew, SwapHoriz } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 import "./createProduct.scss";
 import ProductAPI from "../../api/ProductAPI";
 import CategorySelect from "../../components/product/category/CategorySelect";
 import VariantsPreview from "../../components/product/createProduct/VariantsPreview";
+import UploadImage from "../../components/uploadImage/UploadImage";
 
 function CreateProduct({ setStateAlert }) {
   const history = useHistory();
   const colorRef = useRef(null);
   const materialRef = useRef(null);
   const sizeRef = useRef(null);
+  const [receivedImg, setReceivedImg] = useState("");
 
   const [colors, setColors] = useState([]);
   const [materials, setMaterials] = useState([]);
@@ -41,12 +43,10 @@ function CreateProduct({ setStateAlert }) {
     originalPrice: 0,
     wholeSalePrice: 0,
     retailPrice: 0,
-    //khi khởi tạo măc định true?
     recordStatus: true,
     sellableStatus: true,
     productName: "",
     categoryId: "",
-    //mặc định lưu bằng gram
     weight: 0,
     brand: "",
     description: "",
@@ -64,6 +64,13 @@ function CreateProduct({ setStateAlert }) {
     });
     handleGenerateVariants();
   }, [colors, sizes, materials, weightValue, weightUnit, product.originalPrice, product.retailPrice, product.wholeSalePrice, product.inventoryQuantity, product.sellableQuantity]);
+
+  useEffect(() => {
+    setProduct({
+      ...product,
+      imageUrl: receivedImg
+    });
+  }, [receivedImg])
 
   //handle product attributes
   function handleChange(evt) {
@@ -87,6 +94,10 @@ function CreateProduct({ setStateAlert }) {
         [evt.target.name]: 0,
       });
     }
+  }
+
+  const handleImageUrl = (url) => {
+    setReceivedImg(url);
   }
 
   //handle weight
@@ -154,7 +165,7 @@ function CreateProduct({ setStateAlert }) {
     let colorsArray = [""];
     let materialsAray = [""];
     let sizesArray = [""];
-    let inventoryQuantity1 = product.inventoryQuantity;
+    let inventoryQuantity = product.inventoryQuantity;
     let sellableQuantity = product.sellableQuantity;
     let originalPrice = product.originalPrice;
     let wholeSalePrice = product.wholeSalePrice;
@@ -168,7 +179,7 @@ function CreateProduct({ setStateAlert }) {
         sizesArray.forEach(size => {
           variantsArray.push({
             variantCode: "",
-            inventoryQuantity: inventoryQuantity1,
+            inventoryQuantity: inventoryQuantity,
             sellableQuantity: sellableQuantity,
             size: size,
             color: color,
@@ -184,7 +195,45 @@ function CreateProduct({ setStateAlert }) {
       })
     })
     setVariants([...variantsArray]);
-  } 
+  }
+
+  //tu dong generate variants voi img cua product
+  const handleGenerateVariantsWithProductVariant = () => {
+    let variantsArray = [];
+    let colorsArray = [""];
+    let materialsAray = [""];
+    let sizesArray = [""];
+    let inventoryQuantity = product.inventoryQuantity;
+    let sellableQuantity = product.sellableQuantity;
+    let originalPrice = product.originalPrice;
+    let wholeSalePrice = product.wholeSalePrice;
+    let retailPrice = product.retailPrice;
+
+    if(colors.length != 0) colorsArray = colors;
+    if(materials.length != 0) materialsAray = materials;
+    if(sizes.length != 0) sizesArray = sizes;
+    colorsArray.forEach(color => {
+      materialsAray.forEach(material => {
+        sizesArray.forEach(size => {
+          variantsArray.push({
+            variantCode: "",
+            inventoryQuantity: inventoryQuantity,
+            sellableQuantity: sellableQuantity,
+            size: size,
+            color: color,
+            material: material,
+            unit: product.unit,
+            imageUrl: product.imageUrl,
+            originalPrice: originalPrice,
+            wholeSalePrice: wholeSalePrice,
+            retailPrice: retailPrice,
+            sellableStatus: product.sellableStatus,
+          });
+        })
+      })
+    })
+    setVariants([...variantsArray]);
+  }
 
   const handleCreateProduct = () => {
     console.log({
@@ -195,24 +244,23 @@ function CreateProduct({ setStateAlert }) {
       ...product,
       variants: variants
     })
-    // ProductAPI.createProduct(product)
-      .then((res) => {
-        setStateAlert({
-          severity: "success",
-          variant: "filled",
-          open: true,
-          content: "Đã tạo thêm sản phẩm",
-        });
-        history.push("/san-pham");
-      })
-      .catch((err) => {
-        setStateAlert({
-          severity: "error",
-          variant: "filled",
-          open: true,
-          content: err.response.data,
-        });
+    .then((res) => {
+      setStateAlert({
+        severity: "success",
+        variant: "filled",
+        open: true,
+        content: "Đã tạo thêm sản phẩm",
       });
+      history.push("/san-pham");
+    })
+    .catch((err) => {
+      setStateAlert({
+        severity: "error",
+        variant: "filled",
+        open: true,
+        content: err.response.data,
+      });
+    });
   };
 
   return (
@@ -422,7 +470,6 @@ function CreateProduct({ setStateAlert }) {
                     name="colors"
                     placeholder="Nhập màu sắc"
                     inputRef={colorRef}
-                    // onChange={handleChange}
                     onKeyDown={(evt) =>
                       handleKeyDown(evt, colors, setColors, colorRef)
                     }
@@ -431,6 +478,7 @@ function CreateProduct({ setStateAlert }) {
                         <Chip
                           key={index}
                           label={item}
+                          sx={{mr:1}}
                           onDelete={() =>
                             handleDeleteChip(item, colors, setColors)
                           }
@@ -450,7 +498,6 @@ function CreateProduct({ setStateAlert }) {
                     name="materials"
                     placeholder="Nhập chất liệu"
                     inputRef={materialRef}
-                    // onChange={handleChange}
                     onKeyDown={(evt) =>
                       handleKeyDown(evt, materials, setMaterials, materialRef)
                     }
@@ -459,6 +506,7 @@ function CreateProduct({ setStateAlert }) {
                         <Chip
                           key={index}
                           label={item}
+                          sx={{mr:1}}
                           onDelete={() =>
                             handleDeleteChip(item, materials, setMaterials)
                           }
@@ -478,7 +526,6 @@ function CreateProduct({ setStateAlert }) {
                     name="sizes"
                     placeholder="Nhập kích thước"
                     inputRef={sizeRef}
-                    // onChange={handleChange}
                     onKeyDown={(evt) =>
                       handleKeyDown(evt, sizes, setSizes, sizeRef)
                     }
@@ -487,6 +534,7 @@ function CreateProduct({ setStateAlert }) {
                         <Chip
                           key={index}
                           label={item}
+                          sx={{mr:1}}
                           onDelete={() =>
                             handleDeleteChip(item, sizes, setSizes)
                           }
@@ -509,8 +557,8 @@ function CreateProduct({ setStateAlert }) {
             <Typography variant="h6" id="tableTitle" px={1}>
               Ảnh sản phẩm
             </Typography>
-            <Box display="flex" px={1} py={2}>
-              <Box
+            <Box px={1} py={2} width="100%" textAlign="center">
+              {/* <Box
                 className="file-upload"
                 sx={{
                   display: "flex",
@@ -533,8 +581,14 @@ function CreateProduct({ setStateAlert }) {
                 >
                   tải ảnh lên từ thiết bị
                 </Typography>
+            </Box> */}
+                {/* <Box
+                  width="100%"
+                  heigh="273px"
+                  sx={{ border: 1, display: "inline-block" }}
+                ></Box> */}
+                <UploadImage changeImageUrl={handleImageUrl}/>
               </Box>
-            </Box>
           </Box>
           <Box
             py={2}

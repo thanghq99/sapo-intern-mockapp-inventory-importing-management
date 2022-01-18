@@ -16,7 +16,6 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
 
   function handleChange(evt) {
     const value = evt.target.value;
-    console.log(typeof (evt.target.value))
     setVariantInfo({
       ...variantInfo,
       [evt.target.name]: value,
@@ -24,7 +23,6 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
   }
 
   function handleChangeNumber(evt) {
-    console.log("edit as number")
     if (evt.target.valueAsNumber) {
       setVariantInfo({
         ...variantInfo,
@@ -52,9 +50,9 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
     setViewState(1);
   }
 
-  const [receivedImg, setReceivedImg] = useState("")
+  const [receivedImg, setReceivedImg] = useState("");
   const handleImageUrl = (url) => {
-    setReceivedImg(url)
+    setReceivedImg(url);
   }
   function handleUpdateVariant() {
     console.log({
@@ -113,6 +111,7 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
             display="flex"
             flexDirection="column"
             justifyContent="space-between"
+            marginRight={2}
           >
             <Grid container>
               <Typography variant="body2">Mã SKU</Typography>
@@ -171,12 +170,12 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
             </Box>
           </Box>
           <Box width="33.3333%" textAlign="center">
-            <Box
+            {/* <Box
               width="100%"
               heigh="273px"
               sx={{ border: 1, display: "inline-block" }}
-            ></Box>
-            <UploadImage changeImageUrl={handleImageUrl} />
+            ></Box> */}
+            <UploadImage changeImageUrl={handleImageUrl}/>
           </Box>
         </Box>
       </Box>

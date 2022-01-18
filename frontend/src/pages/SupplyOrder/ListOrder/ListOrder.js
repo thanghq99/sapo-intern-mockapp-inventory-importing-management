@@ -44,11 +44,10 @@ export default function ListOrder() {
 
     //inputs
     const handleChange = (e) => {
-        // let value = e.target.value.toLowerCase();
-        let value = 'đã thanh toán';
+        let value = e.target.value.toLowerCase();
         setSearchInput(value);
         let input = value.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
-        let result = listOrder.filter(product => product.transactionStatus.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
+        let result = listOrder.filter(product => product.code.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
         setSearchedProducts([...result]);
     }
     const handleFillter = (event, contentFillter) => {

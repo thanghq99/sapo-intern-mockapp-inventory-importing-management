@@ -43,10 +43,26 @@
                 height: 30px;
                 padding-right: 10px;
             }
+            
+            
+        }
+        
+    }
+}
+.changeDiscount {
+    // background-color: #FFFFFF;
+    // .MuiOutlinedInput-input {
+    //     padding: 10px 10px;
+    // }
+    .MuiTextField-root {
+        height: 35px;
+        width: 150px;
+        .MuiOutlinedInput-root {
+            height: 35px;
+            width: 150px;
         }
     }
 }
-
 .selectproduct {
     display: flex;
     margin-bottom: 15px;
@@ -64,11 +80,12 @@
         flex-direction: row;
         margin-left: 20px;
         border: 1px rgb(209, 209, 209) solid;
-        border-bottom-left-radius: 5px;
-        border-top-left-radius: 5px;
-        // border-radius: 5px;
+        // border-bottom-left-radius: 5px;
+        // border-top-left-radius: 5px;
+        border-radius: 5px;
         align-items: center;
-        width: 80%;
+        width: 100%;
+        margin-right: 20px;
         // height: 30px;
         .icon-search{   
             margin-left: 10px;
@@ -98,7 +115,16 @@
        
     }
 }
-
+.time {
+    .MuiFormControl-root {
+        // margin-left: 20px;
+        width: 90%;
+        height: 40px;
+        .MuiOutlinedInput-root {
+            height: 40px;
+        }
+    }
+}
 .btn-order {
     position: absolute;
     width: 250px;
