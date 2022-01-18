@@ -43,7 +43,7 @@ export default function Home() {
         fetchReportAPI();
     }, [yearChart])
 
-    // get totalSuppliedQuantity from api report
+    // get totalEachmonth from api report
     const [totalEachMonth, setTotalEachMonth] = React.useState([])
     React.useEffect(() => {
         const fetchReportAPI = async () => {
@@ -52,6 +52,24 @@ export default function Home() {
         }
         fetchReportAPI();
     }, [yearChart])
+
+    // get totalEachmonth last year from api report
+    const [totalEachMonthLastYear, setTotalEachMonthLastYear] = React.useState([])
+    React.useEffect(() => {
+        const fetchReportAPI = async () => {
+            const res = await ReportAPI.eachMonth(yearChart - 1);
+            setTotalEachMonthLastYear(res.data)
+        }
+        fetchReportAPI();
+    }, [yearChart])
+
+    // all index get from api
+    const totalOrdersCurrentYear = (totalOrders.reduce((a, b) => a + b, 0));
+    const totalSuppliedQuantityCurrentYear = (totalSuppliedQuantity.reduce((a, b) => a + b, 0));
+    const totalOrdersLastYear = (totalEachMonthLastYear.map((e) => e.totalOrders).reduce((a, b) => a + b, 0));
+    const totalSuppliedQuantityLastYear = (totalEachMonthLastYear.map((e) => e.totalSuppliedQuantity).reduce((a, b) => a + b, 0));
+    const totalAmountCurrentYear = (totalEachMonth.map((e) => e.totalAmount).reduce((a, b) => a + b, 0));
+    const totalAmountLastYear = (totalEachMonthLastYear.map((e) => e.totalAmount).reduce((a, b) => a + b, 0));
 
 
     const options = {
@@ -176,8 +194,14 @@ export default function Home() {
                             <h3><strong style={{ fontSize: "1.3em" }}>Tổng sản phẩm</strong></h3>
                             <Grid pt={4} pl={4} container spacing={2}>
                                 <Grid xs={6}>
-                                    {(totalSuppliedQuantity.reduce((a, b) => a + b, 0)).toLocaleString()}<br />
-                                    <ArrowUpwardIcon sx={{ marginBottom: "-0.3em", color: "#2eff2e", fontSize: "1.8em" }} /> 20%
+                                    {totalSuppliedQuantityCurrentYear.toLocaleString()}<br />
+                                    {(totalSuppliedQuantityCurrentYear >= totalSuppliedQuantityLastYear) ?
+                                        <ArrowUpwardIcon sx={{ marginBottom: "-0.3em", color: "#2eff2e", fontSize: "1.8em" }} /> :
+                                        <ArrowDownwardIcon sx={{ marginBottom: "-0.3em", color: "#ff4e4e", fontSize: "1.8em" }} />
+                                    }
+                                    {(totalSuppliedQuantityCurrentYear === 0 || totalSuppliedQuantityLastYear === 0) ?
+                                        "Chưa so sánh" : ((Math.abs(totalSuppliedQuantityCurrentYear - totalSuppliedQuantityLastYear) / totalSuppliedQuantityLastYear * 100).toFixed(2) + " %")
+                                    }
                                 </Grid>
                                 <Grid xs={6}>
                                     <i style={{ fontSize: "3em" }} className="fas fa-cubes"></i>
@@ -190,8 +214,14 @@ export default function Home() {
                             <h3><strong style={{ fontSize: "1.3em" }}>Tổng số đơn</strong></h3>
                             <Grid pt={4} pl={4} container spacing={2}>
                                 <Grid xs={6}>
-                                    {(totalOrders.reduce((a, b) => a + b, 0)).toLocaleString()}<br />
-                                    <ArrowUpwardIcon sx={{ marginBottom: "-0.3em", color: "#2eff2e", fontSize: "1.8em" }} /> 20%
+                                    {totalOrdersCurrentYear.toLocaleString()}<br />
+                                    {(totalOrdersCurrentYear >= totalOrdersLastYear) ?
+                                        <ArrowUpwardIcon sx={{ marginBottom: "-0.3em", color: "#2eff2e", fontSize: "1.8em" }} /> :
+                                        <ArrowDownwardIcon sx={{ marginBottom: "-0.3em", color: "#ff4e4e", fontSize: "1.8em" }} />
+                                    }
+                                    {(totalOrdersCurrentYear === 0 || totalOrdersLastYear === 0) ?
+                                        "Chưa so sánh" : ((Math.abs(totalOrdersCurrentYear - totalOrdersLastYear) / totalOrdersLastYear * 100).toFixed(2) + " %")
+                                    }
                                 </Grid>
                                 <Grid xs={6}>
                                     <i style={{ fontSize: "3em" }} className="fas fa-clipboard-list"></i>
@@ -204,8 +234,14 @@ export default function Home() {
                             <h3><strong style={{ fontSize: "1.3em" }}>Tổng tiền hàng</strong></h3>
                             <Grid pt={4} pl={4} container spacing={2}>
                                 <Grid xs={6}>
-                                    {(totalEachMonth.map((e) => e.totalAmount).reduce((a, b) => a + b, 0)).toLocaleString()}<br />
-                                    <ArrowUpwardIcon sx={{ marginBottom: "-0.3em", color: "#2eff2e", fontSize: "1.8em" }} /> 20%
+                                    {totalAmountCurrentYear.toLocaleString()}<br />
+                                    {(totalAmountCurrentYear >= totalAmountCurrentYear) ?
+                                        <ArrowUpwardIcon sx={{ marginBottom: "-0.3em", color: "#2eff2e", fontSize: "1.8em" }} /> :
+                                        <ArrowDownwardIcon sx={{ marginBottom: "-0.3em", color: "#ff4e4e", fontSize: "1.8em" }} />
+                                    }
+                                    {(totalAmountCurrentYear === 0 || totalAmountLastYear === 0) ?
+                                        "Chưa so sánh" : ((Math.abs(totalAmountCurrentYear - totalAmountLastYear) / totalAmountLastYear * 100).toFixed(2) + " %")
+                                    }
                                 </Grid>
                                 <Grid xs={6}>
                                     <i style={{ fontSize: "3em" }} className="fas fa-dollar-sign"></i>

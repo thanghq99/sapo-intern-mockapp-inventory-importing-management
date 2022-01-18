@@ -242,7 +242,9 @@ export default function TableSupply(props) {
         const fetchSuppliers = async () => {
             const res = await SupplierAPI.suppliersList();
             setListSuppliers(res.data);
+            console.log(res.data);
             props.exportSuppliers(res.data)
+
         }
         fetchSuppliers();
     }, [trigger])

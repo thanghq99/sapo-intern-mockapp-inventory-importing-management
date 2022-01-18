@@ -27,7 +27,7 @@ const headers = [
 
 export default function Supplier() {
 
-    const [listSuppliers, setListSuppliers] = React.useState();
+    const [listSuppliers, setListSuppliers] = React.useState([]);
     const exportSuppliers = (listSuppliers) => {
         setListSuppliers(listSuppliers);
     }
