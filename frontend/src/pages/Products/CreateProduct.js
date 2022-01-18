@@ -30,7 +30,7 @@ function CreateProduct({ setStateAlert }) {
   const [sizes, setSizes] = useState([]);
 
   const [weightUnit, setWeightUnit] = useState(false); //false: gram, true: kilogram
-  const [weightValue, setWeightValue] =useState(0);
+  const [weightValue, setWeightValue] = useState(0);
 
   const [variants, setVariants] = useState([]);
   const [product, setProduct] = useState({
@@ -54,7 +54,7 @@ function CreateProduct({ setStateAlert }) {
   });
 
   useEffect(() => {
-    let weight = weightUnit ? (weightValue*1000) : (weightValue);
+    let weight = weightUnit ? (weightValue * 1000) : (weightValue);
     setProduct({
       ...product,
       weight: weight,
@@ -82,7 +82,7 @@ function CreateProduct({ setStateAlert }) {
   }
 
   function handleChangeNumber(evt) {
-    if(evt.target.valueAsNumber) {
+    if (evt.target.valueAsNumber) {
       setProduct({
         ...product,
         [evt.target.name]: evt.target.valueAsNumber,
@@ -102,7 +102,7 @@ function CreateProduct({ setStateAlert }) {
 
   //handle weight
   const handleChangeWeight = (evt) => {
-    if(evt.target.valueAsNumber) setWeightValue(evt.target.valueAsNumber)
+    if (evt.target.valueAsNumber) setWeightValue(evt.target.valueAsNumber)
     else setWeightValue(0);
   };
 
@@ -124,6 +124,7 @@ function CreateProduct({ setStateAlert }) {
       } else {
         newArray.push(evt.target.value);
       }
+      console.log(variants);
       setArray([...newArray]);
       ref.current.value = "";
     }
@@ -171,12 +172,12 @@ function CreateProduct({ setStateAlert }) {
     let wholeSalePrice = product.wholeSalePrice;
     let retailPrice = product.retailPrice;
 
-    if(colors.length != 0) colorsArray = colors;
-    if(materials.length != 0) materialsAray = materials;
-    if(sizes.length != 0) sizesArray = sizes;
-    colorsArray.forEach(color => {
-      materialsAray.forEach(material => {
-        sizesArray.forEach(size => {
+    if (colors.length != 0) colorsArray = colors;
+    if (materials.length != 0) materialsAray = materials;
+    if (sizes.length != 0) sizesArray = sizes;
+    colorsArray.forEach((color, index1) => {
+      materialsAray.forEach((material, index2) => {
+        sizesArray.forEach((size, index3) => {
           variantsArray.push({
             variantCode: "",
             inventoryQuantity: inventoryQuantity,
@@ -185,7 +186,8 @@ function CreateProduct({ setStateAlert }) {
             color: color,
             material: material,
             unit: product.unit,
-            imageUrl: null,
+            // imageUrl: variants[(index1 + 1) * (index2 + 1) * (index3 + 1)]?.imageUrl,
+            //imageUrl: variants[index1 + index2 + index3]?.imageUrl,
             originalPrice: originalPrice,
             wholeSalePrice: wholeSalePrice,
             retailPrice: retailPrice,
@@ -209,9 +211,9 @@ function CreateProduct({ setStateAlert }) {
     let wholeSalePrice = product.wholeSalePrice;
     let retailPrice = product.retailPrice;
 
-    if(colors.length != 0) colorsArray = colors;
-    if(materials.length != 0) materialsAray = materials;
-    if(sizes.length != 0) sizesArray = sizes;
+    if (colors.length != 0) colorsArray = colors;
+    if (materials.length != 0) materialsAray = materials;
+    if (sizes.length != 0) sizesArray = sizes;
     colorsArray.forEach(color => {
       materialsAray.forEach(material => {
         sizesArray.forEach(size => {
@@ -244,23 +246,23 @@ function CreateProduct({ setStateAlert }) {
       ...product,
       variants: variants
     })
-    .then((res) => {
-      setStateAlert({
-        severity: "success",
-        variant: "filled",
-        open: true,
-        content: "Đã tạo thêm sản phẩm",
+      .then((res) => {
+        setStateAlert({
+          severity: "success",
+          variant: "filled",
+          open: true,
+          content: "Đã tạo thêm sản phẩm",
+        });
+        history.push("/san-pham");
+      })
+      .catch((err) => {
+        setStateAlert({
+          severity: "error",
+          variant: "filled",
+          open: true,
+          content: err.response.data,
+        });
       });
-      history.push("/san-pham");
-    })
-    .catch((err) => {
-      setStateAlert({
-        severity: "error",
-        variant: "filled",
-        open: true,
-        content: err.response.data,
-      });
-    });
   };
 
   return (
@@ -478,7 +480,7 @@ function CreateProduct({ setStateAlert }) {
                         <Chip
                           key={index}
                           label={item}
-                          sx={{mr:1}}
+                          sx={{ mr: 1 }}
                           onDelete={() =>
                             handleDeleteChip(item, colors, setColors)
                           }
@@ -506,7 +508,7 @@ function CreateProduct({ setStateAlert }) {
                         <Chip
                           key={index}
                           label={item}
-                          sx={{mr:1}}
+                          sx={{ mr: 1 }}
                           onDelete={() =>
                             handleDeleteChip(item, materials, setMaterials)
                           }
@@ -534,7 +536,7 @@ function CreateProduct({ setStateAlert }) {
                         <Chip
                           key={index}
                           label={item}
-                          sx={{mr:1}}
+                          sx={{ mr: 1 }}
                           onDelete={() =>
                             handleDeleteChip(item, sizes, setSizes)
                           }
@@ -582,13 +584,13 @@ function CreateProduct({ setStateAlert }) {
                   tải ảnh lên từ thiết bị
                 </Typography>
             </Box> */}
-                {/* <Box
+              {/* <Box
                   width="100%"
                   heigh="273px"
                   sx={{ border: 1, display: "inline-block" }}
                 ></Box> */}
-                <UploadImage changeImageUrl={handleImageUrl}/>
-              </Box>
+              <UploadImage changeImageUrl={handleImageUrl} />
+            </Box>
           </Box>
           <Box
             py={2}
@@ -722,9 +724,9 @@ function CreateProduct({ setStateAlert }) {
             </Box>
           </Box>
         </Grid>
-        {variants.length  > 0 ? 
-        <Grid item xs={12}>
-          <Box
+        {variants.length > 0 ?
+          <Grid item xs={12}>
+            <Box
               py={2}
               px={1}
               display="flex"
@@ -736,12 +738,12 @@ function CreateProduct({ setStateAlert }) {
               </Typography>
               <Divider sx={{ my: 1 }} />
               <Box display="flex" flexDirection="column" px={1} py={2}>
-                <VariantsPreview setVariants={setVariants} productName={product.productName} variants={variants}/>
+                <VariantsPreview setVariants={setVariants} productName={product.productName} variants={variants} />
+              </Box>
             </Box>
-          </Box>
-        </Grid>
-        :
-        null}
+          </Grid>
+          :
+          null}
       </Grid>
     </Box>
   );

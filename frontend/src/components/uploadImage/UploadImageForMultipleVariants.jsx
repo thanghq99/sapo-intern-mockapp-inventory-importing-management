@@ -97,7 +97,6 @@ export default function UploadImageForMultipleVariants(props) {
                         style={{ display: "none" }}
                         id="file-upload"
                         onChange={(event) => {
-                            console.log(event.target.files[0]);
                             setSelectedImage(event.target.files[0]);
                             uploadImage(event.target.files[0]);
                             setDisplayState("flex");
