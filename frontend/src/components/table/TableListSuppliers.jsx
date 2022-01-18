@@ -233,7 +233,7 @@ EnhancedTableToolbar.propTypes = {
 
 
 ///////////////////////////// main function ***********************///////////////////////////////
-export default function TableSupply() {
+export default function TableSupply(props) {
 
     // get all infos_suppliers********************************//
     const [trigger, setTrigger] = React.useState(false); // trigger to re-render supplier's info
@@ -242,6 +242,9 @@ export default function TableSupply() {
         const fetchSuppliers = async () => {
             const res = await SupplierAPI.suppliersList();
             setListSuppliers(res.data);
+            console.log(res.data);
+            props.exportSuppliers(res.data)
+
         }
         fetchSuppliers();
     }, [trigger])
