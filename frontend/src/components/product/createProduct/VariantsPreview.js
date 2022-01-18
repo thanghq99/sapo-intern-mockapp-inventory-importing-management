@@ -29,12 +29,9 @@ function VariantsPreview({ variants, setVariants, productName }) {
 
 
   const handleImageUrl = (url, index) => {
-    //let newVariants = variants;
-    //newVariants[index] = { ...newVariants[index], imageUrl: url };
-    variants[index].imageUrl = url;
-    //setVariants([...newVariants]);
-    setVariants(variants);
-    console.log(variants);
+    let newVariants = variants;
+    newVariants[index] = { ...newVariants[index], imageUrl: url };
+    setVariants([...newVariants]);
   }
 
   function handleChangeNumber(evt, index) {
