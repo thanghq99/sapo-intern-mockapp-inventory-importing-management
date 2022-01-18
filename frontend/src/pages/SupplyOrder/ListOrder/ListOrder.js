@@ -117,7 +117,7 @@ export default function ListOrder() {
             <Box display='flex' flexDirection='column'>
 
                 <Box display='flex' justifyContent='space-between' py={2} px={2} backgroundColor='white'>
-                    <CSVLink data={searchedProducts} headers={headers} fileName="Orders.csv" target="_blank"
+                    <CSVLink data={searchedProducts} headers={headers} filename="Orders.csv" target="_blank"
                         style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "black" }}
                     >
                         <Download />
