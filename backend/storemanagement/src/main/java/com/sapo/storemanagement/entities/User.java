@@ -37,6 +37,9 @@ public class User {
     @Email
     private String email;
 
+    @Column(name = "record_status", length = 32)
+    private RecordStatus recordStatus = RecordStatus.ACTIVE;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "user_role",
@@ -89,5 +92,13 @@ public class User {
 
     public void addRole(Role role) {
         this.roles.add(role);
+    }
+
+    public RecordStatus getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(RecordStatus recordStatus) {
+        this.recordStatus = recordStatus;
     }
 }

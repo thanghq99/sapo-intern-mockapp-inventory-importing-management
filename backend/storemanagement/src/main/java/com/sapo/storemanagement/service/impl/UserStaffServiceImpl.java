@@ -1,5 +1,6 @@
 package com.sapo.storemanagement.service.impl;
 
+import com.sapo.storemanagement.entities.RecordStatus;
 import com.sapo.storemanagement.entities.User;
 import com.sapo.storemanagement.exception.BadNumberException;
 import com.sapo.storemanagement.exception.RecordNotFoundException;
@@ -58,7 +59,8 @@ public class UserStaffServiceImpl implements UserStaffService {
         }
 
         User existingUser = this.getUserById(id);
-        userRepository.delete(existingUser);
+        existingUser.setRecordStatus(RecordStatus.DELETED);
+        userRepository.save(existingUser);
         return "Người dùng đã bị xóa";
     }
 
