@@ -21,7 +21,6 @@ const CustomDisableInput = styled(TextField)(() => ({
 }));
 
 function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }) {
-  const [lastestCode, setLastestCode] = useState('');
   const [variantInfo, setVariantInfo] = useState({
     variantCode: "",
     inventoryQuantity: 0,
@@ -46,7 +45,6 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
   useEffect(() => {
     VariantAPI.getLatestVariantCode()
       .then((res) => {
-        setLastestCode(res.data);
         setVariantInfo({
           ...variantInfo,
           variantCode: res.data

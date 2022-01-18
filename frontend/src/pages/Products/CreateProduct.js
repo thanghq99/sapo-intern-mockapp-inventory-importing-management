@@ -112,7 +112,7 @@ function CreateProduct({ setStateAlert }) {
 
   //PROPERTIES
   const handleKeyDown = (evt, array, setArray, ref) => {
-    if (evt.keyCode == 13 && evt.target.value) {
+    if (evt.keyCode === 13 && evt.target.value) {
       let newArray = array;
       if (newArray.includes(evt.target.value)) {
         setStateAlert({
@@ -171,9 +171,9 @@ function CreateProduct({ setStateAlert }) {
     let wholeSalePrice = product.wholeSalePrice;
     let retailPrice = product.retailPrice;
 
-    if(colors.length != 0) colorsArray = colors;
-    if(materials.length != 0) materialsAray = materials;
-    if(sizes.length != 0) sizesArray = sizes;
+    if(colors.length !== 0) colorsArray = colors;
+    if(materials.length !== 0) materialsAray = materials;
+    if(sizes.length !== 0) sizesArray = sizes;
     colorsArray.forEach(color => {
       materialsAray.forEach(material => {
         sizesArray.forEach(size => {
@@ -186,44 +186,6 @@ function CreateProduct({ setStateAlert }) {
             material: material,
             unit: product.unit,
             imageUrl: null,
-            originalPrice: originalPrice,
-            wholeSalePrice: wholeSalePrice,
-            retailPrice: retailPrice,
-            sellableStatus: product.sellableStatus,
-          });
-        })
-      })
-    })
-    setVariants([...variantsArray]);
-  }
-
-  //tu dong generate variants voi img cua product
-  const handleGenerateVariantsWithProductVariant = () => {
-    let variantsArray = [];
-    let colorsArray = [""];
-    let materialsAray = [""];
-    let sizesArray = [""];
-    let inventoryQuantity = product.inventoryQuantity;
-    let sellableQuantity = product.sellableQuantity;
-    let originalPrice = product.originalPrice;
-    let wholeSalePrice = product.wholeSalePrice;
-    let retailPrice = product.retailPrice;
-
-    if(colors.length != 0) colorsArray = colors;
-    if(materials.length != 0) materialsAray = materials;
-    if(sizes.length != 0) sizesArray = sizes;
-    colorsArray.forEach(color => {
-      materialsAray.forEach(material => {
-        sizesArray.forEach(size => {
-          variantsArray.push({
-            variantCode: "",
-            inventoryQuantity: inventoryQuantity,
-            sellableQuantity: sellableQuantity,
-            size: size,
-            color: color,
-            material: material,
-            unit: product.unit,
-            imageUrl: product.imageUrl,
             originalPrice: originalPrice,
             wholeSalePrice: wholeSalePrice,
             retailPrice: retailPrice,

@@ -172,8 +172,8 @@ function ProductDetails({ setStateAlert }) {
               className="mySwiper"
             >
               {/* <SwiperSlide><img src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO6JPHK1VkhnXyF-JblYmBWNQqOsJ1p9AL1JmjnQABCNV3g3Vbn3ILskTCCti96pggJfc&usqp=CAU"} /></SwiperSlide> */}
-              {product.imageUrl ? <SwiperSlide><img src={product.imageUrl} /></SwiperSlide> : null}
-              <SwiperSlide><img src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"} /></SwiperSlide>
+              {product.imageUrl ? <SwiperSlide><img alt="Ảnh sản phẩm" src={product.imageUrl} /></SwiperSlide> : null}
+              <SwiperSlide><img alt="Ảnh phiên bản sản phẩm" src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"} /></SwiperSlide>
             </Swiper>
             :
             <Swiper
@@ -183,10 +183,10 @@ function ProductDetails({ setStateAlert }) {
               }}
               className="mySwiper"
             >
-              {product.imageUrl ? <SwiperSlide><img src={product.imageUrl} /></SwiperSlide> : null}
+              {product.imageUrl ? <SwiperSlide><img alt="Ảnh sản phẩm" src={product.imageUrl} /></SwiperSlide> : null}
               {
                 variants.map((variant) => {
-                  if (variant.imageUrl) return <SwiperSlide key={variant.code}><img src={variant.imageUrl} /></SwiperSlide>
+                  if (variant.imageUrl) return <SwiperSlide key={variant.code}><img alt="Ảnh phiên bản sản phẩm" src={variant.imageUrl} /></SwiperSlide>
                   else return null
                 })
               }
