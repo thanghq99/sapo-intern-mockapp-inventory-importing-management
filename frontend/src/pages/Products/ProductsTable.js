@@ -216,7 +216,6 @@ export default function ProductsTable({ products, handleDeleteProduct, triggerRe
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   React.useEffect(() => {
@@ -334,7 +333,7 @@ export default function ProductsTable({ products, handleDeleteProduct, triggerRe
                           backgroundColor="white"
                           mr={2}
                         >
-                          <img style={{ width: "40px", height: "40px" }} src={row.imageUrl ? row.imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"} />
+                          <img alt="Ảnh sản phẩm" style={{ width: "40px", height: "40px" }} src={row.imageUrl ? row.imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"} />
                         </Box>
                       </TableCell>
                       <TableCell
@@ -356,7 +355,7 @@ export default function ProductsTable({ products, handleDeleteProduct, triggerRe
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 50.5) * emptyRows,
+                    height: 50.5 * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />

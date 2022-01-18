@@ -43,7 +43,7 @@ function CategorySelect({handleSelectCategory, categoryName}) {
   }
   useEffect(() => {
     getData();
-  }, []);
+  });
 
   const onClickChild = (e) => {
     e.stopPropagation();
@@ -61,7 +61,7 @@ function CategorySelect({handleSelectCategory, categoryName}) {
 
   //create category in text input
   const handleKeyDown = (evt) => {
-    if(evt.keyCode == 13 && evt.target.value) {
+    if(evt.keyCode === 13 && evt.target.value) {
       try {
         CategoryAPI.CreateCategory({
           name: searchRef.current.value,

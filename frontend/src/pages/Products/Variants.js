@@ -69,7 +69,7 @@ export default function Variants({setStateAlert}) {
         let searchValue = searchInput.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
         let result = [];
 
-        if (categoryFilterValue != "") {
+        if (categoryFilterValue !== "") {
             result = variants.filter(variant => variant.product.category.name === categoryFilterValue);
         } else {
             result = variants;

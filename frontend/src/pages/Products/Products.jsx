@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import ProductAPI from '../../api/ProductAPI'
 import CategoryAPI from '../../api/CategoryAPI'
-import { Box, TextField, InputAdornment, Button, Divider, Card, CardContent, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material'
+import { Box, TextField, InputAdornment, Button, Divider, Card, CardContent, Typography, Select, MenuItem, FormControl } from '@mui/material'
 import { Search, AddCircle } from '@mui/icons-material';
 import ProductsTable from './ProductsTable'
 import UnlockAccess from '../../components/roleBasedRender/UnlockAccess'
@@ -83,7 +83,7 @@ export default function Products({ setStateAlert }) {
         let searchValue = searchInput.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
         let result = [];
 
-        if (categoryFilterValue != "") {
+        if (categoryFilterValue !== "") {
             result = products.filter(product => product.category === categoryFilterValue);
         } else {
             result = products;

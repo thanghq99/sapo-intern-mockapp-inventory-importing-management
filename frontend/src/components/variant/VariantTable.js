@@ -243,7 +243,6 @@ export default function VariantsTable({
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   React.useEffect(() => {
@@ -364,6 +363,7 @@ export default function VariantsTable({
                             mr={2}
                           ></Box> */}
                         <img
+                          alt="Ảnh phiên bản sản phẩm"
                           style={{ width: "40px", height: "40px" }}
                           src={
                             row.imageUrl
@@ -410,7 +410,7 @@ export default function VariantsTable({
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 50.5) * emptyRows,
+                    height: 50.5 * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />
