@@ -23,4 +23,6 @@ public interface OrderService {
     Order increasePaidAmount(long orderId, double offset);
 
     List<VariantsOrder> findAllVariantInOrder(long id);
+
+    void cancelOrder(long id);
 }

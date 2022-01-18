@@ -62,6 +62,11 @@ public class OrderController {
         return orderService.updateOrder(id, orderDto);
     }
 
+    @DeleteMapping("/{id}")
+    public void cancelOrder(@PathVariable long id){
+        orderService.cancelOrder(id);
+    }
+
     // lấy tất cả các variant thuộc cùng 1 orderId
     @GetMapping("/{id}/variants")
     public List<VariantsOrder> findAllVariantInOrder(@PathVariable long id) {

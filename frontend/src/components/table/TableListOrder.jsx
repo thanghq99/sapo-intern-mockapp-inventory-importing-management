@@ -16,12 +16,9 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import OrderAPI from '../../api/OrderAPI';
 import { Link } from 'react-router-dom';
 
 
@@ -72,7 +69,7 @@ const headCells = [
         disablePadding: true,
         label: 'Tên nhà cung cấp',
     },
-   
+
     {
         id: 'status',
         numeric: true,
@@ -224,7 +221,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function TableSupply({searchedProducts}) {
+export default function TableSupply({ searchedProducts }) {
 
     // const [listOrder, setListOrder] = React.useState(searchedProducts);
 
@@ -299,21 +296,21 @@ export default function TableSupply({searchedProducts}) {
 
 
     const handleColor = (key) => {
-        if(key == "Đã nhập kho" || key == "Đã thanh toán" || key == "Đã nhập hàng" || key == "Đã hoàn thành"){
+        if (key == "Đã nhập kho" || key == "Đã thanh toán" || key == "Đã nhập hàng" || key == "Đã hoàn thành") {
             return "#20a917";
-        } else if(key == "Đang giao dịch" || key == "Thanh toán một phần" || key == "Nhập kho một phần") {
+        } else if (key == "Đang giao dịch" || key == "Thanh toán một phần" || key == "Nhập kho một phần") {
             return "#f19403";
-                } else if(key == "Chờ nhập kho" || key == "Chưa thanh toán") {
-                    return "#0a77bb";
-                         } else {
-                             return "black";
-                                 }
+        } else if (key == "Chờ nhập kho" || key == "Chưa thanh toán") {
+            return "#0a77bb";
+        } else {
+            return "black";
+        }
     }
 
     return (
         <Box className='table_box' sx={{ width: '100%', marginTop: "1em" }}>
-            <Paper sx={{ width: '100%', mb: 2}}>
-                {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+            <Paper sx={{ width: '100%', mb: 2 }}>
+                <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -365,16 +362,16 @@ export default function TableSupply({searchedProducts}) {
                                                 align="center"
                                             >
                                                 <Link to={`/nhap-hang/don-hang?code=${row.id}`} className="link-detail">{row.code}</Link>
-                                        
+
                                             </TableCell>
                                             <TableCell align="center">{row.supplier.name}</TableCell>
-                                            <TableCell  style={{ color: handleColor(row.status) }}
-                                             align="center">{row.status}</TableCell>
+                                            <TableCell style={{ color: handleColor(row.status) }}
+                                                align="center">{row.status}</TableCell>
                                             <TableCell style={{ color: handleColor(row.transactionStatus) }}
-                                             align="center">{row.transactionStatus}</TableCell>
+                                                align="center">{row.transactionStatus}</TableCell>
                                             <TableCell style={{ color: handleColor(row.importedStatus) }}
-                                             align="center">{row.importedStatus}</TableCell>
-                                            <TableCell align="center">{(row.totalAmount).format()}</TableCell>
+                                                align="center">{row.importedStatus}</TableCell>
+                                            <TableCell align="center">{(row.totalAmount).toLocaleString()}</TableCell>
                                             <TableCell align="center">{row.createdBy.username}</TableCell>
                                             <TableCell align="center">{row.expectedTime}</TableCell>
                                         </TableRow>
@@ -403,7 +400,7 @@ export default function TableSupply({searchedProducts}) {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-            
+
         </Box>
     );
 }
