@@ -272,7 +272,7 @@ export default function TableSupply(props) {
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -416,7 +416,7 @@ export default function TableSupply(props) {
                 </TableContainer>
                 <TablePagination
                     labelRowsPerPage="Số hàng một trang"
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[10, 20, 50]}
                     component="div"
                     count={listSuppliers.length}
                     rowsPerPage={rowsPerPage}
