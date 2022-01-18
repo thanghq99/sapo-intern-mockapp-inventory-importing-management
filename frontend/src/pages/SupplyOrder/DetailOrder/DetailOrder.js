@@ -28,9 +28,6 @@ import Modal from '@mui/material/Modal';
 import UnlockAccess from '../../../components/roleBasedRender/UnlockAccess'
 
 import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
     Link,
     useHistory
 } from "react-router-dom";
@@ -38,8 +35,6 @@ import {
 
 import './DetailOrder.scss';
 import OrderAPI from '../../../api/OrderAPI'
-import { Collapse } from "@mui/material";
-import ProductAPI from "../../../api/ProductAPI";
 import PaymentAPI from "../../../api/PaymentAPI";
 import ImportReceiptsAPI from "../../../api/ImportReceiptsAPI";
 import ReturnReceiptsAPI from "../../../api/ReturnReceiptsAPI";
