@@ -9,6 +9,7 @@ import com.sapo.storemanagement.exception.RecordNotFoundException;
 import com.sapo.storemanagement.repository.ImportReceiptRepository;
 import com.sapo.storemanagement.repository.VariantsImportReceiptRepository;
 import com.sapo.storemanagement.repository.VariantsOrderRepository;
+import com.sapo.storemanagement.repository.VariantsReturnReceiptRepository;
 import com.sapo.storemanagement.service.ImportReceiptService;
 import com.sapo.storemanagement.service.OrderService;
 import com.sapo.storemanagement.service.VariantService;
@@ -39,6 +40,9 @@ public class ImportReceiptServiceImpl implements ImportReceiptService {
 
     @Autowired
     private VariantsImportReceiptRepository variantsImportReceiptRepository;
+
+    @Autowired
+    private VariantsReturnReceiptRepository variantsReturnReceiptRepository;
 
     @Autowired
     private VariantService variantService;
@@ -104,7 +108,9 @@ public class ImportReceiptServiceImpl implements ImportReceiptService {
                 .totalImportedQuantityOfVariantInOrder(lineItem.getVariantId(), orderId);
             long totalSuppliedQuantity = variantsOrderRepository
                 .totalSuppliedQuantityOfVariantInOrder(lineItem.getVariantId(), orderId);
-            if(totalAlreadyImportedQuantity + lineItem.getQuantity() > totalSuppliedQuantity) {
+            long totalSuppliedReturnQuantity = variantsReturnReceiptRepository
+                    .totalReturnedQuantityOfVariantInOrder(lineItem.getVariantId(), orderId);
+            if(totalAlreadyImportedQuantity + lineItem.getQuantity() - totalSuppliedReturnQuantity > totalSuppliedQuantity) {
                 throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Tổng lượng nhập kho của sản phẩm " + variant.getVariantName() + " không được vượt quá số lượng được cung cấp"
