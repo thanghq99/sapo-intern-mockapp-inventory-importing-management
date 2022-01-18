@@ -686,7 +686,7 @@ export default function DetailOrder({ setStateAlert }) {
                                                     <ListItem className="product-item"
                                                     //  sx={{border: "1px solid #9b9999"}}
                                                     >
-                                                        <Typography sx={{ width: '75%', paddingLeft: "5px", fontWeight: 500 }} >{item.variant.product.name}</Typography>
+                                                        <Typography sx={{ width: '75%', paddingLeft: "5px", fontWeight: 500 }} >{item.variant.variantName}</Typography>
                                                         <Box sx={{ width: '25%', textAlign: "center" }}><input type="text" style={{ width: '80%', height: 35 }} name="num" value={num[item.variant.id]}
                                                             onChange={e =>
                                                                 setNum({ ...num, [item.variant.id]: e.target.value })}
