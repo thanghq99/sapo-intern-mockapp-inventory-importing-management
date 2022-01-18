@@ -171,7 +171,9 @@ function ProductDetails({ setStateAlert }) {
               }}
               className="mySwiper"
             >
-              <SwiperSlide><img src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO6JPHK1VkhnXyF-JblYmBWNQqOsJ1p9AL1JmjnQABCNV3g3Vbn3ILskTCCti96pggJfc&usqp=CAU"} /></SwiperSlide>
+              {/* <SwiperSlide><img src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO6JPHK1VkhnXyF-JblYmBWNQqOsJ1p9AL1JmjnQABCNV3g3Vbn3ILskTCCti96pggJfc&usqp=CAU"} /></SwiperSlide> */}
+              {product.imageUrl ? <SwiperSlide><img src={product.imageUrl} /></SwiperSlide> : null}
+              <SwiperSlide><img src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"} /></SwiperSlide>
             </Swiper>
             :
             <Swiper
@@ -181,6 +183,7 @@ function ProductDetails({ setStateAlert }) {
               }}
               className="mySwiper"
             >
+              {product.imageUrl ? <SwiperSlide><img src={product.imageUrl} /></SwiperSlide> : null}
               {
                 variants.map((variant) => {
                   if (variant.imageUrl) return <SwiperSlide key={variant.code}><img src={variant.imageUrl} /></SwiperSlide>
@@ -220,8 +223,8 @@ function ProductDetails({ setStateAlert }) {
               justifyContent="space-evenly"
               height="100%"
             >
+              <Typography>Khối lượng</Typography>
               <Typography>Ngày tạo</Typography>
-              <Typography>Ngày cập nhật cuối</Typography>
               <DescriptionDialog description={product.description} />
             </Box>
             <Box
@@ -231,8 +234,8 @@ function ProductDetails({ setStateAlert }) {
               justifyContent="space-evenly"
               height="100%"
             >
+              <Typography>:{product.weight > 999 ? `${product.weight/1000} kg` : `${product.weight} g`}</Typography>
               <Typography>: {product.createdAt}</Typography>
-              <Typography>: {product.updatedAt}</Typography>
               {/* placeholder */}
               <Typography sx={{ opacity: "0" }}>.</Typography>
             </Box>

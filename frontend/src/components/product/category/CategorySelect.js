@@ -33,6 +33,10 @@ function CategorySelect({handleSelectCategory, categoryName}) {
       setCategories(result.data);
       setSearchedCategories(result.data);
       setCategory(categoryName);
+      if (categoryName) {
+        let oldCategory = result.data.find(c => c.name === categoryName);
+        handleSelectCategory(oldCategory.id);
+      }
     }).catch((err) => {
       console.log(err);
     })

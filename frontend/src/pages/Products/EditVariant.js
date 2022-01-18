@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -10,6 +10,14 @@ import {
 } from "@mui/material";
 import ProductAPI from "../../api/ProductAPI";
 import UploadImage from "../../components/uploadImage/UploadImage";
+import { styled } from "@mui/material/styles";
+
+const CustomDisableInput = styled(TextField)(() => ({
+  ".MuiInputBase-input.Mui-disabled": {
+    WebkitTextFillColor: "#000",
+    color: "#000"
+  }
+}));
 
 function EditVariant({ productId, triggerReload, setViewState, variantData, setStateAlert }) {
   const [variantInfo, setVariantInfo] = useState(variantData);
@@ -115,8 +123,9 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
           >
             <Grid container>
               <Typography variant="body2">Mã SKU</Typography>
-              <TextField
+              <CustomDisableInput
                 fullWidth
+                disabled
                 size="small"
                 name="code"
                 placeholder="Nhập mã SKU phiên bản"
