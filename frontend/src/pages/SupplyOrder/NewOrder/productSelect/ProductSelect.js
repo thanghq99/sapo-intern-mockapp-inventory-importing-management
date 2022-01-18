@@ -18,10 +18,10 @@ import ProductAPI from '../../../../api/ProductAPI';
 
 
 
-Number.prototype.format = function(n, x) {
+Number.prototype.format = function (n, x) {
     var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
     return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
-  };
+};
 
 export default function ProductSelect({ setProduct, setDiscountFinal }) {
 
@@ -149,7 +149,7 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
     }
     React.useEffect(() => {
         setDiscountFinal(discount);
-    } ,[discount]) 
+    }, [discount])
     React.useEffect(() => {
         let tmp = 0;
         let numCate = 0;
@@ -201,7 +201,7 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
 
     // console.log(productSelect);
     // console.log(lastProduct);
-    // console.log(productList);
+    console.log(productList);
 
     return (
         <div>
@@ -222,7 +222,14 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
                             getOptionLabel={(option) => option.variantName}
                             renderOption={(props, option) => (
                                 <Box {...props}>
-                                    <Box>Img</Box>
+                                    <Box><img
+                                        style={{ width: "35px", height: "35px" }}
+                                        src={
+                                            option.imageUrl
+                                                ? option.imageUrl
+                                                : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"
+                                        }
+                                    /></Box>
                                     <Box className="info">
                                         <Box sx={{ display: "flex" }} className="info-prod" >
                                             <Box sx={{ fontWeight: 550 }}>{option.variantName}</Box>
@@ -292,7 +299,7 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
                             <Typography>{total?.format()} vnd</Typography>
                         </Box>
                         <Box className="pay-info-item" sx={{ color: "#007BFF", cursor: "pointer" }}>
-                            <Typography onClick={handleOpenDiscount} sx={{display: "flex", alignItems: "center"}}>
+                            <Typography onClick={handleOpenDiscount} sx={{ display: "flex", alignItems: "center" }}>
                                 <Typography>Tổng chiết khấu</Typography>
                                 <ArrowDropDownIcon />
                             </Typography>
@@ -302,7 +309,7 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
                             !openDiscount ? null :
                                 <Box className="changeDiscount" sx={{ width: "100%" }}>
                                     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                                        <Box sx={{display: "flex", alignItems: "center"}}>
+                                        <Box sx={{ display: "flex", alignItems: "center" }}>
                                             <TextField
 
                                                 onChange={e => setDiscount(e.target.value)} >
@@ -318,7 +325,7 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
                         }
                         <Box className="pay-info-item">
                             <Typography sx={{ fontWeight: 700 }}>Phải trả</Typography>
-                            <Typography>{Number((total * (100 -discount)/100).toFixed(2)).format()} vnd</Typography>
+                            <Typography>{Number((total * (100 - discount) / 100).toFixed(2)).format()} vnd</Typography>
                         </Box>
 
                     </Box>

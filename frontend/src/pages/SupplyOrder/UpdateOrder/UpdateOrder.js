@@ -348,7 +348,14 @@ export default function DetailOrder({ setStateAlert }) {
                                     getOptionLabel={(option) => option.product.name}
                                     renderOption={(props, option) => (
                                         <Box {...props}>
-                                            <Box>Img</Box>
+                                            <Box><img
+                                                style={{ width: "35px", height: "35px" }}
+                                                src={
+                                                    option.imageUrl
+                                                        ? option.imageUrl
+                                                        : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"
+                                                }
+                                            /></Box>
                                             <Box className="info">
                                                 <Box sx={{ display: "flex" }} className="info-prod" >
                                                     <Box sx={{ fontWeight: 550 }}>{option.variantName}</Box>
