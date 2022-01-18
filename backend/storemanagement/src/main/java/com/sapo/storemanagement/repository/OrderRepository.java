@@ -32,7 +32,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     double totalAmountInMonthInYear(@Param("month") int month, @Param("year") int year);
 
     @Query(
-            value = "select coalesce(sum(paid_amount), 0) from orders where month(created_at) = :month and year(created_at) = :year",
+            value = "select coalesce(sum(amount), 0) from payment_invoice where month(created_at) = :month and year(created_at) = :year",
             nativeQuery = true
     )
     double paidAmountInMonthInYear(@Param("month") int month, @Param("year") int year);
