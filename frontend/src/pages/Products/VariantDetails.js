@@ -59,7 +59,8 @@ function VariantDetails({ variantInfo, setViewState }) {
             <Box
               sx={{ height: "100%", width: "100%", objectFit: "contain" }}
               component="img"
-              src={variantInfo.imageUrl ? variantInfo.imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO6JPHK1VkhnXyF-JblYmBWNQqOsJ1p9AL1JmjnQABCNV3g3Vbn3ILskTCCti96pggJfc&usqp=CAU"}
+              // src={variantInfo.imageUrl ? variantInfo.imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQO6JPHK1VkhnXyF-JblYmBWNQqOsJ1p9AL1JmjnQABCNV3g3Vbn3ILskTCCti96pggJfc&usqp=CAU"}
+              src={variantInfo.imageUrl ? variantInfo.imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm1N8tGE9JE-BAn4GgYgG6MHCngMqXZKpZYzAUaI8kaPywl-kM_-9Zk8OnNOhmdt1sBjQ&usqp=CAU"}
               width="129px"
             />
           </Box>

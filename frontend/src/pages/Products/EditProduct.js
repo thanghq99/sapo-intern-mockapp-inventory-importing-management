@@ -8,11 +8,12 @@ import {
   TextField,
   IconButton,
 } from "@mui/material";
-import { ArrowBackIosNew, Add, SwapHoriz } from "@mui/icons-material";
+import { ArrowBackIosNew, SwapHoriz } from "@mui/icons-material";
 import { useHistory, useParams } from "react-router-dom";
 import "./createProduct.scss";
 import ProductAPI from "../../api/ProductAPI";
 import CategorySelect from "../../components/product/category/CategorySelect";
+import UploadImage from "../../components/uploadImage/UploadImage";
 
 function EditProduct({ setStateAlert }) {
   const history = useHistory();
@@ -22,6 +23,7 @@ function EditProduct({ setStateAlert }) {
   const [weightUnit, setWeightUnit] = useState(false); //false: gram, true: kilogram
   const [weightValue, setWeightValue] = useState(0);
   const [categoryName, setCategoryName] = useState("");
+  const [receivedImg, setReceivedImg] = useState("");
 
   const [product, setProduct] = useState({});
 
@@ -43,6 +45,13 @@ function EditProduct({ setStateAlert }) {
       setLoading(true);
     };
   }, []);
+
+  useEffect(() => {
+    setProduct({
+      ...product,
+      imageUrl: receivedImg
+    });
+  }, [receivedImg])
 
   useEffect(() => {
     let weight = weightUnit ? weightValue * 1000 : weightValue;
@@ -69,6 +78,10 @@ function EditProduct({ setStateAlert }) {
       categoryId: categoryId
     })
   };
+
+  const handleImageUrl = (url) => {
+    setReceivedImg(url);
+  }
 
   //handle weight
   const handleChangeWeight = (evt) => {
@@ -232,7 +245,7 @@ function EditProduct({ setStateAlert }) {
             <Typography variant="h6" id="tableTitle" px={1}>
               Ảnh sản phẩm
             </Typography>
-            <Box display="flex" px={1} py={2}>
+            {/* <Box display="flex" px={1} py={2}>
               <Box
                 className="file-upload"
                 sx={{
@@ -257,7 +270,39 @@ function EditProduct({ setStateAlert }) {
                   tải ảnh lên từ thiết bị
                 </Typography>
               </Box>
-            </Box>
+            </Box> */}
+            <Box px={1} py={2} width="100%" textAlign="center">
+              {/* <Box
+                className="file-upload"
+                sx={{
+                  display: "flex",
+                  bgcolor: "background.paper",
+                  borderColor: "text.primary",
+                  borderStyle: "dashed",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                  height: "5rem",
+                  border: 1,
+                }}
+              >
+                <Add sx={{ mr: 2 }} />
+                <Typography variant="body2">Kéo thả hoặc&nbsp;</Typography>
+                <Typography
+                  className="file-upload-btn"
+                  variant="body2"
+                  sx={{ color: "#0088FF" }}
+                >
+                  tải ảnh lên từ thiết bị
+                </Typography>
+            </Box> */}
+                {/* <Box
+                  width="100%"
+                  heigh="273px"
+                  sx={{ border: 1, display: "inline-block" }}
+                ></Box> */}
+                <UploadImage changeImageUrl={handleImageUrl}/>
+              </Box>
           </Box>
         </Grid>
         <Grid item xs={4}>
