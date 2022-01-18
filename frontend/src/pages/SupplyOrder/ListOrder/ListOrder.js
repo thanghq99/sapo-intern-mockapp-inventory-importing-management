@@ -11,16 +11,23 @@ import OrderAPI from '../../../api/OrderAPI';
 
 export default function ListOrder() {
     const Fillter = [
-        { title: 'Đang giao dịch' },
-        { title: 'Đã hoàn thành' },
-        { title: 'Chưa thanh toán ' },
-        { title: 'Thanh toán một phần ' },
-        { title: 'Đã thanh toán ' },
-        { title: 'Chờ nhập kho ' },
-        { title: 'Nhập kho một phần ' },
-        { title: 'Đã nhập kho ' }
+        { title: 'Đang giao dịch', label: 'Trạng thái' },
+        { title: 'Đã hoàn thành', label: 'Trạng thái' },
+        { title: 'Chưa thanh toán', label: 'Thanh toán' },
+        { title: 'Thanh toán một phần', label: 'Thanh toán' },
+        { title: 'Đã thanh toán', label: 'Thanh toán' },
+        { title: 'Chờ nhập kho', label: 'Nhập kho' },
+        { title: 'Nhập kho một phần', label: 'Nhập kho' },
+        { title: 'Đã nhập kho', label: 'Nhập kho' }
 
     ];
+    const options = Fillter.map((option) => {
+        const firstLetter = option.label;
+        return {
+            firstLetter: /The/.test(firstLetter) ? '0-9' : firstLetter,
+            ...option,
+        };
+    });
 
     // header xuất file
     const headers = [
@@ -45,30 +52,42 @@ export default function ListOrder() {
     //inputs
     const handleChange = (e) => {
         let value = e.target.value.toLowerCase();
+        // let value = 'thanh toán một phần';
         setSearchInput(value);
         let input = value.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
         let result = listOrder.filter(product => product.code.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
         setSearchedProducts([...result]);
     }
     const handleFillter = (event, contentFillter) => {
-        console.log(contentFillter);
-        contentFillter.map(e => {
-            let value = e.title.toLowerCase();
-            console.log(value);
+        
+        setSearchedProducts([...listOrder]);
+        if (contentFillter.length !=0 ) {
+            contentFillter.map(e => {
+                let inputFilter = e.title;
+
+                let input = inputFilter.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
+
+                if (inputFilter == "Đang giao dịch" || inputFilter == "Đã hoàn thành") {
+
+                    let result = searchedProducts.filter(product => product.status.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
+                    setSearchedProducts([...result]);
+                } else if (inputFilter == "Chưa thanh toán" || inputFilter == "Thanh toán một phần" || inputFilter == "Đã thanh toán") {
+                    let result = searchedProducts.filter(product => product.transactionStatus.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
+                   
+                    setSearchedProducts([...result]);
+                } else if (inputFilter == "Chờ nhập kho" || inputFilter == "Nhập kho một phần" || inputFilter == "Đã nhập kho") {
+                    let result = searchedProducts.filter(product => product.importedStatus.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
+                   
+                    setSearchedProducts([...result]);
+                }
+            })
+        } else {
+            let value = '';
             let input = value.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
-            let result = listOrder.filter(product => product.transactionStatus.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
+            let result = listOrder.filter(product => product.code.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
             setSearchedProducts([...result]);
-            // if (value == "đang giao dịch" || value == "đã hoàn thành") {
-            //     let result = searchedProducts.filter(product => product.status.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
-            //     setSearchedProducts([...result]);
-            // } else if (value == "chưa thanh toán" || value == "thanh toán một phần" || value == "đã thanh toán") {
-            //     let result = searchedProducts.filter(product => product.transactionStatus.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
-            //     setSearchedProducts([...result]);
-            // } else if (value == "chờ nhập kho" || value == "nhập kho một phần" || value == "đã nhập kho") {
-            //     let result = searchedProducts.filter(product => product.importedStatus.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
-            //     setSearchedProducts([...result]);
-            // }
-        })
+        }
+
         // let value = e.toLowerCase();
         // let input = value.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
         // if(e == "Đang giao dịch" || e == "Đã hoàn thành") {
@@ -91,7 +110,7 @@ export default function ListOrder() {
         }
         fetchOrders();
     }, [])
-    console.log(searchedProducts);
+    // console.log(searchedProducts);
     return (
         <Box px={4} pt={2} backgroundColor="#F4F6F8" minHeight='91vh' >
 
@@ -104,13 +123,13 @@ export default function ListOrder() {
                         <Download />
                         Xuất File
                     </CSVLink>
-                <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
-                    <Box>
-                        <Link style={{ textDecoration: "none" }} to="/nhap-hang/tao-don-nhap-hang">
-                            <Button variant="contained" sx={{ width: 200 }} startIcon={<AddCircle />}>Tạo đơn nhập hàng</Button>
-                        </Link>
-                    </Box>
-                </UnlockAccess>
+                    <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
+                        <Box>
+                            <Link style={{ textDecoration: "none" }} to="/nhap-hang/tao-don-nhap-hang">
+                                <Button variant="contained" sx={{ width: 200 }} startIcon={<AddCircle />}>Tạo đơn nhập hàng</Button>
+                            </Link>
+                        </Box>
+                    </UnlockAccess>
                 </Box>
                 <Divider />
                 <Box py={2} px={2} display='flex' justifyContent='space-between' backgroundColor='white'>
@@ -138,7 +157,8 @@ export default function ListOrder() {
                         {/* <FilterAlt fontSize="large"/> */}
                         <Autocomplete
                             multiple
-                            options={Fillter}
+                            options={options}
+                            groupBy={(option) => option.firstLetter}
                             sx={{ width: 200 }}
                             getOptionLabel={(option) => option.title}
                             onChange={(event, newValue) => handleFillter(event, newValue)}
