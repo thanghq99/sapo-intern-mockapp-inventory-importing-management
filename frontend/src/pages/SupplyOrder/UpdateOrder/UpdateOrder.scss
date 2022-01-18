@@ -43,10 +43,26 @@
                 height: 30px;
                 padding-right: 10px;
             }
+            
+            
+        }
+        
+    }
+}
+.changeDiscount {
+    // background-color: #FFFFFF;
+    // .MuiOutlinedInput-input {
+    //     padding: 10px 10px;
+    // }
+    .MuiTextField-root {
+        height: 35px;
+        width: 150px;
+        .MuiOutlinedInput-root {
+            height: 35px;
+            width: 150px;
         }
     }
 }
-
 .selectproduct {
     display: flex;
     margin-bottom: 15px;
@@ -99,7 +115,16 @@
        
     }
 }
-
+.time {
+    .MuiFormControl-root {
+        // margin-left: 20px;
+        width: 90%;
+        height: 40px;
+        .MuiOutlinedInput-root {
+            height: 40px;
+        }
+    }
+}
 .btn-order {
     position: absolute;
     width: 250px;
