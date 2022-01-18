@@ -296,12 +296,14 @@ export default function TableSupply({ searchedProducts }) {
 
 
     const handleColor = (key) => {
-        if (key == "Đã nhập kho" || key == "Đã thanh toán" || key == "Đã nhập hàng" || key == "Đã hoàn thành") {
+        if (key == "Đã nhập kho" || key == "Đã thanh toán" || key == "Đã nhập hàng" || key == "Đã hoàn thành" || key == "Hoàn trả toàn bộ") {
             return "#20a917";
-        } else if (key == "Đang giao dịch" || key == "Thanh toán một phần" || key == "Nhập kho một phần") {
+        } else if (key == "Đang giao dịch" || key == "Thanh toán một phần" || key == "Nhập kho một phần" || key == "Hoàn trả một phần") {
             return "#f19403";
         } else if (key == "Chờ nhập kho" || key == "Chưa thanh toán") {
             return "#0a77bb";
+        } else if (key == "Đã hủy") {
+            return "#ea1a1a";
         } else {
             return "black";
         }
