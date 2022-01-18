@@ -76,7 +76,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-const navList = [{ title: 'Danh sách sản phẩm', url: '/san-pham' }, { title: 'Quản lý kho', url: '/kho-hang' }, { title: 'Nhập hàng', url: '/nhap-hang' }, { title: 'Nhà cung cấp', url: '/nha-cung-cap' }];
+const navList = [{ title: 'Sản phẩm', url: '/san-pham' }, { title: 'Quản lý kho', url: '/kho-hang' }, { title: 'Nhập hàng', url: '/nhap-hang' }, { title: 'Nhà cung cấp', url: '/nha-cung-cap' }];
 const subMenuList = [{ title: 'Hotline: 1900 0000', url: '/hotline', phone: '1900 0000' }, { title: 'Thông tin tài khoản', url: '/nguoi-dung' }]
 const navListIcons = [
     <LocalMallIcon />, <WarehouseIcon />, <AddShoppingCartIcon />, <AddBusinessIcon />
@@ -150,12 +150,12 @@ export default function MiniDrawer({ setHeaderTitle }) {
                                     <ListItemIcon className="nav_item_icon">
                                         {userNavListIcons[index]}
                                     </ListItemIcon>
-                                    <ListItemText primary={<a style={{color:"white", textDecoration: "none"}} href="tel:1900 0000"> 1900 0000 </a>} />
-                                    
+                                    <ListItemText primary={navItem.title} />
+                                    <a style={{color:"white", textDecoration: "none"}} href="tel:1900 0000"> 1900 0000 </a>
                                 </ListItemButton>
                                 :
                                 <Link to={navItem.url} className="nav_link" key={index}>
-                                    <ListItemButton className="nav_leftbar_item" button key={navItem.title} sx={{ pl: 4 }}>
+                                    <ListItemButton className="nav_leftbar_item" button key={navItem.title} sx={{ pl: 4 }} onClick={() => setHeaderTitle(navItem.title)}>
                                         <ListItemIcon className="nav_item_icon">
                                             {userNavListIcons[index]}
                                         </ListItemIcon>
