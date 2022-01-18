@@ -57,7 +57,6 @@ function EnhancedTableHead(props) {
     onSelectAllClick,
     numSelected,
     rowCount,
-    onRequestSort,
     variants,
     setViewState,
     handleDelete

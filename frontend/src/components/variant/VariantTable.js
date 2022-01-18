@@ -18,7 +18,7 @@ import Button from "@mui/material/Button";
 import { visuallyHidden } from "@mui/utils";
 
 import { Link } from "react-router-dom";
-import UnlockAccess from '../../components/roleBasedRender/UnlockAccess'
+import UnlockAccess from "../../components/roleBasedRender/UnlockAccess";
 
 Number.prototype.format = function (n, x) {
   var re = "\\d(?=(\\d{" + (x || 3) + "})+" + (n > 0 ? "\\." : "$") + ")";
@@ -178,7 +178,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected, handleDelete } = props;
+  const { variants, numSelected, handleDelete } = props;
 
   return (
     <Toolbar
@@ -194,7 +194,17 @@ const EnhancedTableToolbar = (props) => {
         }),
       }}
     >
-      {numSelected > 0 ? (
+      {numSelected === 0 && (
+        <Typography
+          sx={{ flex: "1 1 100%" }}
+          variant="h6"
+          id="tableTitle"
+          component="div"
+        >
+          Danh sách phiên bản
+        </Typography>
+      )}
+      {numSelected !== variants.length && numSelected > 0 && (
         <Typography
           sx={{ flex: "1 1 100%" }}
           color="inherit"
@@ -203,17 +213,17 @@ const EnhancedTableToolbar = (props) => {
         >
           Đã chọn {numSelected} phiên bản
         </Typography>
-      ) : (
+      )}
+      {numSelected === variants.length && numSelected > 0 && (
         <Typography
           sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
+          color="inherit"
+          variant="subtitle1"
           component="div"
         >
-          Danh sách phiên bản sản phẩm
+          Đã chọn tất cả phiên bản
         </Typography>
       )}
-
       <UnlockAccess request={["ADMIN", "Nhân viên kho"]}>
         {numSelected > 0 ? (
           <Button
@@ -232,6 +242,7 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
   handleDelete: PropTypes.func.isRequired,
+  variants: PropTypes.array.isRequired,
 };
 
 export default function VariantsTable({
@@ -243,7 +254,7 @@ export default function VariantsTable({
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   React.useEffect(() => {
     setSelected([]);
@@ -313,6 +324,7 @@ export default function VariantsTable({
         <EnhancedTableToolbar
           numSelected={selected.length}
           handleDelete={handleDelete}
+          variants={variants}
         />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
@@ -355,13 +367,6 @@ export default function VariantsTable({
                         />
                       </TableCell>
                       <TableCell component="th" scope="row" padding="none">
-                        {/* {row.img} */}
-                        {/* <Box
-                            width="40px"
-                            height="40px"
-                            backgroundColor="green"
-                            mr={2}
-                          ></Box> */}
                         <img
                           alt="Ảnh phiên bản sản phẩm"
                           style={{ width: "40px", height: "40px" }}
@@ -421,7 +426,7 @@ export default function VariantsTable({
         </TableContainer>
         <TablePagination
           labelRowsPerPage="Số hàng một trang"
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 20, 50]}
           component="div"
           count={variants.length}
           rowsPerPage={rowsPerPage}

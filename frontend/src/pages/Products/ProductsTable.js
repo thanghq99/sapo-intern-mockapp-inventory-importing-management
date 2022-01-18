@@ -158,7 +158,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected, handleDelete } = props;
+  const { products, numSelected, handleDelete } = props;
 
   return (
     <Toolbar
@@ -174,7 +174,17 @@ const EnhancedTableToolbar = (props) => {
         }),
       }}
     >
-      {numSelected > 0 ? (
+      {numSelected > 0 && numSelected === products.length && (
+        <Typography
+          sx={{ flex: "1 1 100%" }}
+          color="inherit"
+          variant="subtitle1"
+          component="div"
+        >
+          Đã chọn tất cả sản phẩm
+        </Typography>
+      )}
+      {numSelected > 0 && numSelected < products.length && (
         <Typography
           sx={{ flex: "1 1 100%" }}
           color="inherit"
@@ -183,7 +193,8 @@ const EnhancedTableToolbar = (props) => {
         >
           Đã chọn {numSelected} sản phẩm
         </Typography>
-      ) : (
+      )}
+      {numSelected === 0 && (
         <Typography
           sx={{ flex: "1 1 100%" }}
           variant="h6"
@@ -209,6 +220,7 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
   handleDelete: PropTypes.func.isRequired,
+  products: PropTypes.array.isRequired
 };
 
 export default function ProductsTable({ products, handleDeleteProduct, triggerReload }) {
@@ -216,7 +228,7 @@ export default function ProductsTable({ products, handleDeleteProduct, triggerRe
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   React.useEffect(() => {
     setSelected([]);
@@ -283,7 +295,7 @@ export default function ProductsTable({ products, handleDeleteProduct, triggerRe
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} handleDelete={handleDelete}/>
+        <EnhancedTableToolbar products={products} numSelected={selected.length} handleDelete={handleDelete}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -366,7 +378,7 @@ export default function ProductsTable({ products, handleDeleteProduct, triggerRe
         </TableContainer>
         <TablePagination
           labelRowsPerPage="Số hàng một trang"
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 20, 50]}
           component="div"
           count={products.length}
           rowsPerPage={rowsPerPage}
