@@ -83,10 +83,11 @@
             margin-bottom: 8px;
             // align-items: ;
         }
-        .pay-info {
+        .pay-info-new {
             width: 300px;
             // border: 1px solid black;
-            float: right;
+            // float: right;
+            margin-left: calc(100% - 300px);
             padding-top: 15px;
             .pay-info-item {
                 display: flex;

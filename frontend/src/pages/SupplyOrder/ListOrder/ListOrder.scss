@@ -88,3 +88,25 @@
         }
     }
 }
+// .filter {
+//     .MuiOutlinedInput-root {
+//         // height:40px;
+//         // overflow-y: scroll;
+//         .MuiButtonBase-root {
+//             height: 25px;
+//         }
+//     }
+//     .MuiAutocomplete-root {
+//         height:40px;
+//         // overflow-y: scroll;
+//     }
+//     .MuiFormControl-root {
+//         // height: 40px;
+//         // overflow-y: scroll;
+//     }
+// }
+.search {
+    .MuiOutlinedInput-root {
+        height: 40px;
+    }
+}

@@ -16,6 +16,8 @@ import ListItem from '@mui/material/ListItem';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ProductAPI from '../../../../api/ProductAPI';
 
+import emptyBox from './empty_box.png'
+
 
 
 Number.prototype.format = function (n, x) {
@@ -32,7 +34,7 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
     const [total, setTotal] = React.useState(0);
     const [productSelect, setProductSelect] = React.useState([]);
     const [check, setCheck] = React.useState(false);
-    const [discount, setDiscount] = React.useState(6);
+    const [discount, setDiscount] = React.useState(0);
 
     const [originalPrice, setOriginalPrice] = React.useState([]);
     const [num, setNum] = React.useState([]);
@@ -285,7 +287,18 @@ export default function ProductSelect({ setProduct, setDiscountFinal }) {
                         }
 
                     </List>
-                    <Box className="pay-info">
+                    {
+                        (productSelect.length == 0) ?
+
+                        <Box sx={{textAlign: "center"}}  mb={2}>
+                            <img src={emptyBox} style={{width: "200px", height: "200px"}} />
+                            <Typography>Bạn chưa chọn sản phẩm nào</Typography>
+                        </Box> : null
+
+                    
+                        
+                    }
+                    <Box className="pay-info-new">
                         <Box className="pay-info-item">
                             <Typography>Tổng sản phẩm</Typography>
                             <Typography>{numProduct?.format()}</Typography>
