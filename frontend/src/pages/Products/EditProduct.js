@@ -13,7 +13,7 @@ import { useHistory, useParams } from "react-router-dom";
 import "./createProduct.scss";
 import ProductAPI from "../../api/ProductAPI";
 import CategorySelect from "../../components/product/category/CategorySelect";
-import UploadImage from "../../components/uploadImage/UploadImage";
+import UpdateImage from "../../components/uploadImage/UpdateImage";
 
 function EditProduct({ setStateAlert }) {
   const history = useHistory();
@@ -35,6 +35,7 @@ function EditProduct({ setStateAlert }) {
     });
     setCategoryName(result.data.category);
     setWeightValue(result.data.weight);
+    setReceivedImg(result.data.imageUrl);
     setLoading(false);
   }
 
@@ -245,64 +246,9 @@ function EditProduct({ setStateAlert }) {
             <Typography variant="h6" id="tableTitle" px={1}>
               Ảnh sản phẩm
             </Typography>
-            {/* <Box display="flex" px={1} py={2}>
-              <Box
-                className="file-upload"
-                sx={{
-                  display: "flex",
-                  bgcolor: "background.paper",
-                  borderColor: "text.primary",
-                  borderStyle: "dashed",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: "100%",
-                  height: "5rem",
-                  border: 1,
-                }}
-              >
-                <Add sx={{ mr: 2 }} />
-                <Typography variant="body2">Kéo thả hoặc&nbsp;</Typography>
-                <Typography
-                  className="file-upload-btn"
-                  variant="body2"
-                  sx={{ color: "#0088FF" }}
-                >
-                  tải ảnh lên từ thiết bị
-                </Typography>
-              </Box>
-            </Box> */}
             <Box px={1} py={2} width="100%" textAlign="center">
-              {/* <Box
-                className="file-upload"
-                sx={{
-                  display: "flex",
-                  bgcolor: "background.paper",
-                  borderColor: "text.primary",
-                  borderStyle: "dashed",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: "100%",
-                  height: "5rem",
-                  border: 1,
-                }}
-              >
-                <Add sx={{ mr: 2 }} />
-                <Typography variant="body2">Kéo thả hoặc&nbsp;</Typography>
-                <Typography
-                  className="file-upload-btn"
-                  variant="body2"
-                  sx={{ color: "#0088FF" }}
-                >
-                  tải ảnh lên từ thiết bị
-                </Typography>
-            </Box> */}
-                {/* <Box
-                  width="100%"
-                  heigh="273px"
-                  sx={{ border: 1, display: "inline-block" }}
-                ></Box> */}
-                <UploadImage changeImageUrl={handleImageUrl}/>
-              </Box>
+              <UpdateImage imgUrl={product.imageUrl} changeImageUrl={handleImageUrl}/>
+            </Box>
           </Box>
         </Grid>
         <Grid item xs={4}>

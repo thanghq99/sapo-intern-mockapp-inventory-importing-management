@@ -30,22 +30,22 @@ LinearProgressWithLabel.propTypes = {
 };
 
 
-export default function UploadImageForMultipleVariants(props) {
+export default function UpdateImage(props) {
 
     const [progress, setProgress] = useState(0);
     const inputRef = useRef();
 
     useEffect(() => {
-        if(props.variantImg) {
-            setSelectedImage(inputRef.current.files[0]);
+        if(props.imgUrl) {
+            setSelectedImage(true);
             setProgress(100);
             setDisplayState("flex");
         } else {
             handleCancelImg();
         }
         console.log(selectedImage);
-        console.log("props: " + props.variantImg);
-    }, [props.variantImg])
+        console.log("props: " + props.imgUrl);
+    }, [props.imgUrl])
 
     const uploadImage = (file) => {
         if (!file) return;
@@ -63,7 +63,7 @@ export default function UploadImageForMultipleVariants(props) {
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     console.log(downloadURL);
-                    props.changeImageUrl(downloadURL, props.index);
+                    props.changeImageUrl(downloadURL);
                 })
             }
         )
@@ -73,7 +73,7 @@ export default function UploadImageForMultipleVariants(props) {
     const [selectedImage, setSelectedImage] = React.useState();
 
     const handleCancelImg = () => {
-        setSelectedImage(null);
+        setSelectedImage(false);
         setProgress(0);
         props.changeImageUrl(null);
         setDisplayState("none");
@@ -81,10 +81,10 @@ export default function UploadImageForMultipleVariants(props) {
 
     return (
         <div>
-            {(props.variantImg && selectedImage) && (
-                <div style={{ height: "5em"}}>
+            {(props.imgUrl && selectedImage) && (
+                <div style={{ height: "15em"}}>
                     {/* <img alt="not found" style={{ height: "100%", width: "100%", objectFit: "contain" }} src={URL?.createObjectURL(selectedImage)} /> */}
-                    <img alt="not found" style={{ height: "100%", width: "100%", objectFit: "contain" }} src={props.variantImg} />
+                    <img alt="not found" style={{ height: "100%", width: "100%", objectFit: "contain" }} src={props.imgUrl} />
                     <br></br>
                 </div>
             )
@@ -110,7 +110,8 @@ export default function UploadImageForMultipleVariants(props) {
                         style={{ display: "none" }}
                         id="file-upload"
                         onChange={(event) => {
-                            setSelectedImage(event.target.files[0]);
+                            console.log(event.target.files[0]);
+                            setSelectedImage(true);
                             uploadImage(event.target.files[0]);
                             setDisplayState("flex");
                         }}

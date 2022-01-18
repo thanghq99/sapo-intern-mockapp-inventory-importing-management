@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -9,7 +9,7 @@ import {
   Switch,
 } from "@mui/material";
 import ProductAPI from "../../api/ProductAPI";
-import UploadImage from "../../components/uploadImage/UploadImage";
+import UpdateImage from "../../components/uploadImage/UpdateImage";
 import { styled } from "@mui/material/styles";
 
 const CustomDisableInput = styled(TextField)(() => ({
@@ -21,6 +21,16 @@ const CustomDisableInput = styled(TextField)(() => ({
 
 function EditVariant({ productId, triggerReload, setViewState, variantData, setStateAlert }) {
   const [variantInfo, setVariantInfo] = useState(variantData);
+  const [receivedImg, setReceivedImg] = useState(variantData.imageUrl);
+
+  useEffect(() => {
+    setVariantInfo({
+      ...variantInfo,
+      imageUrl: receivedImg
+    });
+    console.log("update variant img")
+    console.log(receivedImg)
+  }, [receivedImg])
 
   function handleChange(evt) {
     const value = evt.target.value;
@@ -58,7 +68,6 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
     setViewState(1);
   }
 
-  const [receivedImg, setReceivedImg] = useState("");
   const handleImageUrl = (url) => {
     setReceivedImg(url);
   }
@@ -184,7 +193,7 @@ function EditVariant({ productId, triggerReload, setViewState, variantData, setS
               heigh="273px"
               sx={{ border: 1, display: "inline-block" }}
             ></Box> */}
-            <UploadImage changeImageUrl={handleImageUrl}/>
+            <UpdateImage imgUrl={variantInfo.imageUrl} changeImageUrl={handleImageUrl}/>
           </Box>
         </Box>
       </Box>
