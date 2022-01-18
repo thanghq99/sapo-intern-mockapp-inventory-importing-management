@@ -240,7 +240,7 @@ export default function TableSupply({ searchedProducts }) {
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -363,7 +363,7 @@ export default function TableSupply({ searchedProducts }) {
                                                 padding="none"
                                                 align="center"
                                             >
-                                                <Link to={`/nhap-hang/don-hang?code=${row.id}`} className="link-detail">{row.code}</Link>
+                                                <Link style={{ textDecoration: 'none', color: '#000' }} to={`/nhap-hang/don-hang?code=${row.id}`} className="link-detail">{row.code}</Link>
 
                                             </TableCell>
                                             <TableCell align="center">{row.supplier.name}</TableCell>
@@ -393,7 +393,7 @@ export default function TableSupply({ searchedProducts }) {
                 </TableContainer>
                 <TablePagination
                     labelRowsPerPage="Số hàng một trang"
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[10, 20, 50]}
                     component="div"
                     count={searchedProducts.length}
                     rowsPerPage={rowsPerPage}

@@ -1,9 +1,6 @@
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import MuiAlert from '@mui/material/Alert';
 import { ArrowBackIosNew } from "@mui/icons-material";
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField, Snackbar, Stack, Typography } from '@mui/material';
+import { Button, Divider, TextField, Snackbar, Typography, Grid, Box } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import "./createSupplier.scss"
 import { useHistory } from 'react-router-dom';
@@ -26,9 +23,6 @@ export default function CreateSupplier() {
     const description = useRef("");
     const fax = useRef("");
     const debt = useRef(0);
-    const activityStatus = useRef("");
-    const recordStatus = useRef("");
-
 
     const history = useHistory();
 
@@ -82,67 +76,136 @@ export default function CreateSupplier() {
                         Quay lại trang trước
                     </Typography>
                 </div>
+                <Typography sx={{ margin: " 1em 0em -1.5em 1em" }} variant="h4">Tạo mới nhà cung cấp</Typography>
                 <div className="activity">
-                    <Button onClick={() => history.push("/nha-cung-cap")} className="button_activity" color="error" variant="outlined">Hủy thao tác</Button>
+                    <Button onClick={() => history.push("/nha-cung-cap")} className="button_activity" variant="outlined">Thoát</Button>
                     <Button onClick={handleCreate} className="button_activity" variant="contained"> Lưu kết quả</Button>
-                    <Button className="button_activity" variant="outlined">Trợ giúp</Button>
                 </div>
-                <hr />
                 <div className="createSupplier_form">
                     <div className="left_info">
                         <div className="left_info_first">
-                            <div>
-                                <strong style={{ width: "100%" }}>Thông tin cơ bản</strong>
-                            </div>
-                            <TextField inputRef={name} className="left_info_first_input" required id="outlined-required" label="Tên nhà cung cấp" />
-                            <TextField inputRef={code} className="left_info_first_input left" required id="outlined-required" label="Mã nhà cung cấp" />
-                            <TextField inputRef={phone} className="left_info_first_input" required id="outlined-required" label="Số điện thoại" />
-                            <TextField inputRef={email} className="left_info_first_input left" id="outlined-required" label="Email" />
-                            <TextField inputRef={address} className="left_info_first_input address" id="outlined-required" label="Địa chỉ" />
+                            <Typography variant="h6" id="tableTitle" px={1}>
+                                Thông tin chung
+                            </Typography>
+                            <Divider sx={{ my: 1 }} />
+                            <Box display="flex" px={1} py={2}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={6}>
+                                        <Box display="flex">
+                                            <Typography variant="subtitle1" id="tableTitle">
+                                                Tên nhà cung cấp
+                                            </Typography>
+                                        </Box>
+                                        <TextField
+                                            fullWidth
+                                            name="productName"
+                                            placeholder="Nhập tên nhà cung cấp"
+                                            inputRef={name}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Box display="flex">
+                                            <Typography variant="subtitle1" id="tableTitle">
+                                                Mã nhà cung cấp
+                                            </Typography>
+                                        </Box>
+                                        <TextField
+                                            fullWidth
+                                            name="unit"
+                                            placeholder="Nhập mã nhà cung cấp"
+                                            inputRef={code}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Box display="flex">
+                                            <Typography variant="subtitle1" id="tableTitle">
+                                                Số điện thoại
+                                            </Typography>
+                                        </Box>
+                                        <TextField
+                                            inputRef={phone}
+                                            fullWidth
+                                            name="unit"
+                                            placeholder="Nhập số điện thoại"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Box display="flex">
+                                            <Typography variant="subtitle1" id="tableTitle">
+                                                Email
+                                            </Typography>
+                                        </Box>
+                                        <TextField
+                                            inputRef={email}
+                                            fullWidth
+                                            name="unit"
+                                            placeholder="Nhập email"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Box display="flex">
+                                            <Typography variant="subtitle1" id="tableTitle">
+                                                Địa chỉ nhà cung cấp
+                                            </Typography>
+                                        </Box>
+                                        <TextField
+                                            inputRef={address}
+                                            fullWidth
+                                            name="unit"
+                                            placeholder="Nhập địa chỉ"
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </Box>
                         </div>
                         <div className="left_info_first second">
-                            <div>
-                                <strong style={{ width: "100%" }}>Thông tin bổ sung</strong>
-                            </div>
-                            <TextField inputRef={fax} className="left_info_first_input" id="outlined-required" label="Số Fax" />
-                            <TextField inputRef={website} className="left_info_first_input left" id="outlined-required" label="Website" />
-                            <TextField className="left_info_first_input" id="outlined-required" label="Mã số thuế" />
-                            <TextField inputRef={description} className="left_info_first_input address" id="outlined-required" label="Mô tả nhà cung cấp" />
-                        </div>
-
-                    </div>
-                    <div className="right_info">
-                        <div className="right_info_first">
-                            <div>
-                                <strong style={{ width: "100%" }}>Thông tin người tạo nhà cung cấp</strong>
-                            </div>
-                            <FormControl className="right_info_first_input" fullWidth>
-                                <InputLabel id="demo-simple-select-label">Tên nhân viên</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={NameStaff}
-                                    label="Tên nhân viên"
-                                    onChange={handleChangeStaff}
-                                >
-                                    <MenuItem value={"Nguyễn Văn A"}>Nguyễn Văn A</MenuItem>
-                                    <MenuItem value={"Nguyễn Văn B"}>Nguyễn Văn B</MenuItem>
-                                    <MenuItem value={"Nguyễn Văn C"}>Nguyễn Văn C</MenuItem>
-                                </Select>
-                            </FormControl>
-                            <div className="right_info_first_input">
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <DateTimePicker
-                                        renderInput={(props) => <TextField {...props} />}
-                                        label="Chọn ngày tạo mới"
-                                        value={time}
-                                        onChange={(newTime) => {
-                                            setTime(newTime);
-                                        }}
-                                    />
-                                </LocalizationProvider>
-                            </div>
-                            <TextField className="right_info_first_input" required id="outlined-required" label="ten nha cung cap" />
+                            <Typography variant="h6" id="tableTitle" px={1}>
+                                Thông tin bổ sung
+                            </Typography>
+                            <Divider sx={{ my: 1 }} />
+                            <Box display="flex" px={1} py={2}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={6}>
+                                        <Box display="flex">
+                                            <Typography variant="subtitle1" id="tableTitle">
+                                                Số fax
+                                            </Typography>
+                                        </Box>
+                                        <TextField
+                                            fullWidth
+                                            name="productName"
+                                            placeholder="Nhập số fax"
+                                            inputRef={fax}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Box display="flex">
+                                            <Typography variant="subtitle1" id="tableTitle">
+                                                Website
+                                            </Typography>
+                                        </Box>
+                                        <TextField
+                                            fullWidth
+                                            name="unit"
+                                            placeholder="Nhập website"
+                                            inputRef={website}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Box display="flex">
+                                            <Typography variant="subtitle1" id="tableTitle">
+                                                Mô tả
+                                            </Typography>
+                                        </Box>
+                                        <TextField
+                                            inputRef={description}
+                                            fullWidth
+                                            name="unit"
+                                            placeholder="Nhập mô tả"
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </Box>
                         </div>
                     </div>
                 </div>

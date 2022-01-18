@@ -145,7 +145,7 @@ function EnhancedTableHead(props) {
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
-                        align={headCell.numeric ? 'center' : 'left'}
+                        align="left"
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
@@ -272,7 +272,7 @@ export default function TableSupply(props) {
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -391,14 +391,14 @@ export default function TableSupply(props) {
                                                 scope="row"
                                                 padding="none"
                                             >
-                                                <Link to={`/thong-tin-nha-cung-cap?id=${row.id}`} >{row.name}</Link>
+                                                <Link sx={{color: "black"}} to={`/thong-tin-nha-cung-cap?id=${row.id}`} >{row.name}</Link>
                                             </TableCell>
-                                            <TableCell align="center">{row.code}</TableCell>
-                                            <TableCell align="center">{row.fax}</TableCell>
-                                            <TableCell align="center">{row.phone}</TableCell>
+                                            <TableCell align="left">{row.code}</TableCell>
+                                            <TableCell align="left">{row.fax}</TableCell>
+                                            <TableCell align="left">{row.phone}</TableCell>
                                             <TableCell
                                                 style={{ color: handleColor(row.activityStatus) }}
-                                                align="center">{row.activityStatus}</TableCell>
+                                                align="left">{row.activityStatus}</TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -416,7 +416,7 @@ export default function TableSupply(props) {
                 </TableContainer>
                 <TablePagination
                     labelRowsPerPage="Số hàng một trang"
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[10, 20, 50]}
                     component="div"
                     count={listSuppliers.length}
                     rowsPerPage={rowsPerPage}

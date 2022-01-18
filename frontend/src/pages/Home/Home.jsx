@@ -256,7 +256,7 @@ export default function Home() {
                             <Grid pt={4} pl={4} container spacing={2}>
                                 <Grid xs={6}>
                                     92 <br />
-                                    <CodeOffIcon sx={{ marginBottom: "-0.3em", color: "#fff815", fontSize: "1.8em" }} /> Không so sánh
+                                    <CodeOffIcon sx={{ marginBottom: "-0.3em", color: "#fff700", fontSize: "1.8em" }} /> Không so sánh
                                 </Grid>
                                 <Grid xs={6}>
                                     <i style={{ fontSize: "3em" }} className="fas fa-warehouse"></i>

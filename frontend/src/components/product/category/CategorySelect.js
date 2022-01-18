@@ -43,7 +43,7 @@ function CategorySelect({handleSelectCategory, categoryName}) {
   }
   useEffect(() => {
     getData();
-  },[]);
+  }, []);
 
   const onClickChild = (e) => {
     e.stopPropagation();
