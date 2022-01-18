@@ -2,10 +2,21 @@ import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import ProductAPI from '../../api/ProductAPI'
 import CategoryAPI from '../../api/CategoryAPI'
-import { Box, TextField, InputAdornment, Button, Divider, Card, CardContent, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material'
-import { Search, AddCircle } from '@mui/icons-material';
+import { Box, TextField, InputAdornment, Button, Divider, Card, CardContent, Typography, Select, MenuItem, FormControl } from '@mui/material'
+import { Search, AddCircle, Download } from '@mui/icons-material';
 import ProductsTable from './ProductsTable'
 import UnlockAccess from '../../components/roleBasedRender/UnlockAccess'
+import { CSVLink } from "react-csv";
+
+const headers = [
+    { label: "Tên sản phẩm", key: 'name' },
+    { label: "Thương hiệu", key: 'brand' },
+    { label: "Loại sản phẩm", key: 'category' },
+    { label: "Khối lượng", key: 'weight' },
+    { label: "Tồn kho", key: 'stock' },
+    { label: "Mô tả", key: 'description' },
+    { label: "Ngày tạo", key: 'createdAt' },
+];
 
 export default function Products({ setStateAlert }) {
     const history = useHistory();
@@ -42,7 +53,7 @@ export default function Products({ setStateAlert }) {
                 setStateAlert({ severity: "error", variant: "filled", open: true, content: "Có lỗi xảy ra" });
                 history.push('/san-pham');
             });
-            CategoryAPI.CategoryList()
+        CategoryAPI.CategoryList()
             .then((cResult) => {
                 setCategories(cResult.data);
             })
@@ -83,7 +94,7 @@ export default function Products({ setStateAlert }) {
         let searchValue = searchInput.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
         let result = [];
 
-        if (categoryFilterValue != "") {
+        if (categoryFilterValue !== "") {
             result = products.filter(product => product.category === categoryFilterValue);
         } else {
             result = products;
@@ -103,54 +114,79 @@ export default function Products({ setStateAlert }) {
     }
 
     return (
-        <Box backgroundColor="#F4F6F8" minHeight="93vh" pt={2} pb={4} px={4}>
-            <Box py={2} px={2} display="flex" backgroundColor='white'>
-                <TextField
-                    placeholder="Tìm kiếm sản phẩm"
-                    variant="outlined"
-                    size='small'
-                    sx={{ mr: 2, flexGrow: 1 }}
-                    value={searchInput}
-                    onChange={(e) => handleChange(e)}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="end">
-                                <Search />
-                            </InputAdornment>
-                        ),
-                    }}></TextField>
-                <FormControl sx={{minWidth: 150, mr: 2}}>
-                    {/* <InputLabel>Loại sản phẩm</InputLabel> */}
-                    <Select
-                        value={categoryFilter}
-                        size='small'
-                        displayEmpty
-                        onChange={handleChangeCategory}
-                        renderValue={
-                            categoryFilter !== "" ? undefined : () => <Typography sx={{color: "#aaa"}}>Loại sản phẩm</Typography>
-                          }
+        <Box backgroundColor="#F4F6F8" minHeight="91vh" pt={2} pb={4} px={4}>
+            <Box display="flex" flexDirection="column">
+                <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    py={2}
+                    px={2}
+                    backgroundColor="white"
+                >
+                    <CSVLink
+                        data={searchedProducts}
+                        headers={headers}
+                        filename="Orders.csv"
+                        target="_blank"
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            textDecoration: "none",
+                            color: "black",
+                        }}
                     >
-                        <MenuItem value="">
-                            <Typography >Tất cả</Typography>
-                        </MenuItem>
-                        {categories.map(category => (
-                        <MenuItem key={category.id} value={category.name}>
-                            <Typography >{category.name}</Typography>
-                        </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
-                <Button
-                    variant='contained'
-                    sx={{ mr: 2 }}
-                    startIcon={<AddCircle />}
-                    onClick={() => { history.push('/tao-san-pham') }}
-                >Thêm sản phẩm
-                </Button>
-                </UnlockAccess>
+                        <Download />
+                        Xuất File
+                    </CSVLink>
+                    <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
+                        <Button
+                            variant='contained'
+                            sx={{ mr: 2 }}
+                            startIcon={<AddCircle />}
+                            onClick={() => { history.push('/tao-san-pham') }}
+                        >Thêm sản phẩm
+                        </Button>
+                    </UnlockAccess>
+                </Box>
+                <Divider />
+                <Box py={2} px={2} display="flex" backgroundColor='white'>
+                    <TextField
+                        placeholder="Tìm kiếm sản phẩm"
+                        variant="outlined"
+                        size='small'
+                        sx={{ mr: 2, flexGrow: 1 }}
+                        value={searchInput}
+                        onChange={(e) => handleChange(e)}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Search />
+                                </InputAdornment>
+                            ),
+                        }}></TextField>
+                    <FormControl sx={{ minWidth: 150, mr: 2 }}>
+                        {/* <InputLabel>Loại sản phẩm</InputLabel> */}
+                        <Select
+                            value={categoryFilter}
+                            size='small'
+                            displayEmpty
+                            onChange={handleChangeCategory}
+                            renderValue={
+                                categoryFilter !== "" ? undefined : () => <Typography sx={{ color: "#aaa" }}>Loại sản phẩm</Typography>
+                            }
+                        >
+                            <MenuItem value="">
+                                <Typography >Tất cả</Typography>
+                            </MenuItem>
+                            {categories.map(category => (
+                                <MenuItem key={category.id} value={category.name}>
+                                    <Typography >{category.name}</Typography>
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Box>
             </Box>
-            <Divider />
             <Box py={2} px={1} display="flex" justifyContent="space-evenly" backgroundColor='white'>
                 <Card sx={{
                     borderRadius: '40px',
