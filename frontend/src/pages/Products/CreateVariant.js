@@ -11,6 +11,14 @@ import {
 import ProductAPI from "../../api/ProductAPI";
 import VariantAPI from "../../api/VariantAPI";
 import UploadImage from "../../components/uploadImage/UploadImage";
+import { styled } from "@mui/material/styles";
+
+const CustomDisableInput = styled(TextField)(() => ({
+  ".MuiInputBase-input.Mui-disabled": {
+    WebkitTextFillColor: "#000",
+    color: "#000"
+  }
+}));
 
 function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }) {
   const [lastestCode, setLastestCode] = useState('');
@@ -122,8 +130,9 @@ function CreateVariant({ productId, triggerReload, setViewState, setStateAlert }
           >
             <Grid container>
               <Typography variant="body2">Mã SKU</Typography>
-              <TextField
+              <CustomDisableInput
                 fullWidth
+                disabled
                 size="small"
                 name="variantCode"
                 placeholder="Nhập mã SKU phiên bản"

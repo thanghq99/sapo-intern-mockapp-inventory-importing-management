@@ -67,7 +67,7 @@ export default function Supplier() {
                         variant="outlined"
                         size='small'
                     />
-                    <Box display='flex' alignItems='center'>
+                    {/* <Box display='flex' alignItems='center'>
                         <TextField
                             placeholder="Lọc sản phẩm"
                             variant="outlined"
@@ -81,7 +81,7 @@ export default function Supplier() {
                                 ),
                             }}>
                         </TextField>
-                    </Box>
+                    </Box> */}
                 </Box>
                 <TableSupply exportSuppliers={exportSuppliers} />
             </Box>

@@ -18,7 +18,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function Home() {
     // set year for charts
-    const [yearChart, setYearChart] = React.useState(2021);
+    const [yearChart, setYearChart] = React.useState(2022);
     const handleChangeYear = (event) => {
         setYearChart(event.target.value);
     };

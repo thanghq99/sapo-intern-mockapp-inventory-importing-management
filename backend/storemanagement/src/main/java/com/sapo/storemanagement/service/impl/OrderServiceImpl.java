@@ -203,4 +203,12 @@ public class OrderServiceImpl implements OrderService {
     public List<VariantsOrder> findAllVariantInOrder(long id) {
         return variantsOrderRepository.findVariantByOrderId(id);
     }
+
+    @Override
+    public void cancelOrder(long id) {
+        Order order = getOrderById(id);
+        supplierService.decreaseDebt(order.getSupplier().getId(), order.getTotalAmount());
+        order.setStatus(OrderStatus.CANCELLED);
+        orderRepository.save(order);
+    }
 }

@@ -87,10 +87,10 @@ export default function DetailOrder({ setStateAlert }) {
 
 
     const handleActive = (item) => {
-        if(item?.importedStatus == "Đã nhập kho") {
+        if (item?.importedStatus == "Đã nhập kho") {
             setActive(2);
         }
-        if(item?.status == "Đã hoàn thành") {
+        if (item?.status == "Đã hoàn thành") {
             setActive(3);
         }
     }
@@ -209,6 +209,27 @@ export default function DetailOrder({ setStateAlert }) {
         }
     }
 
+    // huy don hang
+    const handleDeleteOrder = async () => {
+        try {
+            await OrderAPI.deleteOrder(searchParam);
+            history.push("/nhap-hang");
+            setStateAlert({
+                severity: "success",
+                variant: "filled",
+                open: true,
+                content: "Đã huỷ đơn hàng thành công",
+            });
+
+        } catch (err) {
+            setStateAlert({
+                severity: "error",
+                variant: "filled",
+                open: true,
+                content: err.response.data,
+            });
+        }
+    }
     const useStyles = makeStyles((theme) => ({
         inputRoot: {
             color: "black",
@@ -338,15 +359,20 @@ export default function DetailOrder({ setStateAlert }) {
                     <Box sx={{ display: "flex", justifyContent: "space-between" }} ml={2}>
                         <Typography sx={{ fontSize: 36, fontWeight: 450 }}>{codeOrder}</Typography>
                         <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
-                        {
-                            (order?.status == "Đã hoàn thành") ? null :
-                                <Box sx={{ display: "flex", alignItems: "center" }} >
-                                    <Button variant="outlined" color="error" sx={{ width: "50px", marginRight: "16px" }} onClick={handleOpenImport}> Huỷ </Button>
-                                    <Link to={`/nhap-hang/sua-don-hang?code=${searchParam}`} className="link-update">
-                                        <Button variant="contained" sx={{ width: "200px" }}> Chỉnh sửa đơn hàng</Button>
-                                    </Link>
-                                </Box>
-                        }
+                            {
+                                (order?.status == "Đã hoàn thành") ? null :
+                                    <Box sx={{ display: "flex", alignItems: "center" }} >
+                                        {
+                                            (order?.transactionStatus == "Chưa thanh toán" && order?.importedStatus == "Chờ nhập kho") ?
+                                                <Button variant="outlined" color="error" sx={{ width: "50px", marginRight: "16px" }} onClick={handleDeleteOrder}> Huỷ </Button>
+                                                : null
+                                            }
+
+                                        <Link to={`/nhap-hang/sua-don-hang?code=${searchParam}`} className="link-update">
+                                            <Button variant="contained" sx={{ width: "200px" }}> Chỉnh sửa đơn hàng</Button>
+                                        </Link>
+                                    </Box>
+                            }
                         </UnlockAccess>
                     </Box>
 
@@ -565,16 +591,16 @@ export default function DetailOrder({ setStateAlert }) {
                                 <LocalShippingIcon />
                                 <Typography sx={{ fontWeight: 600 }} ml={2}>Nhập Kho</Typography>
                             </Box>
-                        <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
-                            {
-                                (order?.importedStatus == "Đã nhập kho") ? null :
-                                    <Box className="btn-import">
-                                        <Button variant="contained" sx={{ width: "180px" }}
-                                            onClick={handleOpenImport}>  Xác nhận nhập kho  </Button>
-                                    </Box>
-                            }
-                        </UnlockAccess>
-                           
+                            <UnlockAccess request={['ADMIN', 'Nhân viên kho']}>
+                                {
+                                    (order?.importedStatus == "Đã nhập kho") ? null :
+                                        <Box className="btn-import">
+                                            <Button variant="contained" sx={{ width: "180px" }}
+                                                onClick={handleOpenImport}>  Xác nhận nhập kho  </Button>
+                                        </Box>
+                                }
+                            </UnlockAccess>
+
 
 
                         </Box>
@@ -614,7 +640,7 @@ export default function DetailOrder({ setStateAlert }) {
                                                                                 <Typography sx={{ color: "#6f6f6f" }}>Sản phẩm</Typography>
                                                                                 {
                                                                                     item.lineItems.map((variantImport) => {
-                                                                                        if(variantImport.quantity !=0 )
+                                                                                        if (variantImport.quantity != 0)
                                                                                             return (
                                                                                                 <Box>{(variantImport.quantity).format()} x {variantImport.name}</Box>
                                                                                             )
@@ -689,7 +715,7 @@ export default function DetailOrder({ setStateAlert }) {
                                 </Box>
                             </Box>
                             {
-                                (order?.importedStatus == "Chờ nhập kho") ? null :
+                                (order?.importedStatus == "Chờ nhập kho" || order?.importedStatus == "Hoàn trả toàn bộ") ? null :
                                     <Box className="btn-return" sx={{ width: "30%", textAlign: "center" }}>
                                         <Link style={{ textDecoration: "none" }} to={`/don-hang/hoan-tra?id=${searchParam}`}>
                                             <Button variant="contained" sx={{ width: "180px" }}>
@@ -738,16 +764,16 @@ export default function DetailOrder({ setStateAlert }) {
                                                                                 {
                                                                                     item.lineItems.map((variantImport) => {
 
-                                                                                        
-                                                                                            // {
-                                                                                                if (variantImport.quantity != 0)  
-                                                                                                return(
-                                                                                                    <Box>{variantImport.quantity} x {variantImport.name}</Box>
-                                                                                                )
-                                                                                               
-                                                                                            // } 
-                                                                                           
-                                                                                        
+
+                                                                                        // {
+                                                                                        if (variantImport.quantity != 0)
+                                                                                            return (
+                                                                                                <Box>{variantImport.quantity} x {variantImport.name}</Box>
+                                                                                            )
+
+                                                                                        // } 
+
+
                                                                                     })
                                                                                 }
                                                                             </Box>
