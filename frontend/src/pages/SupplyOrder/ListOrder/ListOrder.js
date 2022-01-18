@@ -2,8 +2,9 @@ import './ListOrder.scss';
 
 import * as React from 'react';
 import { CSVLink } from "react-csv";
-import { Box, Autocomplete, Button, TextField, Divider, InputAdornment } from '@mui/material'
+// import { Box, Autocomplete, Button, TextField, Divider, InputAdornment } from '@mui/material'
 import { Download, Upload, AddCircle, Search, FilterAltOutlined, FilterAlt } from '@mui/icons-material';
+import { Box, TextField, InputAdornment,Autocomplete, Button, Divider, Card, CardContent, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material'
 import { Link } from 'react-router-dom'
 import TableOrder from '../../../components/table/TableListOrder';
 import UnlockAccess from '../../../components/roleBasedRender/UnlockAccess'
@@ -21,6 +22,42 @@ export default function ListOrder() {
         { title: 'Đã nhập kho', label: 'Nhập kho' }
 
     ];
+    const statuss = [
+        {name: 'Đang giao dịch'},
+        {name: 'Đã hoàn thành'}
+    ]
+    const payments = [
+        {name: 'Chưa thanh toán'},
+        {name: 'Thanh toán một phần'},
+        {name: 'Đã thanh toán'}
+    ]
+    const imports = [
+        {name: 'Chờ nhập kho'},
+        {name: 'Nhập kho một phần'},
+        {name: 'Đã nhập kho'},
+        {name: 'Hoàn trả một phần'},
+        {name: 'Hoàn trả toàn bộ'}
+    ]
+    const [statusFilter, setStatusFilter] = React.useState('');
+    const [paymentFilter, setPaymentFilter] = React.useState('');
+    const [importFilter, setImportFilter] = React.useState('');
+
+    const handleChangeStatus = (e) => {
+        let value = e.target.value;
+        setStatusFilter(value);
+        // console.log(value);
+    }
+    const handleChangePayments = (e) => {
+        let value = e.target.value;
+        setPaymentFilter(value);
+        // console.log(value);
+    }
+    const handleChangeImports = (e) => {
+        let value = e.target.value;
+        setImportFilter(value);
+        // console.log(value);
+    }
+
     const options = Fillter.map((option) => {
         const firstLetter = option.label;
         return {
@@ -58,50 +95,38 @@ export default function ListOrder() {
         let result = listOrder.filter(product => product.code.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
         setSearchedProducts([...result]);
     }
-    const handleFillter = (event, contentFillter) => {
-        
-        setSearchedProducts([...listOrder]);
-        if (contentFillter.length !=0 ) {
-            contentFillter.map(e => {
-                let inputFilter = e.title;
+    const handleFillter = () => {
 
-                let input = inputFilter.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
+        let test = listOrder;
 
-                if (inputFilter == "Đang giao dịch" || inputFilter == "Đã hoàn thành") {
-
-                    let result = searchedProducts.filter(product => product.status.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
-                    setSearchedProducts([...result]);
-                } else if (inputFilter == "Chưa thanh toán" || inputFilter == "Thanh toán một phần" || inputFilter == "Đã thanh toán") {
-                    let result = searchedProducts.filter(product => product.transactionStatus.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
-                   
-                    setSearchedProducts([...result]);
-                } else if (inputFilter == "Chờ nhập kho" || inputFilter == "Nhập kho một phần" || inputFilter == "Đã nhập kho") {
-                    let result = searchedProducts.filter(product => product.importedStatus.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
-                   
-                    setSearchedProducts([...result]);
-                }
-            })
+        if(statusFilter != "" || paymentFilter != "" || importFilter != ""){
+            if(statusFilter != "") {
+                let result = test.filter(product => product.status === statusFilter);
+                test = result;
+                setSearchedProducts([...result]);
+               }
+            if(paymentFilter != "") {
+            let result = test.filter(product => product.transactionStatus === paymentFilter);
+            test = result;
+            setSearchedProducts([...result]);
+            }
+            if(importFilter != "") {
+            let result = searchedProducts.filter(product => product.importedStatus === importFilter);
+            test = result;
+            setSearchedProducts([...result]);
+            }
         } else {
-            let value = '';
-            let input = value.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
-            let result = listOrder.filter(product => product.code.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
+            let result = listOrder;
             setSearchedProducts([...result]);
         }
+       
 
-        // let value = e.toLowerCase();
-        // let input = value.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
-        // if(e == "Đang giao dịch" || e == "Đã hoàn thành") {
-        //     let result = searchedProducts.filter(product => product.status.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
-        //     setSearchedProducts([...result]);
-        // } else if (e == "Chưa thanh toán" || e == "Thanh toán một phần" || e == "Đã thanh toán") {
-        //     let result = searchedProducts.filter(product => product.transactionStatus.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
-        //     setSearchedProducts([...result]);
-        // } else if (e == "Chờ nhập kho" || e == "Nhập kho một phần" || e == "Đã nhập kho") {
-        //     let result = searchedProducts.filter(product => product.importedStatus.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").indexOf(input) >= 0);
-        //     setSearchedProducts([...result]);
-        // }
     }
 
+    React.useEffect(() => {
+        setSearchedProducts(listOrder);
+        handleFillter();
+    }, [statusFilter, paymentFilter, importFilter])
     React.useEffect(() => {
         const fetchOrders = async () => {
             const res = await OrderAPI.OrderList();
@@ -133,12 +158,13 @@ export default function ListOrder() {
                 </Box>
                 <Divider />
                 <Box py={2} px={2} display='flex' justifyContent='space-between' backgroundColor='white'>
-                    <Box display='flex' alignItems='center' sx={{ width: "60%" }}>
+                    <Box display='flex' alignItems='center' sx={{ width: "60%" }} className="search">
                         <TextField
                             placeholder="Tìm kiếm"
                             sx={{
-                                width: '100%'
+                                width: '100%', height: "40px"
                             }}
+
                             value={searchInput}
                             onChange={(e) => handleChange(e)}
                             InputProps={{
@@ -149,47 +175,74 @@ export default function ListOrder() {
                                 ),
                             }}
                             variant="outlined"
-                            size='small'
+                        // size='small'
                         />
                     </Box>
 
-                    <Box display='flex' alignItems='center' ml={10} sx={{ width: 200 }}>
-                        {/* <FilterAlt fontSize="large"/> */}
-                        <Autocomplete
-                            multiple
-                            options={options}
-                            groupBy={(option) => option.firstLetter}
-                            sx={{ width: 200 }}
-                            getOptionLabel={(option) => option.title}
-                            onChange={(event, newValue) => handleFillter(event, newValue)}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    variant="standard"
-                                    size='small'
-                                    variant="outlined"
-                                    placeholder="Lọc nhiều giá trị"
-                                // InputProps={{
-                                //     startAdornment: (
-                                //         <InputAdornment position="start">
-                                //             <FilterAltOutlined />
-                                //         </InputAdornment>
-                                //     ),
-                                // }}
-                                />
-                            )}
-                        />
-                        {/* <TextField
-                            placeholder="Lọc sản phẩm"
-                            variant="outlined"
-                            size='small'
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <FilterAltOutlined />
-                                    </InputAdornment>
-                                ),
-                            }}></TextField> */}
+                    <Box display='flex' alignItems='center' ml={10} sx={{ width: 600, justifyContent: "space-between" }}>
+                        <FormControl sx={{ minWidth: 150, mr: 2 }}>
+
+                            <Select
+                                value={statusFilter}
+                                size='small'
+                                displayEmpty
+                                onChange={handleChangeStatus}
+                                renderValue={
+                                    statusFilter !== "" ? undefined : () => <Typography sx={{ color: "#aaa" }}>Trạng thái</Typography>
+                                }
+                            >
+                                <MenuItem value="">
+                                    <Typography >Tất cả</Typography>
+                                </MenuItem>
+                                {statuss.map(item => (
+                                    <MenuItem value={item.name}>
+                                        <Typography >{item.name}</Typography>
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl sx={{ minWidth: 150, mr: 2 }}>
+
+                            <Select
+                                value={paymentFilter}
+                                size='small'
+                                displayEmpty
+                                onChange={handleChangePayments}
+                                renderValue={
+                                    paymentFilter !== "" ? undefined : () => <Typography sx={{ color: "#aaa" }}>Thanh toán</Typography>
+                                }
+                            >
+                                <MenuItem value="">
+                                    <Typography >Tất cả</Typography>
+                                </MenuItem>
+                                {payments.map(item => (
+                                    <MenuItem value={item.name}>
+                                        <Typography >{item.name}</Typography>
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl sx={{ minWidth: 150 }}>
+
+                            <Select
+                                value={importFilter}
+                                size='small'
+                                displayEmpty
+                                onChange={handleChangeImports}
+                                renderValue={
+                                    importFilter !== "" ? undefined : () => <Typography sx={{ color: "#aaa" }}>Nhập kho</Typography>
+                                }
+                            >
+                                <MenuItem value="">
+                                    <Typography >Tất cả</Typography>
+                                </MenuItem>
+                                {imports.map(item => (
+                                    <MenuItem value={item.name}>
+                                        <Typography >{item.name}</Typography>
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </Box>
 
                 </Box>
