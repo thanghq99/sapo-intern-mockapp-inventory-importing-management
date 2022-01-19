@@ -72,19 +72,19 @@ const headCells = [
 
     {
         id: 'status',
-        numeric: true,
+        numeric: false,
         disablePadding: false,
         label: 'Trạng thái',
     },
     {
         id: 'transaction',
-        numeric: true,
+        numeric: false,
         disablePadding: false,
         label: 'Thanh Toán',
     },
     {
         id: 'imported',
-        numeric: true,
+        numeric: false,
         disablePadding: false,
         label: 'Nhập Kho',
     },

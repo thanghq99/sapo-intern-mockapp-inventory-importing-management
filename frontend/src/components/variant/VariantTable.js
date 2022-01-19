@@ -400,13 +400,13 @@ export default function VariantsTable({
                         {row.inventoryQuantity}
                       </TableCell>
                       <TableCell align="center">{row.createdAt}</TableCell>
-                      <TableCell align="right">
+                      <TableCell sx={{ paddingRight: "100px" }} align="right">
                         {row.retailPrice.format()}
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell sx={{ paddingRight: "100px" }} align="right">
                         {row.originalPrice.format()}
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell sx={{ paddingRight: "100px" }} align="right">
                         {row.wholeSalePrice.format()}
                       </TableCell>
                     </TableRow>
