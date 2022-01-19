@@ -108,9 +108,7 @@ public class ImportReceiptServiceImpl implements ImportReceiptService {
                 .totalImportedQuantityOfVariantInOrder(lineItem.getVariantId(), orderId);
             long totalSuppliedQuantity = variantsOrderRepository
                 .totalSuppliedQuantityOfVariantInOrder(lineItem.getVariantId(), orderId);
-            long totalSuppliedReturnQuantity = variantsReturnReceiptRepository
-                    .totalReturnedQuantityOfVariantInOrder(lineItem.getVariantId(), orderId);
-            if(totalAlreadyImportedQuantity + lineItem.getQuantity() - totalSuppliedReturnQuantity > totalSuppliedQuantity) {
+            if(totalAlreadyImportedQuantity + lineItem.getQuantity() > totalSuppliedQuantity) {
                 throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Tổng lượng nhập kho của sản phẩm " + variant.getVariantName() + " không được vượt quá số lượng được cung cấp"
