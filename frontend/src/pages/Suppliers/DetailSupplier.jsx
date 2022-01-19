@@ -199,9 +199,9 @@ export default function DetailSupplier({ setStateAlert }) {
                         Quay lại trang trước
                     </Typography>
                 </div>
-                <div className="activity">
+                {/* <div className="activity">
                     <Button className="button_activity" variant="outlined"><i className="far fa-question-circle"></i> <span>Trợ giúp</span> </Button>
-                </div>
+                </div> */}
                 {/* <hr /> */}
                 <div className="tagname_supplier">
                     <h2 style={{ fontSize: "2em" }}>{supplier.name}</h2>
