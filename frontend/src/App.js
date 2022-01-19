@@ -122,10 +122,10 @@ function App() {
                     <Supplier />
                   </RoleBasedRouting>
                   <RoleBasedRouting path="/nha-cung-cap/tao-moi-nha-cung-cap" roles={['ADMIN', 'Nhân viên kho']}>
-                    <CreateSupplier />
+                    <CreateSupplier setStateAlert={setStateAlert} />
                   </RoleBasedRouting>
                   <RoleBasedRouting path="/thong-tin-nha-cung-cap"  roles={['ADMIN', 'Nhân viên kho', 'Kế toán']}>
-                    <DetailSupplier />
+                    <DetailSupplier setStateAlert={setStateAlert} />
                   </RoleBasedRouting>
                   <RoleBasedRouting exact path="/nhap-hang"  roles={['ADMIN', 'Nhân viên kho', 'Kế toán']}>
                     <ListOrder />

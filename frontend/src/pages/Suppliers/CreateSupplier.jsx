@@ -12,7 +12,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 
-export default function CreateSupplier() {
+export default function CreateSupplier({ setStateAlert }) {
 
     const code = useRef("");
     const name = useRef("");
@@ -44,7 +44,7 @@ export default function CreateSupplier() {
             setStateAlert({ severity: "success", variant: "filled", open: true, content: "Đã tạo mới nhà cung cấp thành công" })
             history.push("/nha-cung-cap");
         } catch (error) {
-            setStateAlert({ severity: "error", variant: "standard", open: true, content: error.response.data })
+            setStateAlert({ severity: "error", variant: "filled", open: true, content: error.response.data })
         }
     }
 
@@ -55,7 +55,7 @@ export default function CreateSupplier() {
     };
 
 
-    const [stateAlert, setStateAlert] = useState({ severity: "", variant: "", open: false, content: "" });
+    // const [stateAlert, setStateAlert] = useState({ severity: "", variant: "", open: false, content: "" });
     //const [openAlertSuccess, setOpenAlertSuccess] = React.useState(false);
 
     return (
@@ -210,11 +210,11 @@ export default function CreateSupplier() {
                     </div>
                 </div>
             </div>
-            <Snackbar open={stateAlert.open} autoHideDuration={3000} onClose={() => setStateAlert({ ...stateAlert, open: false })}>
+            {/* <Snackbar open={stateAlert.open} autoHideDuration={3000} onClose={() => setStateAlert({ ...stateAlert, open: false })}>
                 <Alert onClose={() => setStateAlert({ ...stateAlert, open: false })} severity={stateAlert.severity} variant={stateAlert.variant} sx={{ width: '100%' }}>
                     {stateAlert.content}
                 </Alert>
-            </Snackbar>
+            </Snackbar> */}
         </div >
     )
 }

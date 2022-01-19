@@ -79,10 +79,10 @@ const handleColor = (key) => {
 
 
 /////////////////////////////////////////////////////////////////////////////main func /////////////////////////////////////////////
-export default function DetailSupplier() {
+export default function DetailSupplier({ setStateAlert }) {
     const history = useHistory();
 
-    const [stateAlert, setStateAlert] = useState({ severity: "", variant: "", open: false, content: "" });
+    // const [stateAlert, setStateAlert] = useState({ severity: "", variant: "", open: false, content: "" });
 
     //open and close Modal
     const [openModal, setOpenModal] = React.useState(false);
@@ -125,7 +125,7 @@ export default function DetailSupplier() {
             handleCloseModal();
             history.push("/nha-cung-cap");
         } catch (error) {
-            console.log(error);
+            setStateAlert({ severity: "error", variant: "filled", open: true, content: error.response.data })
         }
     }
 
@@ -350,11 +350,11 @@ export default function DetailSupplier() {
                     </Box>
                 }
             </Modal>
-            <Snackbar open={stateAlert.open} autoHideDuration={3000} onClose={() => setStateAlert({ ...stateAlert, open: false })}>
+            {/* <Snackbar open={stateAlert.open} autoHideDuration={3000} onClose={() => setStateAlert({ ...stateAlert, open: false })}>
                 <Alert onClose={() => setStateAlert({ ...stateAlert, open: false })} severity={stateAlert.severity} variant={stateAlert.variant} sx={{ width: '100%' }}>
                     {stateAlert.content}
                 </Alert>
-            </Snackbar>
+            </Snackbar> */}
         </div >
     )
 }
