@@ -366,14 +366,14 @@ export default function TableSupply({ searchedProducts }) {
                                                 <Link style={{ textDecoration: 'none', color: '#000' }} to={`/nhap-hang/don-hang?code=${row.id}`} className="link-detail">{row.code}</Link>
 
                                             </TableCell>
-                                            <TableCell align="center">{row.supplier.name}</TableCell>
+                                            <TableCell align="left">{row.supplier.name}</TableCell>
                                             <TableCell style={{ color: handleColor(row.status) }}
-                                                align="center">{row.status}</TableCell>
+                                                align="left">{row.status}</TableCell>
                                             <TableCell style={{ color: handleColor(row.transactionStatus) }}
-                                                align="center">{row.transactionStatus}</TableCell>
+                                                align="left">{row.transactionStatus}</TableCell>
                                             <TableCell style={{ color: handleColor(row.importedStatus) }}
-                                                align="center">{row.importedStatus}</TableCell>
-                                            <TableCell align="center">{(row.totalAmount).toLocaleString()}</TableCell>
+                                                align="left">{row.importedStatus}</TableCell>
+                                            <TableCell align="right" sx={{paddingRight: "50px"}}>{(row.totalAmount).toLocaleString()}</TableCell>
                                             <TableCell align="center">{row.createdBy.username}</TableCell>
                                             <TableCell align="center">{row.expectedTime}</TableCell>
                                         </TableRow>
