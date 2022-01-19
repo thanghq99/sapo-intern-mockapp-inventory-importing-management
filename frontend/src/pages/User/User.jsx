@@ -75,7 +75,7 @@ export default function User() {
             const res = await UsersApi.getUserById(window.location.search.replace("?id=", "") ? window.location.search.replace("?id=", "") : JSON.parse(sessionStorage.getItem("token"))?.id);
             setCurrentUser(res.data);
             setEditUserRole(res.data.role);
-            setEditUsername(res.data.name);
+            setEditUsername(res.data.username);
             setEditUserEmail(res.data.email);
         }
         fetchCurrentUser();
@@ -108,7 +108,7 @@ export default function User() {
                     setStateAlert({ severity: "success", variant: "filled", open: true, content: "Tạo nhân viên thành công" })
                     setOpenModal(false);
                 } catch (error) {
-                    setStateAlert({ severity: "error", variant: "filled", open: true, content: "Người dùng hoặc email này đã tồn tại" })
+                    setStateAlert({ severity: "error", variant: "filled", open: true, content: error.response.data })
                 }
             }
 
